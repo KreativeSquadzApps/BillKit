@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerViewModel" />
+
+        <variable
+            name="resetValue"
+            type="String" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Customer Name -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Customer Name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{resetValue}"
+                android:id="@+id/etCustomerName"/>
+
+            <!-- Shop Contact Number -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shop Contact Number"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                android:paddingTop="8dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{resetValue}"
+                android:id="@+id/etShopContactNumber"/>
+
+            <!-- GST Number -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="GST Number"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                android:paddingTop="8dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{resetValue}"
+                android:id="@+id/etGSTNo"/>
+
+            <!-- Total Sales -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Sales"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                android:paddingTop="8dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{resetValue}"
+                android:id="@+id/etTotalSales"/>
+
+            <!-- Address -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                android:paddingTop="8dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{resetValue}"
+                android:id="@+id/etAddress"/>
+
+            <!-- Credit Amount -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Credit Amount"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                android:paddingTop="8dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{resetValue}"
+                android:id="@+id/etCreditAmount" />
+
+            <!-- Submit Button -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:id="@+id/btnSubmit"
+                android:layout_marginTop="16dp" /> <!-- Add handler for submit action -->
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

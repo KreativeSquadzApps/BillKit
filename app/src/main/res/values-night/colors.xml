@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="text_color_primary">#2e2b38</color>
+    <color name="colorPrimaryDark">#2e2b38</color>
+    <color name="colorPrimary">#2e2b38</color>
+    <color name="nuemph_shadow_dark">#33313f</color>
+
+    <color name="background_color">#393646</color>
+    <color name="background_color_popup">#393646</color>
+    <color name="background_color_lite">#b0a5ab</color>
+
+
+    <color name="popup">#6D5D6E</color>
+    <color name="colorAccent">#6D5D6E</color>
+    <color name="colorPrimaryLight">#6D5D6E</color>
+    <color name="nuemph_shadow_light">#4d4a59</color>
+
+    <color name="lite_grey">#D3D3D3</color>
+
+
+    <color name="icon_color_main">#fff</color>
+    <color name="text_color_main">#fff</color>
+    <color name="text_color_heading">#fff</color>
+
+
+
+
+
+
+</resources>

@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">BillKit</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_new_sale">New Sale</string>
+    <string name="menu_bill_history">Bill History</string>
+    <string name="menu_credit_notes">Credit Notes</string>
+    <string name="menu_inventory">Inventory</string>
+    <string name="menu_customer_management">Customer Management</string>
+    <string name="menu_staff_management">Staff Management</string>
+    <string name="menu_credit_details">Credit Details</string>
+    <string name="menu_dayBook">Day Book</string>
+    <string name="menu_settings">Settings</string>
+
+
+
+    <string name="settings_item_1">Invoice Settings</string>
+    <string name="settings_item_2">Tax Settings</string>
+    <string name="settings_item_3">POS Settings</string>
+    <string name="settings_item_4">Printer Setup</string>
+    <string name="settings_item_5">Reset</string>
+
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_new_sale" />
+
+        <item
+            android:id="@+id/billHistoryFrag"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_bill_history" />
+
+        <item
+            android:id="@+id/creditNoteFrag"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_credit_notes" />
+
+
+        <item
+            android:id="@+id/inventoryFrag"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_inventory" />
+
+        <item
+            android:id="@+id/customerManagementFrag"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_customer_management" />
+
+        <item
+            android:id="@+id/staffManagementFrag"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_staff_management" />
+
+        <item
+            android:id="@+id/creditDetailsFrag"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_credit_details" />
+
+        <item
+            android:id="@+id/dayBookFrag"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_dayBook" />
+
+        <item
+            android:id="@+id/settingsFrag"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_settings" />
+
+
+
+
+    </group>
+</menu>

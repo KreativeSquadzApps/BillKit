@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="sharedViewModel"
+            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+        <variable
+            name="invoice"
+            type="com.kreativesquadz.billkit.model.Invoice" />
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="70dp"
+          android:layout_margin="10dp"
+          android:id="@+id/viewCustomer"
+          android:background="@drawable/rectangle_outline_view"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
+
+          <androidx.appcompat.widget.AppCompatTextView
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:textStyle="bold"
+              android:textSize="16sp"
+              android:id="@+id/addCustomer"
+              android:text="Add Customer Details"
+              >
+
+          </androidx.appcompat.widget.AppCompatTextView>
+      </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:id="@+id/recyclerView"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewCustomer">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerView"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Clear Order"
+                android:textColor="@color/red"
+                android:id="@+id/clearOrder" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text='@{"Amount : " + sharedViewModel.getSubTotalamount()}'
+                android:textColor="@color/text_color_main"
+                android:id="@+id/amountTotal"
+                tools:text="Amount : "/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clearOrder"
+                android:text='@{"Items Count : " + sharedViewModel.getInvoiceItemCount()}'
+                android:textColor="@color/text_color_main"
+                android:id="@+id/itemsCount"
+                tools:text="Items Count : "/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/amountTotal"
+                android:text='@{"Total Tax : " + sharedViewModel.getTotalTax()}'
+                android:textColor="@color/text_color_main"
+                android:id="@+id/amountTotalTax"
+                tools:text="Total Tax : "/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/amountTotalTax"
+                android:text="Add Discount"
+                android:textColor="@color/text_color_main"
+                android:id="@+id/addDiscount"
+                tools:text="Add Discount : "/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addDiscount"
+                android:text="Add Credit Note"
+                android:textColor="@color/text_color_main"
+                android:id="@+id/addCreditNote"
+                tools:text="Add Credit Note"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addCreditNote"
+                android:text='@{"Total Amount : " + sharedViewModel.getTotalAmount()}'
+                android:textColor="@color/text_color_main"
+                android:id="@+id/totalAmount"
+                tools:text="Total Amount : "/>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="4"
+                android:orientation="horizontal">
+
+                <soup.neumorphism.NeumorphCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/btnCash"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="-5dp"
+                    android:layout_marginStart="-10dp"
+                    android:layout_marginEnd="-5dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color_heading"
+                    android:gravity="center"
+                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_delete" />
+                </soup.neumorphism.NeumorphCardView>
+                <soup.neumorphism.NeumorphCardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/btnOnline"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="-5dp"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginEnd="-10dp"
+                    android:textColor="@color/text_color_heading"
+                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_delete">
+
+                    </ImageView>
+
+                </soup.neumorphism.NeumorphCardView>
+                <soup.neumorphism.NeumorphCardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/btnSplit"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="-5dp"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginEnd="-10dp"
+                    android:textColor="@color/text_color_heading"
+                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_delete">
+
+                    </ImageView>
+
+                </soup.neumorphism.NeumorphCardView>
+                <soup.neumorphism.NeumorphCardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/btnCredit"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="-5dp"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginEnd="-10dp"
+                    android:textColor="@color/text_color_heading"
+                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_delete">
+
+                    </ImageView>
+
+                </soup.neumorphism.NeumorphCardView>
+
+
+            </LinearLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

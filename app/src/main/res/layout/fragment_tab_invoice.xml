@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="companyDetails"
+            type="com.kreativesquadz.billkit.model.CompanyDetails" />
+    </data>
+
+
+
+            <RelativeLayout
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linearLayout"
+                >
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/etBusinessName"
+                            android:text="@{companyDetails.BusinessName}"/>
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/etPlace"
+                            android:text="@{companyDetails.Place}"/>
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/etshopContactNumber"
+                            android:text="@{companyDetails.shopContactNumber}"/>
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/etshopEmail"
+                            android:text="@{companyDetails.shopEmail}"/>
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/etGSTNo"
+                            android:text="@{companyDetails.GSTNo}"/>
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/etFSSAINo"
+                            android:text="@{companyDetails.FSSAINo}"/>
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/etCurrencySymbol"
+                            android:text="@{companyDetails.CurrencySymbol}"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:id="@+id/tvInvoicePrefix"
+                            android:textSize="20sp"
+                            android:text="@{companyDetails.InvoicePrefix}"/>
+
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <soup.neumorphism.NeumorphCardView
+                        android:layout_width="match_parent"
+                        android:id="@+id/btnupdate"
+                        android:layout_alignParentBottom="true"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_heading"
+                        app:neumorph_backgroundColor="@color/colorPrimaryDark"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                        app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|right"
+                            android:textSize="35sp"
+                            android:textStyle="bold"
+                            android:text="Update"
+                            android:gravity="center"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/tvUpdate"
+                            android:layout_marginStart="20dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+
+
+
+                    </soup.neumorphism.NeumorphCardView>
+
+                </RelativeLayout>
+
+
+
+            </RelativeLayout>
+
+
+
+</layout>
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.kreativesquadz.billkit.ui.home.HomeFragment"
+        android:label="@string/menu_new_sale"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_home_to_billDetailsFrag"
+            app:destination="@id/billDetailsFrag" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/billHistoryFrag"
+        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.BillHistoryFrag"
+        android:label="@string/menu_bill_history"
+        tools:layout="@layout/fragment_bill_history" >
+        <action
+            android:id="@+id/action_billHistoryFrag_to_invoiceFragment"
+            app:destination="@id/invoiceFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/creditNoteFrag"
+        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.CreditNoteFrag"
+        android:label="@string/menu_credit_notes"
+        tools:layout="@layout/fragment_credit_note" />
+
+    <fragment
+        android:id="@+id/inventoryFrag"
+        android:name="com.kreativesquadz.billkit.ui.inventory.InventoryFragment"
+        android:label="@string/menu_inventory"
+        tools:layout="@layout/fragment_inventory" />
+
+    <fragment
+        android:id="@+id/customerManagementFrag"
+        android:name="com.kreativesquadz.billkit.ui.customerManag.CustomerManagementFrag"
+        android:label="@string/menu_customer_management"
+        tools:layout="@layout/fragment_customer_management" >
+        <action
+            android:id="@+id/action_customerManagementFrag_to_createCustomerFrag"
+            app:destination="@id/createCustomerFrag" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/staffManagementFrag"
+        android:name="com.kreativesquadz.billkit.ui.staffManag.StaffManagementFrag"
+        android:label="@string/menu_staff_management"
+        tools:layout="@layout/fragment_staff_management" />
+
+    <fragment
+        android:id="@+id/creditDetailsFrag"
+        android:name="com.kreativesquadz.billkit.ui.creditDetails.CreditDetailsFrag"
+        android:label="@string/menu_credit_details"
+        tools:layout="@layout/fragment_credit_details" />
+
+    <fragment
+        android:id="@+id/dayBookFrag"
+        android:name="com.kreativesquadz.billkit.ui.daybook.DayBookFrag"
+        android:label="@string/menu_dayBook"
+        tools:layout="@layout/fragment_day_book" />
+
+    <fragment
+        android:id="@+id/settingsFrag"
+        android:name="com.kreativesquadz.billkit.ui.settings.SettingsFrag"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFrag_to_invoiceSettings"
+            app:destination="@id/invoiceSettings" />
+    </fragment>
+    <fragment
+        android:id="@+id/billDetailsFrag"
+        android:name="com.kreativesquadz.billkit.ui.home.billDetails.BillDetailsFrag"
+        android:label="fragment_bill_details"
+        tools:layout="@layout/fragment_bill_details" >
+        <action
+            android:id="@+id/action_billDetailsFrag_to_receiptFrag"
+            app:destination="@id/receiptFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/receiptFrag"
+        android:name="com.kreativesquadz.billkit.ui.bills.ReceiptFrag"
+        android:label="fragment_receipt"
+        tools:layout="@layout/fragment_receipt" />
+    <fragment
+        android:id="@+id/invoiceFragment"
+        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.invoice.InvoiceFragment"
+        android:label="InvoiceFragment" >
+        <argument
+            android:name="invoice"
+            app:argType="com.kreativesquadz.billkit.model.Invoice" />
+    </fragment>
+    <fragment
+        android:id="@+id/invoiceSettings"
+        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.InvoiceSettings"
+        android:label="fragment_invoice_settings"
+        tools:layout="@layout/fragment_invoice_settings" />
+    <fragment
+        android:id="@+id/createCustomerFrag"
+        android:name="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerFrag"
+        android:label="CreateCustomerFrag" />
+
+
+</navigation>

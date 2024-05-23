@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.widget.TextView" />
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt" />
+        <variable
+            name="item"
+            type="com.kreativesquadz.billkit.model.InvoiceItem" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itemNameAmountQty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/text_color_main"
+            android:layout_marginStart="10dp"
+            android:textSize="@dimen/txt_home_item"
+            android:text="@{item.item_name}"
+            tools:text="2000"/>
+
+        <TextView
+            android:id="@+id/itemTotalAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/text_color_main"
+            android:textSize="@dimen/txt_home_item"
+            android:gravity="end"
+            android:layout_marginEnd="10dp"
+            android:text="@{item.unit_price}"
+            tools:text="2000"/>
+    </LinearLayout>
+</layout>

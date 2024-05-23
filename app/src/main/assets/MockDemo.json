@@ -1,0 +1,76 @@
+[{
+  "invoice_number": "16AMO",
+  "invoice_date": "2024-05-14",
+  "invoice_time": "1:14 PM",
+  "created_by": "Admin",
+  "customer_details": {
+    "name": "DEMO",
+    "phone_number": "9971380539",
+    "gst_number": "26895",
+    "address": "deml"
+  },
+  "items_data": [
+    {
+      "item_name": "Shoes",
+      "unit_price": 200.00,
+      "quantity": 1,
+      "total_price": 200.00,
+      "tax_rate": "0.0%"
+    },
+    {
+      "item_name": "Product New",
+      "unit_price": 300.00,
+      "quantity": 17,
+      "total_price": 5100.00,
+      "tax_rate": "0.00%"
+    },
+    {
+      "item_name": "Dummy Item 2",
+      "unit_price": 290.00,
+      "quantity": 4,
+      "total_price": 1160.00,
+      "tax_rate": "0.00%"
+    },
+    {
+      "item_name": "Dummy Item 3",
+      "unit_price": 450.00,
+      "quantity": 10,
+      "total_price": 4500.00,
+      "tax_rate": "0.00%"
+    }
+  ],
+  "total_items": 4,
+  "subtotal": 10960.00,
+  "cash_amount": 10960.00,
+  "total_amount": 10960.00
+},
+  {
+    "credit_note_title": "CreditNote",
+    "date": "2024-05-03",
+    "time": "4:51 PM",
+    "created_by": "Admin",
+    "invoice_number": "5",
+    "credit_note_number": "002",
+    "status": "Active",
+    "items": [
+      {
+        "item_name": "Dummy Item 2",
+        "unit_price": 290.00,
+        "quantity": 1,
+        "total_price": 290.00,
+        "tax_rate": "0.0%"
+      },
+      {
+        "item_name": "Shoes",
+        "unit_price": 400.00,
+        "quantity": 2,
+        "total_price": 800.00,
+        "tax_rate": "0.0%"
+      }
+    ],
+    "total_amount": 690.00,
+    "total_items": 2
+  }
+]
+
+

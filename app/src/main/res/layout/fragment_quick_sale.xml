@@ -1,0 +1,383 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="sharedViewModels"
+            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+        <import type="android.view.View"/>
+    </data>
+
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_calc_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:background="@color/background_color">
+
+                    <LinearLayout
+                        android:id="@+id/ll_calc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_gravity="bottom"
+                            android:background="@android:color/transparent"
+                            android:orientation="vertical">
+
+
+
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_seven"
+                                android:layout_weight="1"
+                                android:layout_height="0dp"
+                                android:text="7"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_four"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="4"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_one"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="1"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_zero"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="0"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_gravity="bottom"
+                            android:background="@android:color/transparent"
+                            android:orientation="vertical">
+
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_eight"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="8"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_five"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="5"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_two"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="2"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_dot"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="00"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+
+
+
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_gravity="bottom"
+                            android:background="@android:color/transparent"
+                            android:orientation="vertical">
+
+
+
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_nine"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="9"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_six"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="6"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_three"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="3"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_percent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+
+                                android:text="."
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_plus_minus"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+
+                                android:text="-/+"
+                                android:visibility="gone"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_main"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_gravity="bottom"
+                            android:background="@android:color/transparent"
+                            android:orientation="vertical">
+
+
+
+
+
+
+                            <soup.neumorphism.NeumorphCardView
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_minus"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="-"
+                                android:onClick="@{() -> sharedViewModels.delete()}"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_heading"
+                                app:neumorph_backgroundColor="@color/background_color_lite"                               android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:padding="25dp"
+                                    android:src="@drawable/ic_delete">
+
+                                </ImageView>
+
+                            </soup.neumorphism.NeumorphCardView>
+
+
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_plus"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:onClick="@{(view) -> sharedViewModels.getAmount(view)}"
+                                android:text="X"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_heading"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="@dimen/txt_quick_sale"
+                                />
+
+                            <soup.neumorphism.NeumorphButton
+                                android:layout_width="match_parent"
+                                android:id="@+id/iv_equals"
+                                android:layout_height="0dp"
+                                android:layout_weight="2"
+                                android:text="Add\n Item"
+                                android:onClick="@{() -> sharedViewModels.addItem()}"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                                android:textSize="20sp"
+                                android:textColor="@color/white"
+                                app:neumorph_backgroundColor="@color/colorPrimaryDark"/>
+
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+
+    </LinearLayout>
+
+</layout>
+
+

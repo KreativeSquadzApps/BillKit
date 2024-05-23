@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="customer"
+            type="com.kreativesquadz.billkit.model.Customer" /> <!-- Replace "your.package.name" with your actual package name -->
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Customer Name -->
+            <TextView
+                android:id="@+id/customerNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{customer.CustomerName}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                tools:text="DEMO" />
+
+            <!-- Shop Contact Number -->
+            <TextView
+                android:id="@+id/shopContactNumberTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{customer.ShopContactNumber}"
+                android:paddingBottom="4dp"
+                tools:text="9971380539" />
+
+            <!-- GST Number -->
+            <TextView
+                android:id="@+id/gstNumberTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{customer.GSTNo}"
+                android:paddingBottom="4dp"
+                tools:text="26895" />
+
+            <!-- Total Sales -->
+            <TextView
+                android:id="@+id/totalSalesTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{customer.TotalSales}"
+                android:paddingBottom="4dp"
+                tools:text="Rs 26619.84" />
+
+            <!-- Address -->
+            <TextView
+                android:id="@+id/addressTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{customer.Address}"
+                android:paddingBottom="4dp"
+                tools:text="deml" />
+
+            <!-- Credit Amount -->
+            <TextView
+                android:id="@+id/creditAmountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{customer.CreditAmount}"
+                android:paddingBottom="4dp"
+                tools:text="5500.00" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
