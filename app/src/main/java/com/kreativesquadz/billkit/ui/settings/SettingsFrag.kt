@@ -22,7 +22,7 @@ class SettingsFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO: Use the ViewModel
+        
     }
 
     override fun onCreateView(
@@ -55,16 +55,16 @@ class SettingsFrag : Fragment() {
                             findNavController().navigate(R.id.action_settingsFrag_to_invoiceSettings)
                         }
                         getString(R.string.settings_item_2) -> {
-                            // TODO
+
                         }
                         getString(R.string.settings_item_3) -> {
-                            // TODO
+
                         }
                         getString(R.string.settings_item_4) -> {
-                            // TODO
+
                         }
                         getString(R.string.settings_item_5) -> {
-                            // TODO
+
                         }
 
                     }

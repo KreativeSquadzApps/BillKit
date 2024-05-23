@@ -3,5 +3,5 @@ package com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tab
 import androidx.lifecycle.ViewModel
 
 class TabPrinterViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+    
 }
