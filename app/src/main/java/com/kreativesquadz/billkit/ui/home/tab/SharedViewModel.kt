@@ -21,6 +21,10 @@ class SharedViewModel : ViewModel() {
     val amountValue: MutableLiveData<String> by lazy {
         MutableLiveData("0")
     }
+    var _isCustomerSelected = MutableLiveData<Boolean>()
+    val isCustomerSelected : LiveData<Boolean> get() = _isCustomerSelected
+
+
     val amount: LiveData<String> get() =  amountValue
     var amountBuilder = StringBuilder()
 
@@ -137,7 +141,13 @@ class SharedViewModel : ViewModel() {
     }
     fun updateSelectedCustomer(customer: Customer?) {
         _selectedCustomer.value = customer
+        _isCustomerSelected.value = true
     }
+    fun updateDeselectCustomer() {
+        _selectedCustomer.value = null
+        _isCustomerSelected.value = false
+    }
+
     fun getInvoice() : Invoice{
         val invoice = Invoice(
             invoice_number = "INV ${getInvoiceItemCount()}",
@@ -166,7 +176,6 @@ class SharedViewModel : ViewModel() {
         }
         return customerId
     }
-
 
 
 

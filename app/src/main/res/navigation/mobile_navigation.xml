@@ -95,6 +95,7 @@
         <argument
             android:name="invoice"
             app:argType="com.kreativesquadz.billkit.model.Invoice" />
+
     </fragment>
     <fragment
         android:id="@+id/invoiceSettings"

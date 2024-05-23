@@ -19,6 +19,9 @@ interface CustomerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCustomer(customer: Customer)
 
+    @Query("SELECT * FROM customers WHERE id = :id")
+    fun getCustomer(id: String): Customer
+
     @Query("DELETE FROM customers")
     fun deleteCustomer()
 

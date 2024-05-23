@@ -39,6 +39,7 @@ class BillDetailsFrag : Fragment() {
     ): View {
         _binding = FragmentBillDetailsBinding.inflate(inflater, container, false)
         binding.sharedViewModel = sharedViewModel
+        binding.isCustomerSelected = sharedViewModel.isCustomerSelected.value
         setupRecyclerView()
         observers()
         onClickListeners()
@@ -53,6 +54,10 @@ class BillDetailsFrag : Fragment() {
         binding.addCustomer.setOnClickListener {
             val customerAddBottomSheetFrag = CustomerAddBottomSheetFrag()
             customerAddBottomSheetFrag.show(parentFragmentManager, "CustomerAddBottomSheetFrag")
+        }
+
+        binding.ivDeselectCustomer.setOnClickListener {
+            sharedViewModel.updateDeselectCustomer()
         }
     }
 
@@ -70,6 +75,14 @@ class BillDetailsFrag : Fragment() {
                 false -> {
                 }
             }
+        }
+
+        sharedViewModel.isCustomerSelected.observe(viewLifecycleOwner) { isCustomerSelected ->
+            binding.isCustomerSelected = isCustomerSelected
+        }
+
+        sharedViewModel.selectedCustomer.observe(viewLifecycleOwner) { customer ->
+            binding.customer = customer
         }
     }
 

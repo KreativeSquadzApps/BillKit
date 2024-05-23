@@ -5,12 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="sharedViewModel"
             type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
         <variable
             name="invoice"
             type="com.kreativesquadz.billkit.model.Invoice" />
+        <variable
+            name="isCustomerSelected"
+            type="Boolean" />
+        <variable
+            name="customer"
+            type="com.kreativesquadz.billkit.model.Customer" />
 
     </data>
 
@@ -19,27 +26,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-      <LinearLayout
+      <androidx.constraintlayout.widget.ConstraintLayout
           android:layout_width="match_parent"
           android:layout_height="70dp"
           android:layout_margin="10dp"
           android:id="@+id/viewCustomer"
+          android:gravity="center"
           android:background="@drawable/rectangle_outline_view"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent">
 
-          <androidx.appcompat.widget.AppCompatTextView
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintBottom_toBottomOf="parent"
+              android:visibility="@{isCustomerSelected ? View.VISIBLE : View.GONE}"
+              android:id="@+id/customerView">
+
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="@dimen/_20dp"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  android:textSize="20sp"
+                  android:id="@+id/tvCustomerName"
+                  android:text="@{customer.customerName}"
+                  tools:text="Demo"/>
+
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="@dimen/_20dp"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
+                  android:textSize="18sp"
+                  android:id="@+id/tvCustomerNumber"
+                  android:text="@{customer.shopContactNumber}"
+                  tools:text="Demo"/>
+
+              <ImageView
+                  android:layout_width="30dp"
+                  android:layout_height="30dp"
+                  android:layout_marginEnd="@dimen/_20dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:layout_constraintBottom_toBottomOf="parent"
+                  android:id="@+id/ivDeselectCustomer"
+                  android:src="@android:drawable/ic_delete"
+                  />
+
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+          <TextView
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="center"
-              android:textStyle="bold"
-              android:textSize="16sp"
+              android:textSize="20sp"
+              android:visibility="@{isCustomerSelected ? View.GONE : View.VISIBLE}"
               android:id="@+id/addCustomer"
+              android:textStyle="bold"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintBottom_toBottomOf="parent"
               android:text="Add Customer Details"
               >
 
-          </androidx.appcompat.widget.AppCompatTextView>
-      </LinearLayout>
+          </TextView>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

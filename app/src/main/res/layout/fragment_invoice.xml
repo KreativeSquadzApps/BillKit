@@ -4,10 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="invoice"
             type="com.kreativesquadz.billkit.model.Invoice" />
-
+        <variable
+            name="isCustomerAvailable"
+            type="Boolean" />
+        <variable
+            name="customer"
+            type="com.kreativesquadz.billkit.model.Customer" />
 
     </data>
 
@@ -114,15 +120,103 @@
                                            tools:text="Invoice No "/>
 
                                </androidx.constraintlayout.widget.ConstraintLayout>
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_marginTop="@dimen/_10dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/cardHeader"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
+                                    android:id="@+id/customerView">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_20dp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        android:textSize="16sp"
+                                        android:textColor="@color/text_color_main"
+                                        android:id="@+id/txtCustomerDetails"
+                                        android:text="Customer Details" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/text_color_main"
+                                        android:layout_marginStart="@dimen/_20dp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/txtCustomerDetails"
+                                        android:textSize="18sp"
+                                        android:id="@+id/tvCustomerName"
+                                        android:text="@{customer.customerName}"
+                                        tools:text="Demo Name"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_20dp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
+                                        android:textSize="18sp"
+                                        android:textColor="@color/text_color_main"
+                                        android:id="@+id/tvCustomerGst"
+                                        android:text="@{customer.GSTNo}"
+                                        tools:text="Demo"/>
+
+                                      <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_20dp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/tvCustomerGst"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        android:textSize="18sp"
+                                        android:layout_marginBottom="@dimen/_10dp"
+                                        android:textColor="@color/text_color_main"
+                                        android:id="@+id/tvCustomeradress"
+                                        android:text="@{customer.address}"
+                                        tools:text="Demo"/>
+
+
+                                      <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_20dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        android:textSize="18sp"
+                                          android:layout_marginEnd="@dimen/_20dp"
+                                        android:layout_marginBottom="@dimen/_10dp"
+                                        android:textColor="@color/text_color_main"
+                                        android:id="@+id/tvCustomerNumber"
+                                        android:text="@{customer.shopContactNumber}"
+                                        tools:text="Demo"/>
+
+
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:id="@+id/view2"
+                                    android:background="@color/lite_grey"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/customerView"/>
+
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:weightSum="2"
+                                    android:padding="5dp"
                                     android:id="@+id/txtItem"
-                                    android:layout_margin="@dimen/_10dp"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/cardHeader"
+                                    app:layout_constraintTop_toBottomOf="@+id/view2"
+
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -151,7 +245,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
                                     android:id="@+id/view"
-                                    android:layout_marginTop="@dimen/_10dp"
                                     android:background="@color/lite_grey"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/txtItem"/>

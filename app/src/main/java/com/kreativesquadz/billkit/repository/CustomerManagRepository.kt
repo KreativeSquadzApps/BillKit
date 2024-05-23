@@ -75,5 +75,9 @@ class CustomerManagRepository @Inject constructor(val context: Context, private 
         return statusLiveData
     }
 
+    fun getCustomer(id: String): Customer {
+        return customerDao.getCustomer(id)
+    }
+
 
 }

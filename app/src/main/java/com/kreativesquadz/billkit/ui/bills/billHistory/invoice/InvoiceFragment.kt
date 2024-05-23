@@ -35,14 +35,11 @@ class InvoiceFragment : Fragment() {
         _binding = FragmentInvoiceBinding.inflate(inflater, container, false)
         val invoice = arguments?.getSerializable("invoice") as? Invoice
         binding.invoice = invoice
+        binding.isCustomerAvailable = invoice?.customerId != null
+        binding.customer = viewModel.getCustomerById(invoice?.customerId.toString())
         setupRecyclerView(invoice)
-
         return binding.root
 
-    }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setupRecyclerView(invoice: Invoice?) {
@@ -59,4 +56,10 @@ class InvoiceFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

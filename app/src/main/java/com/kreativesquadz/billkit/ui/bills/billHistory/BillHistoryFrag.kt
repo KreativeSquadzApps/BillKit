@@ -15,6 +15,7 @@ import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentBillHistoryBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Invoice
+import timber.log.Timber
 
 class BillHistoryFrag : Fragment() {
     private var _binding: FragmentBillHistoryBinding ?= null
@@ -34,25 +35,20 @@ class BillHistoryFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBillHistoryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
         binding.viewModel = viewModel
         setupRecyclerView()
+        observers()
+        return binding.root
+    }
 
+    private fun observers(){
         viewModel.invoices.observe(viewLifecycleOwner) {
             it.data?.let { it1 ->
-                Log.e("BillHistoryFrag", "onCreateView: $it1")
                 adapter.submitList(it.data)
-            } }
-
-        return root
+            }
+        }
     }
 
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
     private fun setupRecyclerView() {
         adapter = GenericAdapter(
             viewModel.invoices.value?.data ?: emptyList(),
@@ -70,6 +66,11 @@ class BillHistoryFrag : Fragment() {
         binding.billHistoryRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
 
 
