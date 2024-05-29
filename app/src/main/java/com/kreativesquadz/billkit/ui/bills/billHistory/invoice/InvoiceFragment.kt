@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
+import com.kreativesquadz.billkit.bluetooth.BluetoothHelper
 import com.kreativesquadz.billkit.databinding.FragmentInvoiceBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.InvoiceItem
@@ -20,7 +22,10 @@ class InvoiceFragment : Fragment() {
     val binding get() = _binding!!
     private val viewModel: InvoiceViewModel by activityViewModels()
     private lateinit var adapter: GenericAdapter<InvoiceItem>
-
+    private lateinit var bluetoothHelper: BluetoothHelper
+    val invoice by lazy {
+        arguments?.getSerializable("invoice") as? Invoice
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,18 +36,26 @@ class InvoiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentInvoiceBinding.inflate(inflater, container, false)
-        val invoice = arguments?.getSerializable("invoice") as? Invoice
         binding.invoice = invoice
         binding.isCustomerAvailable = invoice?.customerId != null
         binding.customer = viewModel.getCustomerById(invoice?.customerId.toString())
         setupRecyclerView(invoice)
+        onClickListeners()
         return binding.root
+
+    }
+
+    fun onClickListeners() {
+        binding.btnReceipt.setOnClickListener {
+            val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.id.toString())
+            findNavController().navigate(action)
+        }
 
     }
 
     private fun setupRecyclerView(invoice: Invoice?) {
         adapter = GenericAdapter(
-            invoice?.invoice_items ?: emptyList(),
+            invoice?.invoiceItems ?: emptyList(),
             object : OnItemClickListener<InvoiceItem> {
                 override fun onItemClick(item: InvoiceItem) {
                     // Handle item click

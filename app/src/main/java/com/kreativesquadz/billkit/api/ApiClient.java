@@ -1,7 +1,6 @@
 package com.kreativesquadz.billkit.api;
 
 import android.util.Base64;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;

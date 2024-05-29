@@ -1,6 +1,8 @@
 package com.kreativesquadz.billkit.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.kreativesquadz.billkit.Dao.InvoiceDao
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.api.ApiClient
@@ -8,8 +10,6 @@ import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Invoice
-import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
@@ -22,13 +22,13 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
                         // Clear existing data
                         invoiceDao.deleteInvoices()
                         invoiceDao.insertInvoices(item)
-
-                        Timber.d("loadAllInvoices() All invoices saved")
+                        Log.e("Error", item.toString())
                     }
                 } catch (ex: Exception) {
-                    Timber.d(" Error at saveCallResult ${ex}")
+                    Log.e("Error", ex.toString())
 
                 }
+
             }
 
             override fun shouldFetch(data: List<Invoice>?): Boolean {
@@ -40,22 +40,28 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
             }
 
             override fun createCall(): LiveData<ApiResponse<List<Invoice>>> {
+                Log.e("loadd", ApiClient.getApiService().loadInvoices().toString())
                 return ApiClient.getApiService().loadInvoices()
             }
         }.asLiveData()
     }
 
-    // Method to generate an invoice
-    suspend fun generateInvoice(invoice: Invoice): Boolean {
-        try {
-
-            Timber.tag("Request").e(invoice.toString())
-            val response = ApiClient.getApiService().createInvoice(invoice)
-            return response.isSuccessful
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Timber.tag("Error").e("Network error: " + e.message)
-        }
-        return false
+    suspend fun addInvoice(invoice: Invoice) : Long {
+        return invoiceDao.insert(invoice)
     }
+
+    fun getInvoiceById(id: Int): LiveData<Invoice> {
+        return invoiceDao.getInvoiceById(id)
+    }
+
+    suspend fun getUnsyncedInvoices(): List<Invoice> {
+        return invoiceDao.getUnsyncedInvoices()
+    }
+
+    suspend fun markInvoiceAsSynced(invoice: Invoice) {
+        invoiceDao.update(invoice.copy(isSynced = 1))
+    }
+
+
+
 }

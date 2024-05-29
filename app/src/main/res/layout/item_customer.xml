@@ -49,7 +49,7 @@
                 android:id="@+id/gstNumberTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{customer.GSTNo}"
+                android:text="@{customer.gstNo}"
                 android:paddingBottom="4dp"
                 tools:text="26895" />
 

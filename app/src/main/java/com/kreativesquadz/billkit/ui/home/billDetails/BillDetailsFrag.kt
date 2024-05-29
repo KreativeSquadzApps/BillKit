@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.ui.home.billDetails
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +49,7 @@ class BillDetailsFrag : Fragment() {
 
     private fun onClickListeners(){
         binding.btnCash.setOnClickListener {
-            viewModel.generateInvoice(sharedViewModel.getInvoice())
+        viewModel.addInvoice(sharedViewModel.getInvoice(),requireContext())
         }
 
         binding.addCustomer.setOnClickListener {
@@ -59,6 +60,7 @@ class BillDetailsFrag : Fragment() {
         binding.ivDeselectCustomer.setOnClickListener {
             sharedViewModel.updateDeselectCustomer()
         }
+
     }
 
 
@@ -67,13 +69,11 @@ class BillDetailsFrag : Fragment() {
             adapter.submitList(items)
         }
 
-        viewModel.invoiceStatus.observe(viewLifecycleOwner) { isSuccessful ->
-            when (isSuccessful) {
-                true -> {
-                    findNavController().navigate(R.id.action_billDetailsFrag_to_receiptFrag)
-                }
-                false -> {
-                }
+        viewModel.invoiceApiStatus.observe(viewLifecycleOwner) {
+            if(it == true){
+                Log.e("Idddddd", viewModel.invoiceId.value.toString())
+                val action = BillDetailsFragDirections.actionBillDetailsFragToReceiptFrag(viewModel.invoiceId.value.toString())
+                findNavController().navigate(action)
             }
         }
 

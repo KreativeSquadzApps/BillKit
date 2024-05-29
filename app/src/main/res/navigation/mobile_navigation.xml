@@ -87,7 +87,11 @@
         android:id="@+id/receiptFrag"
         android:name="com.kreativesquadz.billkit.ui.bills.ReceiptFrag"
         android:label="fragment_receipt"
-        tools:layout="@layout/fragment_receipt" />
+        tools:layout="@layout/fragment_receipt" >
+        <argument
+            android:name="invoiceId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/invoiceFragment"
         android:name="com.kreativesquadz.billkit.ui.bills.billHistory.invoice.InvoiceFragment"
@@ -95,6 +99,9 @@
         <argument
             android:name="invoice"
             app:argType="com.kreativesquadz.billkit.model.Invoice" />
+        <action
+            android:id="@+id/action_invoiceFragment_to_receiptFrag"
+            app:destination="@id/receiptFrag" />
 
     </fragment>
     <fragment

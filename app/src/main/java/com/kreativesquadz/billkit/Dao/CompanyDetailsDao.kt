@@ -17,8 +17,6 @@ interface CompanyDetailsDao {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     fun insertCompanyDetails(companyDetails: List<CompanyDetails>)
 
-    @Query("SELECT * FROM companyDetails WHERE id = :id")
-    fun getById(id: Int): CompanyDetails?
 
     @Update
     fun update(companyDetails: CompanyDetails)

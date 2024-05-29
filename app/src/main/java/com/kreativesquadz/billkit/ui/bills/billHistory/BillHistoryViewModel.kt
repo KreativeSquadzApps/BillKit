@@ -1,5 +1,6 @@
 package com.kreativesquadz.billkit.ui.bills.billHistory
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.kreativesquadz.billkit.model.Invoice
@@ -16,8 +17,6 @@ class BillHistoryViewModel @Inject constructor(val repository: BillHistoryReposi
         invoices = repository.loadAllInvoices()
         return invoices
     }
-
-
 
 
 }

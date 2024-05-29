@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
     fun observers(){
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items.asReversed())
-            val totalSum = items.sumOf { it.total_price ?: 0.0 }
+            val totalSum = items.sumOf { it.totalPrice ?: 0.0 }
             binding.tvBill.text = totalSum.toString()
         }
 

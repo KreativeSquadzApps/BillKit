@@ -9,6 +9,7 @@ import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import java.util.UUID
 
 
 class SharedViewModel : ViewModel() {
@@ -59,12 +60,12 @@ class SharedViewModel : ViewModel() {
                 val include = "X"
                 val finalAmount = amnt.replace("X", "").toDouble() * qty.toDouble()
                 val homeItem =  InvoiceItem(
-                    invoice_id = 1,
-                    item_name = "$itemName( $amnt )  $include $qty",
-                    unit_price = finalAmount,
+                    invoiceId = 1,
+                    itemName = "$itemName( $amnt )  $include $qty",
+                    unitPrice = finalAmount,
                     quantity = qty.toInt(),
-                    total_price = finalAmount,
-                    tax_rate = 0.10
+                    totalPrice = finalAmount,
+                    taxRate = 0.10
                 )
                 list.add(homeItem)
             }
@@ -73,12 +74,12 @@ class SharedViewModel : ViewModel() {
             val qty = "1"
             val finalAmount = amount.toDouble() * qty.toDouble()
             val homeItem =  InvoiceItem(
-                invoice_id = 1,
-                item_name = "$itemName( $amountBuilder )  $include $qty",
-                unit_price = finalAmount,
+                invoiceId = 1,
+                itemName = "$itemName( $amountBuilder )  $include $qty",
+                unitPrice = finalAmount,
                 quantity = qty.toInt(),
-                total_price = finalAmount,
-                tax_rate = 0.10
+                totalPrice = finalAmount,
+                taxRate = 0.10
             )
             list.add(homeItem)
         }
@@ -99,7 +100,7 @@ class SharedViewModel : ViewModel() {
     fun getSubTotalamount(): String {
         var total = 0.0
         list.forEach {
-            total += it.total_price!!
+            total += it.totalPrice!!
         }
 
         return Config.CURRENCY+total.toString()
@@ -107,7 +108,7 @@ class SharedViewModel : ViewModel() {
     fun getSubTotalamountDouble(): Double {
         var total = 0.0
         list.forEach {
-            total += it.total_price!!
+            total += it.totalPrice!!
         }
 
         return total
@@ -116,7 +117,7 @@ class SharedViewModel : ViewModel() {
     fun getTotalTax(): String {
         var total = 0.0
         list.forEach {
-            total += it.tax_rate!!
+            total += it.taxRate!!
         }
         return Config.CURRENCY+total.toString()
     }
@@ -127,7 +128,7 @@ class SharedViewModel : ViewModel() {
             .toDouble() + getSubTotalamount()
             .replace(Config.CURRENCY,"")
             .toDouble()
-    return Config.CURRENCY+totalTax.toString()
+        return Config.CURRENCY+totalTax.toString()
 
     }
 
@@ -137,7 +138,7 @@ class SharedViewModel : ViewModel() {
             .toDouble() + getSubTotalamount()
             .replace(Config.CURRENCY,"")
             .toDouble()
-    return totalTax
+        return totalTax
     }
     fun updateSelectedCustomer(customer: Customer?) {
         _selectedCustomer.value = customer
@@ -150,16 +151,18 @@ class SharedViewModel : ViewModel() {
 
     fun getInvoice() : Invoice{
         val invoice = Invoice(
-            invoice_number = "INV ${getInvoiceItemCount()}",
-            invoice_date = System.currentTimeMillis().toString(),
-            invoice_time = System.currentTimeMillis().toString(),
-            created_by = "Created By Admin",
-            total_items = getInvoiceItem().size,
+            invoiceId = generateInvoiceId(),
+            invoiceNumber = "INV ${getInvoiceItemCount()}",
+            invoiceDate = System.currentTimeMillis().toString(),
+            invoiceTime = System.currentTimeMillis().toString(),
+            createdBy = "Created By Admin",
+            totalItems = getInvoiceItem().size,
             subtotal = getSubTotalamountDouble(),
-            cash_amount = getTotalAmountDouble(),
-            total_amount = getTotalAmountDouble(),
+            cashAmount = getTotalAmountDouble(),
+            totalAmount = getTotalAmountDouble(),
             customerId = getCustomerId(),
-            invoice_items = getItemsList()
+            isSynced = 0,
+            invoiceItems = getInvoiceItem()
         )
         return invoice
     }
@@ -176,6 +179,14 @@ class SharedViewModel : ViewModel() {
         }
         return customerId
     }
+
+    fun generateInvoiceId(): Int {
+        // Generate a unique invoiceId using a combination of timestamp and counter
+        val timestamp = System.currentTimeMillis()
+        val counter = (0 until 1000).random() // Choose a random number as the counter
+        return (timestamp / 1000).toInt() * 1000 + counter
+    }
+
 
 
 

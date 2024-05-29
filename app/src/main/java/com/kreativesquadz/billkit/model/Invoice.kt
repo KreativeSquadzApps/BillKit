@@ -2,6 +2,7 @@ package com.kreativesquadz.billkit.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
@@ -12,39 +13,42 @@ import java.io.Serializable
         parentColumns = ["id"],
         childColumns = ["customerId"],
         onDelete = ForeignKey.SET_NULL
-    )]
+    )],
+    indices = [Index(value = ["customerId"])]
 )
 data class Invoice(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val invoice_number: String,
-    val invoice_date: String,
-    val invoice_time: String,
-    val created_by: String,
-    val total_items: Int,
+    val invoiceId: Int,
+    val invoiceNumber: String,
+    val invoiceDate: String,
+    val invoiceTime: String,
+    val createdBy: String,
+    val totalItems: Int,
     val subtotal: Double,
-    val cash_amount: Double,
-    val total_amount: Double,
+    val cashAmount: Double,
+    val totalAmount: Double,
     val customerId: Long? = null,
-    val invoice_items: List<InvoiceItem>
-
+    val isSynced: Int = 0,
+    val invoiceItems: List<InvoiceItem>
 ) : Serializable
-
 
 @Entity(
     tableName = "invoice_items",
     foreignKeys = [ForeignKey(
         entity = Invoice::class,
         parentColumns = ["id"],
-        childColumns = ["invoice_id"],
+        childColumns = ["invoiceId"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["invoiceId"])]
 )
 data class InvoiceItem(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val invoice_id: Long,
-    val item_name: String,
-    val unit_price: Double,
+    val invoiceId: Long,
+    val itemName: String,
+    val unitPrice: Double,
     val quantity: Int,
-    val total_price: Double,
-    val tax_rate: Double
-): Serializable
+    val totalPrice: Double,
+    val taxRate: Double
+) : Serializable
+

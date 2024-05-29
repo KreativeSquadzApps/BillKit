@@ -26,7 +26,6 @@ class BillHistoryFrag : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
             viewModel.getAllInvoices()
-
     }
 
     override fun onCreateView(
@@ -43,6 +42,7 @@ class BillHistoryFrag : Fragment() {
 
     private fun observers(){
         viewModel.invoices.observe(viewLifecycleOwner) {
+            println(it.message)
             it.data?.let { it1 ->
                 adapter.submitList(it.data)
             }

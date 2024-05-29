@@ -38,4 +38,16 @@ class DataConverters : Serializable {
     }
 
 
+
+    @TypeConverter
+    fun fromIntToBoolean(value: Int): Boolean {
+        return value != 0
+    }
+
+    @TypeConverter
+    fun fromBooleanToInt(value: Boolean): Int {
+        return if (value) 1 else 0
+    }
+
+
 }

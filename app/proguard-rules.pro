@@ -19,3 +19,16 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keepclassmembers class * {
+    @androidx.annotation.Keep <methods>;
+}
+
+-keepclassmembers class * {
+    @dagger.hilt.android.internal.lifecycle.HiltViewModelMap <fields>;
+}
+
+-keepclassmembers class * {
+    @dagger.hilt.android.internal.lifecycle.HiltViewModelMap.Key <fields>;
+}
+
+-keep @interface dagger.hilt.internal.GeneratedComponent { *; }

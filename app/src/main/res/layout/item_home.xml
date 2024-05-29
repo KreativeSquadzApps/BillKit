@@ -24,7 +24,7 @@
             android:textColor="@color/text_color_main"
             android:layout_marginStart="10dp"
             android:textSize="@dimen/txt_home_item"
-            android:text="@{item.item_name}"
+            android:text="@{item.itemName}"
             tools:text="2000"/>
 
         <TextView
@@ -37,7 +37,7 @@
             android:textSize="@dimen/txt_home_item"
             android:gravity="end"
             android:layout_marginEnd="10dp"
-            android:text="@{item.unit_price}"
+            android:text="@{item.unitPrice}"
             tools:text="2000"/>
     </LinearLayout>
 </layout>

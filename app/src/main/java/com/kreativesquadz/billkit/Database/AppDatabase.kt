@@ -15,7 +15,7 @@ import com.kreativesquadz.billkit.model.InvoiceItem
 import kotlin.concurrent.Volatile
 
 
-@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class], version = 15, exportSchema = false)
+@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class], version = 25, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{

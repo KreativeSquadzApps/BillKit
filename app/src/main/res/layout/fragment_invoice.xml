@@ -63,7 +63,7 @@
                                        android:layout_marginStart="10dp"
                                        app:layout_constraintStart_toStartOf="parent"
                                        app:layout_constraintTop_toTopOf="parent"
-                                       android:text="@{invoice.invoice_date}"
+                                       android:text="@{invoice.invoiceDate}"
                                        tools:text="Date "/>
 
                                      <androidx.appcompat.widget.AppCompatTextView
@@ -76,7 +76,7 @@
                                        android:layout_marginStart="10dp"
                                        app:layout_constraintStart_toStartOf="parent"
                                        app:layout_constraintTop_toBottomOf="@id/tvDate"
-                                       android:text="@{invoice.invoice_time}"
+                                       android:text="@{invoice.invoiceTime}"
                                        tools:text="Time "/>
 
                                    <androidx.appcompat.widget.AppCompatTextView
@@ -89,7 +89,7 @@
                                            android:layout_marginStart="10dp"
                                            app:layout_constraintStart_toStartOf="parent"
                                            app:layout_constraintTop_toBottomOf="@id/tvTime"
-                                           android:text="@{invoice.created_by}"
+                                           android:text="@{invoice.createdBy}"
                                            tools:text="Created by Admin "/>
 
                                    <androidx.appcompat.widget.AppCompatTextView
@@ -161,7 +161,7 @@
                                         android:textSize="18sp"
                                         android:textColor="@color/text_color_main"
                                         android:id="@+id/tvCustomerGst"
-                                        android:text="@{customer.GSTNo}"
+                                        android:text="@{customer.gstNo}"
                                         tools:text="Demo"/>
 
                                       <TextView
@@ -278,7 +278,7 @@
                                         android:layout_marginStart="10dp"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
-                                        android:text="@{invoice.total_items}"
+                                        android:text="@{invoice.totalItems}"
                                         tools:text="Total items "/>
 
                                     <androidx.appcompat.widget.AppCompatTextView
@@ -291,7 +291,7 @@
                                         android:layout_marginStart="10dp"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
-                                        android:text="@{invoice.cash_amount}"
+                                        android:text="@{invoice.cashAmount}"
                                         tools:text="Cash : 1020.00 "/>
 
 
@@ -328,7 +328,7 @@
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/viewfooter"
                                         app:layout_constraintBottom_toBottomOf="parent"
-                                        android:text="@{invoice.total_amount}"
+                                        android:text="@{invoice.totalAmount}"
                                         tools:text="Total Amount : 1020"/>
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -356,7 +356,7 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/btnCash"
+                        android:id="@+id/btnSaleReturn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="-10dp"
@@ -378,7 +378,7 @@
                     </soup.neumorphism.NeumorphCardView>
 
                     <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/btnOnline"
+                        android:id="@+id/btnCancel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="-5dp"
@@ -402,7 +402,7 @@
                     </soup.neumorphism.NeumorphCardView>
 
                     <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/btnSplit"
+                        android:id="@+id/btnReceipt"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="-5dp"
