@@ -9,15 +9,20 @@ import com.kreativesquadz.billkit.api.ApiClient
 import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
+import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import javax.inject.Inject
 
 class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     private val invoiceDao : InvoiceDao = db.invoiceDao()
+    private val customerDao = db.customerDao()
+
+
     fun loadAllInvoices(): LiveData<Resource<List<Invoice>>> {
         return object : NetworkBoundResource<List<Invoice>, List<Invoice>>() {
             override fun saveCallResult(item: List<Invoice>) {
                 try {
+                    Log.e("invoice", item.toString())
                     db.runInTransaction {
                         // Clear existing data
                         invoiceDao.deleteInvoices()
@@ -25,7 +30,7 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
                         Log.e("Error", item.toString())
                     }
                 } catch (ex: Exception) {
-                    Log.e("Error", ex.toString())
+                    Log.e("Errortry", ex.toString())
 
                 }
 
@@ -40,7 +45,6 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
             }
 
             override fun createCall(): LiveData<ApiResponse<List<Invoice>>> {
-                Log.e("loadd", ApiClient.getApiService().loadInvoices().toString())
                 return ApiClient.getApiService().loadInvoices()
             }
         }.asLiveData()

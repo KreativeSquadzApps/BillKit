@@ -11,7 +11,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CustomerManagementViewModel @Inject constructor(val repository: CustomerManagRepository) : ViewModel() {
     lateinit var customer : LiveData<Resource<List<Customer>>>
-
     fun getCustomers(){
         customer = repository.loadAllCustomers()
     }

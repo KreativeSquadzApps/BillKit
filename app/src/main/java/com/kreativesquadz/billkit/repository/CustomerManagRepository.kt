@@ -64,8 +64,6 @@ class CustomerManagRepository @Inject constructor(val context: Context, private 
                 Timber.tag("Error").d(errorMessage)
             }
 
-            Toast.makeText(context, response.body()?.message, Toast.LENGTH_SHORT).show()
-
         } catch (e: IOException) {
             e.printStackTrace()
             Resource.error("Network error: ${e.message}", null)

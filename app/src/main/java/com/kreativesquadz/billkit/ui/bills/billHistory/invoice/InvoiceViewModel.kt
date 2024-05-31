@@ -9,8 +9,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InvoiceViewModel @Inject constructor(val customerManagRepository: CustomerManagRepository) : ViewModel() {
+
   fun getCustomerById(id: String) : Customer {
-  return customerManagRepository.getCustomer(id)
+    return customerManagRepository.getCustomer(id)
   }
 
 

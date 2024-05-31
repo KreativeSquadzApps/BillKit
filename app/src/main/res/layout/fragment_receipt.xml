@@ -1,13 +1,443 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.bills.ReceiptFrag">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="companyDetails"
+            type="com.kreativesquadz.billkit.model.CompanyDetails" />
+        <variable
+            name="invoice"
+            type="com.kreativesquadz.billkit.model.Invoice" />
+        <variable
+            name="isCustomerAvailable"
+            type="Boolean" />
+        <variable
+            name="customer"
+            type="com.kreativesquadz.billkit.model.Customer" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+
+        <com.kreativesquadz.billkit.utils.ZigzagView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/receiptView"
+            android:layout_marginBottom="140dp"
+            app:zigzagBackgroundColor="@color/lite_grey_200"
+            app:zigzagElevation="8dp"
+            app:zigzagHeight="10dp"
+            app:zigzagPaddingContent="10dp"
+            app:zigzagShadowAlpha="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:zigzagSides="bottom">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <!-- Company Details Header -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{companyDetails.BusinessName}"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center"
+                        tools:text="KreativeSquadz Technology pvt Ltd"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{companyDetails.Place}"
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center"
+                        android:textSize="14sp"
+                        tools:text="Shop Place "/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{companyDetails.ShopContactNumber}'
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center"
+                        android:textSize="14sp"
+                        tools:text="+919971380539 "/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{"Email: " + companyDetails.ShopEmail}'
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center"
+                        android:textSize="14sp"
+                        tools:text="info@kreativesquadz.com"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="INVOICE"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center" />
+
+
+                    <!-- Invoice Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:weightSum="2">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:timestampToDateTime="@{invoice.invoiceDate}"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:layout_gravity="center"
+                            tools:text="30-05-2024 9:31 PM" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text='@{"Invoice : " + invoice.id}'
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:gravity="end"
+                            tools:text="Invoice : 8" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_color_main"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
+                        android:id="@+id/customerView">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:id="@+id/tvCustomerName"
+                            android:text="@{customer.customerName}"
+                            tools:text="Dragon"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/tvCustomerNumber"
+                            android:text='@{"Contact : " + customer.shopContactNumber}'
+                            tools:text="Contact : 9971380539"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/tvCustomerGst"
+                            android:text='@{"GST No : " + customer.gstNo}'
+                            tools:text="GST No : GST1234"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/tvCustomeradress"
+                            android:text="@{customer.address}"
+                            tools:text="Darya ganj"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/text_color_main"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:text="Item"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:text="Qty"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:text="Rate"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textColor="@color/text_color_main"
+                            android:layout_marginEnd="10dp"
+                            android:text="Total"/>
+
+
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_color_main"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/itemListRecyclerview"
+                        android:nestedScrollingEnabled="false"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/item_invoice_item_receipt"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_color_main"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text='@{"Items : " + invoice.totalItems}'
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            tools:text="Items: 3"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text='@{"Sub Total  Rs " + invoice.subtotal}'
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/text_color_main"
+                            tools:text="Sub Total  Rs 990.00"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#000000"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <!-- Invoice Totals -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text='@{"Total : " + invoice.totalAmount}'
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_main"
+                        android:gravity="center"
+                        tools:text="Total  :  9000"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text='@{"You saved Rs " + invoice.totalItems + " on this purchase"}'
+                        android:textSize="14sp"
+                        android:textColor="@color/text_color_main"
+                        android:gravity="center"
+                        tools:text="You saved Rs 60.0 on this purchase"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_color_main"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Payment Mode"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{"Cash : " + invoice.cashAmount}'
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center"
+                        tools:text="Cash : 1000"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_color_main"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thank You"
+                        android:layout_marginTop="@dimen/_20dp"
+                        android:textColor="@color/text_color_main"
+                        android:layout_gravity="center"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+
+        </com.kreativesquadz.billkit.utils.ZigzagView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:weightSum="3"
+            android:layout_margin="@dimen/_10dp"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal">
+
+            <soup.neumorphism.NeumorphCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/btnCash"
+                android:layout_marginTop="-5dp"
+                android:layout_marginBottom="-5dp"
+                android:layout_marginStart="-10dp"
+                android:layout_marginEnd="-5dp"
+                android:textStyle="bold"
+                android:textColor="@color/text_color_heading"
+                android:gravity="center"
+                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_delete" />
+            </soup.neumorphism.NeumorphCardView>
+            <soup.neumorphism.NeumorphCardView
+                android:layout_width="match_parent"
+                android:id="@+id/btnOnline"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_marginTop="-5dp"
+                android:layout_marginBottom="-5dp"
+                android:layout_marginStart="-5dp"
+                android:layout_marginEnd="-10dp"
+                android:textColor="@color/text_color_heading"
+                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_delete">
+
+                </ImageView>
+
+            </soup.neumorphism.NeumorphCardView>
+            <soup.neumorphism.NeumorphCardView
+                android:layout_width="match_parent"
+                android:id="@+id/btnSplit"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_marginTop="-5dp"
+                android:layout_marginBottom="-5dp"
+                android:layout_marginStart="-5dp"
+                android:layout_marginEnd="-10dp"
+                android:textColor="@color/text_color_heading"
+                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
+                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_delete">
+
+                </ImageView>
+
+            </soup.neumorphism.NeumorphCardView>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</layout>

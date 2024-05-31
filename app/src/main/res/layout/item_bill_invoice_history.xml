@@ -37,7 +37,7 @@
                     android:layout_marginStart="10dp"
                     android:textColor="@color/text_color_main"
                     android:textSize="@dimen/txt_home_item"
-                    android:text="@{invoice.invoiceId}"
+                    android:text="@{invoice.id}"
                     tools:text="2000"/>
 
                 <TextView

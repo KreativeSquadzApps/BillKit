@@ -14,7 +14,7 @@ import retrofit2.http.PUT
 
 interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
-    @GET("/api/invoices")
+    @GET("api/invoices")
     fun loadInvoices(): LiveData<ApiResponse<List<Invoice>>>
 
     @Headers(

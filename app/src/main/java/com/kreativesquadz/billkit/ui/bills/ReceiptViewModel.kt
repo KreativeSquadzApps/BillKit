@@ -2,9 +2,11 @@ package com.kreativesquadz.billkit.ui.bills
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
+import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
@@ -14,18 +16,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepository,
-                                           val billHistoryRepository: BillHistoryRepository
+                                           val billHistoryRepository: BillHistoryRepository,
+                                            val customerManagRepository: CustomerManagRepository
 ) : ViewModel() {
+    lateinit var companyDetails : LiveData<Resource<List<CompanyDetails>>>
 
     fun getInvoiceDetails(invoiceId: String) : LiveData<Invoice> {
         return billHistoryRepository.getInvoiceById(invoiceId.toInt())
     }
 
-    fun getCompanyDetails() : LiveData<Resource<List<CompanyDetails>>>  {
-       return settingsRepository.loadCompanyDetails()
+    fun getCompanyObjDetails(): LiveData<Resource<List<CompanyDetails>>> {
+        companyDetails = settingsRepository.loadCompanyDetails()
+        return companyDetails
     }
 
-
+    fun getCustomerById(id: String) : Customer {
+        return customerManagRepository.getCustomer(id)
+    }
 
 
 

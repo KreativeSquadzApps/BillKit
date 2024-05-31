@@ -62,7 +62,7 @@ class SharedViewModel : ViewModel() {
                 val homeItem =  InvoiceItem(
                     invoiceId = 1,
                     itemName = "$itemName( $amnt )  $include $qty",
-                    unitPrice = finalAmount,
+                    unitPrice = amnt.toDouble(),
                     quantity = qty.toInt(),
                     totalPrice = finalAmount,
                     taxRate = 0.10
@@ -76,7 +76,7 @@ class SharedViewModel : ViewModel() {
             val homeItem =  InvoiceItem(
                 invoiceId = 1,
                 itemName = "$itemName( $amountBuilder )  $include $qty",
-                unitPrice = finalAmount,
+                unitPrice = amountBuilder.toString().toDouble(),
                 quantity = qty.toInt(),
                 totalPrice = finalAmount,
                 taxRate = 0.10

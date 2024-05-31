@@ -14,7 +14,9 @@ import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentBillHistoryBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.ui.customerManag.CustomerManagementViewModel
 import timber.log.Timber
 
 class BillHistoryFrag : Fragment() {
@@ -41,8 +43,16 @@ class BillHistoryFrag : Fragment() {
     }
 
     private fun observers(){
+        viewModel.customers.observe(viewLifecycleOwner) {
+            println(it.message)
+            it.data?.let { it1 ->
+                Log.e("TAG", "Customer: ${it1}")
+
+            }
+        }
         viewModel.invoices.observe(viewLifecycleOwner) {
             println(it.message)
+            //Log.e("TAG", "observers: ${it}")
             it.data?.let { it1 ->
                 adapter.submitList(it.data)
             }
@@ -56,7 +66,6 @@ class BillHistoryFrag : Fragment() {
                 override fun onItemClick(item: Invoice) {
                      val action = BillHistoryFragDirections.actionBillHistoryFragToInvoiceFragment(item)
                     findNavController().navigate(action)
-
                 }
             },
             R.layout.item_bill_invoice_history,

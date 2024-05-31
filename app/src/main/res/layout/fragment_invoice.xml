@@ -17,422 +17,420 @@
 
     </data>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <soup.neumorphism.NeumorphCardView
+                android:id="@+id/cardViewDetails"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardUseCompatPadding="true">
 
-                <soup.neumorphism.NeumorphCardView
-                    android:id="@+id/cardViewDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:cardUseCompatPadding="true">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-
-
-                        <androidx.core.widget.NestedScrollView
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="wrap_content">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="110dp"
+                                android:id="@+id/cardHeader"
+                                android:paddingTop="@dimen/_20dp"
+                                android:paddingStart="@dimen/_10dp"
+                                android:paddingEnd="@dimen/_10dp"
+                                android:background="@color/lite_grey"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
 
-                               <androidx.constraintlayout.widget.ConstraintLayout
-                                   android:layout_width="match_parent"
-                                   android:layout_height="110dp"
-                                   android:id="@+id/cardHeader"
-                                   android:paddingTop="@dimen/_20dp"
-                                   android:paddingStart="@dimen/_10dp"
-                                   android:paddingEnd="@dimen/_10dp"
-                                   android:background="@color/lite_grey"
-                                   app:layout_constraintStart_toStartOf="parent"
-                                   app:layout_constraintTop_toTopOf="parent">
-
-                                   <androidx.appcompat.widget.AppCompatTextView
-                                       android:id="@+id/tvDate"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       android:layout_weight="1"
-                                       android:textColor="@color/text_color_main"
-                                       android:textSize="@dimen/txt_18sp"
-                                       android:layout_marginStart="10dp"
-                                       app:layout_constraintStart_toStartOf="parent"
-                                       app:layout_constraintTop_toTopOf="parent"
-                                       android:text="@{invoice.invoiceDate}"
-                                       tools:text="Date "/>
-
-                                     <androidx.appcompat.widget.AppCompatTextView
-                                       android:id="@+id/tvTime"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       android:layout_weight="1"
-                                       android:textColor="@color/text_color_main"
-                                       android:textSize="@dimen/txt_18sp"
-                                       android:layout_marginStart="10dp"
-                                       app:layout_constraintStart_toStartOf="parent"
-                                       app:layout_constraintTop_toBottomOf="@id/tvDate"
-                                       android:text="@{invoice.invoiceTime}"
-                                       tools:text="Time "/>
-
-                                   <androidx.appcompat.widget.AppCompatTextView
-                                           android:id="@+id/tvCreatedBy"
-                                           android:layout_width="wrap_content"
-                                           android:layout_height="wrap_content"
-                                           android:layout_weight="1"
-                                           android:textColor="@color/text_color_main"
-                                           android:textSize="@dimen/txt_18sp"
-                                           android:layout_marginStart="10dp"
-                                           app:layout_constraintStart_toStartOf="parent"
-                                           app:layout_constraintTop_toBottomOf="@id/tvTime"
-                                           android:text="@{invoice.createdBy}"
-                                           tools:text="Created by Admin "/>
-
-                                   <androidx.appcompat.widget.AppCompatTextView
-                                       android:id="@+id/tvInvoiceNo"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       android:layout_weight="1"
-                                       android:textColor="@color/text_color_main"
-                                       android:textSize="30sp"
-                                       android:layout_marginStart="10dp"
-                                       app:layout_constraintEnd_toEndOf="parent"
-                                       app:layout_constraintTop_toTopOf="parent"
-                                       app:layout_constraintBottom_toBottomOf="@id/tvTime"
-                                       android:text="@{invoice.id}"
-                                       tools:text="41"/>
-
-                                   <androidx.appcompat.widget.AppCompatTextView
-                                           android:id="@+id/txInvoiceNo"
-                                           android:layout_width="wrap_content"
-                                           android:layout_height="wrap_content"
-                                           android:layout_weight="1"
-                                           android:textColor="@color/text_color_main"
-                                           android:textSize="@dimen/txt_18sp"
-                                           android:layout_marginStart="10dp"
-                                           app:layout_constraintEnd_toEndOf="parent"
-                                       app:layout_constraintTop_toBottomOf="@+id/tvInvoiceNo"
-                                           android:text="Invoice No"
-                                           tools:text="Invoice No "/>
-
-                               </androidx.constraintlayout.widget.ConstraintLayout>
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_marginTop="@dimen/_10dp"
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/cardHeader"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{invoice.invoiceDate}"
+                                    tools:text="Date "/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:layout_marginStart="10dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/tvDate"
+                                    android:text="@{invoice.invoiceTime}"
+                                    tools:text="Time "/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvCreatedBy"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:layout_marginStart="10dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/tvTime"
+                                    android:text="@{invoice.createdBy}"
+                                    tools:text="Created by Admin "/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvInvoiceNo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="30sp"
+                                    android:layout_marginStart="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
-                                    android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
-                                    android:id="@+id/customerView">
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="@id/tvTime"
+                                    android:text="@{invoice.id}"
+                                    tools:text="41"/>
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/_20dp"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        android:textSize="16sp"
-                                        android:textColor="@color/text_color_main"
-                                        android:id="@+id/txtCustomerDetails"
-                                        android:text="Customer Details" />
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="@color/text_color_main"
-                                        android:layout_marginStart="@dimen/_20dp"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/txtCustomerDetails"
-                                        android:textSize="18sp"
-                                        android:id="@+id/tvCustomerName"
-                                        android:text="@{customer.customerName}"
-                                        tools:text="Demo Name"/>
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/txInvoiceNo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:layout_marginStart="10dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvInvoiceNo"
+                                    android:text="Invoice No"
+                                    tools:text="Invoice No "/>
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/_20dp"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
-                                        android:textSize="18sp"
-                                        android:textColor="@color/text_color_main"
-                                        android:id="@+id/tvCustomerGst"
-                                        android:text="@{customer.gstNo}"
-                                        tools:text="Demo"/>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_marginTop="@dimen/_10dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/cardHeader"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
+                                android:id="@+id/customerView">
 
-                                      <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/_20dp"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/tvCustomerGst"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        android:textSize="18sp"
-                                        android:layout_marginBottom="@dimen/_10dp"
-                                        android:textColor="@color/text_color_main"
-                                        android:id="@+id/tvCustomeradress"
-                                        android:text="@{customer.address}"
-                                        tools:text="Demo"/>
-
-
-                                      <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/_20dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        android:textSize="18sp"
-                                          android:layout_marginEnd="@dimen/_20dp"
-                                        android:layout_marginBottom="@dimen/_10dp"
-                                        android:textColor="@color/text_color_main"
-                                        android:id="@+id/tvCustomerNumber"
-                                        android:text="@{customer.shopContactNumber}"
-                                        tools:text="Demo"/>
-
-
-
-
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:id="@+id/view2"
-                                    android:background="@color/lite_grey"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_20dp"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/customerView"/>
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:weightSum="2"
-                                    android:padding="5dp"
-                                    android:id="@+id/txtItem"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/text_color_main"
+                                    android:id="@+id/txtCustomerDetails"
+                                    android:text="Customer Details" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/text_color_main"
+                                    android:layout_marginStart="@dimen/_20dp"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/view2"
+                                    app:layout_constraintTop_toBottomOf="@id/txtCustomerDetails"
+                                    android:textSize="18sp"
+                                    android:id="@+id/tvCustomerName"
+                                    android:text="@{customer.customerName}"
+                                    tools:text="Demo Name"/>
 
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvInvoiceID"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:layout_marginStart="10dp"
-                                        android:textColor="@color/text_color_main"
-                                        android:textSize="@dimen/txt_18sp"
-                                        android:text="Items" />
-
-                                    <TextView
-                                        android:id="@+id/item_name"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="1"
-                                        android:textColor="@color/text_color_main"
-                                        android:textSize="@dimen/txt_18sp"
-                                        android:gravity="end|center"
-                                        android:layout_marginEnd="10dp"
-                                        android:text="Amount"/>
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:id="@+id/view"
-                                    android:background="@color/lite_grey"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_20dp"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
+                                    app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/text_color_main"
+                                    android:id="@+id/tvCustomerGst"
+                                    android:text="@{customer.gstNo}"
+                                    tools:text="Demo"/>
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:id="@+id/recyclerView"
-                                    app:layout_constraintTop_toBottomOf="@+id/view"/>
-
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="110dp"
-                                    android:id="@+id/cardFooter"
-                                    android:paddingTop="@dimen/_20dp"
-                                    android:paddingStart="@dimen/_10dp"
-                                    android:paddingEnd="@dimen/_10dp"
-                                    android:background="@color/lite_grey"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_20dp"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-                                    app:layout_constraintBottom_toBottomOf="parent">
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/tvTotalItems"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:textColor="@color/text_color_main"
-                                        android:textSize="@dimen/txt_18sp"
-                                        android:layout_marginStart="10dp"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        android:text="@{invoice.totalItems}"
-                                        tools:text="Total items "/>
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/tvCash"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:textColor="@color/text_color_main"
-                                        android:textSize="@dimen/txt_18sp"
-                                        android:layout_marginStart="10dp"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
-                                        android:text="@{invoice.cashAmount}"
-                                        tools:text="Cash : 1020.00 "/>
+                                    app:layout_constraintTop_toBottomOf="@id/tvCustomerGst"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    android:textSize="18sp"
+                                    android:layout_marginBottom="@dimen/_10dp"
+                                    android:textColor="@color/text_color_main"
+                                    android:id="@+id/tvCustomeradress"
+                                    android:text="@{customer.address}"
+                                    tools:text="Demo"/>
 
 
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/tvSubTotal"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:textColor="@color/text_color_main"
-                                        android:textSize="@dimen/txt_18sp"
-                                        android:layout_marginStart="10dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        android:text="@{invoice.subtotal}"
-                                        tools:text="Sub Total : 1020"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_20dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    android:textSize="18sp"
+                                    android:layout_marginEnd="@dimen/_20dp"
+                                    android:layout_marginBottom="@dimen/_10dp"
+                                    android:textColor="@color/text_color_main"
+                                    android:id="@+id/tvCustomerNumber"
+                                    android:text="@{customer.shopContactNumber}"
+                                    tools:text="Demo"/>
 
-                                    <View
-                                        android:layout_width="match_parent"
-                                        android:layout_height="1dp"
-                                        android:id="@+id/viewfooter"
-                                        android:layout_marginTop="@dimen/_10dp"
-                                        android:background="@color/design_dark_default_color_shadow_dark"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/tvCash"/>
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/tvTotalAmount"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:textColor="@color/text_color_main"
-                                        android:textSize="20sp"
-                                        android:layout_marginStart="10dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/viewfooter"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        android:text="@{invoice.totalAmount}"
-                                        tools:text="Total Amount : 1020"/>
-
-                                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:id="@+id/view2"
+                                android:background="@color/lite_grey"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/customerView"/>
 
-                        </androidx.core.widget.NestedScrollView>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:weightSum="2"
+                                android:padding="5dp"
+                                android:id="@+id/txtItem"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/view2"
+
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvInvoiceID"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="10dp"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:text="Items" />
+
+                                <TextView
+                                    android:id="@+id/item_name"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:gravity="end|center"
+                                    android:layout_marginEnd="10dp"
+                                    android:text="Amount"/>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:id="@+id/view"
+                                android:background="@color/lite_grey"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:id="@+id/recyclerView"
+                                android:nestedScrollingEnabled="false"
+                                app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="110dp"
+                                android:id="@+id/cardFooter"
+                                android:paddingTop="@dimen/_20dp"
+                                android:paddingStart="@dimen/_10dp"
+                                android:paddingEnd="@dimen/_10dp"
+                                android:background="@color/lite_grey"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvTotalItems"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:layout_marginStart="10dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{invoice.totalItems}"
+                                    tools:text="Total items "/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvCash"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:layout_marginStart="10dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
+                                    android:text="@{invoice.cashAmount}"
+                                    tools:text="Cash : 1020.00 "/>
+
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvSubTotal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_18sp"
+                                    android:layout_marginStart="10dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{invoice.subtotal}"
+                                    tools:text="Sub Total : 1020"/>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:id="@+id/viewfooter"
+                                    android:layout_marginTop="@dimen/_10dp"
+                                    android:background="@color/design_dark_default_color_shadow_dark"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvCash"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvTotalAmount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="20sp"
+                                    android:layout_marginStart="10dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/viewfooter"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    android:text="@{invoice.totalAmount}"
+                                    tools:text="Total Amount : 1020"/>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+                    </LinearLayout>
+
+
+            </soup.neumorphism.NeumorphCardView>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:padding="@dimen/_10dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <soup.neumorphism.NeumorphCardView
+                    android:id="@+id/btnSaleReturn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-10dp"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginEnd="-5dp"
+                    android:layout_marginBottom="-5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/text_color_heading"
+                    android:textStyle="bold"
+                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_delete" />
+                </soup.neumorphism.NeumorphCardView>
+
+                <soup.neumorphism.NeumorphCardView
+                    android:id="@+id/btnCancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginEnd="-10dp"
+                    android:layout_marginBottom="-5dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_color_heading"
+                    android:textStyle="bold"
+                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_delete">
+
+                    </ImageView>
 
                 </soup.neumorphism.NeumorphCardView>
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
+                <soup.neumorphism.NeumorphCardView
+                    android:id="@+id/btnReceipt"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:padding="@dimen/_10dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginEnd="-10dp"
+                    android:layout_marginBottom="-5dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_color_heading"
+                    android:textStyle="bold"
+                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
+                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
 
-                    <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/btnSaleReturn"
+                    <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="-10dp"
-                        android:layout_marginTop="-5dp"
-                        android:layout_marginEnd="-5dp"
-                        android:layout_marginBottom="-5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textColor="@color/text_color_heading"
-                        android:textStyle="bold"
-                        app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                        app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+                        android:padding="15dp"
+                        android:src="@drawable/ic_delete">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="15dp"
-                            android:src="@drawable/ic_delete" />
-                    </soup.neumorphism.NeumorphCardView>
+                    </ImageView>
 
-                    <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/btnCancel"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="-5dp"
-                        android:layout_marginTop="-5dp"
-                        android:layout_marginEnd="-10dp"
-                        android:layout_marginBottom="-5dp"
-                        android:layout_weight="1"
-                        android:textColor="@color/text_color_heading"
-                        android:textStyle="bold"
-                        app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                        app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="15dp"
-                            android:src="@drawable/ic_delete">
-
-                        </ImageView>
-
-                    </soup.neumorphism.NeumorphCardView>
-
-                    <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/btnReceipt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="-5dp"
-                        android:layout_marginTop="-5dp"
-                        android:layout_marginEnd="-10dp"
-                        android:layout_marginBottom="-5dp"
-                        android:layout_weight="1"
-                        android:textColor="@color/text_color_heading"
-                        android:textStyle="bold"
-                        app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                        app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="15dp"
-                            android:src="@drawable/ic_delete">
-
-                        </ImageView>
-
-                    </soup.neumorphism.NeumorphCardView>
+                </soup.neumorphism.NeumorphCardView>
 
 
 
-                </LinearLayout>
+            </LinearLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </layout>

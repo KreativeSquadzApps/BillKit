@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.model.InvoiceItem
 
 @Dao
 interface InvoiceDao {
@@ -25,7 +26,11 @@ interface InvoiceDao {
 
 
     @Insert
+    fun insertRepo(invoice: Invoice) : Long
+    @Insert
     suspend fun insert(invoice: Invoice) : Long
+    @Insert
+     fun insertInvoiceItem(invoiceItem: InvoiceItem)
 
     @Update
     suspend fun update(invoice: Invoice)
