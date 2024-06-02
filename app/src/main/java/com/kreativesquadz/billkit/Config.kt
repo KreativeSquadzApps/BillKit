@@ -7,6 +7,9 @@ class Config {
       const val API_Key: String = "BillKitApi_v_1"
       const val  ERROR_CODE_10001: Int = 10001 // Totally No Record
       const val CURRENCY: String = "INR "
+      const val userId: Long = 1
+
+
 
     }
 

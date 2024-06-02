@@ -13,13 +13,13 @@ import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.model.Invoice
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
-class CustomerManagRepository @Inject constructor(val context: Context, private val db : AppDatabase) {
+class CustomerManagRepository @Inject constructor( private val db : AppDatabase) {
     private val customerDao: CustomerDao = db.customerDao()
-
 
     fun loadAllCustomers(): LiveData<Resource<List<Customer>>> {
         return object : NetworkBoundResource<List<Customer>, List<Customer>>() {
@@ -48,34 +48,23 @@ class CustomerManagRepository @Inject constructor(val context: Context, private 
             }
         }.asLiveData()
     }
-
-    suspend fun addCustomer(customer: Customer): LiveData<Boolean> {
+    suspend fun addCustomer(customer: Customer) : LiveData<Boolean>  {
         val statusLiveData = MutableLiveData<Boolean>()
-        try {
-            val response = ApiClient.getApiService().addCustomer(customer)
-            if (response.isSuccessful) {
-                statusLiveData.value = true
-                customerDao.insertCustomer(customer)
-                Timber.tag("Response").d(response.body().toString())
-
-            } else {
-                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                statusLiveData.value = false
-                Timber.tag("Error").d(errorMessage)
-            }
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Resource.error("Network error: ${e.message}", null)
-            statusLiveData.value = false
-        }
-
-        return statusLiveData
+        customerDao.insertCustomer(customer)
+        statusLiveData.value = true
+       return statusLiveData
     }
 
     fun getCustomer(id: String): Customer {
         return customerDao.getCustomer(id)
     }
 
+    suspend fun getUnsyncedCustomers(): List<Customer> {
+        return customerDao.getUnsyncedCustomers()
+    }
+
+    suspend fun markCustomerAsSynced(customer: Customer) {
+         customerDao.update(customer.copy(isSynced = 1))
+    }
 
 }

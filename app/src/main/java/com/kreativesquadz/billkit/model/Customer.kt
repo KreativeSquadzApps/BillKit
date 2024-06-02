@@ -12,5 +12,6 @@ data class Customer(
     val gstNo: String,
     val totalSales: String,
     val address: String,
-    val creditAmount: String
-) : Serializable
+    val creditAmount: String,
+    val isSynced: Int = 0,
+    ) : Serializable

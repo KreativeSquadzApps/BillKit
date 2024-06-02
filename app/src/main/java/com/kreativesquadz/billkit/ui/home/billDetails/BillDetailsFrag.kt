@@ -71,7 +71,6 @@ class BillDetailsFrag : Fragment() {
 
         viewModel.invoiceApiStatus.observe(viewLifecycleOwner) {
             if(it == true){
-                Log.e("Idddddd", viewModel.invoiceId.value.toString())
                 val action = BillDetailsFragDirections.actionBillDetailsFragToReceiptFrag(viewModel.invoiceId.value.toString())
                 findNavController().navigate(action)
             }

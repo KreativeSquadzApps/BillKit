@@ -7,15 +7,19 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.kreativesquadz.billkit.Dao.CompanyDetailsDao
 import com.kreativesquadz.billkit.Dao.CustomerDao
+import com.kreativesquadz.billkit.Dao.InventoryDao
 import com.kreativesquadz.billkit.Dao.InvoiceDao
+import com.kreativesquadz.billkit.Dao.UserDao
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.User
 import kotlin.concurrent.Volatile
 
 
-@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class], version = 25, exportSchema = false)
+@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class, User::class,Category::class], version = 32, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{
@@ -41,6 +45,8 @@ abstract class AppDatabase  : RoomDatabase() {
     abstract fun invoiceDao() : InvoiceDao
     abstract fun companyDetailsDao() : CompanyDetailsDao
 
+    abstract fun inventoryDao() : InventoryDao
+    abstract fun userDao(): UserDao
 
 
 }

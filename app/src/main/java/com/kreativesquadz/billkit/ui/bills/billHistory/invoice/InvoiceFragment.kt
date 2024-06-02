@@ -45,7 +45,7 @@ class InvoiceFragment : Fragment() {
 
     }
 
-    fun onClickListeners() {
+    private  fun onClickListeners() {
         binding.btnReceipt.setOnClickListener {
             val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.id.toString())
             findNavController().navigate(action)

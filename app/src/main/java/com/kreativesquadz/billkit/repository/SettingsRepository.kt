@@ -1,5 +1,6 @@
 package com.kreativesquadz.billkit.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kreativesquadz.billkit.Database.AppDatabase
@@ -15,30 +16,33 @@ import javax.inject.Inject
 class SettingsRepository @Inject constructor(val db : AppDatabase) {
     val companyDao = db.companyDetailsDao()
 
-    fun loadCompanyDetails(): LiveData<Resource<List<CompanyDetails>>> {
-        return object : NetworkBoundResource<List<CompanyDetails>, List<CompanyDetails>>() {
-            override fun saveCallResult(item: List<CompanyDetails>) {
+    fun loadCompanyDetails(userId : Long): LiveData<Resource<CompanyDetails>> {
+        return object : NetworkBoundResource<CompanyDetails, CompanyDetails>() {
+            override fun saveCallResult(item: CompanyDetails) {
                 try {
                     db.runInTransaction {
                         companyDao.insertCompanyDetails(item)
                         Timber.tag("Response").e(item.toString())
+                        Log.e("Response", item.toString())
                     }
                 } catch (ex: Exception) {
                     //Util.showErrorLog("Error at ", ex)
                     Timber.tag("Error at loadCompanyDetails()").e(ex.toString())
+                    Log.e("Error", ex.toString())
+
                 }
             }
 
-            override fun shouldFetch(data: List<CompanyDetails>?): Boolean {
+            override fun shouldFetch(data: CompanyDetails?): Boolean {
                 return true
             }
 
-            override fun loadFromDb(): LiveData<List<CompanyDetails>> {
-                return companyDao.getCompanyDetails()
+            override fun loadFromDb(): LiveData<CompanyDetails> {
+                return companyDao.getCompanyDetails(userId)
             }
 
-            override fun createCall(): LiveData<ApiResponse<List<CompanyDetails>>> {
-                return ApiClient.getApiService().loadCompanyDetails()
+            override fun createCall(): LiveData<ApiResponse<CompanyDetails>> {
+                return ApiClient.getApiService().loadCompanyDetails(userId)
             }
         }.asLiveData()
     }

@@ -39,13 +39,13 @@ class CustomerManagementFrag : Fragment() {
         return binding.root
     }
 
-    fun onClickListeners(){
+    private fun onClickListeners(){
         binding.btnCreateCustomer.setOnClickListener {
             findNavController().navigate(R.id.action_customerManagementFrag_to_createCustomerFrag)
         }
     }
 
-    fun observers(){
+    private fun observers(){
         viewModel.customer.observe(viewLifecycleOwner) {
             if (it.data != null){
                 adapter.submitList(it.data)

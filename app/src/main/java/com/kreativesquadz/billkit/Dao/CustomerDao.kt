@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.kreativesquadz.billkit.model.Customer
 
 @Dao
@@ -17,7 +18,7 @@ interface CustomerDao {
     fun insertCustomerList(customer: List<Customer>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCustomer(customer: Customer)
+    suspend fun insertCustomer(customer: Customer)
 
     @Query("SELECT * FROM customers WHERE id = :id")
     fun getCustomer(id: String): Customer
@@ -25,4 +26,9 @@ interface CustomerDao {
     @Query("DELETE FROM customers")
     fun deleteCustomer()
 
+    @Query("SELECT * FROM customers WHERE isSynced = 0")
+    suspend fun getUnsyncedCustomers(): List<Customer>
+
+    @Update
+    suspend fun update(customer: Customer)
 }

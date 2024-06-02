@@ -32,7 +32,7 @@ class ReceiptFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getCompanyObjDetails()
+        viewModel.getCompanyDetailsRec()
     }
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class ReceiptFrag : Fragment() {
         }
         viewModel.companyDetails.observe(viewLifecycleOwner){
             it.data?.let {
-                binding.companyDetails = it.get(0)
+                binding.companyDetails = it
             }
         }
 

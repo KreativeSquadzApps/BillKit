@@ -4,7 +4,9 @@ import android.content.Context
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
+import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
+import com.kreativesquadz.billkit.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,8 +26,8 @@ object AppModule {
     }
 
     @Provides
-    fun provideCustomerRepository(@ApplicationContext appContext: Context,providedb: AppDatabase): CustomerManagRepository{
-        return CustomerManagRepository(context = appContext,providedb)
+    fun provideCustomerRepository(providedb: AppDatabase): CustomerManagRepository{
+        return CustomerManagRepository(providedb)
     }
 
     @Provides
@@ -36,6 +38,17 @@ object AppModule {
     @Provides
     fun provideSettingsRepository(providedb: AppDatabase): SettingsRepository {
         return SettingsRepository(providedb)
+    }
+
+    @Provides
+    fun provideInventoryRepository(providedb: AppDatabase): InventoryRepository {
+        return InventoryRepository(providedb)
+
+    }
+
+    @Provides
+    fun provideUserRepository(providedb: AppDatabase) : UserRepository {
+        return UserRepository(providedb)
     }
 
 }

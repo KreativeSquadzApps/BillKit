@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.ui.inventory.product.add
+package com.kreativesquadz.billkit.ui.inventory.tab.product.add
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle

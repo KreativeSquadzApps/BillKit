@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.databinding.FragmentTabInvoiceBinding
 import com.kreativesquadz.billkit.model.CompanyDetails
 
@@ -17,7 +18,7 @@ class TabInvoiceFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getCompanyObjDetails()
+        viewModel.getCompanyDetailsTab()
     }
 
     override fun onCreateView(
@@ -25,7 +26,7 @@ class TabInvoiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTabInvoiceBinding.inflate(inflater, container, false)
-        binding.companyDetails = viewModel.companyDetails.value?.data?.get(0)
+        binding.companyDetails = viewModel.companyDetails.value?.data
         observers()
         onClickListeners()
         return binding.root
@@ -33,15 +34,16 @@ class TabInvoiceFragment : Fragment() {
 
     private fun observers(){
         viewModel.companyDetails.observe(viewLifecycleOwner) {
-            if (!it.data.isNullOrEmpty()){
-                binding.companyDetails = it.data.get(0)
+            it.data?.let {
+                binding.companyDetails = it
             }
+
         }
     }
 
     private fun onClickListeners(){
         binding.btnupdate.setOnClickListener {
-                val companyDetails = CompanyDetails(0, binding.etBusinessName.text.toString(),
+                val companyDetails = CompanyDetails(0,Config.userId, binding.etBusinessName.text.toString(),
                 binding.etPlace.text.toString(), binding.etshopContactNumber.text.toString(),
                 binding.etshopEmail.text.toString(),binding.etGSTNo.text.toString(),
                 binding.etFSSAINo.text.toString(),binding.etCurrencySymbol.text.toString(),

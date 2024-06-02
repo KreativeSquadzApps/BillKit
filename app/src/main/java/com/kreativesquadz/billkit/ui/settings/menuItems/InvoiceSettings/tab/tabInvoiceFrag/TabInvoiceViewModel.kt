@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
@@ -17,11 +18,11 @@ class TabInvoiceViewModel @Inject constructor(val settingsRepository: SettingsRe
    var billHistoryRepository: BillHistoryRepository) : ViewModel() {
     private val _updateCompanyDetailsStatus = MutableLiveData<Boolean>()
     val updateCompanyDetailsStatus: LiveData<Boolean> get() = _updateCompanyDetailsStatus
-    lateinit var companyDetails : LiveData<Resource<List<CompanyDetails>>>
+    lateinit var companyDetails : LiveData<Resource<CompanyDetails>>
 
 
-    fun getCompanyObjDetails(): LiveData<Resource<List<CompanyDetails>>> {
-        companyDetails = settingsRepository.loadCompanyDetails()
+    fun getCompanyDetailsTab(): LiveData<Resource<CompanyDetails>> {
+        companyDetails = settingsRepository.loadCompanyDetails(Config.userId)
         return companyDetails
     }
 

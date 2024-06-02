@@ -37,7 +37,7 @@ class CreateCustomerFrag : Fragment() {
     private fun onClickListeners(){
         binding.btnSubmit.setOnClickListener {
             if (!binding.etShopContactNumber.text.toString().isEmpty()){
-                viewModel.addCustomerObj(getCustomerData())
+                viewModel.addCustomerObj(getCustomerData(),requireContext())
             }else{
                 Toast.makeText(requireContext(),"Please enter contact number",Toast.LENGTH_SHORT).show()
             }
@@ -50,7 +50,7 @@ class CreateCustomerFrag : Fragment() {
                         binding.etGSTNo.text.toString(),
                         binding.etTotalSales.text.toString(),
                         binding.etAddress.text.toString(),
-                        binding.etCreditAmount.text.toString())
+                        binding.etCreditAmount.text.toString(),0)
     }
 
 

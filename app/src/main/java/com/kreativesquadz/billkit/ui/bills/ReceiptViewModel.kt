@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
@@ -19,14 +20,14 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
                                            val billHistoryRepository: BillHistoryRepository,
                                             val customerManagRepository: CustomerManagRepository
 ) : ViewModel() {
-    lateinit var companyDetails : LiveData<Resource<List<CompanyDetails>>>
+    lateinit var companyDetails : LiveData<Resource<CompanyDetails>>
 
     fun getInvoiceDetails(invoiceId: String) : LiveData<Invoice> {
         return billHistoryRepository.getInvoiceById(invoiceId.toInt())
     }
 
-    fun getCompanyObjDetails(): LiveData<Resource<List<CompanyDetails>>> {
-        companyDetails = settingsRepository.loadCompanyDetails()
+    fun getCompanyDetailsRec(): LiveData<Resource<CompanyDetails>> {
+        companyDetails = settingsRepository.loadCompanyDetails(Config.userId)
         return companyDetails
     }
 

@@ -48,14 +48,14 @@ class HomeFragment : Fragment() {
     }
 
 
-    fun onClickListeners(){
+    private fun onClickListeners(){
         binding.btnGenerateBill.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_to_billDetailsFrag)
         }
     }
 
 
-    fun observers(){
+    private fun observers(){
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items.asReversed())
             val totalSum = items.sumOf { it.totalPrice ?: 0.0 }
@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
         tabSetup()
     }
 
-    fun tabSetup(){
+    private  fun tabSetup(){
         val fragments = listOf(QuickSaleFragment(), SaleFragment(),SavedOrdersFragment()) // Replace with your fragments
         val adapter = GenericTabAdapter(requireActivity(), fragments)
         binding.viewPager.adapter = adapter

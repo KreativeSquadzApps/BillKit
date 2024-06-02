@@ -13,6 +13,7 @@ import androidx.work.WorkManager
 import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
+import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.worker.SyncInvoicesWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class BillDetailsViewModel @Inject constructor(val billHistoryRepository: BillHistoryRepository)
+class BillDetailsViewModel @Inject constructor(val billHistoryRepository: BillHistoryRepository,val settingsRepository: SettingsRepository)
     : ViewModel() {
 
     private val _invoiceStatus = MutableLiveData<Boolean?>()
