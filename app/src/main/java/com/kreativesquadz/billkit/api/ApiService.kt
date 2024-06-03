@@ -6,6 +6,7 @@ import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -59,5 +60,13 @@ interface ApiService {
     @GET("/api/categories/{userId}")
     fun loadCategories(@Path("userId") userId: Long): LiveData<ApiResponse<List<Category>>>
 
+
+    @Headers("X-API-KEY: " + Config.API_Key)
+    @GET("/api/products/{userId}")
+    fun loadProducts(@Path("userId") userId: Long): LiveData<ApiResponse<List<Product>>>
+
+    @Headers("X-API-KEY: " + Config.API_Key)
+    @POST("/api/addproducts")
+    suspend fun addProduct(@Body product: Product): Response<ApiStatus>
 
 }

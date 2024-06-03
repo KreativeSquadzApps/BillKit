@@ -1,5 +1,6 @@
 package com.kreativesquadz.billkit.ui.home.tab
 
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.LiveData
@@ -9,6 +10,7 @@ import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.Product
 import java.util.UUID
 
 
@@ -24,7 +26,7 @@ class SharedViewModel : ViewModel() {
     }
     var _isCustomerSelected = MutableLiveData<Boolean>()
     val isCustomerSelected : LiveData<Boolean> get() = _isCustomerSelected
-
+    val include = "X"
 
     val amount: LiveData<String> get() =  amountValue
     var amountBuilder = StringBuilder()
@@ -57,7 +59,7 @@ class SharedViewModel : ViewModel() {
             if (ammountArray.size == 2) {
                 val amnt = ammountArray[0]
                 val qty = ammountArray[1]
-                val include = "X"
+
                 val finalAmount = amnt.replace("X", "").toDouble() * qty.toDouble()
                 val homeItem =  InvoiceItem(
                     invoiceId = 1,
@@ -84,8 +86,30 @@ class SharedViewModel : ViewModel() {
             list.add(homeItem)
         }
         _items.value = list
-        amountBuilder.clear()
-        amountValue.value = amountBuilder.toString()
+        amountValue.value = amountBuilder.clear().toString()
+    }
+
+    fun addProduct(product: Product){
+        var defaultQty = product.productDefaultQty
+        if (defaultQty == 0){
+            defaultQty = 1
+        }
+        val homeItem =  InvoiceItem(
+            invoiceId = 1,
+            itemName = "${product.productName} ( ${product.productPrice} )  $include ${defaultQty}",
+            unitPrice = product.productPrice.toString().toDouble(),
+            quantity = product.productDefaultQty.toString().toInt(),
+            totalPrice = ((product.productPrice.toString().toDouble() * defaultQty!!) + product.productTax.toString().toDouble()),
+            taxRate = product.productTax.toString().toDouble()
+        )
+        list.add(homeItem)
+        _items.value = list
+    }
+
+    fun clearOrder(){
+        list.clear()
+        _items.value = list
+        amountValue.value = amountBuilder.clear().toString()
     }
 
     fun getInvoiceItem(): List<InvoiceItem> {
@@ -186,8 +210,5 @@ class SharedViewModel : ViewModel() {
         val counter = (0 until 1000).random() // Choose a random number as the counter
         return (timestamp / 1000).toInt() * 1000 + counter
     }
-
-
-
 
 }

@@ -35,7 +35,11 @@
         android:id="@+id/inventoryFrag"
         android:name="com.kreativesquadz.billkit.ui.inventory.InventoryFragment"
         android:label="@string/menu_inventory"
-        tools:layout="@layout/fragment_inventory" />
+        tools:layout="@layout/fragment_inventory" >
+        <action
+            android:id="@+id/action_inventoryFrag_to_addProductFrag"
+            app:destination="@id/addProductFrag" />
+    </fragment>
 
     <fragment
         android:id="@+id/customerManagementFrag"
@@ -113,6 +117,18 @@
         android:id="@+id/createCustomerFrag"
         android:name="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerFrag"
         android:label="CreateCustomerFrag" />
+    <fragment
+        android:id="@+id/addProductFrag"
+        android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.add.AddProductFrag"
+        android:label="AddProductFrag" />
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.ProductFragment"
+        android:label="ProductFragment" >
+        <action
+            android:id="@+id/action_productFragment_to_addProductFrag"
+            app:destination="@id/addProductFrag" />
+    </fragment>
 
 
 </navigation>

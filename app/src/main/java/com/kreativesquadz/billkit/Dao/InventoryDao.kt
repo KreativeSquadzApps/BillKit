@@ -7,9 +7,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.Product
 
 @Dao
 interface InventoryDao {
+
+    //For Category
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(category: Category)
 
@@ -26,4 +29,27 @@ interface InventoryDao {
     suspend fun update(category: Category)
 
     @Query("DELETE FROM categories")
-    fun deleteCategoryList()}
+    fun deleteCategoryList()
+
+    //For Products
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertProduct(product: Product)
+
+    @Query("SELECT * FROM products WHERE userId = :userId")
+    fun getProductsForUser(userId: Long): LiveData<List<Product>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertProductList(product: List<Product>)
+
+    @Query("SELECT * FROM products WHERE isSynced = 0")
+    suspend fun getUnsyncedProducts(): List<Product>
+
+    @Update
+    suspend fun updateProduct(product: Product)
+
+    @Query("DELETE FROM products")
+    fun deleteProductList()
+
+
+}

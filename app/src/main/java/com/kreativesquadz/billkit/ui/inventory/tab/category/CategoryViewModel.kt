@@ -26,8 +26,6 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(private val repository: InventoryRepository)  : ViewModel() {
     private var _categoriesStatus = MutableLiveData<ApiStatus>()
     val categoriesStatus: LiveData<ApiStatus> get() = _categoriesStatus
-
-
     lateinit var category : LiveData<Resource<List<Category>>>
 
 

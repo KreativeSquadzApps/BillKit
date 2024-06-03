@@ -37,7 +37,7 @@
             android:textSize="@dimen/txt_home_item"
             android:gravity="end"
             android:layout_marginEnd="10dp"
-            android:text="@{item.unitPrice}"
+            android:text="@{item.totalPrice}"
             tools:text="2000"/>
     </LinearLayout>
 </layout>

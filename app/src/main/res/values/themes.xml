@@ -29,5 +29,4 @@
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/corner_top</item>
     </style>
-
 </resources>

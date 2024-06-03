@@ -15,11 +15,12 @@ import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.User
 import kotlin.concurrent.Volatile
 
 
-@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class, User::class,Category::class], version = 32, exportSchema = false)
+@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class, User::class,Category::class, Product::class], version = 34, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{

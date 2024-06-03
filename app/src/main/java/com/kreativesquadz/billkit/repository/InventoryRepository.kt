@@ -10,11 +10,13 @@ import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.Product
 import javax.inject.Inject
 
 class InventoryRepository @Inject constructor(private val db : AppDatabase) {
     private val inventoryDao: InventoryDao = db.inventoryDao()
 
+    //For Category
     fun loadAllCategory(userId:Long): LiveData<Resource<List<Category>>> {
         return object : NetworkBoundResource<List<Category>, List<Category>>() {
             override fun saveCallResult(item: List<Category>) {
@@ -57,5 +59,48 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
     }
 
 
+    //For Products
+
+    fun loadAllProduct(userId:Long): LiveData<Resource<List<Product>>> {
+        return object : NetworkBoundResource<List<Product>, List<Product>>() {
+            override fun saveCallResult(item: List<Product>) {
+                try {
+                    db.runInTransaction {
+                        inventoryDao.deleteProductList()
+                        inventoryDao.insertProductList(item)
+                    }
+                } catch (ex: Exception) {
+                    Log.e("TAG", ex.toString())
+                }
+            }
+
+            override fun shouldFetch(data: List<Product>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<List<Product>> {
+                return inventoryDao.getProductsForUser(userId)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<Product>>> {
+                return ApiClient.getApiService().loadProducts(userId)
+            }
+        }.asLiveData()
+    }
+
+    suspend fun addProduct(product: Product) : LiveData<Boolean>  {
+        val statusLiveData = MutableLiveData<Boolean>()
+        inventoryDao.insertProduct(product)
+        statusLiveData.value = true
+        return statusLiveData
+    }
+
+    suspend fun getUnsyncedProducts(): List<Product> {
+        return inventoryDao.getUnsyncedProducts()
+    }
+
+    suspend fun markproductsAsSynced(product: Product) {
+        inventoryDao.updateProduct(product)
+    }
 
 }

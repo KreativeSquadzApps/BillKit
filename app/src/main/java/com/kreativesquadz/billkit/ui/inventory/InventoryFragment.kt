@@ -11,7 +11,9 @@ import com.kreativesquadz.billkit.adapter.GenericTabAdapter
 import com.kreativesquadz.billkit.databinding.FragmentInventoryBinding
 import com.kreativesquadz.billkit.ui.inventory.tab.category.CategoryFrag
 import com.kreativesquadz.billkit.ui.inventory.tab.product.ProductFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class InventoryFragment : Fragment() {
     private val viewModel: InventoryViewModel by viewModels()
     private var _binding: FragmentInventoryBinding? = null

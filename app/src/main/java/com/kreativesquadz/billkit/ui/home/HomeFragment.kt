@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,14 +53,24 @@ class HomeFragment : Fragment() {
         binding.btnGenerateBill.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_to_billDetailsFrag)
         }
+        binding.btnClearItems.setOnClickListener {
+            sharedViewModel.clearOrder()
+        }
     }
 
 
     private fun observers(){
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items.asReversed())
-            val totalSum = items.sumOf { it.totalPrice ?: 0.0 }
+            val totalSum = items.sumOf { it.totalPrice }
             binding.tvBill.text = totalSum.toString()
+            binding.tvItemsCount.text = "Items : ${items.size}"
+            if(items.isEmpty()){
+                binding.isItemAvailable = false
+            }else{
+                binding.isItemAvailable = true
+            }
+
         }
 
         sharedViewModel.amount.observe(viewLifecycleOwner){
