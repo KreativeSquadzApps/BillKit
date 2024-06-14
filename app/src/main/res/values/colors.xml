@@ -32,4 +32,5 @@
     <color name="icon_color_main">#000</color>
     <color name="text_color_main">#000</color>
     <color name="text_color_heading">#000</color>
+    <color name="text_color_heading_reverse">#fff</color>
 </resources>

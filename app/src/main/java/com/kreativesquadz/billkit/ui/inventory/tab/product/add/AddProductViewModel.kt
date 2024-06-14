@@ -1,7 +1,6 @@
 package com.kreativesquadz.billkit.ui.inventory.tab.product.add
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +29,12 @@ class AddProductViewModel @Inject constructor(val inventoryRepository: Inventory
 
     lateinit var products : LiveData<Resource<List<Product>>>
     lateinit var category : LiveData<Resource<List<Category>>>
+    private val _barcodeText = MutableLiveData<String>()
+    val barcodeText: LiveData<String> get() = _barcodeText
+
+    fun setBarcodeText(text: String) {
+        _barcodeText.value = text
+    }
 
     fun addproductObj(context: Context, productName : String, product: Product) {
         if(productName.isEmpty()){
@@ -80,6 +85,8 @@ class AddProductViewModel @Inject constructor(val inventoryRepository: Inventory
             syncWorkRequest
         )
     }
+
+
 
 
 }

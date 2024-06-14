@@ -21,6 +21,7 @@ class SaleViewModel @Inject constructor(val inventoryRepository: InventoryReposi
         products = inventoryRepository.loadAllProduct(Config.userId)
     }
 
+
     fun getCategories(){
         category = inventoryRepository.loadAllCategory(Config.userId)
     }

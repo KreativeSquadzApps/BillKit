@@ -10,6 +10,7 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
+import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentBillHistoryBinding
@@ -64,7 +65,7 @@ class BillHistoryFrag : Fragment() {
             viewModel.invoices.value?.data ?: emptyList(),
             object : OnItemClickListener<Invoice> {
                 override fun onItemClick(item: Invoice) {
-                     val action = BillHistoryFragDirections.actionBillHistoryFragToInvoiceFragment(item)
+                     val action = BillHistoryFragDirections.actionBillHistoryFragToInvoiceFragment(item,Config.BillDetailsFragmentToReceiptFragment)
                     findNavController().navigate(action)
                 }
             },

@@ -10,14 +10,31 @@
             name="sharedViewModel"
             type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
         <variable
-            name="invoice"
-            type="com.kreativesquadz.billkit.model.Invoice" />
-        <variable
             name="isCustomerSelected"
+            type="Boolean" />
+
+        <variable
+            name="isDiscountApplied"
+            type="Boolean" />
+        <variable
+            name="isCreditNoteApplied"
             type="Boolean" />
         <variable
             name="customer"
             type="com.kreativesquadz.billkit.model.Customer" />
+
+        <variable
+            name="creditNote"
+            type="com.kreativesquadz.billkit.model.CreditNote" />
+
+        <variable
+            name="isDiscount"
+            type="Boolean" />
+        <variable
+            name="discountedAmount"
+            type="String" />
+
+
 
     </data>
 
@@ -161,24 +178,115 @@
                 android:id="@+id/amountTotalTax"
                 tools:text="Total Tax : "/>
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10dp"
+                android:id="@+id/discountView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/amountTotalTax"
-                android:text="Add Discount"
-                android:textColor="@color/text_color_main"
-                android:id="@+id/addDiscount"
-                tools:text="Add Discount : "/>
+                android:visibility="@{isDiscount ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@+id/amountTotalTax">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{isDiscountApplied ? View.VISIBLE : View.GONE}"
+                    >
+
+                    <ImageView
+                        android:id="@+id/removeDiscount"
+                        android:layout_width="15dp"
+                        android:layout_height="13dp"
+                        android:src="@android:drawable/ic_delete"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/removeDiscount"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Discount :  "
+                        android:id="@+id/txtDiscountAmount"
+                        android:textColor="@color/text_color_main" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/txtDiscountAmount"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="@{discountedAmount}"
+                        android:textColor="@color/text_color_main"
+                        tools:text="10"
+                        android:id="@+id/tvDiscount"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Add Discount"
+                    android:visibility="@{isDiscountApplied ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/text_color_main"
+                    android:id="@+id/addDiscount"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/discountView"
+                android:visibility="@{isCreditNoteApplied ? View.VISIBLE : View.GONE}"
+                >
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/removeCreditNote"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@android:drawable/ic_delete"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_10dp"
+                    app:layout_constraintStart_toEndOf="@+id/removeCreditNote"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="Credit Note Amount :  "
+                    android:id="@+id/txtcreditNoteAmount"
+                    android:textColor="@color/text_color_main" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_10dp"
+                    app:layout_constraintStart_toEndOf="@+id/txtcreditNoteAmount"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@{creditNote.totalAmount}"
+                    android:textColor="@color/text_color_main"
+                    tools:text="10"
+                    android:id="@+id/tvCreditNote"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addDiscount"
-                android:text="Add Credit Note"
+                app:layout_constraintTop_toBottomOf="@id/discountView"
+                android:text='@{isCreditNoteApplied ? "" :"Add Credit Note"}'
                 android:textColor="@color/text_color_main"
                 android:id="@+id/addCreditNote"
                 tools:text="Add Credit Note"/>
@@ -189,7 +297,6 @@
                 android:layout_marginTop="@dimen/_10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/addCreditNote"
-                android:text='@{"Total Amount : " + sharedViewModel.getTotalAmount()}'
                 android:textColor="@color/text_color_main"
                 android:id="@+id/totalAmount"
                 tools:text="Total Amount : "/>

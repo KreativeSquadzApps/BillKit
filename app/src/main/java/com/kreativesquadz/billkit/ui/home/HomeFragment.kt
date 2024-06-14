@@ -1,16 +1,38 @@
 package com.kreativesquadz.billkit.ui.home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.common.InputImage
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
@@ -23,16 +45,25 @@ import com.kreativesquadz.billkit.ui.home.tab.quickSale.QuickSaleFragment
 import com.kreativesquadz.billkit.ui.home.tab.sale.SaleFragment
 import com.kreativesquadz.billkit.ui.home.tab.savedOrders.SavedOrdersFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by hiltNavGraphViewModels(R.id.mobile_navigation)
     val sharedViewModel : SharedViewModel by activityViewModels()
+
+
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-
+    private val requestCodeCameraPermission = 200
+    private val cameraExecutor = Executors.newSingleThreadExecutor()
+    private var isCameraClicked = false
+    private var camera: Camera? = null
+     lateinit var  cameraProvider: ProcessCameraProvider
+    var isScanner = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,16 +76,43 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         observers()
         onClickListeners()
+        binding.isCameraOpen = isCameraClicked
+
         return root
     }
 
 
     private fun onClickListeners(){
         binding.btnGenerateBill.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_home_to_billDetailsFrag)
+            if (binding.tvBill.text.isNullOrEmpty() || binding.tvBill.text.toString() == "0.0"){
+                Toast.makeText(requireContext(), "Please enter amount", Toast.LENGTH_SHORT).show()
+            }else{
+                findNavController().navigate(R.id.action_nav_home_to_billDetailsFrag)
+            }
         }
+
         binding.btnClearItems.setOnClickListener {
             sharedViewModel.clearOrder()
+        }
+
+        binding.btnBarcode.setOnClickListener{
+            if (!isCameraClicked) {
+                isCameraClicked = true
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED) {
+                    startCamera()
+                } else {
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(Manifest.permission.CAMERA),
+                        requestCodeCameraPermission
+                    )
+                }
+            }else{
+                isCameraClicked = false
+                stopCamera()
+            }
+            binding.isCameraOpen = isCameraClicked
         }
     }
 
@@ -111,6 +169,133 @@ class HomeFragment : Fragment() {
         )
         binding.itemRecyclerView.adapter = adapter
         binding.itemRecyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+
+    @androidx.annotation.OptIn(ExperimentalGetImage::class)
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+             cameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(binding.previewView.surfaceProvider)
+            }
+
+            val barcodeScannerOptions = BarcodeScannerOptions.Builder()
+                .setBarcodeFormats(
+                    Barcode.FORMAT_EAN_8,
+                    Barcode.FORMAT_EAN_13,
+                    Barcode.FORMAT_UPC_A,
+                    Barcode.FORMAT_UPC_E,
+                    Barcode.TYPE_ISBN
+                )
+                .build()
+
+            val barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions)
+
+            val imageAnalysis = ImageAnalysis.Builder()
+                .build()
+                .also {
+                    it.setAnalyzer(cameraExecutor) { imageProxy ->
+                        val mediaImage = imageProxy.image
+                        if (mediaImage != null) {
+                            val image = InputImage.fromMediaImage(
+                                mediaImage,
+                                imageProxy.imageInfo.rotationDegrees
+                            )
+                            processImage(image, barcodeScanner, imageProxy)
+                        } else {
+                            imageProxy.close()
+                        }
+                    }
+                }
+
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                camera = cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageAnalysis
+                )
+            } catch (exc: Exception) {
+                Log.e("CameraSetup", "Failed to bind camera use cases", exc)
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun stopCamera() {
+        cameraProvider.unbindAll()
+    }
+
+    private fun logScannerState(state: Boolean) {
+        Log.d("ScannerState", "isScanner is set to: $state")
+    }
+
+    private fun delay1sec() {
+        isScanner = false
+        logScannerState(isScanner) // Log state change
+        lifecycleScope.launch {
+            delay(1000)
+            isScanner = true
+            logScannerState(isScanner) // Log state change
+        }
+    }
+
+
+    private fun processImage(image: InputImage, barcodeScanner: BarcodeScanner, imageProxy: ImageProxy) {
+        if (!isScanner) {
+            Log.d("ScannerState", "Scanner is not ready, skipping image processing.")
+            imageProxy.close()
+            return
+        }
+
+        //isScanner = false // Prevent further scans while processing
+        barcodeScanner.process(image)
+            .addOnSuccessListener { barcodes ->
+                for (barcode in barcodes) {
+                    when (barcode.format) {
+                        Barcode.FORMAT_EAN_8,
+                        Barcode.FORMAT_EAN_13,
+                        Barcode.FORMAT_UPC_A,
+                        Barcode.FORMAT_UPC_E,
+                        Barcode.TYPE_ISBN -> {
+                            if (!sharedViewModel.isProductAdded(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))) {
+                                sharedViewModel.addProduct(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))
+                            }
+                            val beepSoundUri = Uri.parse("android.resource://" + "com.kreativesquadz.billkit" + "/" + R.raw.barcode_beep)
+                            val audioAttributes = AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .build()
+                            val ringtone = RingtoneManager.getRingtone(requireContext(), beepSoundUri)
+                            ringtone.audioAttributes = audioAttributes
+                            ringtone.play()
+                            delay1sec() // Delay for a second after successful scan and addition
+                        }
+                        else -> { /* Handle other barcode formats if needed */ }
+                    }
+                }
+                imageProxy.close()
+            }
+            .addOnFailureListener {
+                Log.e("BarcodeScanning", "Failed to process image", it)
+                imageProxy.close()
+            }
+    }
+
+
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == requestCodeCameraPermission && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startCamera()
+        } else {
+            Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+        }
     }
 
 

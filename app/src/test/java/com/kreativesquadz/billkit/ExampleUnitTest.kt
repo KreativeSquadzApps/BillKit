@@ -1,5 +1,6 @@
 package com.kreativesquadz.billkit
 
+import android.util.Log
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,7 +12,11 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun test() {
+        var intArray = listOf<Int>(4,5,23,6,8,4,5)
+        var handler = mutableListOf(Int)
+        var result = mutableListOf(Int)
+
+
     }
 }

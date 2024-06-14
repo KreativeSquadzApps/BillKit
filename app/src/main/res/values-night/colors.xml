@@ -22,6 +22,7 @@
     <color name="icon_color_main">#fff</color>
     <color name="text_color_main">#fff</color>
     <color name="text_color_heading">#fff</color>
+    <color name="text_color_heading_reverse">#000</color>
 
 
 

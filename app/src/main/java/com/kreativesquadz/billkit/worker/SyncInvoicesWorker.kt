@@ -1,11 +1,11 @@
 package com.kreativesquadz.billkit.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kreativesquadz.billkit.api.ApiClient
+import com.kreativesquadz.billkit.model.request.InvoiceRequest
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -20,9 +20,12 @@ class SyncInvoicesWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
+
             val unsyncedInvoices = repository.getUnsyncedInvoices()
             for (invoice in unsyncedInvoices) {
-                val response = ApiClient.getApiService().createInvoice(invoice.copy(isSynced = 1))
+                val items = repository.getInvoiceItems(invoice.id)
+                val invoiceRequest = InvoiceRequest(invoice.copy(isSynced = 1), items)
+                val response = ApiClient.getApiService().createInvoice(invoiceRequest)
                 if (response.body()?.message.toString().equals("Invoice added successfully")) {
                     repository.markInvoiceAsSynced(invoice)
                 }

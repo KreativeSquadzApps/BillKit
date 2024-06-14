@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabInvoiceFrag
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.databinding.FragmentTabInvoiceBinding
 import com.kreativesquadz.billkit.model.CompanyDetails
+import com.kreativesquadz.billkit.model.UserSetting
 
 class TabInvoiceFragment : Fragment() {
         var _binding: FragmentTabInvoiceBinding? = null
@@ -19,6 +21,7 @@ class TabInvoiceFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getCompanyDetailsTab()
+        viewModel.getUserSettings()
     }
 
     override fun onCreateView(
@@ -39,6 +42,15 @@ class TabInvoiceFragment : Fragment() {
             }
 
         }
+        viewModel.userSetting.observe(viewLifecycleOwner){
+            it.let {
+                if (it?.isdiscount==0){
+                    binding.discountSwitch.isChecked = false
+                }else{
+                    binding.discountSwitch.isChecked = true
+                }
+            }
+        }
     }
 
     private fun onClickListeners(){
@@ -50,6 +62,17 @@ class TabInvoiceFragment : Fragment() {
                 binding.tvInvoicePrefix.text.toString(), 2)
                 viewModel.putCompanyObjDetails(companyDetails)
         }
+
+        binding.discountSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+           lateinit var userSetting : UserSetting
+            if(isChecked) {
+                 userSetting = UserSetting(Config.userId,1, "", "1")
+            } else {
+                 userSetting = UserSetting(Config.userId,0, "", "1")
+            }
+            viewModel.updateDiscount(requireContext(),userSetting,isChecked)
+        }
+
     }
 
     override fun onDestroyView() {

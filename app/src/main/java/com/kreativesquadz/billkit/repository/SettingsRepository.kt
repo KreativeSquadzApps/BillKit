@@ -9,6 +9,7 @@ import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
+import com.kreativesquadz.billkit.model.UserSetting
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject

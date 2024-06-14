@@ -51,5 +51,13 @@ interface InventoryDao {
     @Query("DELETE FROM products")
     fun deleteProductList()
 
+    @Query("UPDATE products SET productStock = productStock - :quantity WHERE productName = :productName")
+    fun decrementProductStock(productName: String?, quantity: Int)
+
+    @Query("SELECT * FROM products WHERE productBarcode = :barcode")
+    fun selectProductByBarcode(barcode: String): Product
+
+
+
 
 }

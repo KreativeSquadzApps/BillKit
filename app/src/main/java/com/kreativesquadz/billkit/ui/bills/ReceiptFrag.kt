@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
+import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentReceiptBinding
@@ -16,6 +18,7 @@ import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
+import com.kreativesquadz.billkit.utils.addBackPressHandler
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,10 +32,14 @@ class ReceiptFrag : Fragment() {
     val invoiceId by lazy {
         arguments?.getString("invoiceId")
     }
+    val target by lazy {
+        arguments?.getString("target")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getCompanyDetailsRec()
+        viewModel.fetchInvoiceItems(invoiceId!!.toLong())
     }
 
     override fun onCreateView(
@@ -40,23 +47,37 @@ class ReceiptFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentReceiptBinding.inflate(inflater, container, false)
+        observers()
+        onClickListeners()
+        addBackPressHandler(viewLifecycleOwner, ::shouldAllowBack)
+        return binding.root
+    }
+
+    fun observers(){
         val invoice= viewModel.getInvoiceDetails(invoiceId!!)
-
-
         invoice.observe(viewLifecycleOwner) {
             binding.invoice = it
             binding.isCustomerAvailable = it?.customerId != null
             binding.customer = viewModel.getCustomerById(it?.customerId.toString())
-            setupRecyclerView(it.invoiceItems)
         }
         viewModel.companyDetails.observe(viewLifecycleOwner){
             it.data?.let {
                 binding.companyDetails = it
             }
         }
+        viewModel.invoiceItems.observe(viewLifecycleOwner){
+            setupRecyclerView(it)
+        }
+    }
 
+    fun onClickListeners(){
+        binding.btnBack.setOnClickListener {
+            if(target == Config.BillDetailsFragmentToReceiptFragment)
+                findNavController().navigate(R.id.action_receiptFrag_to_nav_home)
+            else
+            findNavController().popBackStack()
+        }
 
-        return binding.root
     }
 
     private fun setupRecyclerView(receiptInvoiceItem: List<InvoiceItem>?) {
@@ -74,6 +95,10 @@ class ReceiptFrag : Fragment() {
         binding.itemListRecyclerview.layoutManager = LinearLayoutManager(context)
     }
 
+    private fun shouldAllowBack(): Boolean {
+        // Your logic to allow or restrict back action
+        return false // Change this according to your logic
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

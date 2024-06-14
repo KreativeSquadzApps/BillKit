@@ -280,6 +280,16 @@
                             tools:text="Sub Total  Rs 990.00"/>
 
                     </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{invoice.discount==null||invoice.discount==0 ? View.GONE : View.VISIBLE }"
+                        android:text='@{"Discount " + invoice.discount}'
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:gravity="end"
+                        android:textColor="@color/text_color_main"
+                        tools:text="Discount  Rs 11100.00"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -302,7 +312,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text='@{"You saved Rs " + invoice.totalItems + " on this purchase"}'
+                        android:visibility="@{invoice.discount==null||invoice.discount==0 ? View.GONE : View.VISIBLE}"
+                        android:text='@{"You saved Rs " + invoice.discount + " on this purchase"}'
                         android:textSize="14sp"
                         android:textColor="@color/text_color_main"
                         android:gravity="center"
@@ -371,7 +382,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:id="@+id/btnCash"
+                android:id="@+id/btnBack"
                 android:layout_marginTop="-5dp"
                 android:layout_marginBottom="-5dp"
                 android:layout_marginStart="-10dp"

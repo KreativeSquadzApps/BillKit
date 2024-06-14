@@ -3,6 +3,8 @@ package com.kreativesquadz.billkit.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.kreativesquadz.billkit.Dao.CreditNoteDao
+import com.kreativesquadz.billkit.Dao.InventoryDao
 import com.kreativesquadz.billkit.Dao.InvoiceDao
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.api.ApiClient
@@ -11,11 +13,13 @@ import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.model.InvoiceItem
 import javax.inject.Inject
 
 class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     private val invoiceDao : InvoiceDao = db.invoiceDao()
-    private val customerDao = db.customerDao()
+    private val inventoryDao : InventoryDao = db.inventoryDao()
+
 
 
     fun loadAllInvoices(): LiveData<Resource<List<Invoice>>> {
@@ -27,6 +31,11 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
                         // Clear existing data
                         invoiceDao.deleteInvoices()
                         invoiceDao.insertInvoices(item)
+                        item.forEach{
+                            invoiceDao.insertInvoiceItem(it.invoiceItems!!)
+                        }
+
+
                         Log.e("Error", item.toString())
                     }
                 } catch (ex: Exception) {
@@ -67,5 +76,30 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     }
 
 
+    suspend fun updateInvoiceItem(invoiceId: Long, itemName: String, returnedQty: Int) {
+        invoiceDao.updateReturnedQty(invoiceId,itemName, returnedQty)
+    }
+    suspend fun insertInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>) : Long{
+        try {
+            // Insert the invoice
+            val invoiceId = invoiceDao.insert(invoice)
+
+            // Insert each invoice item
+            items.forEach { item ->
+                invoiceDao.insertInvoiceItem(item.copy(invoiceId = invoiceId))
+                val productName = item.itemName.split(" ")[0]
+                inventoryDao.decrementProductStock(productName, item.quantity)
+            }
+            return invoiceId
+        } catch (e: Exception) {
+            throw e
+        }
+
+    }
+
+
+    suspend fun getInvoiceItems(id: Long): List<InvoiceItem> {
+        return invoiceDao.getInvoiceItems(id)
+    }
 
 }

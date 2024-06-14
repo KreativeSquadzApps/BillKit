@@ -29,7 +29,11 @@ data class Invoice(
     val totalAmount: Double,
     val customerId: Long? = null,
     val isSynced: Int = 0,
-    val invoiceItems: List<InvoiceItem>
+    val creditNoteAmount: Int = 0,
+    val creditNoteId: Int? = 0,
+    val discount : Int? = null,
+    val status : String,
+    val invoiceItems: List<InvoiceItem>?=null
 ) : Serializable
 
 @Entity(
@@ -43,12 +47,13 @@ data class Invoice(
     indices = [Index(value = ["invoiceId"])]
 )
 data class InvoiceItem(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey(autoGenerate = true)  val id: Long = 0,
     val invoiceId: Long,
-    val itemName: String,
+    var itemName: String,
     val unitPrice: Double,
-    val quantity: Int,
-    val totalPrice: Double,
+    var quantity: Int,
+    var returnedQty: Int?=0,
+    var totalPrice: Double,
     val taxRate: Double
 ) : Serializable
 

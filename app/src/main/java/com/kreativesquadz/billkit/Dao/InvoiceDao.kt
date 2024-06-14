@@ -23,14 +23,16 @@ interface InvoiceDao {
 
     @Query("DELETE FROM invoices")
     fun deleteInvoices()
-
-
+    @Query("UPDATE invoice_items SET returnedQty = :returnedQty WHERE invoiceId = :invoiceId AND itemName = :itemName")
+    suspend fun updateReturnedQty(invoiceId: Long, itemName: String, returnedQty: Int)
     @Insert
     fun insertRepo(invoice: Invoice) : Long
     @Insert
     suspend fun insert(invoice: Invoice) : Long
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
      fun insertInvoiceItem(invoiceItem: InvoiceItem)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertInvoiceItem(invoiceList: List<InvoiceItem>)
 
     @Update
     suspend fun update(invoice: Invoice)
@@ -41,5 +43,6 @@ interface InvoiceDao {
     @Query("SELECT * FROM invoices WHERE isSynced = 0")
     suspend fun getUnsyncedInvoices(): List<Invoice>
 
-
+    @Query("SELECT * FROM invoice_items WHERE invoiceId = :id")
+    suspend fun getInvoiceItems(id: Long): List<InvoiceItem>
 }

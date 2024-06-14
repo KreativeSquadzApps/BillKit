@@ -21,4 +21,6 @@
     <dimen name="txt_quick_sale">35sp</dimen>
     <dimen name="txt_home_item">16sp</dimen>
     <dimen name="txt_18sp">18sp</dimen>
+    <dimen name="txt_16sp">16sp</dimen>
+    <dimen name="txt_14sp">14sp</dimen>
 </resources>

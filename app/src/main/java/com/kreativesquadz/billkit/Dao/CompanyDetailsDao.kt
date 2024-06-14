@@ -10,13 +10,11 @@ import com.kreativesquadz.billkit.model.CompanyDetails
 
 @Dao
 interface CompanyDetailsDao {
-
     @Query("SELECT * FROM companyDetails WHERE userId = :userId")
     fun getCompanyDetails(userId: Long): LiveData<CompanyDetails>
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     fun insertCompanyDetails(companyDetails: CompanyDetails)
-
 
     @Update
     fun update(companyDetails: CompanyDetails)

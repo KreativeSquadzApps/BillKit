@@ -1,15 +1,31 @@
 package com.kreativesquadz.billkit.ui.home.tab.sale
 
+import android.content.pm.PackageManager
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.OptIn
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.common.InputImage
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
@@ -20,6 +36,7 @@ import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.Executors
 
 
 @AndroidEntryPoint
@@ -84,7 +101,11 @@ class SaleFragment : Fragment() {
             viewModel.products.value?.data ?: emptyList(),
             object : OnItemClickListener<Product> {
                 override fun onItemClick(item: Product) {
-                    sharedViewModel.addProduct(item)
+                    if(!sharedViewModel.isProductAdded(item)){
+                        sharedViewModel.addProduct(item)
+                    }else{
+
+                    }
                 }
             },
             R.layout.item_product_home,
@@ -109,4 +130,11 @@ class SaleFragment : Fragment() {
         binding.recyclerViewCat.adapter = adapterCat
         binding.recyclerViewCat.layoutManager = LinearLayoutManager(context)
     }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

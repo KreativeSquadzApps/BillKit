@@ -3,10 +3,11 @@ package com.kreativesquadz.billkit.di
 import android.content.Context
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
+import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
-import com.kreativesquadz.billkit.repository.UserRepository
+import com.kreativesquadz.billkit.repository.UserSettingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,8 +48,13 @@ object AppModule {
     }
 
     @Provides
-    fun provideUserRepository(providedb: AppDatabase) : UserRepository {
-        return UserRepository(providedb)
+    fun provideUserRepository(providedb: AppDatabase) : UserSettingRepository {
+        return UserSettingRepository(providedb)
+    }
+
+    @Provides
+    fun  provideCreditNoteReppoository(providedb: AppDatabase): CreditNoteRepository{
+        return CreditNoteRepository(providedb)
     }
 
 }

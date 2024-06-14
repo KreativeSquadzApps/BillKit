@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
+import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.Product
-import com.kreativesquadz.billkit.model.User
+import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.request.InvoiceRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,7 +27,7 @@ interface ApiService {
         "X-API-KEY: " + Config.API_Key, "Content-Type: application/json"
     )
     @POST("/api/addinvoice")
-    suspend fun createInvoice(@Body invoice: Invoice): Response<ApiStatus>
+    suspend fun createInvoice(@Body invoiceRequest: InvoiceRequest): Response<ApiStatus>
 
     @Headers("X-API-KEY: " + Config.API_Key)
     @GET("api/companyDetails/{userId}")
@@ -44,12 +46,16 @@ interface ApiService {
     suspend fun addCustomer(@Body customer: Customer): Response<ApiStatus>
 
     @Headers("X-API-KEY: " + Config.API_Key)
-    @POST("/api/addusers")
-    suspend fun addUser(@Body user: User): Response<ApiStatus>
+    @POST("/api/user_settings")
+    suspend fun addUserSetting(@Body userSetting: UserSetting): Response<ApiStatus>
 
     @Headers("X-API-KEY: " + Config.API_Key)
-    @GET("/api/users/{userId}")
-    fun loadUser(@Path("userId") userId: Long): LiveData<ApiResponse<List<User>>>
+    @GET("/api/user_settings/{userId}")
+    fun loadUserSetting(@Path("userId") userId: Long): LiveData<ApiResponse<UserSetting>>
+
+    @Headers("X-API-KEY: " + Config.API_Key)
+    @PUT( "/api/updateuser_settings")
+    suspend fun updateUserSetting(@Body userSetting: UserSetting?): Response<ApiStatus>
 
 
     @Headers("X-API-KEY: " + Config.API_Key)
@@ -68,5 +74,15 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     @POST("/api/addproducts")
     suspend fun addProduct(@Body product: Product): Response<ApiStatus>
+
+
+    @Headers("X-API-KEY: " + Config.API_Key)
+    @GET("/api/credit_notes/{userId}")
+    fun loadCreditNote(@Path("userId") userId: Long): LiveData<ApiResponse<List<CreditNote>>>
+
+    @Headers("X-API-KEY: " + Config.API_Key)
+    @POST("/api/addcredit_notes")
+    suspend fun addCreditNote(@Body creditNote: CreditNote): Response<ApiStatus>
+
 
 }

@@ -1,14 +1,17 @@
 package com.kreativesquadz.billkit.ui.bills.billHistory.invoice
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
+import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.bluetooth.BluetoothHelper
@@ -27,8 +30,15 @@ class InvoiceFragment : Fragment() {
         arguments?.getSerializable("invoice") as? Invoice
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.fetchInvoiceItems(invoice!!.id)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchInvoiceItems(invoice!!.id)
     }
 
     override fun onCreateView(
@@ -36,26 +46,45 @@ class InvoiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentInvoiceBinding.inflate(inflater, container, false)
-        binding.invoice = invoice
-        binding.isCustomerAvailable = invoice?.customerId != null
-        binding.customer = viewModel.getCustomerById(invoice?.customerId.toString())
-        setupRecyclerView(invoice)
         onClickListeners()
+        observers()
         return binding.root
 
     }
 
+
+
+      fun observers(){
+          val invoice = viewModel.getInvoiceDetails(invoice?.id.toString())
+          invoice.observe(viewLifecycleOwner) {
+              binding.invoice = it
+              binding.isCustomerAvailable = it.customerId != null
+              binding.customer = viewModel.getCustomerById(it.customerId.toString())
+          }
+          viewModel.invoiceItems.observe(viewLifecycleOwner){
+              setupRecyclerView(it)
+              Log.e("wwwwwww",it.toString())
+
+          }
+      }
+
     private  fun onClickListeners() {
         binding.btnReceipt.setOnClickListener {
-            val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.id.toString())
+            val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.id.toString(),Config.InvoiceFragmentToReceiptFragment)
             findNavController().navigate(action)
         }
 
+        binding.btnSaleReturn.setOnClickListener {
+            invoice?.let {
+                val action = InvoiceFragmentDirections.actionInvoiceFragmentToSaleReturnFragment(it)
+                findNavController().navigate(action)
+            }
+        }
     }
 
-    private fun setupRecyclerView(invoice: Invoice?) {
+    private fun setupRecyclerView(list : List<InvoiceItem>?) {
         adapter = GenericAdapter(
-            invoice?.invoiceItems ?: emptyList(),
+            list ?: emptyList(),
             object : OnItemClickListener<InvoiceItem> {
                 override fun onItemClick(item: InvoiceItem) {
                     // Handle item click

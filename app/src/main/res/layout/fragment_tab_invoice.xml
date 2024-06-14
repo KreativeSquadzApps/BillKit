@@ -83,6 +83,12 @@
                             android:textSize="20sp"
                             android:text="@{companyDetails.InvoicePrefix}"/>
 
+                        <Switch
+                            android:id="@+id/discountSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="Discount On" />
 
                     </LinearLayout>
 

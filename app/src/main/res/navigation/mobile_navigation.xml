@@ -11,6 +11,10 @@
         android:label="@string/menu_new_sale"
         tools:layout="@layout/fragment_home">
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_nav_home_to_billDetailsFrag"
             app:destination="@id/billDetailsFrag" />
     </fragment>
@@ -21,6 +25,10 @@
         android:label="@string/menu_bill_history"
         tools:layout="@layout/fragment_bill_history" >
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_billHistoryFrag_to_invoiceFragment"
             app:destination="@id/invoiceFragment" />
     </fragment>
@@ -37,6 +45,10 @@
         android:label="@string/menu_inventory"
         tools:layout="@layout/fragment_inventory" >
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_inventoryFrag_to_addProductFrag"
             app:destination="@id/addProductFrag" />
     </fragment>
@@ -47,6 +59,10 @@
         android:label="@string/menu_customer_management"
         tools:layout="@layout/fragment_customer_management" >
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_customerManagementFrag_to_createCustomerFrag"
             app:destination="@id/createCustomerFrag" />
     </fragment>
@@ -75,6 +91,10 @@
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" >
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_settingsFrag_to_invoiceSettings"
             app:destination="@id/invoiceSettings" />
     </fragment>
@@ -95,6 +115,16 @@
         <argument
             android:name="invoiceId"
             app:argType="string" />
+        <argument
+            android:name="target"
+            app:argType="string" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_receiptFrag_to_nav_home"
+            app:destination="@id/nav_home" />
     </fragment>
     <fragment
         android:id="@+id/invoiceFragment"
@@ -103,9 +133,19 @@
         <argument
             android:name="invoice"
             app:argType="com.kreativesquadz.billkit.model.Invoice" />
+        <argument
+            android:name="target"
+            app:argType="string" />
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_invoiceFragment_to_receiptFrag"
             app:destination="@id/receiptFrag" />
+        <action
+            android:id="@+id/action_invoiceFragment_to_saleReturnFragment"
+            app:destination="@id/saleReturnFragment" />
 
     </fragment>
     <fragment
@@ -126,8 +166,20 @@
         android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.ProductFragment"
         android:label="ProductFragment" >
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_productFragment_to_addProductFrag"
             app:destination="@id/addProductFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/saleReturnFragment"
+        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.saleReturn.SaleReturnFragment"
+        android:label="SaleReturnFragment" >
+        <argument
+            android:name="invoice"
+            app:argType="com.kreativesquadz.billkit.model.Invoice" />
     </fragment>
 
 

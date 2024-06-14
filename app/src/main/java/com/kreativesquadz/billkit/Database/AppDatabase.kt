@@ -6,21 +6,24 @@ import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.kreativesquadz.billkit.Dao.CompanyDetailsDao
+import com.kreativesquadz.billkit.Dao.CreditNoteDao
 import com.kreativesquadz.billkit.Dao.CustomerDao
 import com.kreativesquadz.billkit.Dao.InventoryDao
 import com.kreativesquadz.billkit.Dao.InvoiceDao
-import com.kreativesquadz.billkit.Dao.UserDao
+import com.kreativesquadz.billkit.Dao.UserSettingDao
 import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
+import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.Product
-import com.kreativesquadz.billkit.model.User
+import com.kreativesquadz.billkit.model.UserSetting
 import kotlin.concurrent.Volatile
 
 
-@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class, User::class,Category::class, Product::class], version = 34, exportSchema = false)
+@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class,
+    UserSetting::class,Category::class, Product::class,CreditNote::class], version = 48, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{
@@ -47,7 +50,8 @@ abstract class AppDatabase  : RoomDatabase() {
     abstract fun companyDetailsDao() : CompanyDetailsDao
 
     abstract fun inventoryDao() : InventoryDao
-    abstract fun userDao(): UserDao
+    abstract fun userSettingDao(): UserSettingDao
+    abstract fun creditNoteDao(): CreditNoteDao
 
 
 }

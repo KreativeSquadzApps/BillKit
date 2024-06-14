@@ -3,6 +3,7 @@ package com.kreativesquadz.billkit.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.kreativesquadz.billkit.Dao.CreditNoteDao
 import com.kreativesquadz.billkit.Dao.InventoryDao
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.api.ApiClient
@@ -10,11 +11,13 @@ import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Product
 import javax.inject.Inject
 
 class InventoryRepository @Inject constructor(private val db : AppDatabase) {
     private val inventoryDao: InventoryDao = db.inventoryDao()
+    private val creditNoteDao: CreditNoteDao = db.creditNoteDao()
 
     //For Category
     fun loadAllCategory(userId:Long): LiveData<Resource<List<Category>>> {
@@ -102,5 +105,47 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
     suspend fun markproductsAsSynced(product: Product) {
         inventoryDao.updateProduct(product)
     }
+
+    fun getProductByBarcode(barcode: String): Product {
+        return inventoryDao.selectProductByBarcode(barcode)
+    }
+
+
+    //For Credit Notes
+    fun loadAllCreditNote(userId:Long): LiveData<Resource<List<CreditNote>>> {
+        return object : NetworkBoundResource<List<CreditNote>, List<CreditNote>>() {
+            override fun saveCallResult(item: List<CreditNote>) {
+                try {
+                    Log.e("item", item.toString())
+
+                    db.runInTransaction {
+                        creditNoteDao.deleteCreditNoteList()
+                        creditNoteDao.insertCreditNoteList(item)
+                    }
+                } catch (ex: Exception) {
+                    Log.e("TAG", ex.toString())
+                }
+            }
+
+            override fun shouldFetch(data: List<CreditNote>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<List<CreditNote>> {
+                return creditNoteDao.getCreditNotesByUser(userId)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<CreditNote>>> {
+                return ApiClient.getApiService().loadCreditNote(userId)
+            }
+        }.asLiveData()
+    }
+
+
+     fun decrementProductStock(productName: String?, quantity: Int) {
+        inventoryDao.decrementProductStock(productName,quantity)
+    }
+
+
 
 }

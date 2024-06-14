@@ -1,9 +1,7 @@
 package com.kreativesquadz.billkit.ui.bills.billHistory
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Customer
