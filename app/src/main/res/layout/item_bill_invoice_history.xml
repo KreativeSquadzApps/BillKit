@@ -33,12 +33,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_10dp"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="2"
+
                     android:orientation="horizontal">
 
                     <TextView
@@ -48,9 +51,9 @@
                         android:layout_weight="1"
                         android:layout_marginStart="10dp"
                         android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_home_item"
-                        android:text="@{invoice.id}"
-                        tools:text="2000"/>
+                        android:textSize="@dimen/txt_15sp"
+                        android:text='@{"Invoice : "+invoice.id}'
+                        tools:text="Invoice : 2000"/>
 
                     <TextView
                         android:id="@+id/item_name"
@@ -58,29 +61,30 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_home_item"
+                        android:textSize="@dimen/txt_15sp"
                         android:gravity="end|center"
                         android:layout_marginEnd="10dp"
-                        android:text="@{invoice.totalItems}"
-                        tools:text="2000"/>
+                        android:text='@{"Items : "+invoice.totalItems}'
+                        tools:text="Items : 2000"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
+                    android:weightSum="3"
+                    android:layout_marginTop="2dp"
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/time"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_home_item"
+                        android:textSize="@dimen/txt_15sp"
                         android:layout_marginStart="10dp"
-                        android:text="@{invoice.invoiceTime}"
-                        tools:text="2000"/>
+                        app:timestampToDateTimeTxt="@{invoice.invoiceTime}"
+                        tools:text="Time : 2000"/>
 
                     <TextView
                         android:id="@+id/totalAmount"
@@ -88,11 +92,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_home_item"
+                        android:textSize="@dimen/txt_15sp"
                         android:gravity="end|center"
                         android:layout_marginEnd="10dp"
-                        android:text="@{invoice.totalAmount}"
-                        tools:text="2000"/>
+                        android:text='@{"Total : "+invoice.totalAmount}'
+                        tools:text="Total : 2000"/>
                 </LinearLayout>
 
 
@@ -105,7 +109,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="      Returned      "
-                app:splitText2="@{invoice.status}"
+                app:hideOnReturned="@{invoice.status}"
                 android:rotation="-45"
                 android:textSize="12sp"
                 android:layout_marginStart="-20dp"

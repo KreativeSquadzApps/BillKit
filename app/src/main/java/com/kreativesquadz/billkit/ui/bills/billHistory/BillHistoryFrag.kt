@@ -15,10 +15,8 @@ import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentBillHistoryBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
-import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Invoice
-import com.kreativesquadz.billkit.ui.customerManag.CustomerManagementViewModel
-import timber.log.Timber
 
 class BillHistoryFrag : Fragment() {
     private var _binding: FragmentBillHistoryBinding ?= null

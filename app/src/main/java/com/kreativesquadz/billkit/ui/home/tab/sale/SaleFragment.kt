@@ -1,42 +1,27 @@
 package com.kreativesquadz.billkit.ui.home.tab.sale
 
-import android.content.pm.PackageManager
 import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.OptIn
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
-import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
+import com.kreativesquadz.billkit.adapter.GenericAdapterCategory
 import com.kreativesquadz.billkit.databinding.FragmentSaleBinding
+import com.kreativesquadz.billkit.interfaces.OnItemCatListener
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.concurrent.Executors
 
 
 @AndroidEntryPoint
@@ -45,7 +30,7 @@ class SaleFragment : Fragment() {
     private var _binding: FragmentSaleBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: GenericAdapter<Product>
-    private lateinit var adapterCat: GenericAdapter<Category>
+    private lateinit var adapterCat: GenericAdapterCategory<Category>
     private val sharedViewModel : SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +65,7 @@ class SaleFragment : Fragment() {
         viewModel.category.observe(viewLifecycleOwner) {
             it.data?.let {
                 var filteredList = it
-                filteredList = filteredList + Category(10000, Config.userId, "All", 0)
+                filteredList = filteredList + Category(10000, Config.userId, "All", 1)
                 filteredList = filteredList.sortedBy { it.categoryName }
                 adapterCat.submitList(filteredList)
             }
@@ -117,11 +102,13 @@ class SaleFragment : Fragment() {
 
 
     private fun setupRecyclerViewCat() {
-        adapterCat = GenericAdapter(
+        adapterCat = GenericAdapterCategory(
             viewModel.category.value?.data ?: emptyList(),
-            object : OnItemClickListener<Category> {
-                override fun onItemClick(item: Category) {
+            object : OnItemCatListener<Category> {
+                override fun onItemCat(item: Category) {
                     viewModel.selectedCategory.value = item.categoryName
+                    adapterCat.isSelected(item.categoryName)
+
                 }
             },
             R.layout.item_category_home,

@@ -18,7 +18,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -39,6 +38,7 @@ import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.GenericTabAdapter
 import com.kreativesquadz.billkit.databinding.FragmentHomeBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import com.kreativesquadz.billkit.ui.home.tab.quickSale.QuickSaleFragment
@@ -254,27 +254,18 @@ class HomeFragment : Fragment() {
         barcodeScanner.process(image)
             .addOnSuccessListener { barcodes ->
                 for (barcode in barcodes) {
-                    when (barcode.format) {
-                        Barcode.FORMAT_EAN_8,
-                        Barcode.FORMAT_EAN_13,
-                        Barcode.FORMAT_UPC_A,
-                        Barcode.FORMAT_UPC_E,
-                        Barcode.TYPE_ISBN -> {
-                            if (!sharedViewModel.isProductAdded(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))) {
-                                sharedViewModel.addProduct(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))
-                            }
-                            val beepSoundUri = Uri.parse("android.resource://" + "com.kreativesquadz.billkit" + "/" + R.raw.barcode_beep)
-                            val audioAttributes = AudioAttributes.Builder()
-                                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                                .build()
-                            val ringtone = RingtoneManager.getRingtone(requireContext(), beepSoundUri)
-                            ringtone.audioAttributes = audioAttributes
-                            ringtone.play()
-                            delay1sec() // Delay for a second after successful scan and addition
-                        }
-                        else -> { /* Handle other barcode formats if needed */ }
+                    if (!sharedViewModel.isProductAdded(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))) {
+                        sharedViewModel.addProduct(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))
                     }
+                    val beepSoundUri = Uri.parse("android.resource://" + "com.kreativesquadz.billkit" + "/" + R.raw.barcode_beep)
+                    val audioAttributes = AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                    val ringtone = RingtoneManager.getRingtone(requireContext(), beepSoundUri)
+                    ringtone.audioAttributes = audioAttributes
+                    ringtone.play()
+                    delay1sec()
                 }
                 imageProxy.close()
             }

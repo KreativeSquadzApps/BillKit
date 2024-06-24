@@ -368,85 +368,115 @@
 
 
         </com.kreativesquadz.billkit.utils.ZigzagView>
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:weightSum="3"
-            android:layout_margin="@dimen/_10dp"
+            android:layout_height="130dp"
             android:layout_alignParentBottom="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:orientation="horizontal">
+            android:padding="10dp">
 
-            <soup.neumorphism.NeumorphCardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+            <LinearLayout
                 android:id="@+id/btnBack"
-                android:layout_marginTop="-5dp"
-                android:layout_marginBottom="-5dp"
-                android:layout_marginStart="-10dp"
-                android:layout_marginEnd="-5dp"
-                android:textStyle="bold"
-                android:textColor="@color/text_color_heading"
-                android:gravity="center"
-                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
-                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="5"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:background="@drawable/corner_four_grey"
+                app:layout_constraintEnd_toStartOf="@+id/btnShare"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:paddingTop="@dimen/_15dp"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/backImage" />
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_delete" />
-            </soup.neumorphism.NeumorphCardView>
-            <soup.neumorphism.NeumorphCardView
-                android:layout_width="match_parent"
-                android:id="@+id/btnOnline"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color_main"
+                    android:text="Back"
+                    android:layout_weight="1"
+                    android:id="@+id/backText"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnShare"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textStyle="bold"
-                android:layout_marginTop="-5dp"
-                android:layout_marginBottom="-5dp"
-                android:layout_marginStart="-5dp"
-                android:layout_marginEnd="-10dp"
-                android:textColor="@color/text_color_heading"
-                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
-                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+                android:orientation="vertical"
+                android:weightSum="5"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:background="@drawable/corner_four_grey"
+                app:layout_constraintEnd_toStartOf="@+id/btnPrint"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnBack"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_delete">
+                    android:layout_height="0dp"
+                    android:paddingTop="@dimen/_15dp"
+                    android:layout_weight="4"
+                    android:src="@drawable/share" />
 
-                </ImageView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_color_main"
+                    android:text="Share"
+                    android:gravity="center" />
 
-            </soup.neumorphism.NeumorphCardView>
-            <soup.neumorphism.NeumorphCardView
-                android:layout_width="match_parent"
-                android:id="@+id/btnSplit"
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnPrint"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textStyle="bold"
-                android:layout_marginTop="-5dp"
-                android:layout_marginBottom="-5dp"
-                android:layout_marginStart="-5dp"
-                android:layout_marginEnd="-10dp"
-                android:textColor="@color/text_color_heading"
-                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
-                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+                android:orientation="vertical"
+                android:weightSum="5"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:background="@drawable/corner_four_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnShare"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_delete">
+                    android:layout_height="0dp"
+                    android:paddingTop="@dimen/_15dp"
+                    android:layout_weight="4"
+                    android:src="@drawable/printer" />
 
-                </ImageView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_color_main"
+                    android:text="Print Bill"
+                    android:gravity="center" />
 
-            </soup.neumorphism.NeumorphCardView>
+            </LinearLayout>
 
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     </RelativeLayout>

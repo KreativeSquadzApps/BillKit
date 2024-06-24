@@ -1,12 +1,10 @@
 package com.kreativesquadz.billkit.ui.home.billDetails
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +16,8 @@ import com.kreativesquadz.billkit.databinding.FragmentBillDetailsBinding
 import com.kreativesquadz.billkit.dialogs.AddDiscountDialogFragment
 import com.kreativesquadz.billkit.dialogs.DialogViewModel
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.InvoiceItem
-import com.kreativesquadz.billkit.model.UserSetting
 import com.kreativesquadz.billkit.ui.home.billDetails.creditNoteBottomSheet.CreditNoteBottomSheetFrag
 import com.kreativesquadz.billkit.ui.home.customerBottomSheet.CustomerAddBottomSheetFrag
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel

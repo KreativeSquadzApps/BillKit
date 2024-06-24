@@ -18,5 +18,6 @@ data class Category(
     @PrimaryKey(autoGenerate = true) val categoryId: Long = 0,
     val userId: Long,
     val categoryName: String,
+    var isSelected : Int = 0,
     val isSynced: Int = 0,
 ) : Serializable

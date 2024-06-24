@@ -1,22 +1,20 @@
 package com.kreativesquadz.billkit.ui.bills.creditNote
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentCreditNoteBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CreditNote
-import com.kreativesquadz.billkit.model.Invoice
-import com.kreativesquadz.billkit.model.InvoiceItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,8 +53,8 @@ class CreditNoteFrag : Fragment() {
               emptyList(),
             object : OnItemClickListener<CreditNote> {
                 override fun onItemClick(item: CreditNote) {
-                        Log.e("CreditNote" , item.toString())
-                    // Handle item click
+                    val action = CreditNoteFragDirections.actionCreditNoteFragToCreditNoteDetailsFragment(item.invoiceId.toString())
+                    findNavController().navigate(action)
                 }
             },
             R.layout.item_credit_note,

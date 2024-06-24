@@ -16,13 +16,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="@color/lite_grey_200"
         app:cardElevation="2dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="10dp">
 
             <!-- Customer Name -->
             <TextView
@@ -30,51 +31,35 @@
                 android:layout_height="wrap_content"
                 android:text="@{productHome.productName}"
                 android:textSize="16sp"
+                android:id="@+id/tvProductName"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:textStyle="bold"
+                android:textColor="@color/text_color_heading"
                 android:paddingBottom="4dp"
                 tools:text="Name" />
 
-            <!-- Shop Contact Number -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{productHome.category}"
-                android:paddingBottom="4dp"
-                tools:text="Category" />
-
-            <!-- GST Number -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{productHome.productBarcode}"
-                android:paddingBottom="4dp"
-                tools:text="Barcode" />
-
-            <!-- Total Sales -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{productHome.productStock}"
-                android:paddingBottom="4dp"
-                tools:text="100" />
-
-            <!-- Address -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tvProductName"
+                app:layout_constraintStart_toStartOf="parent"
                 android:text="@{productHome.productPrice}"
+                android:textColor="@color/colorPrimary"
                 android:paddingBottom="4dp"
                 tools:text="Rs 200" />
 
-            <!-- Credit Amount -->
             <TextView
-                android:id="@+id/creditAmountTextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{productHome.productTax}"
+                app:layout_constraintTop_toBottomOf="@+id/tvProductName"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{productHome.productStock}"
                 android:paddingBottom="4dp"
-                tools:text="10%" />
+                tools:text="200" />
 
-        </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

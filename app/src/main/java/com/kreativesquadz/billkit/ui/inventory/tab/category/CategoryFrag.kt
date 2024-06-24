@@ -2,7 +2,6 @@ package com.kreativesquadz.billkit.ui.inventory.tab.category
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,6 @@ import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentCategoryBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
-import com.kreativesquadz.billkit.model.Customer
 import dagger.hilt.android.AndroidEntryPoint
 
 

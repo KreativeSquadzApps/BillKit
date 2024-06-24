@@ -25,30 +25,26 @@
             android:layout_height="0dp"
             android:orientation="vertical">
 
-            <soup.neumorphism.NeumorphCardView
-                android:id="@+id/cardViewDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:cardUseCompatPadding="true">
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="@dimen/_10dp"
                         android:orientation="vertical">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/corner_four_stroke">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="110dp"
                                 android:id="@+id/cardHeader"
                                 android:paddingTop="@dimen/_20dp"
+                                android:background="@drawable/corner_top_grey"
                                 android:paddingStart="@dimen/_10dp"
                                 android:paddingEnd="@dimen/_10dp"
-                                android:background="@color/lite_grey"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
 
@@ -58,11 +54,12 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    android:text="@{invoice.invoiceDate}"
+                                    app:timestampToDate='@{invoice.invoiceDate}'
+                                    android:textStyle="bold"
                                     tools:text="Date "/>
 
                                 <androidx.appcompat.widget.AppCompatTextView
@@ -71,11 +68,12 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
                                     android:layout_marginStart="10dp"
+                                    android:textStyle="bold"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/tvDate"
-                                    android:text="@{invoice.invoiceTime}"
+                                    app:timestampToTime="@{invoice.invoiceDate}"
                                     tools:text="Time "/>
 
                                 <androidx.appcompat.widget.AppCompatTextView
@@ -84,7 +82,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/tvTime"
@@ -98,6 +96,7 @@
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
                                     android:textSize="30sp"
+                                    android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
@@ -111,20 +110,46 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
                                     android:layout_marginStart="10dp"
+                                    android:layout_marginEnd="@dimen/_10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvInvoiceNo"
                                     android:text="Invoice No"
                                     tools:text="Invoice No "/>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toBottomOf="@+id/cardHeader"
+                                android:id="@+id/returnedView"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Returned"
+                                    android:gravity="center_horizontal"
+                                    android:textSize="20sp"
+                                    app:hideOnReturned2="@{invoice.status}"
+                                    android:textColor="@android:color/holo_blue_light"
+                                    android:padding="@dimen/_10dp"
+                                    tools:text="Returned"/>
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:background="@color/lite_grey"
+                                    android:layout_height="1dp"/>
+                            </LinearLayout>
+
+
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_marginTop="@dimen/_10dp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/cardHeader"
+                                app:layout_constraintTop_toBottomOf="@+id/returnedView"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
                                 android:id="@+id/customerView">
@@ -225,7 +250,8 @@
                                     android:layout_weight="1"
                                     android:layout_marginStart="10dp"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
+                                    android:textStyle="bold"
                                     android:text="Items" />
 
                                 <TextView
@@ -234,36 +260,30 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
+                                    android:textStyle="bold"
                                     android:gravity="end|center"
                                     android:layout_marginEnd="10dp"
                                     android:text="Amount"/>
                             </LinearLayout>
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:id="@+id/view"
-                                android:background="@color/lite_grey"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:id="@+id/recyclerView"
+                                tools:listitem="@layout/item_invoice_item"
+                                tools:itemCount="1"
                                 android:nestedScrollingEnabled="false"
-                                app:layout_constraintTop_toBottomOf="@+id/view"/>
+                                app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
 
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="110dp"
+                                android:layout_height="120dp"
                                 android:id="@+id/cardFooter"
                                 android:paddingTop="@dimen/_20dp"
-                                android:paddingStart="@dimen/_10dp"
-                                android:paddingEnd="@dimen/_10dp"
-                                android:background="@color/lite_grey"
+                                android:background="@drawable/corner_bottom_grey"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/recyclerView">
 
@@ -273,12 +293,12 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    android:text="@{invoice.totalItems}"
-                                    tools:text="Total items "/>
+                                    android:text='@{"Total items : "+invoice.totalItems}'
+                                    tools:text="Total items : 2"/>
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvCash"
@@ -286,11 +306,11 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
-                                    android:text="@{invoice.cashAmount}"
+                                    android:text='@{"Cash : "+invoice.cashAmount}'
                                     tools:text="Cash : 1020.00 "/>
 
 
@@ -300,19 +320,35 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_18sp"
+                                    android:textSize="@dimen/txt_16sp"
+                                    android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    android:text="@{invoice.subtotal}"
+                                    android:text='@{"Sub Total : "+ invoice.subtotal}'
                                     tools:text="Sub Total : 1020"/>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvDiscount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_16sp"
+                                    android:layout_marginEnd="@dimen/_10dp"
+                                    android:layout_marginStart="10dp"
+                                    app:hideOnZero="@{invoice.discount}"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvSubTotal"
+                                    android:text='@{"Discount : "+ invoice.discount}'
+                                    tools:text="Discount : 1020"/>
 
                                 <View
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
                                     android:id="@+id/viewfooter"
                                     android:layout_marginTop="@dimen/_10dp"
-                                    android:background="@color/design_dark_default_color_shadow_dark"
+                                    android:background="@color/lite_grey"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvCash"/>
 
@@ -323,12 +359,14 @@
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
                                     android:textSize="20sp"
+                                    android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/viewfooter"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    android:text="@{invoice.totalAmount}"
-                                    tools:text="Total Amount : 1020"/>
+                                    android:text='@{"Total Amount  :  "+invoice.totalAmount}'
+                                    tools:text="Total Amount  :  1020"/>
+
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -339,91 +377,111 @@
 
                     </LinearLayout>
 
-
-            </soup.neumorphism.NeumorphCardView>
-
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:padding="@dimen/_10dp"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:layout_height="130dp"
+                android:padding="10dp">
 
-                <soup.neumorphism.NeumorphCardView
+                <LinearLayout
                     android:id="@+id/btnSaleReturn"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="-10dp"
-                    android:layout_marginTop="-5dp"
-                    android:layout_marginEnd="-5dp"
-                    android:layout_marginBottom="-5dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_color_heading"
-                    android:textStyle="bold"
-                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toStartOf="@+id/btnCancel"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_delete" />
-                </soup.neumorphism.NeumorphCardView>
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_15dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/salesreturn_light" />
 
-                <soup.neumorphism.NeumorphCardView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Sales Return"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/btnCancel"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="-5dp"
-                    android:layout_marginTop="-5dp"
-                    android:layout_marginEnd="-10dp"
-                    android:layout_marginBottom="-5dp"
                     android:layout_weight="1"
-                    android:textColor="@color/text_color_heading"
-                    android:textStyle="bold"
-                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_5dp"
+                    app:hideView="@{invoice.status}"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toStartOf="@+id/btnReceipt"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btnSaleReturn"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_delete">
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_15dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/trash" />
 
-                    </ImageView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Cancel Bill"
+                        android:gravity="center" />
 
-                </soup.neumorphism.NeumorphCardView>
+                </LinearLayout>
 
-                <soup.neumorphism.NeumorphCardView
+                <LinearLayout
                     android:id="@+id/btnReceipt"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="-5dp"
-                    android:layout_marginTop="-5dp"
-                    android:layout_marginEnd="-10dp"
-                    android:layout_marginBottom="-5dp"
                     android:layout_weight="1"
-                    android:textColor="@color/text_color_heading"
-                    android:textStyle="bold"
-                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btnCancel"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_delete">
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_15dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/receipt" />
 
-                    </ImageView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Receipt"
+                        android:gravity="center" />
 
-                </soup.neumorphism.NeumorphCardView>
+                </LinearLayout>
 
 
-
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

@@ -1,6 +1,5 @@
 package com.kreativesquadz.billkit.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -75,7 +74,6 @@ class SalesReturnAdapter<T>(
                     invoiceItem.returnedQty = invoiceItem.returnedQty!! - 1
                     listListener.onItemList(item.copy(returnedQty = invoiceItem.returnedQty))
                 } else {
-                    // Optionally, show a toast if trying to decrement below zero
                     listenerToast.showToast("Quantity cannot be less than zero")
                 }
             }

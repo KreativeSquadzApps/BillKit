@@ -19,6 +19,7 @@ import com.kreativesquadz.billkit.databinding.FragmentSaleReturnBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.interfaces.OnItemListListener
 import com.kreativesquadz.billkit.interfaces.OnToastShow
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
@@ -118,7 +119,9 @@ class SaleReturnFragment : Fragment() {
 
             }
         }
-    } private fun setupSpinnerReturnModeOption(itemList: List<String>) {
+    }
+
+    private fun setupSpinnerReturnModeOption(itemList: List<String>) {
         val adapterStockUnit = GenericSpinnerAdapter(
             context = requireContext(),
             layoutResId = R.layout.dropdown_item, // Use your custom layout
@@ -131,6 +134,7 @@ class SaleReturnFragment : Fragment() {
 
         }
     }
+
     private fun setupRecyclerView(list : List<InvoiceItem>?) {
         adapter = SalesReturnAdapter(
             list ?: emptyList(),
@@ -140,22 +144,24 @@ class SaleReturnFragment : Fragment() {
                 }
             }, object : OnItemListListener<InvoiceItem> {
                 override fun onItemList(item: InvoiceItem) {
-                    itemList.forEach {
-                        if (it.id == item.id){
-                            itemList.remove(it)
-                        }
-                    }
-                    itemList.add(item)
+                    itemList.removeAll { it.id == item.id }
 
-                    itemList.forEach {
-                        total = it.unitPrice * it.returnedQty!!
-                        finaltotal = it.unitPrice * it.returnedQty!! + it.taxRate
-                        tax += it.taxRate
-                    }
+    // Add the new item
+    itemList.add(item)
 
-                    binding.amount = "${Config.CURRENCY} $total"
-                    binding.totalGst = "${Config.CURRENCY} $tax"
-                    binding.totalAmount = "${Config.CURRENCY} ${finaltotal}"
+    // Calculate totals (optimized)
+     total = 0.0
+     tax = 0.0
+    for (it in itemList) {
+        total += it.unitPrice * it.returnedQty!!
+        tax += it.taxRate
+    }
+     finaltotal = total + tax
+
+    // Update UI (no changes needed here)
+    binding.amount = "${Config.CURRENCY} $total"
+    binding.totalGst = "${Config.CURRENCY} $tax"
+    binding.totalAmount = "${Config.CURRENCY} ${finaltotal}"
                 }
             },
 
@@ -169,10 +175,12 @@ class SaleReturnFragment : Fragment() {
         )
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.isNestedScrollingEnabled = false
     }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

@@ -20,6 +20,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -82,10 +83,15 @@ class AddProductFrag : Fragment() {
 
         viewModel.productsStatus.observe(viewLifecycleOwner){
             Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            if (it.invoiceId == 200){
+                findNavController().popBackStack()
+            }
         }
 
         viewModel.barcodeText.observe(viewLifecycleOwner){
             binding.etBarcode.setText(it)
+            binding.barcodeContainer.visibility = View.GONE
+
         }
 
     }
@@ -131,7 +137,7 @@ class AddProductFrag : Fragment() {
 
 
     private fun setupSpinner() {
-      val adapter  = GenericSpinnerAdapter(
+       val adapter  = GenericSpinnerAdapter(
             context = requireContext(),
             layoutResId = R.layout.dropdown_item, // Use your custom layout
             bindVariableId = BR.item,
@@ -227,16 +233,8 @@ class AddProductFrag : Fragment() {
             .addOnSuccessListener { barcodes ->
                 for (barcode in barcodes) {
                     Log.e("barcode",barcode.rawValue.toString())
-                    when (barcode.format) {
-                        Barcode.FORMAT_EAN_8,
-                        Barcode.FORMAT_EAN_13,
-                        Barcode.FORMAT_UPC_A,
-                        Barcode.FORMAT_UPC_E,
-                        Barcode.TYPE_ISBN -> {
-                            viewModel.setBarcodeText(barcode.rawValue.toString() ?: "No Value")
-                        }
-                        else -> { /* Handle other barcode formats if needed */ }
-                    }
+                    viewModel.setBarcodeText(barcode.rawValue.toString() ?: "No Value")
+
                 }
                 imageProxy.close()
             }

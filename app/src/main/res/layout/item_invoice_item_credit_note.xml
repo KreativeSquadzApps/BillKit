@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.widget.TextView" />
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt" />
+        <variable
+            name="item"
+            type="com.kreativesquadz.billkit.model.InvoiceItem" />
+
+    </data>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cardHeader"
+            android:paddingTop="@dimen/_5dp"
+            android:paddingStart="@dimen/_10dp"
+            android:paddingEnd="@dimen/_10dp"
+            android:paddingBottom="@dimen/_5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color_main"
+                android:textSize="@dimen/txt_16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text='@{(item.itemName.split(" ")[0])}'
+                android:textStyle="bold"
+                tools:text="Itemmmm"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_color_main"
+                android:textSize="@dimen/txt_18sp"
+                android:layout_marginTop="@dimen/_5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvItemName"
+                android:text="@{item.unitPrice}"
+                tools:text="450"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color_main"
+                android:textSize="@dimen/txt_18sp"
+                android:layout_marginEnd="@dimen/_10dp"
+                app:layout_constraintStart_toEndOf="@+id/txtPrice"
+                app:layout_constraintTop_toTopOf="@+id/txtPrice"
+                android:text='@{"  x  " + item.returnedQty}'
+                tools:text="  x  3000"/>
+
+            <TextView
+                android:id="@+id/tvAvailableQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10dp"
+                android:textColor="@color/text_color_main"
+                android:textSize="@dimen/txt_18sp"
+                app:returnedQty='@{item.returnedQty}'
+                app:unitPrice='@{item.unitPrice}'
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="3000" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color_main"
+                android:textSize="@dimen/txt_14sp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginEnd="@dimen/_10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAvailableQty"
+                android:text='@{item.taxRate+"%"}'
+                tools:text="0.0%"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPrice"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@color/lite_grey"/>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -13,6 +13,7 @@ import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentSettingsBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.Category
 
 class SettingsFrag : Fragment() {
     var _binding: FragmentSettingsBinding? = null

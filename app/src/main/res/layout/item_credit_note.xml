@@ -1,7 +1,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
         <variable
             name="creditNote"
             type="com.kreativesquadz.billkit.model.CreditNote" />
@@ -10,45 +12,137 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_margin="@dimen/_10dp"
+        android:background="@drawable/corner_four_grey">
 
-        <!-- Example fields -->
-        <TextView
-            android:id="@+id/invoiceId"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{creditNote.invoiceId}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/createdBy"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{creditNote.createdBy}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/invoiceId" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/header"
+            android:paddingStart="@dimen/_15dp"
+            android:paddingTop="@dimen/_15dp"
+            android:paddingEnd="@dimen/_15dp"
+            android:paddingBottom="@dimen/_10dp">
 
-        <TextView
-            android:id="@+id/dateTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{creditNote.dateTime}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/createdBy" />
+
+            <!-- Example fields -->
+            <TextView
+                android:id="@+id/creaditNoteId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{creditNote.id}"
+                android:textColor="@color/text_color_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="022" />
+
+            <TextView
+                android:id="@+id/txtinvoiceId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Invoice : "
+                android:layout_marginTop="@dimen/_5dp"
+                android:textSize="@dimen/txt_14sp"
+                android:textColor="@color/text_color_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/creaditNoteId" />
+
+            <TextView
+                android:id="@+id/tvinvoiceId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{creditNote.invoiceId}"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/_5dp"
+                android:textColor="@color/text_color_heading"
+                app:layout_constraintStart_toEndOf="@+id/txtinvoiceId"
+                app:layout_constraintTop_toBottomOf="@id/creaditNoteId"
+                tools:text="022"/>
+
+
+
+            <TextView
+                android:id="@+id/txtAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount : "
+                android:textSize="@dimen/txt_14sp"
+                android:textColor="@color/text_color_heading"
+                app:layout_constraintEnd_toStartOf="@+id/tvAmount"
+                app:layout_constraintTop_toTopOf="@id/tvAmount" />
+
+
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{creditNote.amount}"
+                android:layout_marginEnd="30dp"
+                android:textStyle="bold"
+                android:textColor="@color/text_color_heading"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="022"/>
+
+
+            <TextView
+                android:id="@+id/txtDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date : "
+                android:gravity="center"
+                android:textSize="@dimen/txt_14sp"
+                android:textColor="@color/text_color_heading"
+                app:layout_constraintStart_toStartOf="@+id/txtAmount"
+                app:layout_constraintTop_toTopOf="@id/dateTime" />
+
+
+
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{creditNote.dateTime}"
+                android:layout_marginEnd="@dimen/_15dp"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/_5dp"
+                app:dateStamp="@{creditNote.dateTime}"
+                android:textColor="@color/text_color_heading"
+                app:layout_constraintStart_toEndOf="@+id/txtDateTime"
+                app:layout_constraintTop_toBottomOf="@id/tvAmount"
+                tools:text="20-02-2024"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         <!-- Bottom line view -->
-        <View
+        <LinearLayout
             android:id="@+id/statusIndicator"
             android:layout_width="0dp"
-            android:layout_height="5dp"
+            android:layout_height="25dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@{creditNote.status.equals(`Active`) ? @color/teal_700 : creditNote.status.equals(`Cleared`) ? @color/lite_grey : @color/lite_grey}" />
+            app:layout_constraintTop_toBottomOf="@+id/header"
+            tools:background="@color/red"
+            android:background="@{creditNote.status.equals(`Active`) ? @color/teal_700 : creditNote.status.equals(`Cleared`) ? @color/lite_grey : @color/lite_grey}" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/text_color_heading_reverse"
+                android:textSize="@dimen/txt_12sp"
+                android:text="@{creditNote.status.equals(`Active`) ? `Available CreditNote` : creditNote.status.equals(`Cleared`) ? `CreditNote Cleared` : `CreditNote Cleared` }"
+                tools:text="Available CreditNote"/>
+
+
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

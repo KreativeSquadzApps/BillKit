@@ -2,7 +2,9 @@ package com.kreativesquadz.billkit.di
 
 import android.content.Context
 import com.kreativesquadz.billkit.Database.AppDatabase
+import com.kreativesquadz.billkit.bluetooth.BluetoothService
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
+import com.kreativesquadz.billkit.repository.BluetoothRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
@@ -24,6 +26,11 @@ object AppModule {
     @Singleton
     fun providedb(@ApplicationContext appContext: Context): AppDatabase {
         return AppDatabase.getInstance(appContext)!!
+    }
+
+    @Provides
+    fun provideBluetoothService(@ApplicationContext appContext: Context): BluetoothService {
+        return BluetoothService(appContext)
     }
 
     @Provides
@@ -53,8 +60,13 @@ object AppModule {
     }
 
     @Provides
-    fun  provideCreditNoteReppoository(providedb: AppDatabase): CreditNoteRepository{
+    fun  provideCreditNoteRepository(providedb: AppDatabase): CreditNoteRepository{
         return CreditNoteRepository(providedb)
+    }
+
+    @Provides
+    fun provideBluetoothRepository(bluetoothService: BluetoothService): BluetoothRepository {
+        return BluetoothRepository(bluetoothService)
     }
 
 }

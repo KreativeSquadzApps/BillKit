@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
@@ -37,7 +37,13 @@
         android:id="@+id/creditNoteFrag"
         android:name="com.kreativesquadz.billkit.ui.bills.creditNote.CreditNoteFrag"
         android:label="@string/menu_credit_notes"
-        tools:layout="@layout/fragment_credit_note" />
+        tools:layout="CreditNote" >
+        <argument android:name="invoiceId" app:argType="string" />
+
+        <action
+            android:id="@+id/action_creditNoteFrag_to_creditNoteDetailsFragment"
+            app:destination="@id/creditNoteDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/inventoryFrag"
@@ -101,7 +107,7 @@
     <fragment
         android:id="@+id/billDetailsFrag"
         android:name="com.kreativesquadz.billkit.ui.home.billDetails.BillDetailsFrag"
-        android:label="fragment_bill_details"
+        android:label="Bill Details"
         tools:layout="@layout/fragment_bill_details" >
         <action
             android:id="@+id/action_billDetailsFrag_to_receiptFrag"
@@ -119,12 +125,12 @@
             android:name="target"
             app:argType="string" />
         <action
-            app:enterAnim="@anim/zoom_in"
-            app:exitAnim="@anim/zoom_out"
-            app:popEnterAnim="@anim/zoom_in"
-            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_receiptFrag_to_nav_home"
-            app:destination="@id/nav_home" />
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home" />
+        <action
+            android:id="@+id/action_receiptFrag_to_bluetoothDeviceFragment"
+            app:destination="@id/bluetoothDeviceFragment" />
     </fragment>
     <fragment
         android:id="@+id/invoiceFragment"
@@ -176,7 +182,23 @@
     <fragment
         android:id="@+id/saleReturnFragment"
         android:name="com.kreativesquadz.billkit.ui.bills.billHistory.saleReturn.SaleReturnFragment"
-        android:label="SaleReturnFragment" >
+        android:label="Sale Return" >
+        <argument
+            android:name="invoice"
+            app:argType="com.kreativesquadz.billkit.model.Invoice" />
+    </fragment>
+    <fragment
+        android:id="@+id/creditNoteDetailsFragment"
+        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteDetails.CreditNoteDetailsFragment"
+        android:label="CreditNote" >
+
+        <argument android:name="invoiceId" app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/bluetoothDeviceFragment"
+        android:name="com.kreativesquadz.billkit.ui.bills.bluetoothPrinter.BluetoothDeviceFragment"
+        android:label="BluetoothDeviceFragment">
+
         <argument
             android:name="invoice"
             app:argType="com.kreativesquadz.billkit.model.Invoice" />

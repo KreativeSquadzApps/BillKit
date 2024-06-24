@@ -13,6 +13,7 @@ import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentProductBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Product
 import dagger.hilt.android.AndroidEntryPoint
 

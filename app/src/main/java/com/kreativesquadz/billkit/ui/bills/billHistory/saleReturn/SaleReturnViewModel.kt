@@ -33,7 +33,7 @@ class SaleReturnViewModel @Inject constructor(val inventoryRepository: Inventory
 
     fun generateCreditNote(context: Context,creditNote: CreditNote){
         viewModelScope.launch {
-            val existingNote = creditNoteRepository.getCreditNoteByInvoiceId(creditNote)
+            val existingNote = creditNoteRepository.getCreditNoteByInvoiceId(creditNote.invoiceId)
             Log.e("existingNote",existingNote.toString())
             Log.e("creditNotessssss",creditNote.toString())
             if (existingNote != null) {

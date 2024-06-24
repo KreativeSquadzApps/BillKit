@@ -3,6 +3,7 @@ package com.kreativesquadz.billkit.model
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(
     tableName = "companyDetails",
@@ -21,4 +22,4 @@ data class CompanyDetails (
     var CurrencySymbol: String,
     var InvoicePrefix: String,
     var InvoiceNumber: Int
-)
+): Serializable

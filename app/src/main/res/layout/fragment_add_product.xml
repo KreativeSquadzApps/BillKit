@@ -241,6 +241,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:id="@+id/barcodeContainer"
             android:visibility="@{isCameraOpen ? View.VISIBLE : View.GONE}"
             android:layout_margin="@dimen/_10dp">
             <androidx.camera.view.PreviewView
@@ -254,45 +255,33 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_margin="@dimen/_10dp"
             android:layout_alignParentBottom="true">
 
-            <soup.neumorphism.NeumorphCardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:id="@+id/btnAdd"
                 android:layout_height="match_parent"
+                app:cardCornerRadius="@dimen/_5dp"
+                app:cardUseCompatPadding="true"
+
                 android:textStyle="bold"
+                app:cardBackgroundColor="@color/colorPrimaryDark"
                 android:textColor="@color/text_color_heading"
-                app:neumorph_backgroundColor="@color/colorPrimaryDark"
-                android:gravity="center"
-                app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
-                app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+                android:gravity="center">
 
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
                     android:layout_width="match_parent"
+                    android:id="@+id/iv_equals"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp">
+                    android:text="Add"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"/>
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="35sp"
-                        android:textStyle="bold"
-                        android:text="Add"
-                        android:gravity="center"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </soup.neumorphism.NeumorphCardView>
+            </androidx.cardview.widget.CardView>
 
 
 

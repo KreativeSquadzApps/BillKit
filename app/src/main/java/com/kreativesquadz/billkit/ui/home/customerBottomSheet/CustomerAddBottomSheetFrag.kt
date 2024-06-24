@@ -16,6 +16,7 @@ import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentCustomerBottomSheetBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">150dp</dimen>
+    <dimen name="nav_header_height">140dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="labels_text_size">14sp</dimen>
     <dimen name="half">2dp</dimen>
@@ -13,14 +13,21 @@
     <dimen name="txt6">17dp</dimen>
     <dimen name="txt7">30dp</dimen>-
     <dimen name="_10dp">10dp</dimen>
+    <dimen name="_8dp">8dp</dimen>
+    <dimen name="_12dp">12dp</dimen>
+    <dimen name="_5dp">5dp</dimen>
     <dimen name="_20dp">20dp</dimen>
+    <dimen name="_15dp">15dp</dimen>
+    <dimen name="_18dp">18dp</dimen>
     <dimen name="_dialog_corners">5dp</dimen>
     <dimen name="_arc_dim">100dp</dimen>
 
 
-    <dimen name="txt_quick_sale">35sp</dimen>
+    <dimen name="txt_quick_sale">40sp</dimen>
     <dimen name="txt_home_item">16sp</dimen>
     <dimen name="txt_18sp">18sp</dimen>
     <dimen name="txt_16sp">16sp</dimen>
+    <dimen name="txt_15sp">15sp</dimen>
     <dimen name="txt_14sp">14sp</dimen>
+    <dimen name="txt_12sp">12sp</dimen>
 </resources>

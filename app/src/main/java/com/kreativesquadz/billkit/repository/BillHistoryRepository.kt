@@ -20,8 +20,6 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     private val invoiceDao : InvoiceDao = db.invoiceDao()
     private val inventoryDao : InventoryDao = db.inventoryDao()
 
-
-
     fun loadAllInvoices(): LiveData<Resource<List<Invoice>>> {
         return object : NetworkBoundResource<List<Invoice>, List<Invoice>>() {
             override fun saveCallResult(item: List<Invoice>) {

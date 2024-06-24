@@ -112,34 +112,6 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
 
 
     //For Credit Notes
-    fun loadAllCreditNote(userId:Long): LiveData<Resource<List<CreditNote>>> {
-        return object : NetworkBoundResource<List<CreditNote>, List<CreditNote>>() {
-            override fun saveCallResult(item: List<CreditNote>) {
-                try {
-                    Log.e("item", item.toString())
-
-                    db.runInTransaction {
-                        creditNoteDao.deleteCreditNoteList()
-                        creditNoteDao.insertCreditNoteList(item)
-                    }
-                } catch (ex: Exception) {
-                    Log.e("TAG", ex.toString())
-                }
-            }
-
-            override fun shouldFetch(data: List<CreditNote>?): Boolean {
-                return true
-            }
-
-            override fun loadFromDb(): LiveData<List<CreditNote>> {
-                return creditNoteDao.getCreditNotesByUser(userId)
-            }
-
-            override fun createCall(): LiveData<ApiResponse<List<CreditNote>>> {
-                return ApiClient.getApiService().loadCreditNote(userId)
-            }
-        }.asLiveData()
-    }
 
 
      fun decrementProductStock(productName: String?, quantity: Int) {

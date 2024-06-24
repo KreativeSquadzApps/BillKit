@@ -28,6 +28,7 @@ class ReceiptFrag : Fragment() {
     private val viewModel: ReceiptViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var adapter: GenericAdapter<InvoiceItem>
+    lateinit var invoiceP: Invoice
 
     val invoiceId by lazy {
         arguments?.getString("invoiceId")
@@ -57,6 +58,7 @@ class ReceiptFrag : Fragment() {
         val invoice= viewModel.getInvoiceDetails(invoiceId!!)
         invoice.observe(viewLifecycleOwner) {
             binding.invoice = it
+            invoiceP = it
             binding.isCustomerAvailable = it?.customerId != null
             binding.customer = viewModel.getCustomerById(it?.customerId.toString())
         }
@@ -68,6 +70,16 @@ class ReceiptFrag : Fragment() {
         viewModel.invoiceItems.observe(viewLifecycleOwner){
             setupRecyclerView(it)
         }
+
+        target?.let {
+            if (it.equals(Config.BillDetailsFragmentToReceiptFragment)){
+                binding.backImage.setBackgroundResource(R.drawable.home_light)
+                binding.backText.text = "New Sale"
+            }else{
+                binding.backImage.setBackgroundResource(R.drawable.back_light)
+                binding.backText.text = "Back"
+            }
+        }
     }
 
     fun onClickListeners(){
@@ -75,10 +87,16 @@ class ReceiptFrag : Fragment() {
             if(target == Config.BillDetailsFragmentToReceiptFragment)
                 findNavController().navigate(R.id.action_receiptFrag_to_nav_home)
             else
-            findNavController().popBackStack()
+                findNavController().popBackStack()
+        }
+
+        binding.btnPrint.setOnClickListener {
+            val action = ReceiptFragDirections.actionReceiptFragToBluetoothDeviceFragment(invoiceP)
+            findNavController().navigate(action)
         }
 
     }
+
 
     private fun setupRecyclerView(receiptInvoiceItem: List<InvoiceItem>?) {
         adapter = GenericAdapter(
