@@ -7,46 +7,55 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/active_newbill_light"
+            android:visible="false"
             android:title="@string/menu_new_sale" />
 
         <item
             android:id="@+id/billHistoryFrag"
+            android:visible="false"
             android:icon="@drawable/active_bill_light"
             android:title="@string/menu_bill_history" />
 
         <item
             android:id="@+id/creditNoteFrag"
+            android:visible="false"
             android:icon="@drawable/active_stock_light"
             android:title="@string/menu_credit_notes" />
 
 
         <item
             android:id="@+id/inventoryFrag"
+            android:visible="false"
             android:icon="@drawable/active_stock_light"
             android:title="@string/menu_inventory" />
 
         <item
             android:id="@+id/customerManagementFrag"
+            android:visible="false"
             android:icon="@drawable/active_customers_light"
             android:title="@string/menu_customer_management" />
 
         <item
             android:id="@+id/staffManagementFrag"
+            android:visible="false"
             android:icon="@drawable/staffactive_light"
             android:title="@string/menu_staff_management" />
 
         <item
             android:id="@+id/creditDetailsFrag"
+            android:visible="false"
             android:icon="@drawable/active_credit_light"
             android:title="@string/menu_credit_details" />
 
         <item
             android:id="@+id/dayBookFrag"
+            android:visible="false"
             android:icon="@drawable/active_daybook_light"
             android:title="@string/menu_dayBook" />
 
         <item
             android:id="@+id/settingsFrag"
+            android:visible="false"
             android:icon="@drawable/active_settings_light"
             android:title="@string/menu_settings" />
 

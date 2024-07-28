@@ -59,7 +59,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/txtInvoice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="Invoice : " />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/tvInvoice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                         android:text="@{invoice.id}"
                         tools:text="777"/>
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/txtTotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="Total : " />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/tvTotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                         tools:text="300"/>
 
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/txtItems"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/txtInvoice"
                         android:text="Items : " />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/tvItems"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
                         android:text="@{invoice.totalItems}"
                         tools:text="3"/>
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/txtDiscount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                         app:layout_constraintTop_toTopOf="@+id/tvDiscount"
                         android:text="Discount : " />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:id="@+id/tvDiscount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/recyclerView"
                 android:layout_marginTop="@dimen/_10dp">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/tvAmount"
                     app:layout_constraintTop_toTopOf="@+id/tvAmount" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/tvAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="RS 300" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtReduceDiscount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -235,7 +235,7 @@
                     app:layout_constraintStart_toEndOf="@+id/txtReduceDiscount"
                     app:layout_constraintTop_toBottomOf="@+id/tvAmount" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtTotalGst"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -247,7 +247,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/tvTotalGst"
                     app:layout_constraintTop_toTopOf="@+id/tvTotalGst" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/tvTotalGst"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -262,7 +262,7 @@
                     tools:text="RS 300" />
 
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -274,7 +274,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/tvTotalAmount"
                     app:layout_constraintTop_toTopOf="@+id/tvTotalAmount" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -289,7 +289,7 @@
                     tools:text="RS 300" />
 
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtReturnMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -330,7 +330,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtReturnModeOption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -392,7 +392,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="5dp">
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"

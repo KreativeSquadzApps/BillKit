@@ -27,6 +27,7 @@ data class Invoice(
     val subtotal: Double,
     val cashAmount: Double,
     val totalAmount: Double,
+    val totalGst: Double,
     val customerId: Long? = null,
     val isSynced: Int = 0,
     val creditNoteAmount: Int = 0,

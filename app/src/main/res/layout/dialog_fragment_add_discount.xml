@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -50,14 +50,14 @@
                 android:orientation="horizontal"
                 android:layout_margin="@dimen/_10dp"
                 android:weightSum="2">
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
                     android:textSize="16sp"
                     android:layout_weight="1"
                     android:text="Cash Discount"/>
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -97,7 +97,7 @@
 
 
 
-        <TextView
+        <TextView android:fontFamily="@font/montserrat_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -105,7 +105,7 @@
             android:gravity="center"
             android:layout_marginTop="@dimen/_20dp"
             android:text="New Total"/>
-        <TextView
+        <TextView android:fontFamily="@font/montserrat_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/totalAmount"

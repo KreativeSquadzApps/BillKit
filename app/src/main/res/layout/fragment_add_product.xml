@@ -271,7 +271,7 @@
                 android:textColor="@color/text_color_heading"
                 android:gravity="center">
 
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:id="@+id/iv_equals"
                     android:layout_height="match_parent"

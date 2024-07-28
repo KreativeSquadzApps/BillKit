@@ -1,23 +1,27 @@
 package com.kreativesquadz.billkit.ui.home.tab
 
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.repository.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.runBlocking
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.util.UUID
+import javax.inject.Inject
 
-
-class SharedViewModel : ViewModel() {
+@HiltViewModel
+class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
     private val _items = MutableLiveData<List<InvoiceItem>>()
     val items: LiveData<List<InvoiceItem>> get() = _items
     var list = mutableListOf<InvoiceItem>()
@@ -248,20 +252,16 @@ class SharedViewModel : ViewModel() {
     fun addCreditNote(creditNote: CreditNote?){
         _selectedCreditNote.value = creditNote
         _isCreditNoteApplied.value = true
-
         creditNoteId = creditNote?.id
         creditNoteAmount = creditNote?.totalAmount?.toInt()
-
         getTotalAmount()
 
     }
     fun removeCreditNote(){
         _selectedCreditNote.value = null
         _isCreditNoteApplied.value = false
-
         creditNoteId = 0
         creditNoteAmount = 0
-
         getTotalAmount()
     }
 
@@ -270,17 +270,29 @@ class SharedViewModel : ViewModel() {
     }
 
     fun getInvoice() : Invoice{
+        var createdBy = "Created By Admin"
+        val loginSession = loginRepository.getUserSessions()
+        if (loginSession != null){
+            if (loginSession.staffId != null){
+              val loginResponse = loginRepository.getSession(null, loginSession.staffId.toLong())
+                val staff = loginResponse?.staff
+                if (staff != null){
+                    createdBy = "Created By ${staff.name}"
+                }
+            }
+        }
         val invoice = Invoice(
             invoiceId = generateInvoiceId(),
             invoiceNumber = "INV ${getInvoiceItemCount()}",
             invoiceDate = System.currentTimeMillis().toString(),
             invoiceTime = System.currentTimeMillis().toString(),
-            createdBy = "Created By Admin",
+            createdBy = createdBy,
             discount = discounted,
             totalItems = getInvoiceItem().size,
             subtotal = getSubTotalamountDouble(),
             cashAmount = getTotalAmountDouble(),
             totalAmount = (getTotalAmountDouble()- (discounted?:0) - (creditNoteAmount?:0)),
+            totalGst = 0.0,
             customerId = getCustomerId(),
             isSynced = 0,
             creditNoteAmount = creditNoteAmount?:0,
@@ -288,6 +300,26 @@ class SharedViewModel : ViewModel() {
             status = "Active"
         )
         return invoice
+    }
+    fun getSession() : LoginResponse? {
+        var loginResponse : LoginResponse?
+        val loginSession = loginRepository.getUserSessions()
+        runBlocking{
+            loginResponse = loginRepository.getSession(Config.userId.toInt(),1)
+            if (loginSession != null){
+                if (loginSession.staffId != null){
+                    loginResponse = loginRepository.getSession(null, loginSession.staffId.toLong())
+                }else if (loginSession.userId != null){
+                    loginResponse = loginRepository.getSession(loginSession.userId, null)
+                }
+            }else{
+                loginResponse = loginRepository.getSession(null, null)
+            }
+        }
+
+
+
+        return loginResponse
     }
 
     fun getItemsList(): List<InvoiceItem> {

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10dp"
-        android:background="@drawable/corner_four_grey">
+        android:background="@drawable/corner_top_grey">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +27,7 @@
 
 
             <!-- Example fields -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/creaditNoteId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="022" />
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/txtinvoiceId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/creaditNoteId" />
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/tvinvoiceId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
 
 
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/txtAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toTopOf="@id/tvAmount" />
 
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/tvAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 tools:text="022"/>
 
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/txtDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
 
 
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/dateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,15 +123,17 @@
             android:id="@+id/statusIndicator"
             android:layout_width="0dp"
             android:layout_height="25dp"
+            android:layout_margin="1dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header"
             tools:background="@color/red"
+            android:drawableBottom="@drawable/corner_bottom_grey"
             android:background="@{creditNote.status.equals(`Active`) ? @color/teal_700 : creditNote.status.equals(`Cleared`) ? @color/lite_grey : @color/lite_grey}" >
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kreativesquadz.billkit.Dao.CreditNoteDao
+import com.kreativesquadz.billkit.Dao.InvoiceDao
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.api.ApiClient
 import com.kreativesquadz.billkit.api.ApiResponse
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 class CreditNoteRepository @Inject constructor(val db: AppDatabase) {
     private val creditNoteDao : CreditNoteDao = db.creditNoteDao()
+    private val invoiceDao : InvoiceDao = db.invoiceDao()
     suspend fun addCreditNote(creditNote: CreditNote) {
         creditNoteDao.insertCreditNote(creditNote)
         val statusLiveData = MutableLiveData<Boolean>()
@@ -51,6 +53,9 @@ class CreditNoteRepository @Inject constructor(val db: AppDatabase) {
                 try {
                     Log.e("item", item.toString())
 
+                    item.forEach {
+                        it.invoiceItems = invoiceDao.getInvoiceItems(it.invoiceId)
+                    }
                     db.runInTransaction {
                         creditNoteDao.deleteCreditNoteList()
                         creditNoteDao.insertCreditNoteList(item)

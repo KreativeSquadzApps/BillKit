@@ -1,5 +1,6 @@
 package com.kreativesquadz.billkit.ui.settings
 
+import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,7 +15,10 @@ import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentSettingsBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.ui.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingsFrag : Fragment() {
     var _binding: FragmentSettingsBinding? = null
     val binding get() = _binding!!
@@ -31,9 +35,19 @@ class SettingsFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        onClickListeners()
         setupRecyclerView()
 
         return binding.root
+    }
+    fun onClickListeners(){
+        binding.signOut.setOnClickListener {
+            viewModel.logout()
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+
     }
 
     override fun onDestroyView() {

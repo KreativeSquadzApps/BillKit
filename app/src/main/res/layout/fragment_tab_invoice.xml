@@ -75,7 +75,7 @@
                             android:id="@+id/etCurrencySymbol"
                             android:text="@{companyDetails.CurrencySymbol}"/>
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_10dp"
@@ -111,7 +111,7 @@
                         app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
 
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center|right"

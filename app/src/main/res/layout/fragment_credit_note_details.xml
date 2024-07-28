@@ -54,7 +54,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                                 android:textStyle="bold"
                                 tools:text="Date "/>
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                                 app:timestampToTime="@{creditNote.dateTime}"
                                 tools:text="Time "/>
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvCreatedBy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                                 android:text="@{creditNote.createdBy}"
                                 tools:text="Created by Admin "/>
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvInvoiceNo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
                                 android:text="@{creditNote.invoiceId}"
                                 tools:text="41"/>
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/txInvoiceNo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/cardHeader"
                             android:id="@+id/returnedView"
                             android:orientation="vertical">
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text='@{"Credit Note No : " + creditNote.id}'
@@ -139,7 +139,7 @@
                                 android:textSize="@dimen/txt_16sp"
                                 android:textColor="@android:color/holo_blue_light"
                                 tools:text="Credit Note No : 0002"/>
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text='@{creditNote.status}'
@@ -147,7 +147,7 @@
                                 android:textSize="@dimen/txt_16sp"
                                 android:textColor="@android:color/holo_blue_light"
                                 tools:text="Cleared"/>
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text='@{creditNote.createdBy}'
@@ -172,7 +172,7 @@
                             android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
                             android:id="@+id/customerView">
 
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_20dp"
@@ -182,7 +182,7 @@
                                 android:textColor="@color/text_color_main"
                                 android:id="@+id/txtCustomerDetails"
                                 android:text="Customer Details" />
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/text_color_main"
@@ -194,7 +194,7 @@
                                 android:text="@{customer.customerName}"
                                 tools:text="Demo Name"/>
 
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_20dp"
@@ -206,7 +206,7 @@
                                 android:text="@{customer.gstNo}"
                                 tools:text="Demo"/>
 
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_20dp"
@@ -221,7 +221,7 @@
                                 tools:text="Demo"/>
 
 
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_20dp"
@@ -261,7 +261,7 @@
 
                             android:orientation="horizontal">
 
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvInvoiceID"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -271,7 +271,7 @@
                                 android:textSize="@dimen/txt_16sp"
                                 android:text="Items" />
 
-                            <TextView
+                            <TextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/item_name"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -311,7 +311,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/recyclerView">
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvTotalItems"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -327,7 +327,7 @@
                                 tools:text="Total items : 2"/>
 
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvSubTotal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -342,7 +342,7 @@
 
 
 
-                            <androidx.appcompat.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                                 android:id="@+id/tvTotalAmount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

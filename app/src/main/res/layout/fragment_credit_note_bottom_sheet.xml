@@ -17,7 +17,7 @@
             android:background="@color/lite_grey"
             android:orientation="horizontal"
             >
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

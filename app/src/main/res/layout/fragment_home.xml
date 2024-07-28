@@ -2,14 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
         <import type="android.view.View"/>
-
         <variable
             name="sharedViewModels"
             type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
-        
         <variable
             name="isItemAvailable"
             type="Boolean" />
@@ -25,9 +22,20 @@
         android:fitsSystemWindows="true"
         tools:context="ui.home.HomeFragment">
 
-        <androidx.appcompat.widget.AppCompatTextView
+
+        <ImageView
+            android:id="@+id/drawer_icon"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:padding="@dimen/_5dp"
+            android:src="@drawable/drawer_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
             android:id="@+id/tv_Display"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/white"
@@ -36,23 +44,25 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:gravity="bottom|right|center_vertical|center_horizontal|center"
-            android:hint=" "
+            android:hint=" 0"
             android:text="@{sharedViewModels.amount}"
             android:paddingBottom="@dimen/half"
             android:scrollbars="vertical"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text_color_main"
-            android:textColorHint="@android:color/white"
-            android:textSize="50sp"
+            android:textColorHint="@android:color/black"
+            android:textSize="30sp"
             android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/drawer_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="@dimen/_20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +74,7 @@
             app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
             android:layout_marginBottom="70dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="170dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -72,10 +82,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                android:visibility="@{isItemAvailable ? View.VISIBLE : View.GONE}"
-                android:background="@color/white">
+                android:visibility="@{isItemAvailable ? View.VISIBLE : View.INVISIBLE}"
+                android:background="@color/lite_grey_200">
 
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -84,7 +94,7 @@
                     android:layout_marginStart="@dimen/_10dp"
                     android:id="@+id/btnClearItems"/>
 
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -139,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:id="@+id/bottom_bar"
-            app:cardElevation="@dimen/_20dp"
+            app:cardElevation="@dimen/_10dp"
             android:paddingTop="@dimen/_10dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -204,7 +214,7 @@
                         android:layout_height="match_parent">
 
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center|right"
@@ -218,11 +228,11 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             android:text="Bill" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center|right"
-                            android:textSize="35sp"
+                            android:textSize="25sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_color_heading_reverse"
                             android:id="@+id/tvBill"

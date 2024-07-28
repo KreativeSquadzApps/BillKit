@@ -67,6 +67,8 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.play.services.mlkit.barcode.scanning)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.annotation)
     ksp(libs.androidx.room.compiler)
     implementation(libs.retrofit)
     implementation(libs.hilt.android)
@@ -87,4 +89,5 @@ dependencies {
     implementation (libs.androidx.camera.camera2)
     implementation (libs.androidx.camera.lifecycle)
     implementation (libs.androidx.camera.view)
+    implementation(libs.logging.interceptor)
 }

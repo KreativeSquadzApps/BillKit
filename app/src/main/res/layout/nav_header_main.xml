@@ -20,7 +20,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/logo" />
 
-    <TextView
+    <TextView android:fontFamily="@font/montserrat_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Simplify Your Bill"

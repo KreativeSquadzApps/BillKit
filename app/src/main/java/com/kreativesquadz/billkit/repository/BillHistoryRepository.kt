@@ -2,8 +2,6 @@ package com.kreativesquadz.billkit.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.kreativesquadz.billkit.Dao.CreditNoteDao
 import com.kreativesquadz.billkit.Dao.InventoryDao
 import com.kreativesquadz.billkit.Dao.InvoiceDao
 import com.kreativesquadz.billkit.Database.AppDatabase
@@ -57,9 +55,6 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
         }.asLiveData()
     }
 
-    suspend fun addInvoice(invoice: Invoice) : Long {
-        return invoiceDao.insert(invoice)
-    }
 
     fun getInvoiceById(id: Int): LiveData<Invoice> {
         return invoiceDao.getInvoiceById(id)
@@ -77,6 +72,7 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     suspend fun updateInvoiceItem(invoiceId: Long, itemName: String, returnedQty: Int) {
         invoiceDao.updateReturnedQty(invoiceId,itemName, returnedQty)
     }
+
     suspend fun insertInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>) : Long{
         try {
             // Insert the invoice
@@ -96,7 +92,7 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     }
 
 
-    suspend fun getInvoiceItems(id: Long): List<InvoiceItem> {
+     fun getInvoiceItems(id: Long): List<InvoiceItem> {
         return invoiceDao.getInvoiceItems(id)
     }
 

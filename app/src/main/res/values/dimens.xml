@@ -23,11 +23,15 @@
     <dimen name="_arc_dim">100dp</dimen>
 
 
-    <dimen name="txt_quick_sale">40sp</dimen>
+    <dimen name="txt_quick_sale">30sp</dimen>
     <dimen name="txt_home_item">16sp</dimen>
+    <dimen name="txt_28sp">28sp</dimen>
+    <dimen name="txt_24sp">24sp</dimen>
+    <dimen name="txt_20sp">20sp</dimen>
     <dimen name="txt_18sp">18sp</dimen>
     <dimen name="txt_16sp">16sp</dimen>
     <dimen name="txt_15sp">15sp</dimen>
     <dimen name="txt_14sp">14sp</dimen>
     <dimen name="txt_12sp">12sp</dimen>
+    <dimen name="txt_13sp">13sp</dimen>
 </resources>

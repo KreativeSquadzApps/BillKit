@@ -51,7 +51,7 @@
                     android:padding="10dp">
 
                     <!-- Company Details Header -->
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{companyDetails.BusinessName}"
@@ -61,7 +61,7 @@
                         android:layout_gravity="center"
                         tools:text="KreativeSquadz Technology pvt Ltd"/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{companyDetails.Place}"
@@ -70,7 +70,7 @@
                         android:textSize="14sp"
                         tools:text="Shop Place "/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{companyDetails.ShopContactNumber}'
@@ -79,7 +79,7 @@
                         android:textSize="14sp"
                         tools:text="+919971380539 "/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{"Email: " + companyDetails.ShopEmail}'
@@ -88,7 +88,7 @@
                         android:textSize="14sp"
                         tools:text="info@kreativesquadz.com"/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="INVOICE"
@@ -106,7 +106,7 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/_10dp"
                         android:weightSum="2">
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:timestampToDateTime="@{invoice.invoiceDate}"
@@ -116,7 +116,7 @@
                             android:textColor="@color/text_color_main"
                             android:layout_gravity="center"
                             tools:text="30-05-2024 9:31 PM" />
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text='@{"Invoice : " + invoice.id}'
@@ -142,7 +142,7 @@
                         android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
                         android:id="@+id/customerView">
 
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/text_color_main"
@@ -153,7 +153,7 @@
                             android:text="@{customer.customerName}"
                             tools:text="Dragon"/>
 
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
@@ -163,7 +163,7 @@
                             android:text='@{"Contact : " + customer.shopContactNumber}'
                             tools:text="Contact : 9971380539"/>
 
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
@@ -173,7 +173,7 @@
                             android:text='@{"GST No : " + customer.gstNo}'
                             tools:text="GST No : GST1234"/>
 
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
@@ -198,25 +198,25 @@
                         android:layout_height="wrap_content"
                         android:weightSum="4">
 
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textColor="@color/text_color_main"
                             android:text="Item"/>
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textColor="@color/text_color_main"
                             android:text="Qty"/>
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textColor="@color/text_color_main"
                             android:text="Rate"/>
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -258,7 +258,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="2">
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text='@{"Items : " + invoice.totalItems}'
@@ -268,7 +268,7 @@
                             android:textColor="@color/text_color_main"
                             tools:text="Items: 3"/>
 
-                        <TextView
+                        <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -280,7 +280,7 @@
                             tools:text="Sub Total  Rs 990.00"/>
 
                     </LinearLayout>
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="@{invoice.discount==null||invoice.discount==0 ? View.GONE : View.VISIBLE }"
@@ -299,7 +299,7 @@
                         android:layout_marginBottom="10dp"/>
 
                     <!-- Invoice Totals -->
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text='@{"Total : " + invoice.totalAmount}'
@@ -309,7 +309,7 @@
                         android:gravity="center"
                         tools:text="Total  :  9000"/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="@{invoice.discount==null||invoice.discount==0 ? View.GONE : View.VISIBLE}"
@@ -326,7 +326,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="5dp"/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Payment Mode"
@@ -335,7 +335,7 @@
                         android:textColor="@color/text_color_main"
                         android:layout_gravity="center" />
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{"Cash : " + invoice.cashAmount}'
@@ -352,7 +352,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="5dp"/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Thank You"
@@ -398,7 +398,7 @@
                     android:layout_gravity="center"
                     android:id="@+id/backImage" />
 
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
@@ -431,7 +431,7 @@
                     android:layout_weight="4"
                     android:src="@drawable/share" />
 
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -464,7 +464,7 @@
                     android:layout_weight="4"
                     android:src="@drawable/printer" />
 
-                <TextView
+                <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

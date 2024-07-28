@@ -25,7 +25,7 @@
             android:padding="16dp">
 
             <!-- Customer Name -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/customerNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                 tools:text="DEMO" />
 
             <!-- Shop Contact Number -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/shopContactNumberTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 tools:text="9971380539" />
 
             <!-- GST Number -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/gstNumberTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 tools:text="26895" />
 
             <!-- Total Sales -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/totalSalesTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 tools:text="Rs 26619.84" />
 
             <!-- Address -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/addressTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                 tools:text="deml" />
 
             <!-- Credit Amount -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/creditAmountTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

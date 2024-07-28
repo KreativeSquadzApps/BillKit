@@ -36,9 +36,7 @@ class GenericAdapterCategory<T>(
     }
 
     fun isSelected(itemName: String) {
-        Log.e("mmmm",itemName)
         items.forEach {
-            Log.e("mmmmmmm",it.categoryName)
             if (it.categoryName.equals(itemName)){
                 it.isSelected = 1
             } else {

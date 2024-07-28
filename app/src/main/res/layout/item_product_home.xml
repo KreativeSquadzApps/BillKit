@@ -26,7 +26,7 @@
             android:padding="10dp">
 
             <!-- Customer Name -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{productHome.productName}"
@@ -39,7 +39,7 @@
                 android:paddingBottom="4dp"
                 tools:text="Name" />
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/tvProductName"
@@ -49,7 +49,7 @@
                 android:paddingBottom="4dp"
                 tools:text="Rs 200" />
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/tvProductName"

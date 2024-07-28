@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.daybook.DayBookFrag">
 
-    <TextView
+    <TextView android:fontFamily="@font/montserrat_regular"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Hello" />

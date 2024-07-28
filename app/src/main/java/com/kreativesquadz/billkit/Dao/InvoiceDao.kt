@@ -44,5 +44,5 @@ interface InvoiceDao {
     suspend fun getUnsyncedInvoices(): List<Invoice>
 
     @Query("SELECT * FROM invoice_items WHERE invoiceId = :id")
-    suspend fun getInvoiceItems(id: Long): List<InvoiceItem>
+     fun getInvoiceItems(id: Long): List<InvoiceItem>
 }

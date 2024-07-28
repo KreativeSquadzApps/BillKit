@@ -10,6 +10,9 @@ import com.kreativesquadz.billkit.Dao.CreditNoteDao
 import com.kreativesquadz.billkit.Dao.CustomerDao
 import com.kreativesquadz.billkit.Dao.InventoryDao
 import com.kreativesquadz.billkit.Dao.InvoiceDao
+import com.kreativesquadz.billkit.Dao.StaffDao
+import com.kreativesquadz.billkit.Dao.UserDao
+import com.kreativesquadz.billkit.Dao.UserSessionDao
 import com.kreativesquadz.billkit.Dao.UserSettingDao
 import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
@@ -18,16 +21,19 @@ import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.model.Staff
+import com.kreativesquadz.billkit.model.User
+import com.kreativesquadz.billkit.model.UserSession
 import com.kreativesquadz.billkit.model.UserSetting
 import kotlin.concurrent.Volatile
 
 
-@Database(entities = [Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class,
-    UserSetting::class,Category::class, Product::class,CreditNote::class], version = 50, exportSchema = false)
+@Database(entities = [User::class,Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class,
+    UserSetting::class,Category::class, Product::class,CreditNote::class, Staff::class,UserSession::class], version = 61, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{
-        private val DATABASE_NAME = "billKit_database"
+        private const val DATABASE_NAME = "billKit_database"
         @Volatile
         private var INSTANCE: AppDatabase? = null
         fun getInstance(context: Context?): AppDatabase? {
@@ -44,14 +50,15 @@ abstract class AppDatabase  : RoomDatabase() {
             return INSTANCE
         }
     }
-
+    abstract fun userSessionDao(): UserSessionDao
+    abstract fun userDao(): UserDao
     abstract fun customerDao() : CustomerDao
     abstract fun invoiceDao() : InvoiceDao
     abstract fun companyDetailsDao() : CompanyDetailsDao
-
     abstract fun inventoryDao() : InventoryDao
     abstract fun userSettingDao(): UserSettingDao
     abstract fun creditNoteDao(): CreditNoteDao
+    abstract fun staffDao(): StaffDao
 
 
 }

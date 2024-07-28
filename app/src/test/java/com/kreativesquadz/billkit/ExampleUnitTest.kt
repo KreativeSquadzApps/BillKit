@@ -13,10 +13,10 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun test() {
-        var intArray = listOf<Int>(4,5,23,6,8,4,5)
-        var handler = mutableListOf(Int)
-        var result = mutableListOf(Int)
+       assertEquals("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.CISfDRmLiBzQMAJeLM-BRaItpnae3O63kOQRPsY4YQQ","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.CISfDRmLiBzQMAJeLM-BRaItpnae3O63kOQRPsY4YQQ")
 
 
     }
+
+
 }

@@ -19,12 +19,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
     public static ApiService getApiService() {
+
 
         return new Retrofit.Builder()
                 .baseUrl(Config.APP_API_URL)
@@ -47,26 +49,29 @@ public class ApiClient {
     }
 
     private static Gson getGson(){
-        return   new GsonBuilder()
+        return new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .setLenient()
                 .serializeNulls()
                 .create();
     }
     private static OkHttpClient GetOkHttpClient(){
-
         List<Protocol> protocols = new ArrayList<>();
         protocols.add(Protocol.HTTP_1_1);
-
+        AuthInterceptor.TokenProvider tokenProvider = MyTokenStorage::getToken;
+        AuthInterceptor authInterceptor = new AuthInterceptor(tokenProvider);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .writeTimeout(100, TimeUnit.SECONDS)
                 .readTimeout(100, TimeUnit.SECONDS)
                 .pingInterval(1, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .protocols(protocols)
+                .addInterceptor(authInterceptor)
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
         return okHttpClient;
     }
+
 
     public static class ByteArrayToBase64Adapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
 

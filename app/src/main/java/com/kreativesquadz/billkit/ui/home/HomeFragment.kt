@@ -1,7 +1,9 @@
 package com.kreativesquadz.billkit.ui.home
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.net.Uri
@@ -10,7 +12,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -51,10 +56,12 @@ import java.util.concurrent.Executors
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+    private var drawerToggleListener: DrawerToggleListener? = null
+    interface DrawerToggleListener {
+        fun toggleDrawer()
+    }
     private val homeViewModel: HomeViewModel by hiltNavGraphViewModels(R.id.mobile_navigation)
     val sharedViewModel : SharedViewModel by activityViewModels()
-
-
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -62,8 +69,18 @@ class HomeFragment : Fragment() {
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
     private var camera: Camera? = null
-     lateinit var  cameraProvider: ProcessCameraProvider
+     private lateinit var  cameraProvider: ProcessCameraProvider
     var isScanner = true
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is DrawerToggleListener) {
+            drawerToggleListener = context
+        } else {
+            throw RuntimeException("$context must implement DrawerToggleListener")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,12 +94,14 @@ class HomeFragment : Fragment() {
         observers()
         onClickListeners()
         binding.isCameraOpen = isCameraClicked
-
         return root
     }
 
 
     private fun onClickListeners(){
+        binding.drawerIcon.setOnClickListener {
+            drawerToggleListener?.toggleDrawer()
+        }
         binding.btnGenerateBill.setOnClickListener {
             if (binding.tvBill.text.isNullOrEmpty() || binding.tvBill.text.toString() == "0.0"){
                 Toast.makeText(requireContext(), "Please enter amount", Toast.LENGTH_SHORT).show()
@@ -146,12 +165,15 @@ class HomeFragment : Fragment() {
         val adapter = GenericTabAdapter(requireActivity(), fragments)
         binding.viewPager.adapter = adapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            val tabView = LayoutInflater.from(requireContext()).inflate(R.layout.tab_custom, null)
+            val tabText = tabView.findViewById<TextView>(R.id.tab_texts)
             when (position) {
-                0 -> tab.text = "Quick Sale"
-                1 -> tab.text = "Sale"
-                2 -> tab.text = "Saved Orders"
+                0 -> tabText.text = "Quick Sale"
+                1 -> tabText.text = "Sale"
+                2 -> tabText.text = "Saved Orders"
                 // Add more cases for additional tabs if needed
             }
+            tab.customView = tabView
         }.attach()
 
     }
@@ -293,6 +315,11 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        drawerToggleListener = null
     }
 
 

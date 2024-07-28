@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <data>
+            <variable
+                name="staff"
+                type="com.kreativesquadz.billkit.model.Staff" />
+        
+        </data>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/corner_four_grey"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_15dp"
+                    android:layout_marginEnd="@dimen/_15dp"
+                    android:padding="10dp">
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/staffStatus"
+                        android:text="@{staff.status}"
+                        tools:text="Active"
+                        android:textSize="@dimen/txt_12sp"
+                        android:textColor="@color/text_color_heading"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/staffName"
+                        android:text="@{staff.name}"
+                        tools:text="Imtiaz"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/txt_16sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        android:layout_marginStart="@dimen/_10dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/staffEmail"
+                        android:text="@{staff.mailId}"
+                        tools:text="Imtiaz.citykidz@gmail.com"
+                        android:textSize="@dimen/txt_14sp"
+                        android:textColor="@color/text_color_heading"
+                        android:layout_marginStart="@dimen/_10dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/staffName"/>
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/staffRole"
+                        android:text="@{staff.role}"
+                        tools:text="Sales"
+                        android:textSize="@dimen/txt_12sp"
+                        android:textColor="@color/text_color_heading"
+                        android:layout_marginStart="@dimen/_10dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/staffEmail"/>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:baselineAligned="false"
+                        android:weightSum="3"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/staffRole">
+
+                        <LinearLayout
+                            android:id="@+id/btnEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:weightSum="3"
+                            android:layout_margin="@dimen/_10dp"
+                            android:background="@drawable/corner_four_grey">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:padding="@dimen/_5dp"
+                                android:src="@android:drawable/ic_menu_edit" />
+
+
+                            <TextView android:fontFamily="@font/montserrat_regular"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/colorPrimary"
+                                android:text="Edit"
+                                android:layout_weight="1"
+                                android:id="@+id/backText"
+                                android:gravity="center|start" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/btnActivate"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:weightSum="3"
+                            android:layout_margin="@dimen/_10dp"
+                            android:background="@drawable/corner_four_grey">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:padding="@dimen/_5dp"
+                                android:src="@android:drawable/ic_media_play" />
+
+
+                            <TextView android:fontFamily="@font/montserrat_regular"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textColor="@android:color/holo_green_dark"
+                                android:text="Activate"
+                                android:layout_weight="1"
+                                android:gravity="center|start" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/btnDelete"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:weightSum="3"
+                            android:layout_margin="@dimen/_10dp"
+                            android:background="@drawable/corner_four_grey">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:padding="@dimen/_5dp"
+                                android:src="@android:drawable/ic_menu_delete" />
+
+
+                            <TextView android:fontFamily="@font/montserrat_regular"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/red"
+                                android:text="Delete"
+                                android:layout_weight="1"
+                                android:gravity="center|start" />
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/viewSales"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:layout_marginStart="@dimen/_15dp"
+                        android:layout_marginEnd="@dimen/_15dp"
+                        android:background="@drawable/corner_four_grey"
+                        android:orientation="vertical">
+
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvTotalSalesCount"
+                            android:text="@{staff.totalSalesCount}"
+                            tools:text="500"
+                            android:gravity="center"
+                            android:textAllCaps="true"
+                            android:padding="@dimen/_10dp"
+                            android:textSize="@dimen/txt_24sp"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
+
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtTotalSalesCount"
+                            android:text="Total Sales Count"
+                            android:gravity="center"
+                            android:padding="@dimen/_8dp"
+                            android:textSize="@dimen/txt_14sp"
+                            android:textColor="@color/text_color_heading"
+                            android:layout_marginStart="@dimen/_10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/staffName"/>
+
+
+                    </LinearLayout>
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/corner_four_grey"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:layout_marginStart="@dimen/_15dp"
+                        android:layout_marginEnd="@dimen/_15dp"
+                        android:orientation="vertical">
+
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvTotalSales"
+                            android:text="@{staff.totalSalesCount}"
+                            tools:text="500"
+                            android:gravity="center"
+                            android:textAllCaps="true"
+                            android:padding="@dimen/_10dp"
+                            android:textSize="@dimen/txt_24sp"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
+
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtTotalSales"
+                            android:text="Total Sales"
+                            android:gravity="center"
+                            android:padding="@dimen/_8dp"
+                            android:textSize="@dimen/txt_14sp"
+                            android:textColor="@color/text_color_heading"
+                            android:layout_marginStart="@dimen/_10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/staffName"/>
+
+
+                    </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:fontFamily="@font/montserrat_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_15dp"
+                android:textStyle="bold"
+                android:textColor="@color/text_color_heading"
+                android:textSize="@dimen/txt_18sp"
+                android:text="PERMISSIONS"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerView"
+                tools:listitem="@layout/item_permissions"
+                tools:itemCount="5"
+                android:layout_marginStart="@dimen/_15dp"
+                android:layout_marginEnd="@dimen/_15dp" />
+
+        </LinearLayout>
+</layout>

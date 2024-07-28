@@ -14,5 +14,5 @@ data class CreditNote(
     val totalAmount: Double,
     val isSynced: Int = 0,
     val userId: Long,
-    val invoiceItems: List<InvoiceItem>
+    var invoiceItems: List<InvoiceItem>
 )

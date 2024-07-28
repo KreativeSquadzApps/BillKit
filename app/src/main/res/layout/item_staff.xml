@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="staff"
+            type="com.kreativesquadz.billkit.model.Staff" /> <!-- Replace "your.package.name" with your actual package name -->
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/lite_grey_200"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView android:fontFamily="@font/montserrat_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@{staff.name}"
+                android:maxLength="2"
+                android:textStyle="bold"
+                android:textSize="@dimen/txt_16sp"
+                android:textColor="@color/text_color_heading"
+                tools:text="mmmm"
+                android:padding="@dimen/_10dp"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:id="@+id/circleName"
+                android:background="@drawable/corner_four_grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView android:fontFamily="@font/montserrat_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/staffStatus"
+                android:text="@{staff.status}"
+                tools:text="Active"
+                android:textSize="@dimen/txt_12sp"
+                android:textColor="@color/text_color_heading"
+                android:layout_marginEnd="@dimen/_10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <TextView android:fontFamily="@font/montserrat_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/staffName"
+                android:text="@{staff.name}"
+                tools:text="Imtiaz"
+                android:textAllCaps="true"
+                android:textSize="@dimen/txt_16sp"
+                android:textColor="@color/text_color_heading"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_10dp"
+                app:layout_constraintStart_toEndOf="@+id/circleName"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+           <TextView android:fontFamily="@font/montserrat_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/staffEmail"
+                android:text="@{staff.mailId}"
+                tools:text="Imtiaz.citykidz@gmail.com"
+                android:textSize="@dimen/txt_14sp"
+                android:textColor="@color/text_color_heading"
+                android:layout_marginStart="@dimen/_10dp"
+                app:layout_constraintStart_toEndOf="@+id/circleName"
+                app:layout_constraintTop_toBottomOf="@+id/staffName"/>
+
+           <TextView android:fontFamily="@font/montserrat_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/staffRole"
+                android:text="@{staff.role}"
+                tools:text="Sales"
+                android:textSize="@dimen/txt_12sp"
+                android:textColor="@color/text_color_heading"
+                android:layout_marginStart="@dimen/_10dp"
+                app:layout_constraintStart_toEndOf="@+id/circleName"
+                app:layout_constraintTop_toBottomOf="@+id/staffEmail"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

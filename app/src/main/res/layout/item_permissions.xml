@@ -1,0 +1,33 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
+        <variable
+            name="permission"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5dp"
+        android:background="@drawable/corner_four_grey"
+        android:orientation="vertical">
+
+        <TextView android:fontFamily="@font/montserrat_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTotalSalesCount"
+            android:text="@{permission}"
+            tools:text="View bill History"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5dp"
+            android:paddingBottom="@dimen/_5dp"
+            android:textSize="@dimen/txt_18sp"
+            android:textColor="@color/text_color_heading"
+            android:textStyle="bold"/>
+
+
+    </LinearLayout>
+</layout>

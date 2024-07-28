@@ -21,7 +21,7 @@
         app:cardCornerRadius="30dp"
         app:cardBackgroundColorSelected="@{isSelected}"
         app:cardElevation="2dp">
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@{category.categoryName}"

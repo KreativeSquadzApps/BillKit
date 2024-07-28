@@ -48,6 +48,4 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
             // Handle exception, e.g., show a message to the user
         }
     }
-
-
 }

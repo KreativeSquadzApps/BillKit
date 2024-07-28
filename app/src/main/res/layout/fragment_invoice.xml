@@ -38,23 +38,24 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="110dp"
+                                android:layout_height="wrap_content"
                                 android:id="@+id/cardHeader"
                                 android:paddingTop="@dimen/_20dp"
                                 android:background="@drawable/corner_top_grey"
                                 android:paddingStart="@dimen/_10dp"
                                 android:paddingEnd="@dimen/_10dp"
+                                android:paddingBottom="@dimen/_10dp"
 
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvDate"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
@@ -62,13 +63,13 @@
                                     android:textStyle="bold"
                                     tools:text="Date "/>
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvTime"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginStart="10dp"
                                     android:textStyle="bold"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -76,26 +77,26 @@
                                     app:timestampToTime="@{invoice.invoiceDate}"
                                     tools:text="Time "/>
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvCreatedBy"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/tvTime"
                                     android:text="@{invoice.createdBy}"
                                     tools:text="Created by Admin "/>
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvInvoiceNo"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="30sp"
+                                    android:textSize="25sp"
                                     android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -104,13 +105,13 @@
                                     android:text="@{invoice.id}"
                                     tools:text="41"/>
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/txInvoiceNo"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginEnd="@dimen/_10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -127,15 +128,15 @@
                                 app:layout_constraintTop_toBottomOf="@+id/cardHeader"
                                 android:id="@+id/returnedView"
                                 android:orientation="vertical">
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Returned"
                                     android:gravity="center_horizontal"
-                                    android:textSize="20sp"
+                                    android:textSize="18sp"
                                     app:hideOnReturned2="@{invoice.status}"
                                     android:textColor="@android:color/holo_blue_light"
-                                    android:padding="@dimen/_10dp"
+                                    android:padding="@dimen/_5dp"
                                     tools:text="Returned"/>
                                 <View
                                     android:layout_width="match_parent"
@@ -154,7 +155,7 @@
                                 android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
                                 android:id="@+id/customerView">
 
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_20dp"
@@ -164,7 +165,7 @@
                                     android:textColor="@color/text_color_main"
                                     android:id="@+id/txtCustomerDetails"
                                     android:text="Customer Details" />
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/text_color_main"
@@ -176,7 +177,7 @@
                                     android:text="@{customer.customerName}"
                                     tools:text="Demo Name"/>
 
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_20dp"
@@ -188,7 +189,7 @@
                                     android:text="@{customer.gstNo}"
                                     tools:text="Demo"/>
 
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_20dp"
@@ -203,7 +204,7 @@
                                     tools:text="Demo"/>
 
 
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_20dp"
@@ -225,7 +226,7 @@
 
                             <View
                                 android:layout_width="match_parent"
-                                android:layout_height="1dp"
+                                android:layout_height="0dp"
                                 android:id="@+id/view2"
                                 android:background="@color/lite_grey"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -243,24 +244,24 @@
 
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvInvoiceID"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:layout_marginStart="10dp"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:textStyle="bold"
                                     android:text="Items" />
 
-                                <TextView
+                                <TextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/item_name"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:textStyle="bold"
                                     android:gravity="end|center"
                                     android:layout_marginEnd="10dp"
@@ -277,36 +278,42 @@
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
 
-
+                            <View
+                                android:layout_width="match_parent"
+                                android:background="@color/lite_grey"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+                                android:layout_height="1dp"/>
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="120dp"
+                                android:layout_height="wrap_content"
                                 android:id="@+id/cardFooter"
                                 android:paddingTop="@dimen/_20dp"
-                                android:background="@drawable/corner_bottom_grey"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/recyclerView">
 
-                                <androidx.appcompat.widget.AppCompatTextView
+
+
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvTotalItems"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
                                     android:text='@{"Total items : "+invoice.totalItems}'
                                     tools:text="Total items : 2"/>
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvCash"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
@@ -314,13 +321,13 @@
                                     tools:text="Cash : 1020.00 "/>
 
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvSubTotal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -328,13 +335,13 @@
                                     android:text='@{"Sub Total : "+ invoice.subtotal}'
                                     tools:text="Sub Total : 1020"/>
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvDiscount"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_16sp"
+                                    android:textSize="@dimen/txt_13sp"
                                     android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
                                     app:hideOnZero="@{invoice.discount}"
@@ -352,15 +359,17 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvCash"/>
 
-                                <androidx.appcompat.widget.AppCompatTextView
+                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvTotalAmount"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:textColor="@color/text_color_main"
-                                    android:textSize="20sp"
+                                    android:textSize="18sp"
                                     android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
+                                    android:layout_marginTop="@dimen/_10dp"
+                                    android:layout_marginBottom="@dimen/_10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/viewfooter"
                                     app:layout_constraintBottom_toBottomOf="parent"
@@ -404,7 +413,7 @@
                         android:layout_weight="4"
                         android:src="@drawable/salesreturn_light" />
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -437,7 +446,7 @@
                         android:layout_weight="4"
                         android:src="@drawable/trash" />
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -470,7 +479,7 @@
                         android:layout_weight="4"
                         android:src="@drawable/receipt" />
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

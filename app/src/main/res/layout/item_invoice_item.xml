@@ -35,12 +35,12 @@
                 android:layout_marginEnd="@dimen/_10dp">
 
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/tvItemName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
-                    android:textSize="@dimen/txt_16sp"
+                    android:textSize="@dimen/txt_13sp"
                     android:layout_marginTop="@dimen/_10dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -48,13 +48,13 @@
                     android:textStyle="bold"
                     tools:text="Itemmmm"/>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_main"
-                    android:textSize="@dimen/txt_18sp"
+                    android:textSize="@dimen/txt_13sp"
 
                     android:layout_marginTop="@dimen/_5dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -62,38 +62,38 @@
                     android:text="@{item.unitPrice}"
                     tools:text="450"/>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
-                    android:textSize="@dimen/txt_18sp"
+                    android:textSize="@dimen/txt_13sp"
                     android:layout_marginEnd="@dimen/_10dp"
                     app:layout_constraintStart_toEndOf="@+id/txtPrice"
                     app:layout_constraintTop_toTopOf="@+id/txtPrice"
                     android:text='@{"  x  " + item.quantity}'
                     tools:text="  x  3000"/>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/tvAvailableQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_10dp"
                     android:layout_marginTop="@dimen/_10dp"
                     android:textColor="@color/text_color_main"
-                    android:textSize="@dimen/txt_18sp"
+                    android:textSize="@dimen/txt_13sp"
                     android:text="@{item.totalPrice}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="3000" />
 
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
-                    android:textSize="@dimen/txt_14sp"
+                    android:textSize="@dimen/txt_13sp"
                     android:layout_marginTop="@dimen/_10dp"
                     android:layout_marginEnd="@dimen/_10dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -101,12 +101,12 @@
                     android:text='@{item.taxRate+"%"}'
                     tools:text="0.0%"/>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/txtReturnQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
-                    android:textSize="@dimen/txt_16sp"
+                    android:textSize="@dimen/txt_13sp"
                     app:hideOnZero="@{item.returnedQty}"
                     app:layout_constraintStart_toEndOf="@+id/quantity"
                     app:layout_constraintTop_toTopOf="@+id/quantity"

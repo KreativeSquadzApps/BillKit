@@ -44,24 +44,24 @@
 
                     android:orientation="horizontal">
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_bold"
                         android:id="@+id/tvInvoiceID"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="10dp"
-                        android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_15sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/txt_13sp"
                         android:text='@{"Invoice : "+invoice.id}'
                         tools:text="Invoice : 2000"/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_bold"
                         android:id="@+id/item_name"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_15sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/txt_13sp"
                         android:gravity="end|center"
                         android:layout_marginEnd="10dp"
                         android:text='@{"Items : "+invoice.totalItems}'
@@ -75,24 +75,24 @@
                     android:layout_marginTop="2dp"
                     android:orientation="horizontal">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_bold"
                         android:id="@+id/time"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_15sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/txt_13sp"
                         android:layout_marginStart="10dp"
                         app:timestampToDateTimeTxt="@{invoice.invoiceTime}"
                         tools:text="Time : 2000"/>
 
-                    <TextView
+                    <TextView android:fontFamily="@font/montserrat_bold"
                         android:id="@+id/totalAmount"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:textColor="@color/text_color_main"
-                        android:textSize="@dimen/txt_15sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/txt_13sp"
                         android:gravity="end|center"
                         android:layout_marginEnd="10dp"
                         android:text='@{"Total : "+invoice.totalAmount}'
@@ -102,7 +102,7 @@
 
             </LinearLayout>
 
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +111,7 @@
                 android:text="      Returned      "
                 app:hideOnReturned="@{invoice.status}"
                 android:rotation="-45"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_marginStart="-20dp"
                 android:layout_marginTop="-20dp"
                 android:textColor="@color/text_color_heading_reverse"

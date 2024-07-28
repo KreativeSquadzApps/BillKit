@@ -27,7 +27,7 @@
             android:padding="16dp">
 
             <!-- Customer Name -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Customer Name"
@@ -41,7 +41,7 @@
                 android:id="@+id/etCustomerName"/>
 
             <!-- Shop Contact Number -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Shop Contact Number"
@@ -56,7 +56,7 @@
                 android:id="@+id/etShopContactNumber"/>
 
             <!-- GST Number -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="GST Number"
@@ -71,7 +71,7 @@
                 android:id="@+id/etGSTNo"/>
 
             <!-- Total Sales -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Total Sales"
@@ -86,7 +86,7 @@
                 android:id="@+id/etTotalSales"/>
 
             <!-- Address -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Address"
@@ -101,7 +101,7 @@
                 android:id="@+id/etAddress"/>
 
             <!-- Credit Amount -->
-            <TextView
+            <TextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Credit Amount"

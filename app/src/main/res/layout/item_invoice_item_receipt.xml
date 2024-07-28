@@ -8,6 +8,7 @@
         <variable
             name="item"
             type="com.kreativesquadz.billkit.model.InvoiceItem" />
+
     </data>
 
     <LinearLayout
@@ -15,28 +16,28 @@
         android:layout_height="wrap_content"
         android:weightSum="4">
 
-        <TextView
+        <TextView android:fontFamily="@font/montserrat_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/text_color_main"
             app:splitText="@{item.itemName}"
             tools:text="DummyItem1"/>
-        <TextView
+        <TextView android:fontFamily="@font/montserrat_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/text_color_main"
             android:text="@{item.quantity}"
             tools:text="Qty"/>
-        <TextView
+        <TextView android:fontFamily="@font/montserrat_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/text_color_main"
             android:text="@{item.unitPrice}"
             tools:text="Rate"/>
-        <TextView
+        <TextView android:fontFamily="@font/montserrat_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -9,10 +9,30 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:id="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView android:fontFamily="@font/montserrat_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10dp"
+            android:text="Sign Out"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:id="@+id/signOut"
+            android:textSize="@dimen/txt_18sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="@dimen/_20dp"
+            android:background="@drawable/corner_four_grey"/>
+
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

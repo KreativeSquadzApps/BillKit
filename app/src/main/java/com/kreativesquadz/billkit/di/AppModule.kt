@@ -3,12 +3,14 @@ package com.kreativesquadz.billkit.di
 import android.content.Context
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.bluetooth.BluetoothService
+import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.BluetoothRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
+import com.kreativesquadz.billkit.repository.StaffManagRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import dagger.Module
 import dagger.Provides
@@ -68,5 +70,18 @@ object AppModule {
     fun provideBluetoothRepository(bluetoothService: BluetoothService): BluetoothRepository {
         return BluetoothRepository(bluetoothService)
     }
+
+    @Provides
+    fun provideStaffRepository(providedb: AppDatabase): StaffManagRepository {
+        return StaffManagRepository(providedb)
+    }
+
+    @Provides
+    fun provideLoginRepository(providedb: AppDatabase): LoginRepository {
+        return LoginRepository(providedb)
+    }
+
+
+
 
 }

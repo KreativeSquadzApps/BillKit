@@ -24,6 +24,10 @@
         android:name="com.kreativesquadz.billkit.ui.bills.billHistory.BillHistoryFrag"
         android:label="@string/menu_bill_history"
         tools:layout="@layout/fragment_bill_history" >
+
+        <argument
+            android:name="target"
+            app:argType="string"/>
         <action
             app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
@@ -77,7 +81,14 @@
         android:id="@+id/staffManagementFrag"
         android:name="com.kreativesquadz.billkit.ui.staffManag.StaffManagementFrag"
         android:label="@string/menu_staff_management"
-        tools:layout="@layout/fragment_staff_management" />
+        tools:layout="@layout/fragment_staff_management" >
+        <action
+            android:id="@+id/action_staffManagementFrag_to_addStaffFragment"
+            app:destination="@id/addStaffFragment" />
+        <action
+            android:id="@+id/action_staffManagementFrag_to_staffDetailsFragment"
+            app:destination="@id/staffDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/creditDetailsFrag"
@@ -202,6 +213,22 @@
         <argument
             android:name="invoice"
             app:argType="com.kreativesquadz.billkit.model.Invoice" />
+    </fragment>
+    <fragment
+        android:id="@+id/addStaffFragment"
+        android:name="com.kreativesquadz.billkit.ui.staffManag.add.AddStaffFragment"
+        android:label="AddStaffFragment" />
+    <fragment
+        android:id="@+id/staffDetailsFragment"
+        android:name="com.kreativesquadz.billkit.ui.staffManag.staffDetails.StaffDetailsFragment"
+        android:label="StaffDetailsFragment" >
+        <argument
+            android:name="staff"
+            app:argType="com.kreativesquadz.billkit.model.Staff" />
+
+        <action
+            android:id="@+id/action_staffDetailsFragment_to_billHistoryFrag"
+            app:destination="@id/billHistoryFrag" />
     </fragment>
 
 
