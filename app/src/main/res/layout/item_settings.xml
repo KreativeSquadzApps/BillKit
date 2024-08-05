@@ -13,12 +13,14 @@
         android:padding="@dimen/_10dp"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:fontFamily="@font/montserrat_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{itemSettings}"
-            android:textSize="@dimen/txt_18sp"
+            android:textSize="@dimen/txt_16sp"
             android:textStyle="bold"
+            android:textColor="@color/text_color_main"
             android:layout_margin="@dimen/_10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +30,8 @@
             android:layout_height="wrap_content"
             android:text=">"
             android:textStyle="bold"
-            android:textSize="30sp"
+            android:textSize="20sp"
+            android:textColor="@color/text_color_main"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />

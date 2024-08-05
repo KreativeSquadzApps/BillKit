@@ -147,7 +147,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="80dp"
             android:id="@+id/bottom_bar"
             app:cardElevation="@dimen/_10dp"
             android:paddingTop="@dimen/_10dp"
@@ -164,6 +164,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     app:cardCornerRadius="@dimen/_10dp"
+                    app:cardElevation="4dp"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:layout_marginBottom="@dimen/_5dp"
                     app:cardUseCompatPadding="true"
                     android:id="@+id/btnBarcode"
                     android:textStyle="bold"
@@ -182,7 +185,11 @@
                     android:id="@+id/btnSavedOrder"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:layout_marginBottom="@dimen/_5dp"
                     app:cardCornerRadius="@dimen/_10dp"
+                    app:cardElevation="4dp"
+
                     app:cardUseCompatPadding="true"
                     android:textColor="@color/text_color_heading">
 
@@ -203,7 +210,10 @@
                     app:cardCornerRadius="@dimen/_10dp"
                     app:cardUseCompatPadding="true"
                     android:textStyle="bold"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:layout_marginBottom="@dimen/_5dp"
                     android:layout_weight="1"
+                    app:cardElevation="4dp"
                     app:cardBackgroundColor="@color/colorPrimaryDark"
                     android:textColor="@color/text_color_heading"
                     android:gravity="center">

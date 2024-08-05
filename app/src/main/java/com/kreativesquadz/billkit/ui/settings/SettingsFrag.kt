@@ -70,7 +70,7 @@ class SettingsFrag : Fragment() {
                             findNavController().navigate(R.id.action_settingsFrag_to_invoiceSettings)
                         }
                         getString(R.string.settings_item_2) -> {
-
+                            findNavController().navigate(R.id.action_settingsFrag_to_taxSettingsFragment)
                         }
                         getString(R.string.settings_item_3) -> {
 

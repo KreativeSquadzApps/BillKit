@@ -26,7 +26,10 @@
     <color name="text_color_heading_reverse">#000</color>
 
 
-
+    <color name="colorThumbChecked">#FF4081</color>
+    <color name="colorThumbUnchecked">#B0BEC5</color>
+    <color name="colorTrackChecked">#FFC1E3</color>
+    <color name="colorTrackUnchecked">#CFD8DC</color>
 
 
 

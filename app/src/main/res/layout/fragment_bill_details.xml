@@ -17,6 +17,9 @@
             name="isDiscountApplied"
             type="Boolean" />
         <variable
+            name="isGSTApplied"
+            type="Boolean" />
+        <variable
             name="isCreditNoteApplied"
             type="Boolean" />
         <variable
@@ -30,8 +33,16 @@
         <variable
             name="isDiscount"
             type="Boolean" />
+
         <variable
             name="discountedAmount"
+            type="String" />
+  <variable
+            name="isGST"
+            type="Boolean" />
+
+        <variable
+            name="gstAppliedAmount"
             type="String" />
 
 
@@ -187,16 +198,68 @@
                 android:id="@+id/itemsCount"
                 tools:text="Items Count : "/>
 
-            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10dp"
+                android:id="@+id/gstView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/itemsCount"
-                android:text="Hudaaaaaaa"
-                android:textColor="@color/text_color_heading"
-                android:id="@+id/totalGst"
-                tools:text="Total GST : "/>
+                android:visibility="@{isGST ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@+id/itemsCount">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{isGSTApplied ? View.VISIBLE : View.GONE}"
+                    >
+
+                    <ImageView
+                        android:id="@+id/removeGst"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:src="@drawable/close_circle"
+                        android:paddingEnd="@dimen/_8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/removeGst"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Add Gst :  "
+                        android:id="@+id/txtGstAmount"
+                        android:textColor="@color/colorPrimary" />
+
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/txtGstAmount"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="@{gstAppliedAmount}"
+                        android:textColor="@color/colorPrimary"
+                        tools:text="10"
+                        android:id="@+id/tvGst"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Add Gst"
+                    android:visibility="@{isGSTApplied ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/addGst"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="wrap_content"
@@ -225,9 +288,11 @@
 
                     <ImageView
                         android:id="@+id/removeDiscount"
-                        android:layout_width="15dp"
-                        android:layout_height="13dp"
-                        android:src="@android:drawable/ic_delete"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:src="@drawable/close_circle"
+                        android:paddingEnd="@dimen/_8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -243,7 +308,8 @@
                         android:id="@+id/txtDiscountAmount"
                         android:textColor="@color/colorPrimary" />
 
-                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_10dp"
@@ -278,13 +344,15 @@
                 android:visibility="@{isCreditNoteApplied ? View.VISIBLE : View.GONE}"
                 >
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/removeCreditNote"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:src="@android:drawable/ic_delete"/>
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:src="@drawable/close_circle"
+                    android:paddingEnd="@dimen/_8dp"/>
 
                 <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="wrap_content"
@@ -337,6 +405,7 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"

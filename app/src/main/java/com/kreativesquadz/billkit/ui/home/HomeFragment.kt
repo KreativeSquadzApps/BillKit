@@ -3,7 +3,6 @@ package com.kreativesquadz.billkit.ui.home
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.net.Uri
@@ -14,8 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -30,7 +27,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -42,9 +41,13 @@ import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.GenericTabAdapter
 import com.kreativesquadz.billkit.databinding.FragmentHomeBinding
+import com.kreativesquadz.billkit.dialogs.AddDiscountDialogFragment
+import com.kreativesquadz.billkit.dialogs.savedOrderDialogFrag.SavedOrderDialogFragment
+import com.kreativesquadz.billkit.dialogs.savedOrderDialogFrag.SavedOrderDialogViewModel
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
-import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.SavedOrder
+import com.kreativesquadz.billkit.ui.bottomSheet.editItemBottomSheet.EditItemBottomSheetFrag
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import com.kreativesquadz.billkit.ui.home.tab.quickSale.QuickSaleFragment
 import com.kreativesquadz.billkit.ui.home.tab.sale.SaleFragment
@@ -69,7 +72,7 @@ class HomeFragment : Fragment() {
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
     private var camera: Camera? = null
-     private lateinit var  cameraProvider: ProcessCameraProvider
+    private lateinit var  cameraProvider: ProcessCameraProvider
     var isScanner = true
 
 
@@ -80,6 +83,11 @@ class HomeFragment : Fragment() {
         } else {
             throw RuntimeException("$context must implement DrawerToggleListener")
         }
+
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        homeViewModel.getUserSettings()
     }
 
     override fun onCreateView(
@@ -133,11 +141,16 @@ class HomeFragment : Fragment() {
             }
             binding.isCameraOpen = isCameraClicked
         }
+
+        binding.btnSavedOrder.setOnClickListener {
+            showSavedOrderDialog()
+        }
     }
 
 
     private fun observers(){
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
+            Log.d("itemssssssss", items.toString())
             adapter.submitList(items.asReversed())
             val totalSum = items.sumOf { it.totalPrice }
             binding.tvBill.text = totalSum.toString()
@@ -152,6 +165,16 @@ class HomeFragment : Fragment() {
 
         sharedViewModel.amount.observe(viewLifecycleOwner){
             binding.tvDisplay.text = it.toString()
+        }
+
+        homeViewModel.userSetting.observe(viewLifecycleOwner){
+            it.let {
+                if (it?.isQtyReverse==0){
+                    sharedViewModel.isReversedAmountNQty = false
+                }else{
+                    sharedViewModel.isReversedAmountNQty = true
+                }
+            }
         }
     }
 
@@ -183,7 +206,7 @@ class HomeFragment : Fragment() {
             sharedViewModel.items.value ?: emptyList(),
             object : OnItemClickListener<InvoiceItem> {
                 override fun onItemClick(item: InvoiceItem) {
-                    // Handle item click
+                    editItem(item)
                 }
             },
             R.layout.item_home,
@@ -191,9 +214,34 @@ class HomeFragment : Fragment() {
         )
         binding.itemRecyclerView.adapter = adapter
         binding.itemRecyclerView.layoutManager = LinearLayoutManager(context)
+        setupSwipeToDelete(binding.itemRecyclerView)
+
     }
 
+    private fun setupSwipeToDelete(recyclerView: RecyclerView) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
 
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                sharedViewModel.removeItemAt(position)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun editItem(item: InvoiceItem){
+        val editItemBottomSheetFrag = EditItemBottomSheetFrag(item)
+        editItemBottomSheetFrag.show(parentFragmentManager, "EditItemBottomSheetFrag")
+    }
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
@@ -297,7 +345,12 @@ class HomeFragment : Fragment() {
             }
     }
 
+    private fun showSavedOrderDialog() {
+        val dialog = SavedOrderDialogFragment()
+        dialog.show(childFragmentManager, SavedOrderDialogFragment.TAG)
+       // dialogViewModel.setTotalAmount(sharedViewModel.totalLivedata.value.toString())
 
+    }
 
 
     override fun onRequestPermissionsResult(

@@ -17,6 +17,8 @@
     <dimen name="_12dp">12dp</dimen>
     <dimen name="_5dp">5dp</dimen>
     <dimen name="_20dp">20dp</dimen>
+    <dimen name="_30dp">30dp</dimen>
+    <dimen name="_40dp">40dp</dimen>
     <dimen name="_15dp">15dp</dimen>
     <dimen name="_18dp">18dp</dimen>
     <dimen name="_dialog_corners">5dp</dimen>

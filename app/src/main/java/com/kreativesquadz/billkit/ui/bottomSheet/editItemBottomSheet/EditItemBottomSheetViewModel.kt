@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.ui.home.customerBottomSheet
+package com.kreativesquadz.billkit.ui.bottomSheet.editItemBottomSheet
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class CustomerAddBottomSheetViewModel @Inject constructor(val repository: CustomerManagRepository) : ViewModel() {
+class EditItemBottomSheetViewModel @Inject constructor(val repository: CustomerManagRepository) : ViewModel() {
     lateinit var customer : LiveData<Resource<List<Customer>>>
     fun getCustomers(){
         customer = repository.loadAllCustomers()

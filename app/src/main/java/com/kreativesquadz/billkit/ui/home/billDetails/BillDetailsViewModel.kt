@@ -21,6 +21,7 @@ import com.kreativesquadz.billkit.model.UserSetting
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
+import com.kreativesquadz.billkit.repository.SavedOrderRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import com.kreativesquadz.billkit.worker.SyncInvoicesWorker
@@ -34,7 +35,8 @@ import javax.inject.Inject
 class BillDetailsViewModel @Inject constructor(val billHistoryRepository: BillHistoryRepository,
                                                val userSettingRepository: UserSettingRepository,
                                                val inventoryRepository: InventoryRepository,
-                                               val creditNoteRepository: CreditNoteRepository)
+                                               val creditNoteRepository: CreditNoteRepository,
+                                               val savedOrderRepository: SavedOrderRepository)
     : ViewModel() {
 
 
@@ -57,9 +59,12 @@ class BillDetailsViewModel @Inject constructor(val billHistoryRepository: BillHi
 //        }
 //
 //    }
-    fun insertInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>,creditNoteId : Int?,context: Context)  {
+    fun insertInvoiceWithItems(isSavedOrderIdExist: Long?,invoice: Invoice, items: List<InvoiceItem>,creditNoteId : Int?,context: Context)  {
         try {
             viewModelScope.launch{
+                if(isSavedOrderIdExist != null){
+                    deleteSavedOrder(isSavedOrderIdExist)
+                }
                 val invoiceId =  billHistoryRepository.insertInvoiceWithItems(invoice, items)
                 creditNoteRepository.redeemCreditNoteById(creditNoteId)
                 _invoiceID.value = invoiceId
@@ -97,5 +102,11 @@ class BillDetailsViewModel @Inject constructor(val billHistoryRepository: BillHi
     fun getUserSettings(): LiveData<UserSetting> {
         userSetting = userSettingRepository.getUserSetting(Config.userId)
         return userSetting
+    }
+
+
+    fun deleteSavedOrder(orderId: Long) {
+            savedOrderRepository.deleteSavedOrder(orderId)
+
     }
 }

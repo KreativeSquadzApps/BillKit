@@ -6,7 +6,7 @@
     android:gravity="center">
 
     <TextView
-        android:fontFamily="@font/montserrat_regular"
+        android:fontFamily="@font/montserrat_medium"
         android:id="@+id/tab_texts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

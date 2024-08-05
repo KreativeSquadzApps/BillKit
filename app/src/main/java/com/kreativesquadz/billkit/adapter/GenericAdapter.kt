@@ -31,6 +31,13 @@ class GenericAdapter<T>(
         items = newItems
         notifyDataSetChanged()
     }
+    fun deleteItem(position: Int) {
+        val itemss = items.toMutableList()
+        itemss.removeAt(position)
+        items = emptyList()
+        items = itemss
+        notifyItemRemoved(position)
+    }
 
     class ViewHolder<T>(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: T, listener: OnItemClickListener<T>, variableId: Int) {

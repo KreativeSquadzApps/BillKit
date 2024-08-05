@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.ui.home.customerBottomSheet
+package com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet
 
 import android.os.Bundle
 import android.util.DisplayMetrics

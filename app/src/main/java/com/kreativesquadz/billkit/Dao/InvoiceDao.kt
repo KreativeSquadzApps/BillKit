@@ -45,4 +45,7 @@ interface InvoiceDao {
 
     @Query("SELECT * FROM invoice_items WHERE invoiceId = :id")
      fun getInvoiceItems(id: Long): List<InvoiceItem>
+
+    @Query("SELECT * FROM invoice_items WHERE orderId = :orderId")
+    fun getInvoiceItemsByOrderId(orderId: Long): List<InvoiceItem>
 }

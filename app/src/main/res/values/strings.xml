@@ -38,4 +38,6 @@
     <string name="des_bill_history">This role enables user to view bill history, create return bills, and cancel bills etc.</string>
 
 
+    <string name="terms">By Proceeding, you agree to our Terms and Conditions, Privacy Policy Refund and Cancellation Policy. SMS would be send to your Registered mobile number for verification</string>
+
 </resources>

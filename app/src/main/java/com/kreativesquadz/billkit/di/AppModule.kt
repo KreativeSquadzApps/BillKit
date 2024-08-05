@@ -8,7 +8,9 @@ import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.BluetoothRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
+import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
+import com.kreativesquadz.billkit.repository.SavedOrderRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.StaffManagRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
@@ -79,6 +81,17 @@ object AppModule {
     @Provides
     fun provideLoginRepository(providedb: AppDatabase): LoginRepository {
         return LoginRepository(providedb)
+    }
+
+    @Provides
+    fun provideGstTaxRepository(providedb: AppDatabase): GstTaxRepository {
+        return GstTaxRepository(providedb)
+    }
+
+
+    @Provides
+    fun provideSavedOrderRepository(providedb: AppDatabase): SavedOrderRepository {
+        return SavedOrderRepository(providedb)
     }
 
 

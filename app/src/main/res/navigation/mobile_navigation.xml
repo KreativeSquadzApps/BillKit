@@ -114,6 +114,9 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_settingsFrag_to_invoiceSettings"
             app:destination="@id/invoiceSettings" />
+        <action
+            android:id="@+id/action_settingsFrag_to_taxSettingsFragment"
+            app:destination="@id/taxSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/billDetailsFrag"
@@ -168,7 +171,7 @@
     <fragment
         android:id="@+id/invoiceSettings"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.InvoiceSettings"
-        android:label="fragment_invoice_settings"
+        android:label="Invoice Settings"
         tools:layout="@layout/fragment_invoice_settings" />
     <fragment
         android:id="@+id/createCustomerFrag"
@@ -230,6 +233,11 @@
             android:id="@+id/action_staffDetailsFragment_to_billHistoryFrag"
             app:destination="@id/billHistoryFrag" />
     </fragment>
+    <fragment
+        android:id="@+id/taxSettingsFragment"
+        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.TaxSettingsFragment"
+        android:label="Tax Settings"
+        tools:layout="@layout/fragment_tax_settings" />
 
 
 </navigation>

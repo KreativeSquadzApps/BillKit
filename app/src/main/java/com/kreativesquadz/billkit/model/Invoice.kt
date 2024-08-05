@@ -39,21 +39,15 @@ data class Invoice(
 
 @Entity(
     tableName = "invoice_items",
-    foreignKeys = [ForeignKey(
-        entity = Invoice::class,
-        parentColumns = ["id"],
-        childColumns = ["invoiceId"],
-        onDelete = ForeignKey.CASCADE
-    )],
-    indices = [Index(value = ["invoiceId"])]
 )
 data class InvoiceItem(
-    @PrimaryKey(autoGenerate = true)  val id: Long = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val invoiceId: Long,
+    val orderId: Long = 0, // Add this field
     var itemName: String,
     val unitPrice: Double,
     var quantity: Int,
-    var returnedQty: Int?=0,
+    var returnedQty: Int? = 0,
     var totalPrice: Double,
     val taxRate: Double
 ) : Serializable

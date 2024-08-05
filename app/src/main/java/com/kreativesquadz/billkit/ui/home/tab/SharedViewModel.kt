@@ -1,5 +1,6 @@
 package com.kreativesquadz.billkit.ui.home.tab
 
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.LiveData
@@ -22,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
-    private val _items = MutableLiveData<List<InvoiceItem>>()
-    val items: LiveData<List<InvoiceItem>> get() = _items
+    private val _items = MutableLiveData<MutableList<InvoiceItem>>().apply { value = mutableListOf() }
+    val items: LiveData<MutableList<InvoiceItem>> get() = _items
     var list = mutableListOf<InvoiceItem>()
     private val _selectedCustomer = MutableLiveData<Customer?>()
     val selectedCustomer: LiveData<Customer?> get() = _selectedCustomer
@@ -43,10 +44,14 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
 
     var amountBuilder = StringBuilder()
     private var discounted : Int? = null
+    private var gstAddedAmount : Int? = null
     private var creditNoteAmount : Int? = null
 
     var _isDiscountApplied = MutableLiveData<Boolean>()
     val isDiscountApplied : LiveData<Boolean> get() = _isDiscountApplied
+
+    var _isGstApplied = MutableLiveData<Boolean>()
+    val isGstApplied : LiveData<Boolean> get() = _isGstApplied
 
     var _isCreditNoteApplied = MutableLiveData<Boolean>()
     val isCreditNoteApplied : LiveData<Boolean> get() = _isCreditNoteApplied
@@ -56,6 +61,8 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
     val totalLivedata : LiveData<String> get() = _totalLivedata
     val df = DecimalFormat("#")
     var creditNoteId : Int?=0
+
+   var isReversedAmountNQty = false
 
     fun getAmount(view: View){
         val amount = (view as TextView).text ?: ""
@@ -76,24 +83,36 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             return
         }
         val amount = amountBuilder.toString()
-        val itemName = "Item${list.size + 1} "
+        val itemName = "Item${list.size + 1}"
 
         if (amount.contains("X")){
             val ammountArray =  amount.split("X")
+            Log.e("ammountArray", ammountArray.toString())
             if (ammountArray.size == 2) {
-                val amnt = ammountArray[0]
-                val qty = ammountArray[1]
 
+                var (amnt, qty) = if (isReversedAmountNQty) {
+                    ammountArray[1] to ammountArray[0]
+                } else {
+                    ammountArray[0] to ammountArray[1]
+                }
+
+
+                if (amnt.isEmpty()){
+                    amnt = "1"
+                }
+                if (qty.isEmpty()){
+                    qty = "1"
+                }
                 val finalAmount = amnt.replace("X", "").toDouble() * qty.toDouble()
                 val invoiceId =  generateInvoiceId().toLong()
                 val homeItem =  InvoiceItem(
                     invoiceId = invoiceId,
-                    itemName = "$itemName( $amnt )  $include $qty",
+                    itemName = "$itemName ( $amnt )  $include $qty",
                     unitPrice = amnt.toDouble(),
                     quantity = qty.toInt(),
                     returnedQty = 0,
                     totalPrice = finalAmount,
-                    taxRate = 0.10
+                    taxRate = 0.00
                 )
                 list.add(homeItem)
             }
@@ -104,12 +123,12 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             val invoiceId =  generateInvoiceId().toLong()
             val homeItem =  InvoiceItem(
                 invoiceId = invoiceId,
-                itemName = "$itemName( $amountBuilder )  $include $qty",
+                itemName = "$itemName ( $amountBuilder )  $include $qty",
                 unitPrice = amountBuilder.toString().toDouble(),
                 quantity = qty.toInt(),
                 returnedQty = 0,
                 totalPrice = finalAmount,
-                taxRate = 0.10
+                taxRate = 0.00
             )
             list.add(homeItem)
         }
@@ -129,14 +148,30 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
       val invoiceId =  generateInvoiceId().toLong()
         val homeItem =  InvoiceItem(
             invoiceId = invoiceId,
-            itemName = "${product.productName} ( ${product.productPrice} )  $include ${defaultQty}",
+            itemName = "${product.productName}  ( ${product.productPrice} )   $include ${defaultQty}",
             unitPrice = product.productPrice.toString().toDouble(),
             quantity = defaultQty!!.toInt(),
             returnedQty = 0,
-            totalPrice = ((product.productPrice.toString().toDouble() * defaultQty) + product.productTax.toString().toDouble()),
+            totalPrice = ((product.productPrice.toString().toDouble() * defaultQty) + (product.productTax.toString().toDouble() * defaultQty)),
             taxRate = product.productTax.toString().toDouble()
         )
         list.add(homeItem)
+        _items.value = list
+    }
+    fun removeItemAt(position: Int){
+        Log.e("pree",list.toString())
+        list.removeAt(position)
+        _items.value = list
+        Log.e("posttttt",list.toString())
+
+    }
+
+    fun updateItemAt(oldItem: InvoiceItem, newItem : InvoiceItem){
+        val position = list.indexOf(oldItem)
+        Log.e("positionssss", position.toString())
+        if (position != -1){
+            list[position] = newItem
+        }
         _items.value = list
     }
 
@@ -208,11 +243,18 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         }else if (creditNoteAmount != null){
             creditNoteAmountTemp = creditNoteAmount!!
         }
-        val totalTax = getTotalTax()
+        var totalTax = getTotalTax()
             .replace(Config.CURRENCY,"")
             .toDouble() + getSubTotalamount()
             .replace(Config.CURRENCY,"")
             .toDouble() - dis - creditNoteAmountTemp
+
+
+        if (gstAddedAmount != null ){
+           totalTax = totalTax + gstAddedAmount!!.toDouble()
+            Log.e("yyyyyyyy", totalTax.toString() +"    "+ gstAddedAmount.toString() )
+        }
+
 
         df.roundingMode = RoundingMode.DOWN
         _totalLivedata.value = Config.CURRENCY+df.format(totalTax)
@@ -246,6 +288,18 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
     fun removeDiscount(){
         _isDiscountApplied.value = false
         discounted = null
+        getTotalAmount()
+    }
+
+    fun addGst(gst: String){
+        gstAddedAmount = gst.toInt()
+        _isGstApplied.value = true
+        getTotalAmount()
+
+    }
+    fun removeGst(){
+        _isGstApplied.value = false
+        gstAddedAmount = null
         getTotalAmount()
     }
 
@@ -316,14 +370,25 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
                 loginResponse = loginRepository.getSession(null, null)
             }
         }
-
-
-
         return loginResponse
     }
 
     fun getItemsList(): List<InvoiceItem> {
         return list
+    }
+
+    fun setItemsList(items: List<InvoiceItem>) {
+        list = items.toMutableList()
+        _items.value = list
+    }
+
+    fun isSavedOrderIdExist(): Long? {
+        list.forEach {
+            if (it.orderId != 0L){
+                return it.orderId
+            }
+        }
+        return null
     }
 
     fun getCustomerId() : Long?{

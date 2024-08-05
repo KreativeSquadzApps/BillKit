@@ -9,71 +9,249 @@
             type="com.kreativesquadz.billkit.model.CompanyDetails" />
     </data>
 
-
-
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/linearLayout"
-                >
+                android:orientation="vertical"
+                android:id="@+id/linearLayout">
 
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="80dp">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_20dp"
+                        android:layout_marginEnd="@dimen/_20dp"
+                        android:layout_marginBottom="200dp"
                         android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/etBusinessName"
-                            android:text="@{companyDetails.BusinessName}"/>
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:weightSum="5">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_weight="2">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/etPlace"
-                            android:text="@{companyDetails.Place}"/>
+                                <TextView
+                                    android:fontFamily="@font/montserrat_bold"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/txt_14sp"
+                                    android:textColor="@color/text_color_heading"
+                                    android:text="Business Logo : "/>
+                                <TextView
+                                    android:fontFamily="@font/montserrat_medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/txt_12sp"
+                                    android:text="Recommended size 512px X 512px max 100kb "/>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/etshopContactNumber"
-                            android:text="@{companyDetails.shopContactNumber}"/>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/etshopEmail"
-                            android:text="@{companyDetails.shopEmail}"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_15dp"
+                                android:background="@drawable/corner_four_stroke"
+                                android:layout_weight="3">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/etGSTNo"
-                            android:text="@{companyDetails.GSTNo}"/>
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="80dp"
+                                        android:layout_margin="@dimen/_10dp"
+                                        android:padding="@dimen/_20dp"
+                                        android:background="@drawable/corner_four_grey"
+                                        android:src="@drawable/add_image"/>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/etFSSAINo"
-                            android:text="@{companyDetails.FSSAINo}"/>
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/etCurrencySymbol"
-                            android:text="@{companyDetails.CurrencySymbol}"/>
+                            app:endIconMode="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textSize="@dimen/txt_14sp"
+                                android:padding="@dimen/_15dp"
+                                android:id="@+id/etBusinessName"
+                                android:text="@{companyDetails.BusinessName}"
+                                android:hint="Business Name" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            app:endIconMode="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/etPlace"
+                                android:textSize="@dimen/txt_14sp"
+                                android:padding="@dimen/_15dp"
+                                android:text="@{companyDetails.Place}"
+                                android:hint="Place" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            app:endIconMode="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textSize="@dimen/txt_14sp"
+                                android:padding="@dimen/_15dp"
+
+                                android:id="@+id/etshopContactNumber"
+                                android:text="@{companyDetails.shopContactNumber}"
+                                android:hint="Shop Contact Number" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            app:endIconMode="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/etshopEmail"
+                                android:textSize="@dimen/txt_14sp"
+                                android:padding="@dimen/_15dp"
+                                android:text="@{companyDetails.shopEmail}"
+                                android:hint="Shop Email" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            app:endIconMode="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/etGSTNo"
+                                android:textSize="@dimen/txt_14sp"
+                                android:padding="@dimen/_15dp"
+                                android:text="@{companyDetails.GSTNo}"
+                                android:hint="GST No" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            app:endIconMode="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/etFSSAINo"
+                                android:textSize="@dimen/txt_14sp"
+                                android:padding="@dimen/_15dp"
+                                android:text="@{companyDetails.FSSAINo}"
+                                android:hint="FSSAI No" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            app:endIconMode="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/etCurrencySymbol"
+                                android:textSize="@dimen/txt_14sp"
+                                android:padding="@dimen/_15dp"
+                                android:text="@{companyDetails.CurrencySymbol}"
+                                android:hint="Currency Symbol" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <Switch
+                            android:fontFamily="@font/montserrat_bold"
+                            android:id="@+id/discountSwitch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="Discount On"
+                            android:layout_marginStart="@dimen/_12dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_5dp"
+                            android:thumb="@drawable/custom_thumb"
+                            android:track="@drawable/custom_track"/>
+
+                        <Switch
+                            android:fontFamily="@font/montserrat_bold"
+                            android:id="@+id/reverseSwitch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="Qty Reverse"
+                            android:layout_marginStart="@dimen/_12dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:thumb="@drawable/custom_thumb"
+                            android:track="@drawable/custom_track"/>
 
                         <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
@@ -83,61 +261,51 @@
                             android:textSize="20sp"
                             android:text="@{companyDetails.InvoicePrefix}"/>
 
-                        <Switch
-                            android:id="@+id/discountSwitch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:text="Discount On" />
+
 
                     </LinearLayout>
-
                 </ScrollView>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <soup.neumorphism.NeumorphCardView
+                    android:layout_height="80dp"
+                    android:background="@color/lite_grey_200"
+                    android:paddingTop="@dimen/_10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:id="@+id/btnupdate"
-                        android:layout_alignParentBottom="true"
                         android:layout_height="wrap_content"
+                        app:cardCornerRadius="@dimen/_10dp"
+                        app:cardUseCompatPadding="true"
                         android:textStyle="bold"
+                        android:layout_marginStart="@dimen/_20dp"
+                        android:layout_marginEnd="@dimen/_20dp"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        app:cardBackgroundColor="@color/colorPrimaryDark"
                         android:textColor="@color/text_color_heading"
-                        app:neumorph_backgroundColor="@color/colorPrimaryDark"
-                        android:gravity="center"
-                        android:layout_gravity="bottom"
-                        app:neumorph_shadowColorLight="@color/nuemph_shadow_light"
-                        app:neumorph_shadowColorDark="@color/nuemph_shadow_dark">
+                        android:gravity="center">
 
-
-                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                        <TextView android:fontFamily="@font/montserrat_medium"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center|right"
-                            android:textSize="35sp"
-                            android:textStyle="bold"
+                            android:id="@+id/iv_equals"
+                            android:layout_height="match_parent"
                             android:text="Update"
+                            android:padding="@dimen/_10dp"
+                            android:textStyle="bold"
                             android:gravity="center"
-                            android:textColor="@color/text_color_main"
-                            android:id="@+id/tvUpdate"
-                            android:layout_marginStart="20dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            />
+                            android:textSize="20sp"
+                            android:textColor="@color/white"/>
 
-
-
-
-                    </soup.neumorphism.NeumorphCardView>
+                    </androidx.cardview.widget.CardView>
 
                 </RelativeLayout>
 
 
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

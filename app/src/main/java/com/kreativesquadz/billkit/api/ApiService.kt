@@ -6,9 +6,12 @@ import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.model.SavedOrder
+import com.kreativesquadz.billkit.model.SavedOrderEntity
 import com.kreativesquadz.billkit.model.Staff
 import com.kreativesquadz.billkit.model.User
 import com.kreativesquadz.billkit.model.UserSetting
@@ -117,5 +120,20 @@ interface ApiService {
     suspend fun addStaff(@Body staff: Staff): Response<ApiStatus>
 
 
+    @GET("/api/gsttax/{userId}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    fun loadAllGstTax(@Path("userId") userId: Int): LiveData<ApiResponse<List<GST>>>
+
+
+    @POST("/api/addgsttax")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun addGstTax(@Body gst: GST): Response<ApiStatus>
+
+
+    @POST("orders")
+    fun saveOrder(@Body savedOrder: SavedOrder): LiveData<ApiResponse<Boolean>>
+
+    @GET("orders")
+    fun getSavedOrders(): LiveData<ApiResponse<List<SavedOrderEntity>>>
 
 }

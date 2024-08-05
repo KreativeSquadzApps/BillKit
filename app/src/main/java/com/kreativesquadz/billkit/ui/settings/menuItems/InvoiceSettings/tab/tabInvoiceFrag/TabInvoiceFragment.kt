@@ -15,6 +15,8 @@ import com.kreativesquadz.billkit.model.UserSetting
 class TabInvoiceFragment : Fragment() {
         var _binding: FragmentTabInvoiceBinding? = null
         val binding get() = _binding!!
+    var isDiscount = 0
+    var isReverse = 0
 
     private val viewModel: TabInvoiceViewModel by activityViewModels()
 
@@ -46,8 +48,17 @@ class TabInvoiceFragment : Fragment() {
             it.let {
                 if (it?.isdiscount==0){
                     binding.discountSwitch.isChecked = false
+                    isDiscount = 0
                 }else{
                     binding.discountSwitch.isChecked = true
+                    isDiscount = 1
+                }
+                if (it?.isQtyReverse==0){
+                    binding.reverseSwitch.isChecked = false
+                    isReverse = 0
+                }else{
+                    binding.reverseSwitch.isChecked = true
+                    isReverse = 1
                 }
             }
         }
@@ -65,10 +76,24 @@ class TabInvoiceFragment : Fragment() {
 
         binding.discountSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
            lateinit var userSetting : UserSetting
-            if(isChecked) {
-                 userSetting = UserSetting(Config.userId,1, "", "1")
+           if(isChecked) {
+               isDiscount = 1
+               userSetting = UserSetting(Config.userId,1,isReverse, "", "1")
             } else {
-                 userSetting = UserSetting(Config.userId,0, "", "1")
+                 isDiscount = 0
+                 userSetting = UserSetting(Config.userId,0, isReverse,"", "1")
+            }
+            viewModel.updateDiscount(requireContext(),userSetting,isChecked)
+        }
+
+        binding.reverseSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+           lateinit var userSetting : UserSetting
+            if(isChecked) {
+                 isReverse = 1
+                 userSetting = UserSetting(Config.userId,isDiscount,1, "", "1")
+            } else {
+                 isReverse = 0
+                 userSetting = UserSetting(Config.userId,isDiscount,0, "", "1")
             }
             viewModel.updateDiscount(requireContext(),userSetting,isChecked)
         }

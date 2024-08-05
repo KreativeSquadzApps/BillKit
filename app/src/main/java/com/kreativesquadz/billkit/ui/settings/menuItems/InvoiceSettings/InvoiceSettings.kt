@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.google.android.material.tabs.TabLayoutMediator
+import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericTabAdapter
 import com.kreativesquadz.billkit.databinding.FragmentInvoiceSettingsBinding
 import com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabInvoiceFrag.TabInvoiceFragment
@@ -43,12 +45,15 @@ class InvoiceSettings : Fragment() {
         val adapter = GenericTabAdapter(requireActivity(), fragments)
         binding.viewPager.adapter = adapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            val tabView = LayoutInflater.from(requireContext()).inflate(R.layout.tab_custom, null)
+            val tabText = tabView.findViewById<TextView>(R.id.tab_texts)
             when (position) {
-                0 -> tab.text = "Invoice"
-                1 -> tab.text = "Thermal Printer"
-                2 -> tab.text = "PDF"
+                0 -> tabText.text = "Invoice"
+                1 -> tabText.text = "Printer"
+                2 -> tabText.text = "PDF"
                 // Add more cases for additional tabs if needed
             }
+            tab.customView = tabView
         }.attach()
 
     }
