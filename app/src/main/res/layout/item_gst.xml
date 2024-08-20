@@ -7,8 +7,8 @@
         <import type="android.view.View" />
         <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt" />
         <variable
-            name="item"
-            type="com.kreativesquadz.billkit.model.InvoiceItem" />
+            name="taxGst"
+            type="com.kreativesquadz.billkit.model.InvoiceTax" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,100 +18,65 @@
         android:weightSum="5">
 
         <TextView
-            android:id="@+id/item"
+            android:id="@+id/tvtaxType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_medium"
-            android:text="Item"
+            android:text="@{taxGst.taxType}"
+            tools:text="GST"
             android:textSize="12sp"
-            app:splitText="@{item.itemName}"
             android:textColor="@color/text_color_main"
-            app:layout_constraintEnd_toStartOf="@+id/qty"
+            app:layout_constraintEnd_toStartOf="@+id/tvtaxableAmount"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvtaxableAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            tools:text="888.0"
+            android:text="@{taxGst.taxableAmount}"
+            android:textSize="12sp"
+            android:textColor="@color/text_color_main"
+            app:layout_constraintEnd_toStartOf="@+id/tvrates"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvtaxType"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvrates"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:text='@{taxGst.rate + "%"}'
+            android:textSize="12sp"
+            tools:text="20 %"
+            android:textColor="@color/text_color_main"
+            app:layout_constraintEnd_toStartOf="@+id/tvtotals"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvtaxableAmount"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/qty"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="@{item.quantity}"
-            tools:text="qty"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:textColor="@color/text_color_main"
-            app:layout_constraintEnd_toStartOf="@+id/mrp"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/item"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            android:id="@+id/mrp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="@{item.productMrp}"
-            tools:text="qty"
-            android:gravity="center"
-
-            android:textSize="12sp"
-            android:textColor="@color/text_color_main"
-            app:layout_constraintEnd_toStartOf="@+id/rate"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/qty"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/rate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            app:rate='@{item.unitPrice +" "+ item.taxRate}'
-            tools:text="rate"
-            android:gravity="center"
-
-            android:textSize="12sp"
-            android:textColor="@color/text_color_main"
-            app:layout_constraintEnd_toStartOf="@+id/tax"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/mrp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/tax"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:text='@{item.taxRate+"%"}'
-            tools:text="tax"
-            android:gravity="center"
-
-            android:textSize="12sp"
-            android:textColor="@color/text_color_main"
-            app:layout_constraintEnd_toStartOf="@+id/total"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/rate"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/total"
+            android:id="@+id/tvtotals"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/montserrat_medium"
             android:gravity="end"
-            android:text="@{item.totalPrice}"
-            tools:text="Total"
             android:textSize="12sp"
+            android:text="@{taxGst.taxAmount}"
+            tools:text="177.6"
             android:textColor="@color/text_color_main"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tax"
+            app:layout_constraintStart_toEndOf="@+id/tvrates"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -30,11 +30,12 @@ import com.kreativesquadz.billkit.model.Staff
 import com.kreativesquadz.billkit.model.User
 import com.kreativesquadz.billkit.model.UserSession
 import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.PdfSettings
 import kotlin.concurrent.Volatile
 
 
 @Database(entities = [User::class,Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class,
-    UserSetting::class,Category::class, Product::class,CreditNote::class, Staff::class,UserSession::class,GST::class, SavedOrderEntity::class], version = 80, exportSchema = false)
+    UserSetting::class,Category::class, Product::class,CreditNote::class, Staff::class,UserSession::class,GST::class, SavedOrderEntity::class, PdfSettings::class], version = 86, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{

@@ -16,7 +16,9 @@ interface SavedOrderDao {
      fun insertAllSavedOrders(orders: List<SavedOrderEntity>)
 
     @Query("SELECT * FROM saved_order")
-    fun getSavedOrders(): List<SavedOrderEntity>
+    fun getSavedOrders(): LiveData<List<SavedOrderEntity>>
+
+
 
 
     @Query("DELETE FROM saved_order")

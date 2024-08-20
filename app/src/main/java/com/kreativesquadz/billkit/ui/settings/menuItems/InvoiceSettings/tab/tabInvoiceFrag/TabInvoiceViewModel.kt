@@ -22,11 +22,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TabInvoiceViewModel @Inject constructor(val settingsRepository: SettingsRepository, val userSettingRepository: UserSettingRepository)
+class TabInvoiceViewModel @Inject constructor(val settingsRepository: SettingsRepository,
+                                              val userSettingRepository: UserSettingRepository)
     : ViewModel() {
     private val _updateCompanyDetailsStatus = MutableLiveData<Boolean>()
     lateinit var companyDetails : LiveData<Resource<CompanyDetails>>
-    private val _updateUsersettinStatus = MutableLiveData<Boolean>()
     lateinit var userSetting : LiveData<UserSetting>
 
 
@@ -50,9 +50,8 @@ class TabInvoiceViewModel @Inject constructor(val settingsRepository: SettingsRe
         return userSetting
     }
 
-    fun updateDiscount(context: Context,userSetting: UserSetting,isUpdate:Boolean){
+    fun updateDiscount(context: Context,userSetting: UserSetting){
         userSettingRepository.insert(userSetting)
-        _updateUsersettinStatus.value = isUpdate
             //scheduleSettingSync(context)
     }
 

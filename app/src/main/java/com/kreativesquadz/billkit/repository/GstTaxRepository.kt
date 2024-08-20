@@ -53,6 +53,14 @@ class GstTaxRepository @Inject constructor(val db: AppDatabase){
       return gstTaxDao.getGSTById(id)
    }
 
+   suspend fun getGstByTaxValue(taxValue: Double): GST {
+      return gstTaxDao.getGSTByTaxValue(taxValue)
+   }
+   fun getGSTListByTaxValues(taxAmounts: List<Double>): LiveData<List<GST>> {
+      return gstTaxDao.getGSTListByTaxValues(taxAmounts)
+   }
+
+
    suspend fun getUnsyncedGst(): List<GST> {
       return gstTaxDao.getUnsyncedGST()
    }
@@ -60,6 +68,8 @@ class GstTaxRepository @Inject constructor(val db: AppDatabase){
    suspend fun markGstAsSynced(gst: GST) {
       gstTaxDao.update(gst.copy(isSynced = 1))
    }
+
+
 
 
 

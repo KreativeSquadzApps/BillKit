@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.dialogs.savedOrderDialogFrag
+package com.kreativesquadz.billkit.ui.dialogs.savedOrderDialogFrag
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -54,7 +54,7 @@ class SavedOrderDialogFragment : BaseDialogFragment<DialogFragmentSavedOrderBind
             }
             val savedOrder = SavedOrder(200, orderName, sharedViewModel.getItemsList(), totalSum.toString().toDouble(), System.currentTimeMillis())
             viewModel.saveOrder(savedOrder,sharedViewModel.getItemsList())
-            //sharedViewModel.clearOrder()
+            sharedViewModel.clearItemsList()
             dismiss()
         }
 

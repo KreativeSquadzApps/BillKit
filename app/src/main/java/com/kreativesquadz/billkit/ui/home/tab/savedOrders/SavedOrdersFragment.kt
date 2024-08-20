@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
@@ -32,7 +34,7 @@ class SavedOrdersFragment : Fragment(), FragmentBaseFunctions {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getSavedOrders()
+        viewModel.loadSavedOrders()
 
         
     }
@@ -50,9 +52,10 @@ class SavedOrdersFragment : Fragment(), FragmentBaseFunctions {
     }
 
     override fun observers() {
-        viewModel.savedOrder.observe(viewLifecycleOwner) {
-                adapter.submitList(it.toMutableList())
-
+        viewModel.savedOrders.observe(viewLifecycleOwner) {
+            it.data?.let {
+                adapter.submitList(it)
+            }
         }
     }
 
@@ -65,7 +68,7 @@ class SavedOrdersFragment : Fragment(), FragmentBaseFunctions {
 
     private fun setupRecyclerView() {
         adapter = GenericAdapter(
-            viewModel.savedOrder.value ?: emptyList(),
+            viewModel.savedOrders.value?.data ?: emptyList(),
             object : OnItemClickListener<SavedOrder> {
                 override fun onItemClick(item: SavedOrder) {
                     Log.d("TAG", "onItemClick: ${item}")
@@ -79,6 +82,28 @@ class SavedOrdersFragment : Fragment(), FragmentBaseFunctions {
         )
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        setupSwipeToDelete(binding.recyclerView)
+    }
+
+    private fun setupSwipeToDelete(recyclerView: RecyclerView) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val savedOrder = viewModel.savedOrders.value?.data?.get(position)
+                viewModel.deleteSavedOrder(savedOrder!!.orderId)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
 

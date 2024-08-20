@@ -16,6 +16,8 @@ import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -112,7 +114,9 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
                     quantity = qty.toInt(),
                     returnedQty = 0,
                     totalPrice = finalAmount,
-                    taxRate = 0.00
+                    taxRate = 0.00,
+                    productMrp = amnt.toDouble()
+
                 )
                 list.add(homeItem)
             }
@@ -128,7 +132,9 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
                 quantity = qty.toInt(),
                 returnedQty = 0,
                 totalPrice = finalAmount,
-                taxRate = 0.00
+                taxRate = 0.00,
+                productMrp = amountBuilder.toString().toDouble()
+
             )
             list.add(homeItem)
         }
@@ -146,15 +152,22 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             defaultQty = 1
         }
       val invoiceId =  generateInvoiceId().toLong()
+        var productMrp = product.productPrice
+        if (product.productMrp != null && product.productMrp.toString().toDouble() > 0.0) {
+            productMrp = product.productMrp
+        }
         val homeItem =  InvoiceItem(
             invoiceId = invoiceId,
             itemName = "${product.productName}  ( ${product.productPrice} )   $include ${defaultQty}",
             unitPrice = product.productPrice.toString().toDouble(),
             quantity = defaultQty!!.toInt(),
             returnedQty = 0,
-            totalPrice = ((product.productPrice.toString().toDouble() * defaultQty) + (product.productTax.toString().toDouble() * defaultQty)),
-            taxRate = product.productTax.toString().toDouble()
+            totalPrice = ((product.productPrice.toString().toDouble() * defaultQty)),
+            taxRate = product.productTax.toString().toDouble(),
+            productMrp = productMrp
+
         )
+        Log.e("productMrp", productMrp.toString())
         list.add(homeItem)
         _items.value = list
     }
@@ -182,7 +195,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
                 it.itemName = "${product?.productName} ( ${product?.productPrice} )  $include ${it.quantity + 1}"
                 it.quantity += 1
                 it.totalPrice = ((product?.productPrice.toString()
-                    .toDouble() * it.quantity) + product?.productTax.toString().toDouble())
+                    .toDouble() * it.quantity))
 
                 return@any true
             }
@@ -200,6 +213,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         removeDiscount()
     }
 
+
     fun getInvoiceItem(): List<InvoiceItem> {
         return list
     }
@@ -211,16 +225,21 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
 
     fun getSubTotalamount(): String {
         var total = 0.0
+        var taxAmount = 0.0
         list.forEach {
-            total += it.totalPrice
+            taxAmount +=   it.taxRate * it.unitPrice * it.quantity / 100
+            total += it.totalPrice - taxAmount
         }
 
         return Config.CURRENCY+total.toString()
     }
+
     fun getSubTotalamountDouble(): Double {
         var total = 0.0
+        var taxAmount = 0.0
         list.forEach {
-            total += it.totalPrice
+            taxAmount +=   it.taxRate * it.unitPrice * it.quantity / 100
+            total += it.totalPrice - taxAmount
         }
 
         return total
@@ -229,7 +248,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
     fun getTotalTax(): String {
         var total = 0.0
         list.forEach {
-            total += it.taxRate
+            total += it.taxRate * it.unitPrice * it.quantity / 100
         }
         df.roundingMode = RoundingMode.DOWN
         return Config.CURRENCY+df.format(total).toString()
@@ -323,7 +342,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         return selectedCreditNote.value
     }
 
-    fun getInvoice() : Invoice{
+    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double? ) : Invoice{
         var createdBy = "Created By Admin"
         val loginSession = loginRepository.getUserSessions()
         if (loginSession != null){
@@ -344,9 +363,11 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             discount = discounted,
             totalItems = getInvoiceItem().size,
             subtotal = getSubTotalamountDouble(),
-            cashAmount = getTotalAmountDouble(),
+            cashAmount = cashAmount,
+            onlineAmount = onlineAmount,
+            creditAmount = creditAmount,
             totalAmount = (getTotalAmountDouble()- (discounted?:0) - (creditNoteAmount?:0)),
-            totalGst = 0.0,
+            totalGst = gstAddedAmount?.toDouble() ?: 0.0,
             customerId = getCustomerId(),
             isSynced = 0,
             creditNoteAmount = creditNoteAmount?:0,
@@ -380,6 +401,13 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
     fun setItemsList(items: List<InvoiceItem>) {
         list = items.toMutableList()
         _items.value = list
+    }
+    fun clearItemsList() {
+        viewModelScope.launch {
+            delay(300)
+            list.clear()
+            _items.value = list
+        }
     }
 
     fun isSavedOrderIdExist(): Long? {

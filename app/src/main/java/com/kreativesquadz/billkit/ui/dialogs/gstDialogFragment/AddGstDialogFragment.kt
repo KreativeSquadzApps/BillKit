@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.dialogs.gstDialogFragment
+package com.kreativesquadz.billkit.ui.dialogs.gstDialogFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,21 +1,19 @@
 package com.kreativesquadz.billkit.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kreativesquadz.billkit.databinding.ItemCategoryHomeBinding
 import com.kreativesquadz.billkit.interfaces.OnItemCatListener
-import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
 
-class GenericAdapterCategory<T>(
+class AdapterCategory<T>(
     private var items: List<Category>,
     private val listener: OnItemCatListener<T>,
     private val layoutResId: Int,
     private val bindVariableId: Int
-) : RecyclerView.Adapter<GenericAdapterCategory.ViewHolder<T>>() {
+) : RecyclerView.Adapter<AdapterCategory.ViewHolder<T>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
         val inflater = LayoutInflater.from(parent.context)

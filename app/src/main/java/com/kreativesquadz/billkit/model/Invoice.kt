@@ -25,7 +25,9 @@ data class Invoice(
     val createdBy: String,
     val totalItems: Int,
     val subtotal: Double,
-    val cashAmount: Double,
+    val cashAmount: Double? = null,
+    val onlineAmount: Double? = null,
+    val creditAmount: Double? = null,
     val totalAmount: Double,
     val totalGst: Double,
     val customerId: Long? = null,
@@ -49,6 +51,7 @@ data class InvoiceItem(
     var quantity: Int,
     var returnedQty: Int? = 0,
     var totalPrice: Double,
+    val productMrp: Double?=null,
     val taxRate: Double
 ) : Serializable
 

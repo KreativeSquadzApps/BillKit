@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Company Info -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end">
+
+        <TextView android:textColor="@color/text_color_main"
+            android:id="@+id/company_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kreativesquadz technology"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="end"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:id="@+id/company_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delhi"
+            android:layout_gravity="end"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:id="@+id/company_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tel : +919971380539"
+            android:layout_gravity="end"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:id="@+id/company_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email: info@kreativesquadz.com"
+            android:layout_gravity="end"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:id="@+id/company_fssai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FSSAI No: Fassai"
+            android:layout_gravity="end"/>
+    </LinearLayout>
+
+    <!-- Separator Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/gray"
+        android:layout_marginVertical="8dp"/>
+
+    <!-- Invoice Info -->
+    <TextView android:textColor="@color/text_color_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="INVOICE"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="end"
+        android:gravity="end"
+        android:paddingEnd="@dimen/_25dp"
+        android:background="@color/gray"
+        android:padding="4dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bill To,"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dragon"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9971380539"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DRAG123"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="darya ganj"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end">
+
+        <TextView android:textColor="@color/text_color_main"
+            android:id="@+id/invoice_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Invoice No : 372"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:id="@+id/invoice_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="08-08-2024 18:17 PM"/>
+    </LinearLayout>
+
+    <!-- Product Table -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:background="@drawable/cell_border"
+        android:layout_marginTop="16dp">
+
+        <TableRow
+            android:background="@color/gray">
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SL No"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ITEM"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QTY"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MRP"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PRICE"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TAX[%]"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AMOUNT"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+        </TableRow>
+
+        <!-- Sample Row -->
+        <TableRow >
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shoes"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200.0"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="160.0"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="160.0 [20.0%]"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="800.0"
+                android:padding="8dp"
+                android:gravity="center"/>
+        </TableRow>
+
+        <!-- Add more rows as needed -->
+    </TableLayout>
+
+    <!-- Total Amounts -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+
+        <TextView android:textColor="@color/text_color_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Qty : 4"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash : 1000.0"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Online : 1000.0"/>
+
+        <TextView android:textColor="@color/text_color_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit : 296.0"/>
+    </LinearLayout>
+
+    <!-- Separator Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/gray"
+        android:layout_marginVertical="8dp"/>
+
+    <!-- Footer Total -->
+    <TextView android:textColor="@color/text_color_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total : 2296.0"
+        android:layout_gravity="end"
+        android:background="@color/gray"
+        android:padding="8dp"/>
+
+    <!-- TAX Details -->
+    <TextView android:textColor="@color/text_color_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TAX DETAILS"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:background="@drawable/cell_border"
+        android:layout_marginTop="8dp">
+
+        <TableRow
+            android:background="@color/gray">
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SL No"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TAX TYPE"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TAXABLE AMOUNT"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RATE"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TAX AMOUNT"
+                android:padding="8dp"
+                android:gravity="center"
+                android:textStyle="bold"/>
+        </TableRow>
+
+        <!-- Sample Row -->
+        <TableRow>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GST"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1000.0"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20.0"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <TextView android:textColor="@color/text_color_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200.0"
+                android:padding="8dp"
+                android:gravity="center"/>
+        </TableRow>
+
+        <!-- Add more rows as needed -->
+    </TableLayout>
+
+    <TextView android:textColor="@color/text_color_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thank You"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

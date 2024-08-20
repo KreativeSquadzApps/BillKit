@@ -432,7 +432,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:paddingTop="@dimen/_18dp"
+                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="4"
@@ -468,6 +468,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:paddingTop="@dimen/_18dp"
@@ -501,6 +502,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:paddingTop="@dimen/_18dp"
@@ -535,6 +537,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:paddingTop="@dimen/_18dp"

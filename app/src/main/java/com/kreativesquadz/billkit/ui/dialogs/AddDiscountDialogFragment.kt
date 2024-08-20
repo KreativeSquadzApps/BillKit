@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.dialogs
+package com.kreativesquadz.billkit.ui.dialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater

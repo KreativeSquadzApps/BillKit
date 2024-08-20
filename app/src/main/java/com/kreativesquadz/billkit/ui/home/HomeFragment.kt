@@ -41,9 +41,9 @@ import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.GenericTabAdapter
 import com.kreativesquadz.billkit.databinding.FragmentHomeBinding
-import com.kreativesquadz.billkit.dialogs.AddDiscountDialogFragment
-import com.kreativesquadz.billkit.dialogs.savedOrderDialogFrag.SavedOrderDialogFragment
-import com.kreativesquadz.billkit.dialogs.savedOrderDialogFrag.SavedOrderDialogViewModel
+import com.kreativesquadz.billkit.ui.dialogs.AddDiscountDialogFragment
+import com.kreativesquadz.billkit.ui.dialogs.savedOrderDialogFrag.SavedOrderDialogFragment
+import com.kreativesquadz.billkit.ui.dialogs.savedOrderDialogFrag.SavedOrderDialogViewModel
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.SavedOrder
@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
     private var camera: Camera? = null
-    private lateinit var  cameraProvider: ProcessCameraProvider
+    private  var  cameraProvider: ProcessCameraProvider?=null
     var isScanner = true
 
 
@@ -284,8 +284,8 @@ class HomeFragment : Fragment() {
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                cameraProvider.unbindAll()
-                camera = cameraProvider.bindToLifecycle(
+                cameraProvider?.unbindAll()
+                camera = cameraProvider?.bindToLifecycle(
                     this, cameraSelector, preview, imageAnalysis
                 )
             } catch (exc: Exception) {
@@ -295,7 +295,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun stopCamera() {
-        cameraProvider.unbindAll()
+            cameraProvider?.unbindAll()
     }
 
     private fun logScannerState(state: Boolean) {
@@ -358,6 +358,7 @@ class HomeFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == requestCodeCameraPermission && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            isCameraClicked = true
             startCamera()
         } else {
             Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()

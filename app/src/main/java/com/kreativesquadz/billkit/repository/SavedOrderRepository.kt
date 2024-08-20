@@ -3,11 +3,17 @@ package com.kreativesquadz.billkit.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.room.withTransaction
 import com.kreativesquadz.billkit.Dao.InvoiceDao
 import com.kreativesquadz.billkit.Dao.SavedOrderDao
 import com.kreativesquadz.billkit.Database.AppDatabase
+import com.kreativesquadz.billkit.api.ApiClient
+import com.kreativesquadz.billkit.api.ApiResponse
+import com.kreativesquadz.billkit.api.common.NetworkBoundResource
+import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.SavedOrder
 import com.kreativesquadz.billkit.model.SavedOrderEntity
@@ -51,24 +57,35 @@ class SavedOrderRepository @Inject constructor(val db: AppDatabase){
          }
       }
    }
-
-   suspend fun getSavedOrders(): List<SavedOrder> {
-      return withContext(Dispatchers.IO) {
-         val savedOrders = savedOrderDao.getSavedOrders()
-         savedOrders.map { orderEntity ->
-            val invoiceItems = invoiceDao.getInvoiceItemsByOrderId(orderEntity.orderId)
-            SavedOrder(
-               orderId = orderEntity.orderId,
-               orderName = orderEntity.orderName,
-               totalAmount = orderEntity.totalAmount,
-               date = orderEntity.date,
-               items = invoiceItems
-
-            )
+   fun loadSavedOrders(userId: Long): LiveData<Resource<List<SavedOrderEntity>>> {
+      return object : NetworkBoundResource<List<SavedOrderEntity>, List<SavedOrderEntity>>() {
+         override fun saveCallResult(item: List<SavedOrderEntity>) {
+            try {
+               db.runInTransaction {
+                  savedOrderDao.insertAllSavedOrders(item)
+               }
+            } catch (ex: Exception) {
+               Log.e("TAG", ex.toString())
+            }
          }
-      }
+
+         override fun shouldFetch(data: List<SavedOrderEntity>?): Boolean {
+            return true
+         }
+
+         override fun loadFromDb(): LiveData<List<SavedOrderEntity>> {
+            return savedOrderDao.getSavedOrders()
+         }
+
+         override fun createCall(): LiveData<ApiResponse<List<SavedOrderEntity>>> {
+            return ApiClient.getApiService().getSavedOrders()
+         }
+      }.asLiveData()
    }
 
+   suspend fun getInvoiceItemsByOrderId(orderId: Long): List<InvoiceItem> {
+      return invoiceDao.getInvoiceItemsByOrderId(orderId)
+   }
 
    fun deleteSavedOrder(orderId: Long) {
       savedOrderDao.deleteSavedOrderById(orderId)

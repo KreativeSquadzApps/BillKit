@@ -21,7 +21,7 @@ fun setIntToText(view: TextView, value: Int) {
 @BindingAdapter("splitText")
 fun splitText(view: TextView, text: String) {
     // This splits the text at '0' and joins it back together with spaces
-    val splitText = text.split(' ').get(0)
+    val splitText = text.split('(').get(0)
     view.text = splitText
 }
 @BindingAdapter("returnedQty", "unitPrice")
@@ -51,6 +51,27 @@ fun hideOnReturned2(view: TextView, text: String?) {
 }
 @BindingAdapter("hideOnZero")
 fun hideOnZero(view: TextView, text: Int?) {
+    if (text != null) {
+        if (text > 0) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }
+}
+
+@BindingAdapter("rate")
+fun rate(view: TextView, text: String) {
+    // This splits the text at '0' and joins it back together with spaces
+    val unitPrice = text.split(' ').get(0)
+    val taxRate = text.split(' ').get(1)
+
+    val  finalRate = unitPrice.toDouble() - unitPrice.toDouble() * taxRate.toDouble() / 100
+
+    view.text = finalRate.toString()
+}
+@BindingAdapter("hideOnZeroDouble")
+fun hideOnZeroDouble(view: TextView, text: Double?) {
     if (text != null) {
         if (text > 0) {
             view.visibility = View.VISIBLE

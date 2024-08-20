@@ -6,13 +6,7 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(
-    tableName = "categories",
-    foreignKeys = [ForeignKey(
-        entity = CompanyDetails::class,
-        parentColumns = ["userId"],
-        childColumns = ["userId"],
-        onDelete = ForeignKey.CASCADE
-    )]
+    tableName = "categories"
 )
 data class Category(
     @PrimaryKey(autoGenerate = true) val categoryId: Long = 0,

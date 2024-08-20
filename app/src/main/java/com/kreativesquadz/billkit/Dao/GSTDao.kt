@@ -24,6 +24,11 @@ interface GSTDao {
     @Query("SELECT * FROM gst_table WHERE id = :id")
     fun getGSTById(id: Int): GST
 
+    @Query("SELECT * FROM gst_table WHERE taxAmount = :taxAmount")
+     fun getGSTByTaxValue(taxAmount: Double): GST
+
+    @Query("SELECT * FROM gst_table WHERE taxAmount IN (:taxAmounts)")
+    fun getGSTListByTaxValues(taxAmounts: List<Double>): LiveData<List<GST>>
     @Query("SELECT * FROM gst_table WHERE userId = :userId")
     fun getGSTByUserId(userId: Int): LiveData<List<GST>>
 

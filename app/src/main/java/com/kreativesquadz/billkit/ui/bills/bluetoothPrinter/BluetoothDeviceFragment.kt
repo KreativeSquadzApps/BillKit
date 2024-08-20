@@ -186,7 +186,9 @@ class BluetoothDeviceFragment : Fragment() {
                     subtotal = invoiceItems.sumOf { it.totalPrice },
                     discount = invoice!!.discount?.toDouble(),
                     totalAmount = invoice!!.totalAmount,
-                    cashAmount = invoice!!.cashAmount
+                    cashAmount = invoice!!.cashAmount,
+                    onlineAmount = invoice!!.onlineAmount,
+                    creditAmount = invoice!!.creditAmount
                 )
                 println(receipt)
                 viewModel.printData(receipt)
@@ -245,7 +247,9 @@ class BluetoothDeviceFragment : Fragment() {
         subtotal: Double,
         discount: Double?,
         totalAmount: Double,
-        cashAmount: Double
+        cashAmount: Double?,
+        onlineAmount: Double?,
+        creditAmount: Double?
     ): String {
         val receipt = StringBuilder()
 
@@ -290,7 +294,9 @@ class BluetoothDeviceFragment : Fragment() {
         receipt.append("--------------------------------\n")
         receipt.append(centerText("Total: $totalAmount")).append("\n\n")
         receipt.append(centerText("Payment Mode")).append("\n")
-        receipt.append(centerText("Cash: $cashAmount")).append("\n")
+        receipt.append(centerText("Cash : $cashAmount")).append("\n")
+        receipt.append(centerText("Online : $onlineAmount")).append("\n")
+        receipt.append(centerText("Credit : $creditAmount")).append("\n")
         receipt.append("--------------------------------\n")
         receipt.append(centerText("Thank You")).append("\n")
 

@@ -126,6 +126,9 @@
         <action
             android:id="@+id/action_billDetailsFrag_to_receiptFrag"
             app:destination="@id/receiptFrag" />
+        <action
+            android:id="@+id/action_billDetailsFrag_to_splitFragment"
+            app:destination="@id/splitFragment" />
     </fragment>
     <fragment
         android:id="@+id/receiptFrag"
@@ -238,6 +241,14 @@
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.TaxSettingsFragment"
         android:label="Tax Settings"
         tools:layout="@layout/fragment_tax_settings" />
+    <fragment
+        android:id="@+id/splitFragment"
+        android:name="com.kreativesquadz.billkit.ui.home.billDetails.split.SplitFragment"
+        android:label="SplitFragment" >
+        <action
+            android:id="@+id/action_splitFragment_to_receiptFrag"
+            app:destination="@id/receiptFrag" />
+    </fragment>
 
 
 </navigation>

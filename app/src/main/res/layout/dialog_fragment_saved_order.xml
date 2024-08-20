@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.kreativesquadz.billkit.dialogs.savedOrderDialogFrag.SavedOrderDialogViewModel" />
+            type="com.kreativesquadz.billkit.ui.dialogs.savedOrderDialogFrag.SavedOrderDialogViewModel" />
     </data>
 
     <LinearLayout

@@ -14,7 +14,7 @@ import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
-import com.kreativesquadz.billkit.adapter.GenericAdapterCategory
+import com.kreativesquadz.billkit.adapter.AdapterCategory
 import com.kreativesquadz.billkit.databinding.FragmentSaleBinding
 import com.kreativesquadz.billkit.interfaces.OnItemCatListener
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
@@ -30,7 +30,7 @@ class SaleFragment : Fragment() {
     private var _binding: FragmentSaleBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: GenericAdapter<Product>
-    private lateinit var adapterCat: GenericAdapterCategory<Category>
+    private lateinit var adapterCat: AdapterCategory<Category>
     private val sharedViewModel : SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +102,7 @@ class SaleFragment : Fragment() {
 
 
     private fun setupRecyclerViewCat() {
-        adapterCat = GenericAdapterCategory(
+        adapterCat = AdapterCategory(
             viewModel.category.value?.data ?: emptyList(),
             object : OnItemCatListener<Category> {
                 override fun onItemCat(item: Category) {

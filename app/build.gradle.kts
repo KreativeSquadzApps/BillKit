@@ -90,4 +90,6 @@ dependencies {
     implementation (libs.androidx.camera.lifecycle)
     implementation (libs.androidx.camera.view)
     implementation(libs.logging.interceptor)
+    implementation(libs.itext7.core)
+
 }

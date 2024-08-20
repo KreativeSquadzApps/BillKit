@@ -1,13 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.settings.menuItems.InvoiceSettings.tab.tabPrinterFrag.TabPrinterFrag">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
 
-    <TextView android:fontFamily="@font/montserrat_regular"
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layoutCompanyInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Main Item View -->
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:id="@+id/headerCompanyInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Company Info"
+                    android:drawableRight="@drawable/ic_arrow_down"
+
+                    android:padding="@dimen/_15dp"
+                    android:textColor="@color/text_color_main"
+                    android:textSize="@dimen/txt_16sp"
+                    android:background="?attr/selectableItemBackground" />
+
+                <!-- Hidden Dropdown Content -->
+                <LinearLayout
+                    android:id="@+id/dropdown_contentCompanyInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_20dp"
+                    android:visibility="gone"
+                    android:background="@color/lite_grey_200">
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchCompanyLogo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Company Logo"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchCompanyEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Company Email"
+                        android:layout_marginTop="@dimen/_25dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchCompanyPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Company Phone No."
+                        android:layout_marginTop="@dimen/_25dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchCompanyGst"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Company GST No."
+                        android:layout_marginTop="@dimen/_25dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+
+
+                    <!-- Add more content here -->
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layoutItemTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Main Item View -->
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:id="@+id/headerItemTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Item Table"
+                    android:drawableRight="@drawable/ic_arrow_down"
+                    android:padding="@dimen/_15dp"
+                    android:textColor="@color/text_color_main"
+                    android:textSize="@dimen/txt_16sp"
+                    android:background="?attr/selectableItemBackground" />
+
+                <!-- Hidden Dropdown Content -->
+                <LinearLayout
+                    android:id="@+id/dropdown_contentItemTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="@dimen/_20dp"
+                    android:background="@color/lite_grey_200">
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchCustomerDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Customer Details"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchMrp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="MRP"
+                        android:layout_marginTop="@dimen/_25dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchPaymentMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Payment Mode"
+                        android:layout_marginTop="@dimen/_25dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+                    <Switch
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/switchTotalQty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Total Qty"
+                        android:layout_marginTop="@dimen/_25dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:track="@drawable/custom_track"/>
+
+
+
+                    <!-- Add more content here -->
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutFooter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Main Item View -->
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:id="@+id/headerFooter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Footer Setup"
+                    android:drawableRight="@drawable/ic_arrow_down"
+                    android:padding="@dimen/_15dp"
+                    android:textColor="@color/text_color_main"
+                    android:textSize="@dimen/txt_16sp"
+                    android:background="?attr/selectableItemBackground" />
+
+                <!-- Hidden Dropdown Content -->
+                <LinearLayout
+                    android:id="@+id/dropdown_contentFooter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_20dp"
+                    android:visibility="gone"
+                    android:background="@color/lite_grey_200">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:endIconMode="none"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <AutoCompleteTextView
+                            android:fontFamily="@font/montserrat_bold"
+                            android:id="@+id/etFooterText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:lines="5"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="top"
+                            android:hint="bill description" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                    <!-- Add more content here -->
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

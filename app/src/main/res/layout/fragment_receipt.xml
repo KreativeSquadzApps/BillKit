@@ -15,8 +15,17 @@
             name="isCustomerAvailable"
             type="Boolean" />
         <variable
+            name="istTaxAvalaible"
+            type="Boolean" />
+        <variable
+            name="istMrpAvalaible"
+            type="Boolean" />
+        <variable
             name="customer"
             type="com.kreativesquadz.billkit.model.Customer" />
+        <variable
+            name="taxGst"
+            type="com.kreativesquadz.billkit.model.GST" />
     </data>
 
     <RelativeLayout
@@ -146,7 +155,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/text_color_main"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:textStyle="bold"
                             android:id="@+id/tvCustomerName"
@@ -156,7 +165,7 @@
                         <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:textColor="@color/text_color_main"
                             android:id="@+id/tvCustomerNumber"
@@ -166,7 +175,7 @@
                         <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:textColor="@color/text_color_main"
                             android:id="@+id/tvCustomerGst"
@@ -176,7 +185,7 @@
                         <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:textColor="@color/text_color_main"
                             android:id="@+id/tvCustomeradress"
@@ -193,41 +202,96 @@
                     </LinearLayout>
 
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="4">
+                        android:layout_height="wrap_content">
 
-                        <TextView android:fontFamily="@font/montserrat_regular"
+                        <TextView
+                            android:id="@+id/item"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="Item"
                             android:textColor="@color/text_color_main"
-                            android:text="Item"/>
-                        <TextView android:fontFamily="@font/montserrat_regular"
+                            app:layout_constraintEnd_toStartOf="@+id/qty"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/qty"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="Qty"
+                            android:gravity="center"
                             android:textColor="@color/text_color_main"
-                            android:text="Qty"/>
-                        <TextView android:fontFamily="@font/montserrat_regular"
+                            app:layout_constraintEnd_toStartOf="@+id/mrp"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/item"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/mrp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="Mrp"
+                            android:visibility="@{istMrpAvalaible ? View.VISIBLE : View.GONE}"
+                            android:textSize="12sp"
+                            android:gravity="center"
                             android:textColor="@color/text_color_main"
-                            android:text="Rate"/>
-                        <TextView android:fontFamily="@font/montserrat_regular"
+                            app:layout_constraintEnd_toStartOf="@+id/rate"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/qty"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/rate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="end"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="Rate"
+                            android:gravity="center"
+
                             android:textColor="@color/text_color_main"
+                            app:layout_constraintEnd_toStartOf="@+id/tax"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/mrp"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tax"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="Tax"
+                            android:gravity="center"
+
+                            android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
+                            android:textColor="@color/text_color_main"
+                            app:layout_constraintEnd_toStartOf="@+id/total"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/rate"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/total"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
-                            android:text="Total"/>
+                            android:fontFamily="@font/montserrat_regular"
+                            android:gravity="end"
+                            android:text="Total"
+                            android:textColor="@color/text_color_main"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/tax"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
-
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -262,7 +326,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text='@{"Items : " + invoice.totalItems}'
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
                             android:layout_weight="1"
                             android:textColor="@color/text_color_main"
@@ -273,7 +337,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text='@{"Sub Total  Rs " + invoice.subtotal}'
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
                             android:gravity="end"
                             android:textColor="@color/text_color_main"
@@ -283,13 +347,24 @@
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/tvTotalTax"
+                        android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:gravity="end"
+                        android:textColor="@color/text_color_main"
+                        tools:text="Total Tax  Rs 11100.00"/>
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:visibility="@{invoice.discount==null||invoice.discount==0 ? View.GONE : View.VISIBLE }"
                         android:text='@{"Discount " + invoice.discount}'
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
                         android:gravity="end"
                         android:textColor="@color/text_color_main"
                         tools:text="Discount  Rs 11100.00"/>
+
 
                     <View
                         android:layout_width="match_parent"
@@ -314,7 +389,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="@{invoice.discount==null||invoice.discount==0 ? View.GONE : View.VISIBLE}"
                         android:text='@{"You saved Rs " + invoice.discount + " on this purchase"}'
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textColor="@color/text_color_main"
                         android:gravity="center"
                         tools:text="You saved Rs 60.0 on this purchase"/>
@@ -323,27 +398,161 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/text_color_main"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"/>
+                        android:layout_marginTop="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
+                    android:id="@+id/taxView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="5">
+
+                        <TextView
+                            android:id="@+id/taxType"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:text="Tax Type"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_color_main"
+                            app:layout_constraintEnd_toStartOf="@+id/taxableAmount"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/taxableAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:text="Taxable Amount"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_color_main"
+                            app:layout_constraintEnd_toStartOf="@+id/rates"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/taxType"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/rates"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:text="Rate"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_color_main"
+                            app:layout_constraintEnd_toStartOf="@+id/totals"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/taxableAmount"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/totals"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:textSize="12sp"
+                            android:text="Tax Amount"
+                            android:textColor="@color/text_color_main"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/rates"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/text_color_main"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintTop_toBottomOf="@id/totals"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/gstRecyclerview"
+                        android:nestedScrollingEnabled="false"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_gst" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_color_main"
+                        android:layout_marginTop="10dp" />
+
+
+
+                </LinearLayout>
 
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Payment Mode"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
+                        android:layout_marginTop="@dimen/_10dp"
                         android:textStyle="bold"
                         android:textColor="@color/text_color_main"
                         android:layout_gravity="center" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2"
+                        android:orientation="horizontal">
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="@{invoice.cashAmount==null||invoice.cashAmount==0 ? View.GONE : View.VISIBLE }"
+                            android:text='@{"Cash : " + invoice.cashAmount}'
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/text_color_main"
+                            android:layout_gravity="center"
+                            tools:text="Cash : 1000"/>
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:visibility="@{invoice.onlineAmount==null||invoice.onlineAmount==0 ? View.GONE : View.VISIBLE }"
+                            android:text='@{"Online : " + invoice.onlineAmount}'
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_color_main"
+                            android:layout_gravity="center"
+                            tools:text="Online : 1000"/>
+
+                    </LinearLayout>
+
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text='@{"Cash : " + invoice.cashAmount}'
-                        android:textSize="14sp"
+                        android:layout_weight="1"
+                        android:visibility="@{invoice.creditAmount==null||invoice.creditAmount==0 ? View.GONE : View.VISIBLE }"
+                        android:text='@{"Credit : " + invoice.creditAmount}'
+                        android:textSize="12sp"
+                        android:gravity="center"
                         android:textStyle="bold"
                         android:textColor="@color/text_color_main"
                         android:layout_gravity="center"
-                        tools:text="Cash : 1000"/>
+                        tools:text="Credit : 1000"/>
+
 
                     <View
                         android:layout_width="match_parent"
@@ -359,7 +568,7 @@
                         android:layout_marginTop="@dimen/_20dp"
                         android:textColor="@color/text_color_main"
                         android:layout_gravity="center"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
 
                 </LinearLayout>
@@ -382,7 +591,9 @@
                 android:orientation="vertical"
                 android:weightSum="5"
                 android:layout_marginTop="@dimen/_10dp"
-                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_15dp"
+                android:layout_marginEnd="@dimen/_15dp"
                 android:background="@drawable/corner_four_grey"
                 app:layout_constraintEnd_toStartOf="@+id/btnShare"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -391,18 +602,22 @@
 
                 <ImageView
                     android:paddingTop="@dimen/_15dp"
-                    android:layout_width="50dp"
+                    android:layout_width="45dp"
                     android:layout_height="0dp"
                     android:layout_weight="4"
-                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginTop="@dimen/_20dp"
+                    android:paddingBottom="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
                     android:layout_gravity="center"
                     android:id="@+id/backImage" />
 
-                <TextView android:fontFamily="@font/montserrat_regular"
+                <TextView android:fontFamily="@font/montserrat_medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
                     android:text="Back"
+                    android:textSize="@dimen/txt_12sp"
+                    android:layout_marginBottom="@dimen/_5dp"
                     android:layout_weight="1"
                     android:id="@+id/backText"
                     android:gravity="center" />
@@ -416,8 +631,9 @@
                 android:orientation="vertical"
                 android:weightSum="5"
                 android:layout_marginTop="@dimen/_10dp"
-                android:layout_marginBottom="@dimen/_10dp"
-                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_15dp"
+                android:layout_marginEnd="@dimen/_15dp"
                 android:background="@drawable/corner_four_grey"
                 app:layout_constraintEnd_toStartOf="@+id/btnPrint"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -427,16 +643,19 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:paddingTop="@dimen/_15dp"
+                    android:paddingTop="@dimen/_20dp"
+                    android:paddingBottom="@dimen/_10dp"
                     android:layout_weight="4"
                     android:src="@drawable/share" />
 
-                <TextView android:fontFamily="@font/montserrat_regular"
+                <TextView android:fontFamily="@font/montserrat_medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_main"
                     android:text="Share"
+                    android:textSize="@dimen/txt_12sp"
+                    android:layout_marginBottom="2dp"
                     android:gravity="center" />
 
             </LinearLayout>
@@ -449,8 +668,9 @@
                 android:orientation="vertical"
                 android:weightSum="5"
                 android:layout_marginTop="@dimen/_10dp"
-                android:layout_marginBottom="@dimen/_10dp"
-                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_15dp"
+                android:layout_marginEnd="@dimen/_15dp"
                 android:background="@drawable/corner_four_grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -460,16 +680,19 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:paddingTop="@dimen/_15dp"
+                    android:paddingTop="@dimen/_20dp"
+                    android:paddingBottom="@dimen/_10dp"
                     android:layout_weight="4"
                     android:src="@drawable/printer" />
 
-                <TextView android:fontFamily="@font/montserrat_regular"
+                <TextView android:fontFamily="@font/montserrat_medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_main"
+                    android:layout_marginBottom="2dp"
                     android:text="Print Bill"
+                    android:textSize="@dimen/txt_12sp"
                     android:gravity="center" />
 
             </LinearLayout>

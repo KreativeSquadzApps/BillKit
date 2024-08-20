@@ -1,22 +1,27 @@
 package com.kreativesquadz.billkit.ui.home.billDetails
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentBillDetailsBinding
-import com.kreativesquadz.billkit.dialogs.AddDiscountDialogFragment
-import com.kreativesquadz.billkit.dialogs.DialogViewModel
-import com.kreativesquadz.billkit.dialogs.gstDialogFragment.AddGstDialogFragment
-import com.kreativesquadz.billkit.dialogs.gstDialogFragment.AddGstDialogViewModel
+import com.kreativesquadz.billkit.ui.dialogs.AddDiscountDialogFragment
+import com.kreativesquadz.billkit.ui.dialogs.DialogViewModel
+import com.kreativesquadz.billkit.ui.dialogs.gstDialogFragment.AddGstDialogFragment
+import com.kreativesquadz.billkit.ui.dialogs.gstDialogFragment.AddGstDialogViewModel
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.ui.home.billDetails.creditNoteBottomSheet.CreditNoteBottomSheetFrag
@@ -24,6 +29,7 @@ import com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet.CustomerAdd
 import com.kreativesquadz.billkit.ui.bottomSheet.editItemBottomSheet.EditItemBottomSheetFrag
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
@@ -37,6 +43,9 @@ class BillDetailsFrag : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     val df = DecimalFormat("#")
+    var isCustomerSelected = false
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,15 +73,42 @@ class BillDetailsFrag : Fragment() {
 
     private fun init(){
         binding.isGST = true
+
     }
 
     private fun onClickListeners(){
         binding.btnCash.setOnClickListener {
-        viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                                          invoice = sharedViewModel.getInvoice(),
+                      viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble()),
                                          items =  sharedViewModel.getItemsList(),
                                          creditNoteId =  sharedViewModel.getCreditNote()?.id,
                                          context =  requireContext())
+        }
+
+        binding.btnOnline.setOnClickListener{
+                        viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0),
+                                         items =  sharedViewModel.getItemsList(),
+                                         creditNoteId =  sharedViewModel.getCreditNote()?.id,
+                                         context =  requireContext())
+        }
+
+        binding.btnCredit.setOnClickListener{
+            if (isCustomerSelected){
+                viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
+                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0),
+                    items =  sharedViewModel.getItemsList(),
+                    creditNoteId =  sharedViewModel.getCreditNote()?.id,
+                    context =  requireContext())
+            }else{
+                Toast.makeText(requireContext(), "Please select customer", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        binding.btnSplit.setOnClickListener {
+            val action = BillDetailsFragDirections.actionBillDetailsFragToSplitFragment()
+            findNavController().navigate(action)
         }
 
         binding.addCustomer.setOnClickListener {
@@ -135,6 +171,10 @@ class BillDetailsFrag : Fragment() {
     private fun observers(){
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
+            sharedViewModel.getTotalAmount()
+            binding.amountTotalTax.text =  "Total Tax : " + sharedViewModel.getTotalTax()
+            binding.itemsCount.text = "Items : "+ sharedViewModel.getInvoiceItemCount()
+
         }
 
         viewModel.invoiceId.observe(viewLifecycleOwner){
@@ -150,6 +190,7 @@ class BillDetailsFrag : Fragment() {
 
         sharedViewModel.isCustomerSelected.observe(viewLifecycleOwner) { isCustomerSelected ->
             binding.isCustomerSelected = isCustomerSelected
+            this.isCustomerSelected = isCustomerSelected
         }
 
         sharedViewModel.isDiscountApplied.observe(viewLifecycleOwner) { isDiscountApplied ->
@@ -184,7 +225,9 @@ class BillDetailsFrag : Fragment() {
 
 
         sharedViewModel.totalLivedata.observe(viewLifecycleOwner) { totalAmount ->
-            binding.totalAmount.text = "Total Amount : "+totalAmount
+            binding.totalAmount.text = "Total Amount  :  "+totalAmount
+            //binding.amountTotal.text =  "Amount : " + totalAmount
+
         }
 
         dialogViewModel.isApplied.observe(viewLifecycleOwner) {
@@ -221,7 +264,34 @@ class BillDetailsFrag : Fragment() {
         )
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        setupSwipeToDelete(binding.recyclerView)
     }
+    private fun setupSwipeToDelete(recyclerView: RecyclerView) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                sharedViewModel.removeItemAt(position)
+                if (sharedViewModel.items.value.isNullOrEmpty()){
+                    findNavController().popBackStack()
+                }
+
+
+
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
 
     private fun editItem(item: InvoiceItem){
         val editItemBottomSheetFrag = EditItemBottomSheetFrag(item)

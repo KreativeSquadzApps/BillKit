@@ -13,12 +13,14 @@ import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.PdfSettings
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
 class UserSettingRepository @Inject constructor(val db: AppDatabase) {
     private val userSettingDao: UserSettingDao = db.userSettingDao()
+
 
     fun loadUserSetting(userId : Long): LiveData<Resource<UserSetting>> {
         return object : NetworkBoundResource<UserSetting, UserSetting>() {
@@ -79,5 +81,21 @@ class UserSettingRepository @Inject constructor(val db: AppDatabase) {
     fun getUserSetting(userId: Long): LiveData<UserSetting> {
         return userSettingDao.getUserById(userId)
     }
+
+    fun insertPdfSetting(pdfSetting: PdfSettings) : Long {
+       return userSettingDao.insertPdfSettings(pdfSetting)
+    }
+
+    fun getPdfSetting(userId: Long): PdfSettings? {
+        return userSettingDao.getUserPdfSettingsById(userId)
+    }
+
+
+    suspend fun updatePdfSetting(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String) {
+            userSettingDao.updatePdfSettings(userId, pdfCompanyInfo, pdfItemTable, pdfFooter)
+      //  userSettingDao.updatePdfSettings(pdfSetting)
+    }
+
+
 
 }
