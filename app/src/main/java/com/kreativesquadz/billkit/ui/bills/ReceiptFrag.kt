@@ -6,9 +6,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,9 +50,11 @@ import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.InvoiceTax
 import com.kreativesquadz.billkit.model.settings.PdfSettings
+import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.utils.addBackPressHandler
 import com.kreativesquadz.billkit.utils.toBoolean
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -66,7 +70,7 @@ class ReceiptFrag : Fragment() {
     private lateinit var adapterGst: GenericAdapter<InvoiceTax>
     lateinit var invoiceP: Invoice
     private var customerP : Customer? = null
-    val invoiceTax = mutableListOf<InvoiceTax>()
+    var invoiceTax = mutableListOf<InvoiceTax>()
     var isTaxAvailable = false
     var isMrpAvailable = false
     val invoiceId by lazy {
@@ -77,15 +81,17 @@ class ReceiptFrag : Fragment() {
     }
 
     private var pdfSettings = PdfSettings()
+    private var thermalPrinterSetup: ThermalPrinterSetup? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getCompanyDetailsRec()
-        viewModel.fetchInvoiceItems(invoiceId!!.toLong())
-        viewModel.getPdfSetting()
+        viewModel.fetchAllDetails(invoiceId!!)
     }
-
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPrinterSetting()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,23 +101,33 @@ class ReceiptFrag : Fragment() {
         observers()
         onClickListeners()
         addBackPressHandler(viewLifecycleOwner, ::shouldAllowBack)
+        binding.isPrintLoading  = false
         return binding.root
     }
 
     fun observers(){
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.printerSettings.collect { printerSettings ->
+                        thermalPrinterSetup = printerSettings
+                    }
+                }
+            }
+        }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.pdfSettings.collect { pdfSettings ->
                         this@ReceiptFrag.pdfSettings = pdfSettings
+                        binding.tvFooter.text = pdfSettings.pdfFooter
                     }
                 }
             }
         }
 
-
-        val invoice= viewModel.getInvoiceDetails(invoiceId!!)
-        invoice.observe(viewLifecycleOwner) {
+        viewModel.invoiceData.observe(viewLifecycleOwner) {
             binding.invoice = it
             binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().minus(it.subtotal.toInt())
                 //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
@@ -126,15 +142,15 @@ class ReceiptFrag : Fragment() {
             customerP = viewModel.getCustomerById(it?.customerId.toString())
 
         }
+
         viewModel.companyDetails.observe(viewLifecycleOwner){
-            it.data?.let {
+            it?.let {
                 binding.companyDetails = it
             }
         }
+
         viewModel.invoiceItems.observe(viewLifecycleOwner){
             setupRecyclerView(it)
-
-
             it?.forEach {
                 if(it.taxRate > 0){
                     isTaxAvailable = true
@@ -149,6 +165,8 @@ class ReceiptFrag : Fragment() {
 
         }
 
+
+
         target?.let {
             if (it.equals(Config.BillDetailsFragmentToReceiptFragment)){
                 binding.backImage.setBackgroundResource(R.drawable.home_light)
@@ -158,8 +176,25 @@ class ReceiptFrag : Fragment() {
                 binding.backText.text = "Back"
             }
         }
+        viewModel.printStatus.observe(viewLifecycleOwner){
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            if (it == "printingStart"){
+                binding.isPrintLoading = true
+            }else{
+                binding.isPrintLoading = false
+            }
+        }
 
-
+        viewModel.allDataReady.observe(viewLifecycleOwner) { ready ->
+            if (ready) {
+                thermalPrinterSetup?.let {
+                    if (it.defaultPrinterAddress.isNotEmpty() && it.enableAutoPrint){
+                        printInvoice(customerP, invoiceP, viewModel.invoiceItems.value!!, viewModel.companyDetails.value!!)
+                }
+           }
+                // Other operations after all data is ready
+            }
+        }
     }
 
     fun onClickListeners(){
@@ -168,15 +203,23 @@ class ReceiptFrag : Fragment() {
                 findNavController().navigate(R.id.action_receiptFrag_to_nav_home)
             else
                 findNavController().popBackStack()
-        }
+            }
+
+
 
         binding.btnPrint.setOnClickListener {
-            val action = ReceiptFragDirections.actionReceiptFragToBluetoothDeviceFragment(invoiceP)
-            findNavController().navigate(action)
+            if (thermalPrinterSetup != null && thermalPrinterSetup!!.defaultPrinterAddress.isNotEmpty()){
+                printInvoice(customerP, invoiceP, viewModel.invoiceItems.value!!, viewModel.companyDetails.value!!)
+            }else{
+                Toast.makeText(requireContext(), "No Default Printer Found", Toast.LENGTH_SHORT).show()
+                val action = ReceiptFragDirections.actionReceiptFragToBluetoothDeviceFragment(invoiceP)
+                findNavController().navigate(action)
+            }
+
         }
 
         binding.btnShare.setOnClickListener {
-            generateReceiptPdf(requireContext(),pdfSettings, viewModel.invoiceItems.value!!,viewModel.companyDetails.value?.data!!, invoiceP, customerP)
+            generateReceiptPdf(requireContext(),pdfSettings, viewModel.invoiceItems.value!!,viewModel.companyDetails.value!!, invoiceP, customerP)
         }
 
     }
@@ -187,8 +230,7 @@ class ReceiptFrag : Fragment() {
         var isMrpAvailable = false
         val taxList = mutableListOf<Double>()
         var taxAmount: Double
-        var taxableAmount : Double = 0.0
-
+        invoiceTax.clear()
         receiptInvoiceItem?.forEach {
             if (it.taxRate > 0) {
                 isTaxAvailable = true
@@ -200,7 +242,7 @@ class ReceiptFrag : Fragment() {
                 } else {
                     // Tax rate doesn't exist, add a new entry
                     taxList.add(it.taxRate)
-                    val taxAmount = it.totalPrice * it.taxRate / 100
+                    taxAmount = it.totalPrice * it.taxRate / 100
                     invoiceTax.add(InvoiceTax("", it.totalPrice, it.taxRate, taxAmount))
                 }
             }
@@ -210,18 +252,20 @@ class ReceiptFrag : Fragment() {
 
         }
 
+
         viewModel.getGstListByValue(taxList).observe(viewLifecycleOwner) { gstList ->
             gstList?.let { gstItems ->
                 gstItems.forEach { gst ->
                     invoiceTax.forEach { invoiceItem ->
                         if (invoiceItem.rate == gst.taxAmount) {
                             invoiceItem.taxType = gst.taxType
-
                         }
                     }
                 }
+                setupRecyclerViewGst(invoiceTax)
             }
-            setupRecyclerViewGst(invoiceTax)
+
+
         }
 
         adapter = AdapterReceipt(
@@ -244,6 +288,7 @@ class ReceiptFrag : Fragment() {
 
 
     private fun setupRecyclerViewGst(gst: List<InvoiceTax>?) {
+        invoiceTax = gst?.toMutableList() ?: mutableListOf()
         adapterGst = GenericAdapter(
             gst ?: emptyList(),
             object : OnItemClickListener<InvoiceTax> {
@@ -670,6 +715,208 @@ class ReceiptFrag : Fragment() {
 
         return "$intPartWords $fractionPartWords"
     }
+
+    private fun printInvoice(customer : Customer?, invoice : Invoice?, invoiceItems : List<InvoiceItem>, companyDetails : CompanyDetails) {
+        val isCustomer = customer != null
+        val discount = invoice?.discount ?: 0
+        val timestamp = try {
+            val date = Date(invoice!!.invoiceDate.toLong())
+            val format = SimpleDateFormat("dd-MM-yyyy HH:mm a", Locale.getDefault())
+            format.format(date)
+        } catch (e: Exception) {
+            ""
+        }
+
+        val receipt = createReceiptString(
+            businessName = companyDetails.BusinessName,
+            place = companyDetails.Place,
+            contactNumber = companyDetails.ShopContactNumber,
+            email = companyDetails.ShopEmail,
+            invoiceDate = timestamp,
+            invoiceId = invoice!!.id.toString(),
+            isCustomerAvailable = isCustomer,
+            customerName = customer?.customerName,
+            customerNumber = customer?.shopContactNumber,
+            customerGst = customer?.gstNo,
+            customerAddress = customer?.address,
+            items = invoiceItems,
+            totalItems = invoiceItems.size,
+            subtotal = invoice.subtotal,
+            discount = discount.toDouble(),
+            totalAmount = invoice.totalAmount,
+            totalTax = invoice.totalAmount - invoice.subtotal - discount,
+            cashAmount = invoice.cashAmount,
+            onlineAmount = invoice.onlineAmount,
+            creditAmount = invoice.creditAmount,
+            footer = pdfSettings.pdfFooter
+        )
+        viewModel.printUsingDefaultPrinter(receipt)
+
+    }
+    fun centerText(text: String, paperWidth: String): String {
+        val width = when (paperWidth) {
+            "80MM" -> 48
+            "58MM" -> 32
+            else -> 32
+        }
+        val padding = (width - text.length) / 2
+        return if (padding > 0) {
+            " ".repeat(padding) + text + " ".repeat(padding)
+        } else {
+            text
+        }.padEnd(width)
+    }
+
+    fun formatItem(slNo: String, name: String, quantity: String, rate: String,tax : String, total: String, paperWidth: String): String {
+        if (isTaxAvailable){
+            val format = when (paperWidth) {
+                "80MM" -> "%-5s %-19s %7s %7s %6s %10s"
+                "58MM" -> "%-3s %-11s %5s %6s %4s %7s"
+                else -> "%-3s %-11s %5s %6s %4s %7s"
+            }
+            return String.format(format, slNo, name, quantity, rate,tax, total)
+
+        }else{
+            val format = when (paperWidth) {
+                "80MM" -> "%-5s %-19s %7s %7s %10s"
+                "58MM" -> "%-3s %-11s %5s %6s %7s"
+                else -> "%-3s %-11s %5s %6s %7s"
+            }
+            return String.format(format, slNo, name, quantity, rate, total)
+        }
+    }
+    fun formatTax(paperWidth: String, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
+        val format = when (paperWidth) {
+            "80MM" -> "%-7s %-12s %6s %9s"
+            "58MM" -> "%-5s %-8s %4s %6s"
+            else -> "%-5s %-8s %4s %6s"
+        }
+        return String.format(format, taxType, taxableAmount, rate, taxAmount)
+    }
+    fun formatTaxData(paperWidth: String, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
+        val format = when (paperWidth) {
+            "80MM" -> "%-7s %-12s %6s %9s"
+            "58MM" -> "%-15s %-8s %4s %6s"
+            else -> "%-15s %-8s %4s %6s"
+        }
+        return String.format(format, taxType, taxableAmount, rate, taxAmount)
+    }
+
+    fun createReceiptString(
+        businessName: String,
+        place: String,
+        contactNumber: String,
+        email: String,
+        invoiceDate: String,
+        invoiceId: String,
+        isCustomerAvailable: Boolean,
+        customerName: String?,
+        customerNumber: String?,
+        customerGst: String?,
+        customerAddress: String?,
+        items: List<InvoiceItem>,
+        totalItems: Int,
+        subtotal: Double,
+        discount: Double?,
+        totalAmount: Double,
+        totalTax: Double,
+        cashAmount: Double?,
+        onlineAmount: Double?,
+        creditAmount: Double?,
+        footer: String,
+    ): String {
+        val receipt = StringBuilder()
+        var separatorLine = ""
+        var paperWidth = "58MM" // Default to 58MM, adjust as needed
+
+        thermalPrinterSetup?.let {
+            paperWidth = it.printerSize
+            separatorLine = generateSeparatorLine(paperWidth)
+        }
+
+        // Company Details Header
+        receipt.append(centerText(businessName, paperWidth)).append("\n")
+        receipt.append(centerText(place, paperWidth)).append("\n")
+        receipt.append(centerText(contactNumber, paperWidth)).append("\n")
+        receipt.append(centerText("Email: $email", paperWidth)).append("\n\n")
+        receipt.append(centerText("INVOICE", paperWidth)).append("\n\n")
+
+        // Invoice Header
+        receipt.append(String.format("%-15s %s\n", invoiceDate, "Invoice: $invoiceId"))
+        receipt.append(separatorLine)
+
+        // Customer Details
+        if (isCustomerAvailable) {
+            receipt.append(centerText(customerName ?: "", paperWidth)).append("\n")
+            receipt.append(centerText("Contact: ${customerNumber ?: ""}", paperWidth)).append("\n")
+            receipt.append(centerText("GST No: ${customerGst ?: ""}", paperWidth)).append("\n")
+            receipt.append(centerText(customerAddress ?: "", paperWidth)).append("\n")
+            receipt.append(separatorLine)
+        }
+
+        // Items Header
+       receipt.append(formatItem("SL No.", "Item", "Qty", "Rate","Tax", "Total", paperWidth)).append("\n")
+
+        receipt.append(separatorLine)
+
+        // Items
+        var slNo = 0
+        for (item in items) {
+            slNo++
+            receipt.append(formatItem(slNo.toString(), item.itemName.split("(")[0], item.quantity.toString(), item.unitPrice.toString(),item.taxRate.toString(), item.totalPrice.toString(), paperWidth)).append("\n")
+        }
+        receipt.append(separatorLine)
+
+        // Totals
+        receipt.append(String.format("%-15s %s\n", "Items:", totalItems))
+        receipt.append(String.format("%-15s %s\n", "Sub Total:", subtotal))
+        if (discount != null && discount > 0) {
+            receipt.append(String.format("%-15s %s\n", "Discount:", discount))
+            receipt.append(String.format("%-15s %s\n", "You saved Rs", discount))
+        }
+        if (isTaxAvailable){
+            receipt.append(String.format("%-15s %s", "Total Tax:", totalTax)).append("\n")
+        }
+        receipt.append(separatorLine)
+        receipt.append(centerText("Total: $totalAmount", paperWidth)).append("\n")
+
+        if (isTaxAvailable){
+            receipt.append(separatorLine)
+            receipt.append(formatTax(paperWidth,"TaxType","Taxable Amount","Rate","Tax Amount"))
+            receipt.append(separatorLine)
+            invoiceTax.forEach {
+                Log.d("TAG", "createReceiptString: "+it.taxType)
+                receipt.append(formatTax(paperWidth,it.taxType,it.taxableAmount.toString(),it.rate.toString(),it.taxAmount.toString())).append("\n")
+            }
+        }
+
+        receipt.append(centerText("Payment Mode", paperWidth)).append("\n")
+        if (cashAmount != null && cashAmount > 0) {
+            receipt.append(String.format("%-15s %s\n", "Cash:", cashAmount))
+        }
+        if (onlineAmount != null && onlineAmount > 0) {
+            receipt.append(String.format("%-15s %s\n", "Online:", onlineAmount))
+        }
+        if (creditAmount != null && creditAmount > 0) {
+            receipt.append(String.format("%-15s %s\n", "Credit:", creditAmount))
+        }
+        receipt.append(separatorLine)
+        receipt.append(centerText(footer, paperWidth)).append("\n\n")
+        receipt.append(centerText("Powered by billkit", paperWidth)).append("\n")
+
+        return receipt.toString()
+    }
+
+    fun generateSeparatorLine(paperWidth: String): String {
+        val receiptWidth = when (paperWidth) {
+            "80MM" -> 58 // Typical character width for 80mm paper
+            "58MM" -> 42 // Typical character width for 58mm paper
+            else -> 42 // Default to 42 if the size is unknown
+        }
+        return "-".repeat(receiptWidth) + "\n"
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

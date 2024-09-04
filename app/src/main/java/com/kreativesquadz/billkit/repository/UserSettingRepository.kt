@@ -14,6 +14,7 @@ import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.UserSetting
 import com.kreativesquadz.billkit.model.settings.PdfSettings
+import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -93,6 +94,24 @@ class UserSettingRepository @Inject constructor(val db: AppDatabase) {
 
     suspend fun updatePdfSetting(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String) {
             userSettingDao.updatePdfSettings(userId, pdfCompanyInfo, pdfItemTable, pdfFooter)
+      //  userSettingDao.updatePdfSettings(pdfSetting)
+    }
+
+
+
+    fun insertPrinterSetting(thermalPrinterSetup: ThermalPrinterSetup) : Long {
+       return userSettingDao.insertPrinterSettings(thermalPrinterSetup)
+    }
+
+
+
+    fun getPrinterSetting(userId: Long): ThermalPrinterSetup? {
+        return userSettingDao.getUserPrinterSettingsById(userId)
+    }
+
+
+    suspend fun updatePrinterSetting(userId: Long, printerSize : String, printerMode : String, fontSize : String, enableAutoPrint : Boolean, openCashDrawer : Boolean, disconnectAfterPrint : Boolean, autoCutAfterPrint : Boolean, defaultPrinterAddress : String,defaultprinterName : String ) {
+            userSettingDao.updatePrinterSettings(userId, printerSize, printerMode, fontSize, enableAutoPrint, openCashDrawer, disconnectAfterPrint, autoCutAfterPrint, defaultPrinterAddress, defaultprinterName)
       //  userSettingDao.updatePdfSettings(pdfSetting)
     }
 

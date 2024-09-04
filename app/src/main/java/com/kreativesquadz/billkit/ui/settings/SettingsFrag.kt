@@ -60,7 +60,6 @@ class SettingsFrag : Fragment() {
             listOf(getString(R.string.settings_item_1),
                 getString(R.string.settings_item_2),
                 getString(R.string.settings_item_3),
-                getString(R.string.settings_item_3),
                 getString(R.string.settings_item_4),
                 getString(R.string.settings_item_5)),
             object : OnItemClickListener<String> {
@@ -76,6 +75,7 @@ class SettingsFrag : Fragment() {
 
                         }
                         getString(R.string.settings_item_4) -> {
+                            findNavController().navigate(R.id.action_settingsFrag_to_printerSettingsFragment)
 
                         }
                         getString(R.string.settings_item_5) -> {

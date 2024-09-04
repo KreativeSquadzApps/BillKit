@@ -3,6 +3,7 @@ package com.kreativesquadz.billkit.di
 import android.content.Context
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.bluetooth.BluetoothService
+import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.BluetoothRepository
@@ -33,8 +34,8 @@ object AppModule {
     }
 
     @Provides
-    fun provideBluetoothService(@ApplicationContext appContext: Context): BluetoothService {
-        return BluetoothService(appContext)
+    fun provideBluetoothService(@ApplicationContext appContext: Context , userSettingRepository: UserSettingRepository ): BluetoothService {
+        return BluetoothService(appContext,userSettingRepository)
     }
 
     @Provides

@@ -226,6 +226,8 @@ class BillDetailsFrag : Fragment() {
 
         sharedViewModel.totalLivedata.observe(viewLifecycleOwner) { totalAmount ->
             binding.totalAmount.text = "Total Amount  :  "+totalAmount
+            binding.amountTotal.text = "Amount : "+ (totalAmount.replace(Config.CURRENCY, "").toDouble()
+                    - sharedViewModel.getTotalTax().replace(Config.CURRENCY, "").toDouble())
             //binding.amountTotal.text =  "Amount : " + totalAmount
 
         }

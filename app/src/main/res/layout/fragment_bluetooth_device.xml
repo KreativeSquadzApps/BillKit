@@ -1,35 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
 
     </data>
     <RelativeLayout
-
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/scanButton"
+        <TextView
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_main"
+            android:padding="@dimen/_10dp"
+            android:id="@+id/tvRefresh"
+            android:paddingEnd="@dimen/_20dp"
+            android:paddingStart="@dimen/_20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/_20dp"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/corner_four_stroke"
+            android:text="Refresh"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Scan Devices" />
+            android:layout_marginTop="50dp"
+            tools:listitem="@layout/item_bluetooth_device"/>
 
-        <ListView
-            android:id="@+id/deviceList"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            android:background="#80ffffff">
 
-        <Button
-            android:id="@+id/printButton"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
-            android:text="Print Bill"
-            android:layout_alignParentBottom="true"
-            android:enabled="false" />
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
     </RelativeLayout>
 
 </layout>

@@ -53,8 +53,8 @@ class GstTaxRepository @Inject constructor(val db: AppDatabase){
       return gstTaxDao.getGSTById(id)
    }
 
-   suspend fun getGstByTaxValue(taxValue: Double): GST {
-      return gstTaxDao.getGSTByTaxValue(taxValue)
+   suspend fun getGstByTaxValue(userId: Int, taxValue: Double): GST {
+      return gstTaxDao.getGSTByTaxValue( userId, taxValue)
    }
    fun getGSTListByTaxValues(taxAmounts: List<Double>): LiveData<List<GST>> {
       return gstTaxDao.getGSTListByTaxValues(taxAmounts)

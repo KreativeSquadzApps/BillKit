@@ -60,6 +60,13 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
         return invoiceDao.getInvoiceById(id)
     }
 
+
+    fun getInvoiceByIdWithoutLiveData(id: Int): Invoice {
+        return invoiceDao.getInvoiceByIdWithoutLiveData(id)
+    }
+
+
+
     suspend fun getUnsyncedInvoices(): List<Invoice> {
         return invoiceDao.getUnsyncedInvoices()
     }

@@ -117,6 +117,9 @@
         <action
             android:id="@+id/action_settingsFrag_to_taxSettingsFragment"
             app:destination="@id/taxSettingsFragment" />
+        <action
+            android:id="@+id/action_settingsFrag_to_printerSettingsFragment"
+            app:destination="@id/printerSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/billDetailsFrag"
@@ -213,7 +216,7 @@
     </fragment>
     <fragment
         android:id="@+id/bluetoothDeviceFragment"
-        android:name="com.kreativesquadz.billkit.ui.bills.bluetoothPrinter.BluetoothDeviceFragment"
+        android:name="com.kreativesquadz.billkit.ui.bluetoothPrinter.BluetoothDeviceFragment"
         android:label="BluetoothDeviceFragment">
 
         <argument
@@ -248,6 +251,14 @@
         <action
             android:id="@+id/action_splitFragment_to_receiptFrag"
             app:destination="@id/receiptFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/printerSettingsFragment"
+        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.printerSettings.PrinterSettingsFragment"
+        android:label="PrinterSettingsFragment" >
+        <action
+            android:id="@+id/action_printerSettingsFragment_to_bluetoothDeviceFragment"
+            app:destination="@id/bluetoothDeviceFragment" />
     </fragment>
 
 

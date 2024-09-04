@@ -40,4 +40,23 @@
 
     <string name="terms">By Proceeding, you agree to our Terms and Conditions, Privacy Policy Refund and Cancellation Policy. SMS would be send to your Registered mobile number for verification</string>
 
+
+
+    <string name="printer_size">Printer Size : </string>
+    <string name="printer_mode">Printer Mode : </string>
+    <string name="font_size">Font Size : </string>
+
+    <!-- Switch Labels -->
+    <string name="enable_auto_print">Enable Auto Print : </string>
+    <string name="open_cash_drawer">Open Cash Drawer : </string>
+    <string name="disconnect_after_print">Disconnect After Print : </string>
+    <string name="auto_cut_after_print">Auto-Cut After Printing : </string>
+
+    <!-- Default Printer Section -->
+    <string name="default_printer">Default Printer</string>
+    <string name="change">Change</string>
+    <string name="printer_icon">Printer Icon</string>
+
+    <!-- Button -->
+    <string name="update">Update</string>
 </resources>

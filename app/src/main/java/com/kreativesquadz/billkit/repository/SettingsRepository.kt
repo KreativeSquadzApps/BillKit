@@ -70,5 +70,7 @@ class SettingsRepository @Inject constructor(val db : AppDatabase) {
         return statusLiveData
     }
 
+    fun loadCompanyDetailsDb(userId : Long) : LiveData<CompanyDetails> = companyDao.getCompanyDetails(userId)
+
 
 }

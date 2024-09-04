@@ -175,7 +175,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         Log.e("pree",list.toString())
         list.removeAt(position)
         _items.value = list
-        Log.e("posttttt",list.toString())
+        getSubTotalamount()
 
     }
 
@@ -223,69 +223,54 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         return list.size.toString()
     }
 
-    fun getSubTotalamount(): String {
-        var total = 0.0
-        var taxAmount = 0.0
-        list.forEach {
-            taxAmount +=   it.taxRate * it.unitPrice * it.quantity / 100
-            total += it.totalPrice - taxAmount
+    fun getTotalValues(): Triple<Double, Double, Double> {
+        var subtotal = 0.0
+        var totalTax = 0.0
+        var totalAmount = 0.0
+
+        list.forEach { item ->
+            val itemTax = item.taxRate * item.unitPrice * item.quantity / 100
+            totalTax += itemTax
+            subtotal += item.totalPrice - itemTax
         }
 
-        return Config.CURRENCY+total.toString()
+        totalAmount = subtotal + totalTax - (discounted ?: 0) - (creditNoteAmount ?: 0)
+        if (gstAddedAmount != null) {
+            totalAmount += gstAddedAmount!!
+        }
+
+        return Triple(subtotal, totalTax, totalAmount)
     }
 
-    fun getSubTotalamountDouble(): Double {
-        var total = 0.0
-        var taxAmount = 0.0
-        list.forEach {
-            taxAmount +=   it.taxRate * it.unitPrice * it.quantity / 100
-            total += it.totalPrice - taxAmount
-        }
-
-        return total
+    fun getSubTotalamount(): String {
+        val (subtotal, _, _) = getTotalValues()
+        return Config.CURRENCY + subtotal.toString()
     }
 
     fun getTotalTax(): String {
-        var total = 0.0
-        list.forEach {
-            total += it.taxRate * it.unitPrice * it.quantity / 100
-        }
+        val (_, totalTax, _) = getTotalValues()
         df.roundingMode = RoundingMode.DOWN
-        return Config.CURRENCY+df.format(total).toString()
+        return Config.CURRENCY + df.format(totalTax)
     }
 
     fun getTotalAmount() {
-        var dis = 0
-        var creditNoteAmountTemp = 0
-        if (discounted != null){
-            dis = discounted!!
-        }else if (creditNoteAmount != null){
-            creditNoteAmountTemp = creditNoteAmount!!
-        }
-        var totalTax = getTotalTax()
-            .replace(Config.CURRENCY,"")
-            .toDouble() + getSubTotalamount()
-            .replace(Config.CURRENCY,"")
-            .toDouble() - dis - creditNoteAmountTemp
-
-
-        if (gstAddedAmount != null ){
-           totalTax = totalTax + gstAddedAmount!!.toDouble()
-            Log.e("yyyyyyyy", totalTax.toString() +"    "+ gstAddedAmount.toString() )
-        }
-
-
+        val (_, _, totalAmount) = getTotalValues()
         df.roundingMode = RoundingMode.DOWN
-        _totalLivedata.value = Config.CURRENCY+df.format(totalTax)
+        _totalLivedata.value = Config.CURRENCY + df.format(totalAmount)
     }
 
     fun getTotalAmountDouble(): Double {
-        return  getTotalTax()
-            .replace(Config.CURRENCY,"")
-            .toDouble() + getSubTotalamount()
-            .replace(Config.CURRENCY,"")
-            .toDouble()
+        val (_, _, totalAmount) = getTotalValues()
+        return totalAmount
     }
+
+    fun getSubTotalamountDouble(): Double {
+        val (subtotal, _, _) = getTotalValues()
+        return subtotal
+    }
+
+
+
     fun updateSelectedCustomer(customer: Customer?) {
         _selectedCustomer.value = customer
         _isCustomerSelected.value = true
@@ -366,7 +351,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             cashAmount = cashAmount,
             onlineAmount = onlineAmount,
             creditAmount = creditAmount,
-            totalAmount = (getTotalAmountDouble()- (discounted?:0) - (creditNoteAmount?:0)),
+            totalAmount = getTotalAmountDouble(),
             totalGst = gstAddedAmount?.toDouble() ?: 0.0,
             customerId = getCustomerId(),
             isSynced = 0,
@@ -376,24 +361,6 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         )
         return invoice
     }
-    fun getSession() : LoginResponse? {
-        var loginResponse : LoginResponse?
-        val loginSession = loginRepository.getUserSessions()
-        runBlocking{
-            loginResponse = loginRepository.getSession(Config.userId.toInt(),1)
-            if (loginSession != null){
-                if (loginSession.staffId != null){
-                    loginResponse = loginRepository.getSession(null, loginSession.staffId.toLong())
-                }else if (loginSession.userId != null){
-                    loginResponse = loginRepository.getSession(loginSession.userId, null)
-                }
-            }else{
-                loginResponse = loginRepository.getSession(null, null)
-            }
-        }
-        return loginResponse
-    }
-
     fun getItemsList(): List<InvoiceItem> {
         return list
     }

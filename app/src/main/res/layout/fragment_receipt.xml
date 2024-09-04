@@ -26,6 +26,9 @@
         <variable
             name="taxGst"
             type="com.kreativesquadz.billkit.model.GST" />
+        <variable
+            name="isPrintLoading"
+            type="Boolean" />
     </data>
 
     <RelativeLayout
@@ -564,7 +567,7 @@
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Thank You"
+                        android:id="@+id/tvFooter"
                         android:layout_marginTop="@dimen/_20dp"
                         android:textColor="@color/text_color_main"
                         android:layout_gravity="center"
@@ -677,13 +680,29 @@
                 app:layout_constraintStart_toEndOf="@+id/btnShare"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:paddingTop="@dimen/_20dp"
-                    android:paddingBottom="@dimen/_10dp"
                     android:layout_weight="4"
-                    android:src="@drawable/printer" />
+                    >
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="@dimen/_20dp"
+                        android:paddingBottom="@dimen/_10dp"
+                        android:visibility="@{isPrintLoading ? View.GONE : View.VISIBLE}"
+                        android:id="@+id/printImage"
+                        android:src="@drawable/printer" />
+                    <ProgressBar
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/_10dp"
+                        android:visibility="@{isPrintLoading ? View.VISIBLE : View.GONE}"
+                        android:id="@+id/printProgress"/>
+                </FrameLayout>
+
+
 
                 <TextView android:fontFamily="@font/montserrat_medium"
                     android:layout_width="match_parent"

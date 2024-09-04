@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.kreativesquadz.billkit.model.UserSetting
 import com.kreativesquadz.billkit.model.settings.PdfSettings
+import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 
 @Dao
 interface UserSettingDao {
@@ -28,4 +29,20 @@ interface UserSettingDao {
 
     @Query("UPDATE pdf_settings SET pdfCompanyInfo = :pdfCompanyInfo, pdfItemTable = :pdfItemTable,pdfFooter = :pdfFooter WHERE userId = :userId")
     suspend fun updatePdfSettings(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String)
+
+
+
+     @Query("SELECT * FROM thermal_printer_setup WHERE userId = :userId")
+     fun getUserPrinterSettingsById(userId: Long): ThermalPrinterSetup?
+
+     @Insert(onConflict = OnConflictStrategy.REPLACE)
+     fun insertPrinterSettings(thermalPrinterSetup: ThermalPrinterSetup) : Long
+
+
+
+    @Query("UPDATE thermal_printer_setup SET printerSize = :printerSize, printerMode = :printerMode, fontSize = :fontSize, enableAutoPrint = :enableAutoPrint, openCashDrawer = :openCashDrawer, disconnectAfterPrint = :disconnectAfterPrint, autoCutAfterPrint = :autoCutAfterPrint, defaultPrinterAddress = :defaultPrinterAddress , defaultPrinterName = :defaultPrinterName WHERE userId = :userId")
+    suspend fun updatePrinterSettings(userId: Long, printerSize : String, printerMode : String, fontSize : String, enableAutoPrint : Boolean, openCashDrawer : Boolean, disconnectAfterPrint : Boolean, autoCutAfterPrint : Boolean, defaultPrinterAddress : String, defaultPrinterName : String)
+
+
+
 }
