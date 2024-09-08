@@ -17,16 +17,20 @@
             android:id="@+id/calenderView"
             android:layout_margin="@dimen/_10dp"
             android:background="@drawable/corner_four_grey"
-            android:padding="@dimen/_10dp"
+            android:padding="@dimen/_8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/calender"/>
 
             <TextView android:fontFamily="@font/montserrat_regular"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All"
-                app:currentDate='@{"222"}'
+                android:id="@+id/tvDate"
+                android:text="20-06-2021"
                 android:textSize="@dimen/txt_16sp"
                 android:layout_marginStart="@dimen/_5dp"
                 android:layout_marginEnd="@dimen/_5dp"
@@ -35,14 +39,36 @@
 
 
         </LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="-5dp"
+            app:layout_constraintStart_toEndOf="@+id/calenderView"
+            android:layout_marginStart="@dimen/_10dp"
+            app:layout_constraintEnd_toStartOf="@+id/searchView"
+            app:layout_constraintTop_toTopOf="@id/calenderView"
+            app:layout_constraintBottom_toBottomOf="@id/calenderView">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownCreditNote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none"
+                android:padding="@dimen/_10dp"
+                android:background="@drawable/corner_four_grey"
+                android:text="All" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginEnd="@dimen/_10dp"
-            android:src="@android:drawable/ic_menu_search"
+            android:id="@+id/searchView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="@dimen/_12dp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:src="@drawable/search_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:layout_width="match_parent"

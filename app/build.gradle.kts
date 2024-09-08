@@ -91,5 +91,8 @@ dependencies {
     implementation (libs.androidx.camera.view)
     implementation(libs.logging.interceptor)
     implementation(libs.itext7.core)
+    implementation (libs.androidx.paging.runtime)  // Latest version of Paging 3
+    implementation( libs.androidx.room.paging)
+
 
 }

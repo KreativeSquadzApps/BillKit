@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
+import com.kreativesquadz.billkit.adapter.showCustomAlertDialog
 import com.kreativesquadz.billkit.databinding.FragmentCreditNoteDetailsBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.CreditNote
+import com.kreativesquadz.billkit.model.DialogData
 import com.kreativesquadz.billkit.model.InvoiceItem
 
 class CreditNoteDetailsFragment : Fragment() {
@@ -20,6 +23,7 @@ class CreditNoteDetailsFragment : Fragment() {
     val binding get() = _binding!!
     private val viewModel: CreditNoteDetailsViewModel by activityViewModels()
     private lateinit var adapter: GenericAdapter<InvoiceItem>
+    lateinit var creditNote : CreditNote
     val invoiceId by lazy {
         arguments?.getString("invoiceId")
     }
@@ -35,6 +39,7 @@ class CreditNoteDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCreditNoteDetailsBinding.inflate(inflater, container, false)
+        binding.isActive = false
         observers()
         onClicklisteners()
         return binding.root
@@ -44,6 +49,8 @@ class CreditNoteDetailsFragment : Fragment() {
         viewModel.creditNote.observe(viewLifecycleOwner){
             it.let {
                 binding.creditNote = it
+                binding.isActive = it.status == "Active"
+                creditNote = it
             }
         }
         viewModel.itemsList.observe(viewLifecycleOwner){
@@ -57,6 +64,9 @@ class CreditNoteDetailsFragment : Fragment() {
     }
 
     fun onClicklisteners(){
+        binding.btnRefund.setOnClickListener {
+            setupPopup()
+        }
 
     }
 
@@ -73,6 +83,26 @@ class CreditNoteDetailsFragment : Fragment() {
         )
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+    private fun setupPopup(){
+        val dialogData = DialogData(
+            title = "Are you sure",
+            info = "you want to Refund this CreditNote ${creditNote.id} ?",
+            positiveButtonText = "REFUND",
+            negativeButtonText = "Cancel"
+        )
+
+        showCustomAlertDialog(
+            context = requireActivity(),
+            dialogData = dialogData,
+            positiveAction = {
+                viewModel.updateCreditNote(requireContext(),invoiceId!!.toLong(),creditNote.copy(status = "Cleared"))
+              },
+            negativeAction = {
+                // Handle negative button action
+                // E.g., dismiss the dialog
+            }
+        )
     }
 
     override fun onDestroyView() {

@@ -35,12 +35,13 @@
                 android:layout_marginEnd="@dimen/_10dp">
 
 
-                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:fontFamily="@font/montserrat_regular"
                     android:id="@+id/tvItemName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_main"
-                    android:textSize="@dimen/txt_13sp"
+                    android:textSize="@dimen/txt_14sp"
                     android:layout_marginTop="@dimen/_10dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

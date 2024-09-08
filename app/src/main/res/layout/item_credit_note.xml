@@ -27,7 +27,8 @@
 
 
             <!-- Example fields -->
-            <TextView android:fontFamily="@font/montserrat_regular"
+            <TextView
+                android:fontFamily="@font/montserrat_regular"
                 android:id="@+id/creaditNoteId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -119,32 +120,48 @@
 
 
         <!-- Bottom line view -->
-        <LinearLayout
-            android:id="@+id/statusIndicator"
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_margin="1dp"
-            android:orientation="vertical"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header"
-            tools:background="@color/red"
-            android:drawableBottom="@drawable/corner_bottom_grey"
-            android:background="@{creditNote.status.equals(`Active`) ? @color/teal_700 : creditNote.status.equals(`Cleared`) ? @color/lite_grey : @color/lite_grey}" >
+            app:layout_constraintTop_toBottomOf="@+id/header">
 
-            <TextView android:fontFamily="@font/montserrat_regular"
+            <LinearLayout
+                android:id="@+id/statusIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_margin="1dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header"
+                tools:background="@color/red"
+                android:background="@{creditNote.status.equals(`Active`) ? @color/teal_700 : creditNote.status.equals(`Cleared`) ? @color/lite_grey : @color/lite_grey}" >
+
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/text_color_heading_reverse"
+                    android:textSize="@dimen/txt_12sp"
+                    android:text="@{creditNote.status.equals(`Active`) ? `Available CreditNote` : creditNote.status.equals(`Cleared`) ? `CreditNote Cleared` : `CreditNote Cleared` }"
+                    tools:text="Available CreditNote"/>
+
+
+
+
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/text_color_heading_reverse"
-                android:textSize="@dimen/txt_12sp"
-                android:text="@{creditNote.status.equals(`Active`) ? `Available CreditNote` : creditNote.status.equals(`Cleared`) ? `CreditNote Cleared` : `CreditNote Cleared` }"
-                tools:text="Available CreditNote"/>
+                android:background="@drawable/corner_bottom_grey"/>
 
 
-
-        </LinearLayout>
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

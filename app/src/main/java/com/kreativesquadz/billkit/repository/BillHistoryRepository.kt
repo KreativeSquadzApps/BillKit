@@ -2,6 +2,9 @@ package com.kreativesquadz.billkit.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.kreativesquadz.billkit.Dao.InventoryDao
 import com.kreativesquadz.billkit.Dao.InvoiceDao
 import com.kreativesquadz.billkit.Database.AppDatabase
@@ -12,6 +15,7 @@ import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
@@ -22,7 +26,6 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
         return object : NetworkBoundResource<List<Invoice>, List<Invoice>>() {
             override fun saveCallResult(item: List<Invoice>) {
                 try {
-                    Log.e("invoice", item.toString())
                     db.runInTransaction {
                         // Clear existing data
                         invoiceDao.deleteInvoices()
@@ -30,12 +33,9 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
                         item.forEach{
                             invoiceDao.insertInvoiceItem(it.invoiceItems!!)
                         }
-
-
-                        Log.e("Error", item.toString())
                     }
                 } catch (ex: Exception) {
-                    Log.e("Errortry", ex.toString())
+                    Log.e("Error", ex.toString())
 
                 }
 
@@ -55,18 +55,23 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
         }.asLiveData()
     }
 
-
     fun getInvoiceById(id: Int): LiveData<Invoice> {
         return invoiceDao.getInvoiceById(id)
     }
 
-
-    fun getInvoiceByIdWithoutLiveData(id: Int): Invoice {
-        return invoiceDao.getInvoiceByIdWithoutLiveData(id)
+    fun getPagedInvoicesFromDb(startDate: Long, endDate: Long): Flow<PagingData<Invoice>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20, // Define the size of each page
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { invoiceDao.getPagedInvoicesByDateRange(startDate, endDate) }
+        ).flow
     }
 
-
-
+    suspend fun updateInvoiceStatus( status: String, invoiceId: Int) {
+        invoiceDao.updateInvoiceStatus( status, invoiceId)
+    }
     suspend fun getUnsyncedInvoices(): List<Invoice> {
         return invoiceDao.getUnsyncedInvoices()
     }

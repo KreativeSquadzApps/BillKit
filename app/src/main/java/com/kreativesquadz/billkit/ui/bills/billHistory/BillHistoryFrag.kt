@@ -2,23 +2,25 @@ package com.kreativesquadz.billkit.ui.bills.billHistory
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
-import com.kreativesquadz.billkit.adapter.GenericAdapter
+import com.kreativesquadz.billkit.adapter.GenericAdapterPagination
+import com.kreativesquadz.billkit.adapter.GenericDiffCallback
 import com.kreativesquadz.billkit.databinding.FragmentBillHistoryBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
-import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Invoice
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -27,7 +29,7 @@ class BillHistoryFrag : Fragment() {
     private var _binding: FragmentBillHistoryBinding ?= null
     private val viewModel: BillHistoryViewModel by hiltNavGraphViewModels(R.id.mobile_navigation)
     private val binding get() = _binding!!
-    private lateinit var adapter: GenericAdapter<Invoice>
+    private lateinit var adapter: GenericAdapterPagination<Invoice>
     private val target by lazy {
         arguments?.getString("target")
     }
@@ -36,8 +38,18 @@ class BillHistoryFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            viewModel.getSesssion()
-            viewModel.getAllInvoices()
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = viewModel.getSelectedDate()
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val startOfDay = calendar.timeInMillis
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val endOfDay = calendar.timeInMillis - 1
+        viewModel.getPagedInvoicesFromDb(startOfDay, endOfDay)
+
     }
 
     override fun onCreateView(
@@ -54,41 +66,49 @@ class BillHistoryFrag : Fragment() {
     }
 
     private fun observers(){
-        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val currentDate = sdf.format(System.currentTimeMillis())
-        binding.tvDate.text = currentDate
-        viewModel.customers.observe(viewLifecycleOwner) {
-            println(it.message)
-            it.data?.let { it1 ->
-                Log.e("TAG", "Customer: ${it1}")
-            }
-        }
+        val selectedDate = viewModel.getSelectedDate()
+        binding.tvDate.text = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(selectedDate)
+
         viewModel.loginResponse.observe(viewLifecycleOwner) { userSession->
             createdBy = userSession.sessionUser
-            Log.e("TAG", "UserSession: ${userSession.sessionUser}")
-            viewModel.invoices.observe(viewLifecycleOwner) {
-                println(it.message)
-                it.data?.let { it1 ->
-                    //adapter.submitList(it.data)
-                    if (target.isNullOrEmpty()){
-                        setupRecyclerView(it1.filter { it.createdBy == createdBy })
-                    }else{
-                        setupRecyclerView(it1.filter { it.createdBy == target })
-                    }
-                }
+        }
+
+//        viewModel.invoices.observe(viewLifecycleOwner) {
+//            Log.d("TAG", "observers: $it")
+//            it.data?.let { it1 ->
+//                if (target.isNullOrEmpty()){
+//                    adapter.submitList(it1.filter { it.createdBy == createdBy })
+//                }else{
+//                    adapter.submitList(it1.filter { it.createdBy == target })
+//                }
+//            }
+//        }
+
+
+        viewModel.invoicess.observe(viewLifecycleOwner) {
+
+
+        }
+        lifecycleScope.launch {
+            viewModel.invoices.collectLatest { pagingData ->
+                adapter.submitData(pagingData)
             }
         }
+
     }
 
     private fun onClickListener(){
         binding.calenderView.setOnClickListener {
-            setCurrentDateOnCalender(binding.tvDate)
+            setCurrentDateOnCalendar(binding.tvDate)
         }
     }
 
-    private fun setupRecyclerView(invoiceList: List<Invoice> = emptyList()) {
-        adapter = GenericAdapter(
-            invoiceList,
+    private fun setupRecyclerView() {
+        val diffCallback = GenericDiffCallback<Invoice>(
+            areItemsSame = { oldItem, newItem -> oldItem.invoiceId == newItem.invoiceId },
+            areContentsSame = { oldItem, newItem -> oldItem == newItem }
+        )
+        adapter = GenericAdapterPagination(
             object : OnItemClickListener<Invoice> {
                 override fun onItemClick(item: Invoice) {
                      val action = BillHistoryFragDirections.actionBillHistoryFragToInvoiceFragment(item,Config.BillDetailsFragmentToReceiptFragment)
@@ -97,11 +117,15 @@ class BillHistoryFrag : Fragment() {
             },
             R.layout.item_bill_invoice_history,
             BR.invoice // Variable ID generated by data binding
+            ,diffCallback
         )
         binding.billHistoryRecyclerView.adapter = adapter
         binding.billHistoryRecyclerView.layoutManager = LinearLayoutManager(context)
     }
-    private fun setCurrentDateOnCalender(textView: TextView){
+
+
+
+    private fun setCurrentDateOnCalendar(textView: TextView) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -109,14 +133,31 @@ class BillHistoryFrag : Fragment() {
 
         // Create DatePickerDialog and set initial date to current date
         val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            // Set selected date on the TextView
+            // Format the selected date
             val selectedDate = "$selectedDay-${selectedMonth + 1}-$selectedYear"
             textView.text = selectedDate
-        }, year, month, day)
+            val selectedCalendar = Calendar.getInstance().apply {
+                set(Calendar.YEAR, selectedYear)
+                set(Calendar.MONTH, selectedMonth)
+                set(Calendar.DAY_OF_MONTH, selectedDay)
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+            val selectedTimestamp = selectedCalendar.timeInMillis
+            viewModel.saveSelectedDate(selectedTimestamp)
 
-        // Show the DatePickerDialog
+            val startOfDay = selectedCalendar.timeInMillis
+            selectedCalendar.add(Calendar.DAY_OF_MONTH, 1)
+            val endOfDay = selectedCalendar.timeInMillis - 1
+            viewModel.getPagedInvoicesFromDb(startOfDay, endOfDay)
+            binding.tvDate.text = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(selectedTimestamp)
+
+        }, year, month, day)
         datePickerDialog.show()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

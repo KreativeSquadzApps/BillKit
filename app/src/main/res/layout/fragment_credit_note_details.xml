@@ -17,438 +17,539 @@
         <variable
             name="totalItem"
             type="String" />
+        <variable
+            name="isActive"
+            type="Boolean" />
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical">
 
-            <soup.neumorphism.NeumorphCardView
-                android:id="@+id/cardViewDetails"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:cardUseCompatPadding="true">
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10dp"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/corner_four_stroke">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cardHeader"
+                        android:paddingTop="@dimen/_20dp"
+                        android:background="@drawable/corner_top_grey"
+                        android:paddingStart="@dimen/_10dp"
+                        android:paddingEnd="@dimen/_10dp"
+                        android:paddingBottom="@dimen/_10dp"
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="110dp"
-                            android:id="@+id/cardHeader"
-                            android:paddingTop="@dimen/_20dp"
-                            android:paddingStart="@dimen/_10dp"
-                            android:paddingEnd="@dimen/_10dp"
-                            android:background="@color/lite_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginStart="10dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:timestampToDate='@{creditNote.dateTime}'
+                            android:textStyle="bold"
+                            tools:text="Date "/>
 
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvDate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_16sp"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:timestampToDate='@{creditNote.dateTime}'
-                                android:textStyle="bold"
-                                tools:text="Date "/>
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginStart="10dp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvDate"
+                            app:timestampToTime="@{creditNote.dateTime}"
+                            tools:text="Time "/>
 
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_16sp"
-                                android:layout_marginStart="10dp"
-                                android:textStyle="bold"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvDate"
-                                app:timestampToTime="@{creditNote.dateTime}"
-                                tools:text="Time "/>
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvCreatedBy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvTime"
+                            android:text="@{creditNote.createdBy}"
+                            tools:text="Created by Admin "/>
 
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvCreatedBy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_16sp"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvTime"
-                                android:text="@{creditNote.createdBy}"
-                                tools:text="Created by Admin "/>
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvInvoiceNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="25sp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/tvTime"
+                            android:text="@{creditNote.invoiceId}"
+                            tools:text="41"/>
 
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvInvoiceNo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="30sp"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="@id/tvTime"
-                                android:text="@{creditNote.invoiceId}"
-                                tools:text="41"/>
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/txInvoiceNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvInvoiceNo"
+                            android:text="Invoice No"
+                            tools:text="Invoice No "/>
 
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/txInvoiceNo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_16sp"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvInvoiceNo"
-                                android:text="Invoice No"
-                                tools:text="Invoice No "/>
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                        <LinearLayout
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/cardHeader"
+                        android:id="@+id/returnedView"
+                        android:orientation="vertical">
+                        <TextView
+                            android:fontFamily="@font/montserrat_medium"
+                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layout_constraintTop_toBottomOf="@+id/cardHeader"
-                            android:id="@+id/returnedView"
-                            android:orientation="vertical">
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text='@{"Credit Note No : " + creditNote.id}'
-                                android:gravity="center_horizontal"
-                                android:textSize="@dimen/txt_16sp"
-                                android:textColor="@android:color/holo_blue_light"
-                                tools:text="Credit Note No : 0002"/>
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text='@{creditNote.status}'
-                                android:gravity="center_horizontal"
-                                android:textSize="@dimen/txt_16sp"
-                                android:textColor="@android:color/holo_blue_light"
-                                tools:text="Cleared"/>
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text='@{creditNote.createdBy}'
-                                android:gravity="center_horizontal"
-                                android:textSize="@dimen/txt_16sp"
-                                android:textColor="@android:color/holo_blue_light"
-                                tools:text="Cleared by Admin"/>
-                            <View
-                                android:layout_width="match_parent"
-                                android:background="@color/lite_grey"
-                                android:layout_height="1dp"/>
-                        </LinearLayout>
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:text='@{"Credit Note No : " + creditNote.id}'
+                            android:gravity="center_horizontal"
+                            android:textSize="@dimen/txt_16sp"
+                            android:textColor="@color/colorPrimary"
+                            tools:text="Credit Note No : 0002"/>
+                        <TextView
+                            android:fontFamily="@font/montserrat_medium"
+                            android:textStyle="bold"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_height="wrap_content"
+                            android:text='@{creditNote.status}'
+                            android:gravity="center_horizontal"
+                            android:textSize="@dimen/txt_16sp"
+                            android:textColor='@{ isActive ? @color/colorPrimary  : @color/red }'
+                            tools:text="Cleared"/>
+                        <TextView
+                            android:fontFamily="@font/montserrat_medium"
+                            android:textStyle="bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text='@{creditNote.createdBy}'
+                            android:gravity="center_horizontal"
+                            android:textSize="@dimen/txt_16sp"
+                            android:layout_marginBottom="@dimen/_10dp"
+                            android:textColor="@color/colorPrimary"
+                            tools:text="Cleared by Admin"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:background="@color/lite_grey"
+                            android:layout_height="1dp"/>
+                    </LinearLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/returnedView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
+                        android:id="@+id/customerView">
+
+                        <TextView android:fontFamily="@font/montserrat_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_20dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/returnedView"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/txtCustomerDetails"
+                            android:text="Customer Details" />
+                        <TextView android:fontFamily="@font/montserrat_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_color_main"
+                            android:layout_marginStart="@dimen/_20dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/txtCustomerDetails"
+                            android:textSize="18sp"
+                            android:id="@+id/tvCustomerName"
+                            android:text="@{customer.customerName}"
+                            tools:text="Demo Name"/>
+
+                        <TextView android:fontFamily="@font/montserrat_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_20dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
+                            android:textSize="18sp"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/tvCustomerGst"
+                            android:text="@{customer.gstNo}"
+                            tools:text="Demo"/>
+
+                        <TextView android:fontFamily="@font/montserrat_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_20dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvCustomerGst"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="@dimen/_10dp"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/tvCustomeradress"
+                            android:text="@{customer.address}"
+                            tools:text="Demo"/>
+
+
+                        <TextView android:fontFamily="@font/montserrat_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_20dp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:visibility="@{isCustomerAvailable ? View.VISIBLE : View.GONE}"
-                            android:id="@+id/customerView">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="@dimen/_20dp"
+                            android:layout_marginBottom="@dimen/_10dp"
+                            android:textColor="@color/text_color_main"
+                            android:id="@+id/tvCustomerNumber"
+                            android:text="@{customer.shopContactNumber}"
+                            tools:text="Demo"/>
 
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:textSize="16sp"
-                                android:textColor="@color/text_color_main"
-                                android:id="@+id/txtCustomerDetails"
-                                android:text="Customer Details" />
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/text_color_main"
-                                android:layout_marginStart="@dimen/_20dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/txtCustomerDetails"
-                                android:textSize="18sp"
-                                android:id="@+id/tvCustomerName"
-                                android:text="@{customer.customerName}"
-                                tools:text="Demo Name"/>
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
-                                android:textSize="18sp"
-                                android:textColor="@color/text_color_main"
-                                android:id="@+id/tvCustomerGst"
-                                android:text="@{customer.gstNo}"
-                                tools:text="Demo"/>
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvCustomerGst"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textSize="18sp"
-                                android:layout_marginBottom="@dimen/_10dp"
-                                android:textColor="@color/text_color_main"
-                                android:id="@+id/tvCustomeradress"
-                                android:text="@{customer.address}"
-                                tools:text="Demo"/>
-
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textSize="18sp"
-                                android:layout_marginEnd="@dimen/_20dp"
-                                android:layout_marginBottom="@dimen/_10dp"
-                                android:textColor="@color/text_color_main"
-                                android:id="@+id/tvCustomerNumber"
-                                android:text="@{customer.shopContactNumber}"
-                                tools:text="Demo"/>
-
-
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:id="@+id/view2"
-                            android:background="@color/lite_grey"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/customerView"/>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:weightSum="2"
-                            android:padding="5dp"
-                            android:id="@+id/txtItem"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/view2"
-
-                            android:orientation="horizontal">
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvInvoiceID"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginStart="10dp"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_16sp"
-                                android:text="Items" />
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/item_name"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_16sp"
-                                android:gravity="end|center"
-                                android:layout_marginEnd="10dp"
-                                android:text="Amount"/>
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:id="@+id/view"
-                            android:background="@color/lite_grey"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:id="@+id/recyclerView"
-                            tools:listitem="@layout/item_invoice_item"
-                            tools:itemCount="1"
-                            android:nestedScrollingEnabled="false"
-                            app:layout_constraintTop_toBottomOf="@+id/view"/>
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="110dp"
-                            android:id="@+id/cardFooter"
-                            android:paddingTop="@dimen/_20dp"
-                            android:paddingStart="@dimen/_10dp"
-                            android:paddingEnd="@dimen/_10dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/recyclerView">
-
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvTotalItems"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_18sp"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/viewfooter"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:paddingBottom="@dimen/_20dp"
-                                android:text='@{"Total items : "+totalItem}'
-                                tools:text="Total items : 2"/>
-
-
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvSubTotal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_16sp"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:text='@{"Amount : "+ creditNote.amount}'
-                                tools:text="Amount : 1020"/>
-
-
-
-                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                                android:id="@+id/tvTotalAmount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textColor="@color/text_color_main"
-                                android:textSize="@dimen/txt_18sp"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/viewfooter"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:paddingBottom="@dimen/_20dp"
-                                android:text='@{"Total Amount : "+creditNote.totalAmount}'
-                                tools:text="Total Amount : 1020"/>
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:id="@+id/view2"
+                        android:background="@color/lite_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/customerView"/>
 
-                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:padding="5dp"
+                        android:id="@+id/txtItem"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view2"
+
+                        android:orientation="horizontal">
+
+                        <TextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvInvoiceID"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:textStyle="bold"
+                            android:text="Items" />
+
+                        <TextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/item_name"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:textStyle="bold"
+                            android:gravity="end|center"
+                            android:layout_marginEnd="10dp"
+                            android:text="Amount"/>
+                    </LinearLayout>
 
 
-            </soup.neumorphism.NeumorphCardView>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:id="@+id/recyclerView"
+                        tools:listitem="@layout/item_invoice_item_credit_note"
+                        tools:itemCount="1"
+                        android:nestedScrollingEnabled="false"
+                        app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@color/lite_grey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+                        android:layout_height="1dp"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cardFooter"
+                        android:paddingTop="@dimen/_20dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+
+
+
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvTotalItems"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:text='@{"Total items : "+totalItem}'
+                            tools:text="Total items : 2"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvCash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
+                            android:text='@{"Cash : "+creditNote.totalAmount}'
+                            tools:text="Cash : 1020.00 "/>
+
+
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:text='@{"Amount : "+ creditNote.amount}'
+                            tools:text="Amount : 1020"/>
+
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:id="@+id/viewfooter"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:background="@color/lite_grey"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvCash"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvTotalAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginBottom="@dimen/_10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/viewfooter"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:text='@{"Total Amount  :  "+creditNote.totalAmount}'
+                            tools:text="Total Amount  :  1020"/>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:padding="@dimen/_10dp">
+                android:layout_height="130dp"
+                android:visibility='@{isActive ? View.VISIBLE :  View.GONE }'
+                android:padding="10dp">
 
-                <soup.neumorphism.NeumorphCardView
+                <LinearLayout
                     android:id="@+id/btnSaleReturn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@color/text_color_heading"
-                    android:textStyle="bold"
+                    android:orientation="vertical"
+                    android:weightSum="5"
                     android:visibility="gone"
-                    app:layout_constraintEnd_toStartOf="@+id/btnCancel"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toStartOf="@+id/btnRefund"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_delete" />
-                </soup.neumorphism.NeumorphCardView>
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_15dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/salesreturn_light" />
 
-                <soup.neumorphism.NeumorphCardView
-                    android:id="@+id/btnRefunds"
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Sales Return"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnRefund"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textColor="@color/text_color_heading"
-                    android:textStyle="bold"
-                    app:hideView="@{creditNote.status}"
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:background="@drawable/corner_four_grey"
                     app:layout_constraintEnd_toStartOf="@+id/btnReceipt"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/btnSaleReturn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_delete">
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_15dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/refund" />
 
-                    </ImageView>
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Refund"
+                        android:gravity="center" />
 
-                </soup.neumorphism.NeumorphCardView>
+                </LinearLayout>
 
-                <soup.neumorphism.NeumorphCardView
+                <LinearLayout
                     android:id="@+id/btnReceipt"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textColor="@color/text_color_heading"
-                    android:textStyle="bold"
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_15dp"
+                    android:background="@drawable/corner_four_grey"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/btnRefunds"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:neumorph_shadowColorDark="@color/nuemph_shadow_dark"
-                    app:neumorph_shadowColorLight="@color/nuemph_shadow_light">
+                    app:layout_constraintStart_toEndOf="@+id/btnRefund"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_delete">
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_15dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/receipt" />
 
-                    </ImageView>
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Receipt"
+                        android:gravity="center" />
 
-                </soup.neumorphism.NeumorphCardView>
+                </LinearLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility='@{ isActive ? View.GONE  : View.VISIBLE  }'
+
+                android:weightSum="2">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:rotation="-25"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/refunded" />
+
+                    <TextView
+                        android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="REFUNDED"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/txt_12sp"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+                </FrameLayout>
+
+
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="CreditNote Refunded"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/txt_12sp"
+                    android:textStyle="bold"
+                    android:gravity="center|left"/>
+
+            </LinearLayout>
 
 
 

@@ -8,13 +8,7 @@ import java.io.Serializable
 
 @Entity(
     tableName = "invoices",
-    foreignKeys = [ForeignKey(
-        entity = Customer::class,
-        parentColumns = ["id"],
-        childColumns = ["customerId"],
-        onDelete = ForeignKey.SET_NULL
-    )],
-    indices = [Index(value = ["customerId"])]
+
 )
 data class Invoice(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -41,6 +35,7 @@ data class Invoice(
 
 @Entity(
     tableName = "invoice_items",
+
 )
 data class InvoiceItem(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

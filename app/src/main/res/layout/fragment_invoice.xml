@@ -14,12 +14,15 @@
         <variable
             name="customer"
             type="com.kreativesquadz.billkit.model.Customer" />
-
+        <variable
+            name="istTaxAvalaible"
+            type="Boolean" />
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -138,6 +141,16 @@
                                     android:textColor="@android:color/holo_blue_light"
                                     android:padding="@dimen/_5dp"
                                     tools:text="Returned"/>
+                                <TextView android:fontFamily="@font/montserrat_medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cancelled"
+                                    android:gravity="center_horizontal"
+                                    android:textSize="18sp"
+                                    app:hideOnReturnedCancel="@{invoice.status}"
+                                    android:textColor="@android:color/holo_red_dark"
+                                    android:padding="@dimen/_5dp"
+                                    tools:text="Cancelled"/>
                                 <View
                                     android:layout_width="match_parent"
                                     android:background="@color/lite_grey"
@@ -350,6 +363,21 @@
                                     android:text='@{"Discount : "+ invoice.discount}'
                                     tools:text="Discount : 1020"/>
 
+                                <TextView android:fontFamily="@font/montserrat_regular"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tvTotalTax"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvDiscount"
+                                    android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:gravity="end"
+                                    android:layout_marginEnd="@dimen/_10dp"
+                                    android:layout_marginStart="10dp"
+                                    android:textColor="@color/text_color_main"
+                                    tools:text="Total Tax  Rs 11100.00"/>
+
                                 <View
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
@@ -357,7 +385,7 @@
                                     android:layout_marginTop="@dimen/_10dp"
                                     android:background="@color/lite_grey"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvCash"/>
+                                    app:layout_constraintTop_toBottomOf="@+id/tvTotalTax"/>
 
                                 <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvTotalAmount"
@@ -398,6 +426,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:weightSum="5"
+                    app:hideViewCancel="@{invoice.status}"
                     android:layout_marginTop="@dimen/_10dp"
                     android:layout_marginBottom="@dimen/_10dp"
                     android:background="@drawable/corner_four_grey"

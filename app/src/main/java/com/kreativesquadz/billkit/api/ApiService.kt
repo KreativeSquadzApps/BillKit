@@ -15,7 +15,9 @@ import com.kreativesquadz.billkit.model.SavedOrderEntity
 import com.kreativesquadz.billkit.model.Staff
 import com.kreativesquadz.billkit.model.User
 import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.request.CreditNoteStatusUpdate
 import com.kreativesquadz.billkit.model.request.InvoiceRequest
+import com.kreativesquadz.billkit.model.request.InvoiceStatusUpdate
 import com.kreativesquadz.billkit.model.request.LoginRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -37,6 +39,11 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     @GET("api/invoices")
     fun loadInvoices(): LiveData<ApiResponse<List<Invoice>>>
+
+    @PUT( "/api/updateinvoicestatus")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateInvoiceStatus(@Body invoiceStatusUpdate: InvoiceStatusUpdate?): Response<ApiStatus>
+
 
 
     @POST("/api/addinvoice")
@@ -108,6 +115,12 @@ interface ApiService {
     @POST("/api/addcredit_notes")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addCreditNote(@Body creditNote: CreditNote): Response<ApiStatus>
+
+    @PUT( "/api/updatecredit_notes")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateCreditNoteStatus(@Body creditNoteStatusUpdate: CreditNoteStatusUpdate?): Response<ApiStatus>
+
+
 
 
     @GET("/api/staff/{adminId}")

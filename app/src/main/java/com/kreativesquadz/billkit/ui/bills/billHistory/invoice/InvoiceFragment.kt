@@ -13,9 +13,11 @@ import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
+import com.kreativesquadz.billkit.adapter.showCustomAlertDialog
 import com.kreativesquadz.billkit.databinding.FragmentInvoiceBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.DialogData
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.Invoice
 
@@ -24,18 +26,14 @@ class InvoiceFragment : Fragment() {
     val binding get() = _binding!!
     private val viewModel: InvoiceViewModel by activityViewModels()
     private lateinit var adapter: GenericAdapter<InvoiceItem>
+    var isTaxAvailable = false  
     val invoice by lazy {
         arguments?.getSerializable("invoice") as? Invoice
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.fetchInvoiceItems(invoice!!.id)
-    }
-
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         viewModel.fetchInvoiceItems(invoice!!.id)
     }
 
@@ -58,11 +56,24 @@ class InvoiceFragment : Fragment() {
               binding.invoice = it
               binding.isCustomerAvailable = it.customerId != null
               binding.customer = viewModel.getCustomerById(it.customerId.toString())
+
+              binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().minus(it.subtotal.toInt())
+              //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
+              it.discount?.apply{
+                  binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt())
+                  // binding.tvtotals.text = it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt()).toString()
+
+              }
           }
           viewModel.invoiceItems.observe(viewLifecycleOwner){
               setupRecyclerView(it)
-              Log.e("wwwwwww",it.toString())
+              it?.forEach {
+                  if(it.taxRate > 0){
+                      isTaxAvailable = true
+                  }
 
+              }
+              binding.istTaxAvalaible = isTaxAvailable
           }
       }
 
@@ -78,6 +89,31 @@ class InvoiceFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+        binding.btnCancel.setOnClickListener {
+            setupPopup()
+        }
+    }
+    private fun setupPopup(){
+        val dialogData = DialogData(
+            title = "Cancel Invoice",
+            info = "Are you sure you want to Cancel this invoice ${invoice?.id} ?",
+            positiveButtonText = "Cancel Invoice",
+            negativeButtonText = "Cancel"
+        )
+
+        showCustomAlertDialog(
+            context = requireActivity(),
+            dialogData = dialogData,
+            positiveAction = {
+                invoice?.id?.let {
+                    viewModel.updateInvoiceStatus(requireContext(),"Cancelled",it.toInt())
+                }
+            },
+            negativeAction = {
+                // Handle negative button action
+                // E.g., dismiss the dialog
+            }
+        )
     }
 
     private fun setupRecyclerView(list : List<InvoiceItem>?) {

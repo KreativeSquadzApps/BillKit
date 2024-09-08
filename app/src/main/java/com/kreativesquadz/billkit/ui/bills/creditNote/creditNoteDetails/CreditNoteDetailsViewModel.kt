@@ -1,17 +1,21 @@
 package com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteDetails
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kreativesquadz.billkit.Config
-import com.kreativesquadz.billkit.api.common.common.Resource
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
-import com.kreativesquadz.billkit.repository.InventoryRepository
+import com.kreativesquadz.billkit.worker.UpdateCreditNoteWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,4 +35,33 @@ class CreditNoteDetailsViewModel @Inject constructor(val creditNoteRepository: C
         }
     }
 
+    fun updateCreditNote(context: Context, invoiceId:Long,creditNote: CreditNote){
+        viewModelScope.launch {
+            creditNoteRepository.updateCreditNote(creditNote)
+            _creditNote.value = creditNoteRepository.getCreditNoteByInvoiceId(invoiceId)
+        }
+        updateCreditNoteStatusWork(context, creditNote.status,creditNote.id.toString())
+    }
+
+    private fun updateCreditNoteStatusWork (context: Context, status: String, id: String ) {
+        val data = Data.Builder()
+            .putString("id",id)
+            .putString("status", status)
+            .build()
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncWorkRequest = OneTimeWorkRequestBuilder<UpdateCreditNoteWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "updateCreditNoteStatusWorker",
+            ExistingWorkPolicy.KEEP,
+            syncWorkRequest
+        )
+    }
 }

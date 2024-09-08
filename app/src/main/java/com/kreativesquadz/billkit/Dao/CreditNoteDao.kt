@@ -1,12 +1,14 @@
 package com.kreativesquadz.billkit.Dao
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.kreativesquadz.billkit.model.CreditNote
+import com.kreativesquadz.billkit.model.Invoice
 
 @Dao
 interface CreditNoteDao {
@@ -41,4 +43,9 @@ interface CreditNoteDao {
 
     @Query("UPDATE invoices SET status = 'Returned' WHERE id = :invoiceId")
     suspend fun updateInvoiceStatus(invoiceId: Int)
+
+    @Query("SELECT * FROM credit_notes WHERE dateTime BETWEEN :startDate AND :endDate ORDER BY dateTime DESC")
+    fun getPagedCreditNoteByDateRange(startDate: Long, endDate: Long): PagingSource<Int, CreditNote>
+
+
 }

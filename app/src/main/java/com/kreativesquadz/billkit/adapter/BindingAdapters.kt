@@ -47,16 +47,27 @@ fun hideOnReturned2(view: TextView, text: String?) {
     } else {
         view.visibility =   View.GONE
     }
+   }
+}@BindingAdapter("hideOnReturnedCancel")
+fun hideOnReturnedCancel(view: TextView, text: String?) {
+    if (text != null) {
+        if (text == "Cancelled") {
+        view.visibility =   View.VISIBLE
+    } else {
+        view.visibility =   View.GONE
+    }
     }
 }
 @BindingAdapter("hideOnZero")
 fun hideOnZero(view: TextView, text: Int?) {
-    if (text != null) {
+    if (text != null ) {
         if (text > 0) {
             view.visibility = View.VISIBLE
         } else {
             view.visibility = View.GONE
         }
+    }else{
+        view.visibility = View.GONE
     }
 }
 
@@ -83,7 +94,17 @@ fun hideOnZeroDouble(view: TextView, text: Double?) {
 @BindingAdapter("hideView")
 fun hideView(view: View, text: String?) {
     if (text != null) {
-        if (text == "Returned") {
+        if (text == "Returned" || text == "Cancelled" ) {
+            view.visibility =   View.GONE
+        } else {
+            view.visibility =   View.VISIBLE
+        }
+    }
+
+}@BindingAdapter("hideViewCancel")
+fun hideViewCancel(view: View, text: String?) {
+    if (text != null) {
+        if (text == "Cancelled" ) {
             view.visibility =   View.GONE
         } else {
             view.visibility =   View.VISIBLE
@@ -134,7 +155,7 @@ fun timestampToDateTimeTxt(view: TextView, timestamp: String?) {
         try {
             val date = Date(timestamp.toLong())
             val format = SimpleDateFormat("dd-MM-yyyy HH:mm a", Locale.getDefault())
-            view.text = "Time : "+format.format(date)
+            view.text = format.format(date)
         } catch (e: Exception) {
             view.text = ""
         }

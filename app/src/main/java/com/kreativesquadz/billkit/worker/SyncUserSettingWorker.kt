@@ -22,13 +22,9 @@ class SyncUserSettingWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            Log.e("SyncUserSettingWorker", "ssssssss")
-
             val userSettingObj = repository.loadUserSetting(Config.userId)
-
-               val response = ApiClient.getApiService().updateUserSetting(userSettingObj.value?.data)
+             val response = ApiClient.getApiService().updateUserSetting(userSettingObj.value?.data)
                 if (response.body()?.message.toString().equals("User settings updated successfully")) {
-                        Log.e("SyncUserSettingWorker", "success")
                 }
 
             Result.success()

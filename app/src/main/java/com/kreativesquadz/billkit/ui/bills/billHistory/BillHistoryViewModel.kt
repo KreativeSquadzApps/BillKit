@@ -4,42 +4,60 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kreativesquadz.billkit.Config
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.api.common.common.Resource
-import com.kreativesquadz.billkit.model.Customer
-import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.UserSession
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
-import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.UserSessionRepository
+import com.kreativesquadz.billkit.utils.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class BillHistoryViewModel @Inject constructor(val repository: BillHistoryRepository,
-                                               val customerRepository: CustomerManagRepository,
                                                val loginRepository: LoginRepository,
+                                               val preferencesHelper: PreferencesHelper,
                                                val userSessionRepository: UserSessionRepository
 ) : ViewModel() {
-
-    lateinit var invoices : LiveData<Resource<List<Invoice>>>
-    lateinit var customers : LiveData<Resource<List<Customer>>>
+    var _invoices = MutableStateFlow<PagingData<Invoice>>(PagingData.empty())
+    val invoices: StateFlow<PagingData<Invoice>> = _invoices
+    lateinit var invoicess : LiveData<Resource<List<Invoice>>>
     val _loginResponse = MutableLiveData<UserSession>()
     var loginResponse : LiveData<UserSession> = _loginResponse
-    //val userSession: LiveData<UserSession> = userSessionRepository.userSession
-    fun getAllInvoices(): LiveData<Resource<List<Invoice>>> {
-        customers = customerRepository.loadAllCustomers()
-        invoices = repository.loadAllInvoices()
-        return invoices
+
+    init {
+         fetchAllInvoices()
     }
+
+    private fun fetchAllInvoices() {
+        invoicess = repository.loadAllInvoices()
+    }
+
+    fun getPagedInvoicesFromDb(startDate: Long, endDate: Long) {
+        viewModelScope.launch {
+            repository.getPagedInvoicesFromDb(startDate, endDate)
+                .cachedIn(viewModelScope)
+                .collect { pagingData ->
+                    _invoices.value = pagingData
+                }
+        }
+    }
+    fun saveSelectedDate(timestamp: Long) {
+        preferencesHelper.saveSelectedDate(timestamp)
+    }
+    fun getSelectedDate(): Long {
+        return preferencesHelper.getSelectedDate()
+    }
+
+
     fun getSesssion() {
-            _loginResponse.value = loginRepository.getUserSessions()
+     _loginResponse.value = loginRepository.getUserSessions()
     }
-
-
 
 }

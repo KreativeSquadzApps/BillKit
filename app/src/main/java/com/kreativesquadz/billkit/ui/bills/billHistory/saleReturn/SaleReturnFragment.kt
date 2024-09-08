@@ -33,6 +33,7 @@ class SaleReturnFragment : Fragment() {
     private lateinit var adapter: SalesReturnAdapter<InvoiceItem>
     val returnMode = listOf("CreditNote", "Refund")
     val returnModeOption = listOf("Cash", "Online")
+    var isRefund = false
     var total = 0.0
     var finaltotal = 0.0
     var tax = 0.0
@@ -82,6 +83,7 @@ class SaleReturnFragment : Fragment() {
 
     fun onClickListeners(){
         binding.btnAdd.setOnClickListener{
+
             invoice?.let {
                 val creditNote = CreditNote(
                     invoiceId = it.id,
@@ -94,9 +96,8 @@ class SaleReturnFragment : Fragment() {
                     invoiceItems = itemList
                 )
 
-                viewModel.generateCreditNote(requireContext(),creditNote)
+                viewModel.generateCreditNote(requireContext(),creditNote,isRefund)
                 findNavController().popBackStack()
-                Log.e("creditNotecreditNote",creditNote.toString())
             }
         }
     }
@@ -113,9 +114,11 @@ class SaleReturnFragment : Fragment() {
             if (selectedItem.equals("Refund")){
                 binding.isRefund = true
                 binding.returnMode = "REFUND"
+                isRefund = true
             }else{
                 binding.isRefund = false
                 binding.returnMode = "Save Credit Note"
+                isRefund = false
 
             }
         }

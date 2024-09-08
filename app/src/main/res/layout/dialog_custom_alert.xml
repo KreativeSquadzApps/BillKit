@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="dialogData"
+            type="com.kreativesquadz.billkit.model.DialogData" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Title -->
+        <TextView
+            android:fontFamily="@font/montserrat_bold"
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{dialogData.title}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_color_main"
+            android:layout_gravity="center_horizontal"
+            tools:text="Are you Sure?"/>
+
+        <!-- Info -->
+        <TextView
+            android:fontFamily="@font/montserrat_medium"
+            android:id="@+id/tvInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{dialogData.info}"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/text_color_main"
+            android:layout_gravity="center_horizontal"
+            tools:text="Are you Sure?"/>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+            <Button
+                android:id="@+id/btnNegative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{dialogData.negativeButtonText}"
+                android:layout_marginStart="10dp" />
+
+            <Button
+                android:id="@+id/btnPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10dp"
+                android:text="@{dialogData.positiveButtonText}" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

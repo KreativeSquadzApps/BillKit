@@ -15,6 +15,7 @@ import com.kreativesquadz.billkit.repository.SavedOrderRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.StaffManagRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
+import com.kreativesquadz.billkit.utils.PreferencesHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -95,7 +96,9 @@ object AppModule {
         return SavedOrderRepository(providedb)
     }
 
-
-
+    @Provides
+    fun providePreferencesHelper(@ApplicationContext appContext: Context): PreferencesHelper {
+        return PreferencesHelper(appContext)
+    }
 
 }

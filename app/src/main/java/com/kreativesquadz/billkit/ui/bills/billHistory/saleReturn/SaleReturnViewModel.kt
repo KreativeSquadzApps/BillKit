@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
+import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -19,6 +20,7 @@ import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.worker.SyncCreditNoteWorker
 import com.kreativesquadz.billkit.worker.SyncCustomerWorker
+import com.kreativesquadz.billkit.worker.UpdateInvoiceStatusWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,23 +33,27 @@ class SaleReturnViewModel @Inject constructor(val inventoryRepository: Inventory
     private val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
-    fun generateCreditNote(context: Context,creditNote: CreditNote){
+    fun generateCreditNote(context: Context,creditNote: CreditNote, isRefund: Boolean){
         viewModelScope.launch {
-            val existingNote = creditNoteRepository.getCreditNoteByInvoiceId(creditNote.invoiceId)
-            Log.e("existingNote",existingNote.toString())
-            Log.e("creditNotessssss",creditNote.toString())
-            if (existingNote != null) {
-                creditNoteRepository.updateCreditNote(creditNote)
-            } else {
-                creditNoteRepository.addCreditNote(creditNote)
+            if (!isRefund){
+                val existingNote = creditNoteRepository.getCreditNoteByInvoiceId(creditNote.invoiceId)
+                if (existingNote != null) {
+                    creditNoteRepository.updateCreditNote(creditNote)
+                } else {
+                    creditNoteRepository.addCreditNote(creditNote)
+                }
+                scheduleCreditNoteSync(context)
             }
-            creditNoteRepository.updateInvoiceStatus(creditNote.invoiceId.toInt())
+
             creditNote.invoiceItems.forEach{
                 billHistoryRepository.updateInvoiceItem(it.invoiceId,it.itemName,it.returnedQty!!)
             }
-            scheduleCreditNoteSync(context)
+            creditNoteRepository.updateInvoiceStatus(creditNote.invoiceId.toInt())
+            updateInvoiceStatusWork(context,"Returned",creditNote.invoiceId.toString())
+
         }
     }
+
 
     fun fetchInvoiceItems(invoiceId: Long) = viewModelScope.launch {
         try {
@@ -64,7 +70,7 @@ class SaleReturnViewModel @Inject constructor(val inventoryRepository: Inventory
     }
 
 
-    fun scheduleCreditNoteSync(context: Context) {
+    private fun scheduleCreditNoteSync(context: Context) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -79,6 +85,26 @@ class SaleReturnViewModel @Inject constructor(val inventoryRepository: Inventory
             syncWorkRequest
         )
     }
+    private fun updateInvoiceStatusWork (context: Context, status: String, invoiceId: String ) {
+        val data = Data.Builder()
+            .putString("invoiceId",invoiceId)
+            .putString("status", status)
+            .build()
 
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncWorkRequest = OneTimeWorkRequestBuilder<UpdateInvoiceStatusWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "updateInvoiceStatusWorker",
+            ExistingWorkPolicy.KEEP,
+            syncWorkRequest
+        )
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.Dao
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -15,8 +16,13 @@ interface InvoiceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
      fun insertInvoices(invoiceList: List<Invoice>)
 
-    @Query("SELECT * FROM invoices")
+    @Query("SELECT * FROM invoices ")
     fun getAllInvoices(): LiveData<List<Invoice>>
+
+
+    @Query("SELECT * FROM invoices WHERE invoiceDate BETWEEN :startDate AND :endDate ORDER BY invoiceDate DESC")
+    fun getPagedInvoicesByDateRange(startDate: Long, endDate: Long): PagingSource<Int, Invoice>
+
 
     @Query("DELETE FROM invoice_items")
     fun deleteInvoiceItems()
@@ -25,6 +31,10 @@ interface InvoiceDao {
     fun deleteInvoices()
     @Query("UPDATE invoice_items SET returnedQty = :returnedQty WHERE invoiceId = :invoiceId AND itemName = :itemName")
     suspend fun updateReturnedQty(invoiceId: Long, itemName: String, returnedQty: Int)
+
+
+    @Query("UPDATE invoices SET status = :status WHERE id = :invoiceId")
+    suspend fun updateInvoiceStatus(status : String,  invoiceId: Int)
     @Insert
     fun insertRepo(invoice: Invoice) : Long
     @Insert
