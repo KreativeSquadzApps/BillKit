@@ -28,10 +28,8 @@ class TabPrinterFrag : Fragment(),FragmentBaseFunctions {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTabPrinterBinding.inflate(inflater, container, false)
-
         observers()
         onClickListener()
-
         return binding.root
     }
 

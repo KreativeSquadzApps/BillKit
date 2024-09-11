@@ -167,7 +167,6 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             productMrp = productMrp
 
         )
-        Log.e("productMrp", productMrp.toString())
         list.add(homeItem)
         _items.value = list
     }
@@ -229,7 +228,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         var totalAmount = 0.0
 
         list.forEach { item ->
-            val itemTax = item.taxRate * item.unitPrice * item.quantity / 100
+            val itemTax = item.taxRate?:0 * item.unitPrice * item.quantity / 100
             totalTax += itemTax
             subtotal += item.totalPrice - itemTax
         }

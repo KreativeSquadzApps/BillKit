@@ -31,6 +31,9 @@ interface InventoryDao {
     @Query("DELETE FROM categories")
     fun deleteCategoryList()
 
+    @Query("DELETE FROM categories WHERE categoryId = :id")
+    fun deleteCategory(id : Long)
+
     //For Products
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -51,12 +54,24 @@ interface InventoryDao {
     @Query("DELETE FROM products")
     fun deleteProductList()
 
+    @Query("DELETE FROM products WHERE productId = :id")
+    fun deleteProduct(id : Long)
+
     @Query("UPDATE products SET productStock = productStock - :quantity WHERE productName = :productName")
     fun decrementProductStock(productName: String?, quantity: Int)
+
+    @Query("UPDATE products SET productStock = productStock + :quantity WHERE productId = :id")
+    fun updateProductStock(id: Long?, quantity: Int)
+
+
+
+
 
     @Query("SELECT * FROM products WHERE productBarcode = :barcode")
     fun selectProductByBarcode(barcode: String): Product
 
+    @Query("SELECT * FROM products WHERE productId = :productId")
+    fun selectProductById( productId: Long): Product
 
 
 

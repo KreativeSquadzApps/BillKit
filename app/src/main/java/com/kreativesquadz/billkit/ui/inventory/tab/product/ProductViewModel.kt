@@ -13,6 +13,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(val inventoryRepository: InventoryRepository) : ViewModel() {
     lateinit var products : LiveData<Resource<List<Product>>>
+    lateinit var categories : LiveData<Resource<List<Category>>>
+    fun getCategories(){
+        categories = inventoryRepository.loadAllCategory(Config.userId)
+    }
     fun getProducts(){
         products = inventoryRepository.loadAllProduct(Config.userId)
     }

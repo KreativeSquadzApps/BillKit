@@ -2,6 +2,7 @@ package com.kreativesquadz.billkit.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "products")
 data class Product(
@@ -16,7 +17,7 @@ data class Product(
     val productBarcode: String?=null,
     val productStockUnit: String?=null,
     val productTax: Double?=null,
-    val productStock: Int?=null,
+    var productStock: Int?=null,
     val productDefaultQty: Int?=null,
     val isSynced: Int = 0,
-)
+) : Serializable

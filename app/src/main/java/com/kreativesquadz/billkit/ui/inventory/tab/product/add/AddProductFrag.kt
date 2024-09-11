@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import com.kreativesquadz.billkit.BR
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.OptIn
+import androidx.appcompat.widget.SwitchCompat
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -20,7 +22,10 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.ViewDataBinding
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -28,9 +33,14 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
+import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
 import com.kreativesquadz.billkit.databinding.FragmentAddProductBinding
+import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.utils.collapse
+import com.kreativesquadz.billkit.utils.expand
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
 
@@ -39,6 +49,7 @@ import java.util.concurrent.Executors
 class AddProductFrag : Fragment() {
     private val viewModel: AddProductViewModel by viewModels()
     private var _binding: FragmentAddProductBinding? = null
+    private lateinit var adapter: GenericAdapter<GST>
     private val binding get() = _binding!!
     val stockUnitList = listOf("Numbers (Nos)", "Kilogram (Kg)",
                                "Liter (L)", "Milliliter (ml)", "Bag (Bag)",
@@ -55,10 +66,14 @@ class AddProductFrag : Fragment() {
     private val requestCodeCameraPermission = 200
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
+    private var selectedPosition: Int = -1 // Keeps track of selected switch position
+    private var selectedTaxValue: Double? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getCategories()
         viewModel.getProducts()
+        viewModel.getGstTax()
     }
 
     override fun onCreateView(
@@ -66,17 +81,22 @@ class AddProductFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddProductBinding.inflate(inflater, container, false)
+        setupRecyclerView()
         onClickListeners()
         setupSpinner()
         setupSpinnerStockUnit(stockUnitList)
         setupSpinnerTaxType(taxTypeList)
         observers()
         binding.isCameraOpen = isCameraClicked
-
         return binding.root
     }
 
     private fun observers(){
+        viewModel.gstTax.observe(viewLifecycleOwner) {
+            it.data?.let {
+                adapter.submitList(it)
+            }
+        }
         viewModel.products.observe(viewLifecycleOwner){
             Log.e("observe",it.data.toString())
         }
@@ -118,6 +138,21 @@ class AddProductFrag : Fragment() {
             }
             binding.isCameraOpen = isCameraClicked
         }
+        binding.header.setOnClickListener {
+            if (binding.dropdownContent.visibility == View.GONE) {
+                binding.dropdownContent.expand()
+                binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)
+                binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.white)
+                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+
+            } else {
+                binding.dropdownContent.collapse()
+                binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
+                binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.lite_grey_200)
+                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            }
+
+        }
     }
 
     private fun getProduct():Product{
@@ -129,7 +164,7 @@ class AddProductFrag : Fragment() {
             productMrp = binding.etProductMrp.text.toString().takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0,
             productBarcode = binding.etBarcode.text.toString(),
             productStockUnit = binding.dropdownStockUnit.text.toString(),
-            productTax = 0.0,
+            productTax = selectedTaxValue,
             productStock = binding.etCurrentStock.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
             productDefaultQty = binding.etDefaultQty.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
             isSynced = 0)
@@ -171,12 +206,29 @@ class AddProductFrag : Fragment() {
             staticItems = itemList
         )
         binding.dropdownTaxType.setAdapter(adapterStockUnit)
+        binding.dropdownTaxType.setText(itemList[0],false)
+
         binding.dropdownTaxType.setOnItemClickListener { _, _, position, _ ->
             val selectedItem = adapterStockUnit.getItem(position)
-            Toast.makeText(requireContext(), selectedItem, Toast.LENGTH_SHORT).show()
+            when(selectedItem){
+                "Price includes Tax" -> {
+                    binding.recyclerView.visibility = View.VISIBLE
+                }
+                "Price is without Tax" -> {
+                    binding.recyclerView.visibility = View.VISIBLE
+
+                }
+                "Zero Rated Tax" -> {
+
+                    binding.recyclerView.visibility = View.GONE
+
+                }
+                "Exempt Tax" -> {
+                    binding.recyclerView.visibility = View.GONE
+                }
+            }
         }
     }
-
 
     @OptIn(ExperimentalGetImage::class)
     private fun startCamera() {
@@ -253,6 +305,48 @@ class AddProductFrag : Fragment() {
         } else {
             Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun setupRecyclerView() {
+        adapter = GenericAdapter(
+            viewModel.gstTax.value?.data ?: emptyList(),
+            object : OnItemClickListener<GST> {
+                override fun onItemClick(item: GST) {
+                    val gstPosition = viewModel.gstTax.value?.data?.indexOf(item) ?: -1
+                    val currentHolder = binding.recyclerView.findViewHolderForAdapterPosition(gstPosition)
+                    if (currentHolder is GenericAdapter.ViewHolder<*>) {
+                        val currentBinding = currentHolder.binding as ViewDataBinding
+                        val currentSwitch = currentBinding.root.findViewById<SwitchCompat>(R.id.switchTax)
+
+                        if (selectedPosition == gstPosition) {
+                            // If the current item is already selected, unselect it
+                            currentSwitch.isChecked = false
+                            selectedPosition = -1 // Reset the selection
+                        } else {
+                            // Unselect previously selected switch if exists
+                            if (selectedPosition != -1) {
+                                val previousHolder = binding.recyclerView.findViewHolderForAdapterPosition(selectedPosition)
+                                if (previousHolder is GenericAdapter.ViewHolder<*>) {
+                                    val previousBinding = previousHolder.binding as ViewDataBinding
+                                    val previousSwitch = previousBinding.root.findViewById<SwitchCompat>(R.id.switchTax)
+                                    previousSwitch.isChecked = false // Uncheck the previous switch
+                                }
+                            }
+
+                            // Set the current switch as selected
+                            currentSwitch.isChecked = true
+                            selectedPosition = gstPosition // Update the selected position
+                            selectedTaxValue = item.taxAmount
+                        }
+                    }
+                }
+
+            },
+            R.layout.item_tax_add_products,
+            BR.gst // Variable ID generated by data binding
+        )
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     override fun onDestroyView() {

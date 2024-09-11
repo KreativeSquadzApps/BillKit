@@ -44,7 +44,10 @@
         tools:layout="CreditNote" >
         <argument android:name="invoiceId" app:argType="string" />
 
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_creditNoteFrag_to_creditNoteDetailsFragment"
             app:destination="@id/creditNoteDetailsFragment" />
     </fragment>
@@ -61,6 +64,12 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_inventoryFrag_to_addProductFrag"
             app:destination="@id/addProductFrag" />
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_inventoryFrag_to_editProductFragment"
+            app:destination="@id/editProductFragment" />
     </fragment>
 
     <fragment
@@ -82,10 +91,16 @@
         android:name="com.kreativesquadz.billkit.ui.staffManag.StaffManagementFrag"
         android:label="@string/menu_staff_management"
         tools:layout="@layout/fragment_staff_management" >
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_staffManagementFrag_to_addStaffFragment"
             app:destination="@id/addStaffFragment" />
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_staffManagementFrag_to_staffDetailsFragment"
             app:destination="@id/staffDetailsFragment" />
     </fragment>
@@ -114,10 +129,16 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_settingsFrag_to_invoiceSettings"
             app:destination="@id/invoiceSettings" />
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_settingsFrag_to_taxSettingsFragment"
             app:destination="@id/taxSettingsFragment" />
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_settingsFrag_to_printerSettingsFragment"
             app:destination="@id/printerSettingsFragment" />
     </fragment>
@@ -126,10 +147,16 @@
         android:name="com.kreativesquadz.billkit.ui.home.billDetails.BillDetailsFrag"
         android:label="Bill Details"
         tools:layout="@layout/fragment_bill_details" >
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_billDetailsFrag_to_receiptFrag"
             app:destination="@id/receiptFrag" />
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_billDetailsFrag_to_splitFragment"
             app:destination="@id/splitFragment" />
     </fragment>
@@ -144,18 +171,24 @@
         <argument
             android:name="target"
             app:argType="string" />
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_receiptFrag_to_nav_home"
             app:destination="@id/nav_home"
             app:popUpTo="@id/nav_home" />
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_receiptFrag_to_bluetoothDeviceFragment"
             app:destination="@id/bluetoothDeviceFragment" />
     </fragment>
     <fragment
         android:id="@+id/invoiceFragment"
         android:name="com.kreativesquadz.billkit.ui.bills.billHistory.invoice.InvoiceFragment"
-        android:label="InvoiceFragment" >
+        android:label="Invoice" >
         <argument
             android:name="invoice"
             app:argType="com.kreativesquadz.billkit.model.Invoice" />
@@ -169,7 +202,10 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_invoiceFragment_to_receiptFrag"
             app:destination="@id/receiptFrag" />
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_invoiceFragment_to_saleReturnFragment"
             app:destination="@id/saleReturnFragment" />
 
@@ -182,15 +218,15 @@
     <fragment
         android:id="@+id/createCustomerFrag"
         android:name="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerFrag"
-        android:label="CreateCustomerFrag" />
+        android:label="Create Customer" />
     <fragment
         android:id="@+id/addProductFrag"
         android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.add.AddProductFrag"
-        android:label="AddProductFrag" />
+        android:label="Add Product" />
     <fragment
         android:id="@+id/productFragment"
         android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.ProductFragment"
-        android:label="ProductFragment" >
+        android:label="Product" >
         <action
             app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
@@ -198,6 +234,12 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_productFragment_to_addProductFrag"
             app:destination="@id/addProductFrag" />
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_productFragment_to_editProductFragment"
+            app:destination="@id/editProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/saleReturnFragment"
@@ -217,7 +259,7 @@
     <fragment
         android:id="@+id/bluetoothDeviceFragment"
         android:name="com.kreativesquadz.billkit.ui.bluetoothPrinter.BluetoothDeviceFragment"
-        android:label="BluetoothDeviceFragment">
+        android:label="Bluetooth Device">
 
         <argument
             android:name="invoice"
@@ -230,12 +272,15 @@
     <fragment
         android:id="@+id/staffDetailsFragment"
         android:name="com.kreativesquadz.billkit.ui.staffManag.staffDetails.StaffDetailsFragment"
-        android:label="StaffDetailsFragment" >
+        android:label="Staff Details" >
         <argument
             android:name="staff"
             app:argType="com.kreativesquadz.billkit.model.Staff" />
 
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_staffDetailsFragment_to_billHistoryFrag"
             app:destination="@id/billHistoryFrag" />
     </fragment>
@@ -247,8 +292,11 @@
     <fragment
         android:id="@+id/splitFragment"
         android:name="com.kreativesquadz.billkit.ui.home.billDetails.split.SplitFragment"
-        android:label="SplitFragment" >
-        <action
+        android:label="Split" >
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_splitFragment_to_receiptFrag"
             app:destination="@id/receiptFrag" />
     </fragment>
@@ -256,9 +304,20 @@
         android:id="@+id/printerSettingsFragment"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.printerSettings.PrinterSettingsFragment"
         android:label="PrinterSettingsFragment" >
-        <action
+        <action app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_printerSettingsFragment_to_bluetoothDeviceFragment"
             app:destination="@id/bluetoothDeviceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.edit.EditProductFragment"
+        android:label="Edit Product">
+        <argument
+            android:name="product"
+            app:argType="com.kreativesquadz.billkit.model.Product" />
     </fragment>
 
 

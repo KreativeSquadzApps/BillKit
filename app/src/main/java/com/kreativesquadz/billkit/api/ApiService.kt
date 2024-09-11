@@ -19,8 +19,12 @@ import com.kreativesquadz.billkit.model.request.CreditNoteStatusUpdate
 import com.kreativesquadz.billkit.model.request.InvoiceRequest
 import com.kreativesquadz.billkit.model.request.InvoiceStatusUpdate
 import com.kreativesquadz.billkit.model.request.LoginRequest
+import com.kreativesquadz.billkit.model.request.ProductStockRequest
+import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -96,6 +100,9 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     fun loadCategories(@Path("userId") userId: Long): LiveData<ApiResponse<List<Category>>>
 
+    @DELETE("/api/deletecategory/{id}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun deleteCategory(@Path("id") id: Long): Response<ResponseBody>
 
 
     @GET("/api/products/{userId}")
@@ -106,6 +113,19 @@ interface ApiService {
     @POST("/api/addproducts")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addProduct(@Body product: Product): Response<ApiStatus>
+
+    @DELETE("/api/deleteproduct/{productId}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun deleteProduct(@Path("productId") id: Long): Response<ResponseBody>
+
+    @PUT( "/api/updateproductstock")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateProductStock(@Body productStockRequest: ProductStockRequest?): Response<ApiStatus>
+
+    @PUT("/api/updateproduct")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateProduct(@Body product: Product?): Response<ApiStatus>
+
 
 
     @GET("/api/credit_notes/{userId}")
@@ -119,8 +139,6 @@ interface ApiService {
     @PUT( "/api/updatecredit_notes")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun updateCreditNoteStatus(@Body creditNoteStatusUpdate: CreditNoteStatusUpdate?): Response<ApiStatus>
-
-
 
 
     @GET("/api/staff/{adminId}")

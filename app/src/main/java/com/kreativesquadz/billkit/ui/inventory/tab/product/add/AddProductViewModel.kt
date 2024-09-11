@@ -15,7 +15,9 @@ import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.worker.SyncProductsWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +25,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddProductViewModel @Inject constructor(val inventoryRepository: InventoryRepository) : ViewModel() {
+class AddProductViewModel @Inject constructor(val inventoryRepository: InventoryRepository,
+                                              val gstTaxRepository: GstTaxRepository) : ViewModel() {
     private var _productsStatus = MutableLiveData<ApiStatus>()
     val productsStatus: LiveData<ApiStatus> get() = _productsStatus
 
@@ -31,6 +34,12 @@ class AddProductViewModel @Inject constructor(val inventoryRepository: Inventory
     lateinit var category : LiveData<Resource<List<Category>>>
     private val _barcodeText = MutableLiveData<String>()
     val barcodeText: LiveData<String> get() = _barcodeText
+    lateinit var gstTax : LiveData<Resource<List<GST>>>
+
+
+    fun getGstTax(){
+        gstTax = gstTaxRepository.loadAllgstTax(Config.userId.toInt())
+    }
 
     fun setBarcodeText(text: String) {
         _barcodeText.value = text

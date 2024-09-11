@@ -13,11 +13,11 @@ import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.model.request.ProductStockRequest
 import javax.inject.Inject
 
 class InventoryRepository @Inject constructor(private val db : AppDatabase) {
     private val inventoryDao: InventoryDao = db.inventoryDao()
-    private val creditNoteDao: CreditNoteDao = db.creditNoteDao()
 
     //For Category
     fun loadAllCategory(userId:Long): LiveData<Resource<List<Category>>> {
@@ -60,6 +60,12 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
     suspend fun markCategoriesAsSynced(category: Category) {
         inventoryDao.update(category)
     }
+
+     fun deleteCategory(id: Long)  {
+        inventoryDao.deleteCategory(id)
+    }
+
+
 
 
     //For Products
@@ -106,15 +112,36 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
         inventoryDao.updateProduct(product)
     }
 
+
     fun getProductByBarcode(barcode: String): Product {
         return inventoryDao.selectProductByBarcode(barcode)
     }
+
+     fun deleteProduct(id: Long)  {
+        inventoryDao.deleteProduct(id)
+     }
+
+     fun updateProductStock(id: Long, quantity: Int) {
+        inventoryDao.updateProductStock(id,quantity)
+     }
+
+    suspend fun updateProduct(product: Product) {
+        inventoryDao.updateProduct(product)
+    }
+
+    fun getProduct(id: Long): Product {
+        return inventoryDao.selectProductById(id)
+    }
+
+
+
 
 
     //For Credit Notes
 
 
      fun decrementProductStock(productName: String?, quantity: Int) {
+
         inventoryDao.decrementProductStock(productName,quantity)
     }
 

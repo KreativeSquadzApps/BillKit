@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
 
         <variable
             name="product"
@@ -14,66 +15,126 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="5dp"
+        android:layout_marginStart="@dimen/_10dp"
+        android:layout_marginEnd="@dimen/_10dp"
+        android:layout_marginTop="@dimen/_10dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
+             android:background="@drawable/corner_four_grey"
+            android:weightSum="3"
             android:padding="16dp">
 
-            <!-- Customer Name -->
-            <TextView android:fontFamily="@font/montserrat_regular"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{product.productName}"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingBottom="4dp"
-                tools:text="Name" />
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <!-- Shop Contact Number -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{product.category}"
-                android:paddingBottom="4dp"
-                tools:text="Category" />
+                <!-- Customer Name -->
+                <TextView android:fontFamily="@font/montserrat_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{product.productName}"
+                    android:textSize="@dimen/txt_18sp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/text_color_main"
+                    tools:text="Name" />
 
-            <!-- GST Number -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{product.productBarcode}"
-                android:paddingBottom="4dp"
-                tools:text="Barcode" />
+                <!-- Shop Contact Number -->
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{product.category}"
+                    android:paddingBottom="4dp"
+                    android:textSize="@dimen/txt_13sp"
+                    android:textColor="@color/colorPrimary"
+                    tools:text="Category" />
 
-            <!-- Total Sales -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{product.productStock}"
-                android:paddingBottom="4dp"
-                tools:text="100" />
+                <!-- GST Number -->
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='@{product.productBarcode == null || product.productBarcode.isEmpty() ? "No barcode added" : product.productBarcode }'
+                    android:paddingBottom="4dp"
+                    android:textSize="@dimen/txt_13sp"
+                    android:textColor="@color/colorPrimary"
+                    tools:text="Barcode" />
 
-            <!-- Address -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{product.productPrice}"
-                android:paddingBottom="4dp"
-                tools:text="Rs 200" />
 
-            <!-- Credit Amount -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:id="@+id/creditAmountTextView"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current Stock : "
+                        android:textSize="@dimen/txt_13sp"
+                        android:textColor="@color/text_color_main"
+                        android:paddingBottom="4dp" />
+
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{product.productStock}"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/txt_14sp"
+                        android:textColor="@color/colorPrimary"
+                        android:paddingBottom="4dp"
+                        tools:text="100" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{product.productTax}"
-                android:paddingBottom="4dp"
-                tools:text="10%" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom|end"
+                android:layout_weight="2">
+                <!-- Address -->
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{"Rs "+product.productPrice}'
+                    android:paddingBottom="2dp"
+                    android:textSize="@dimen/txt_13sp"
+                    android:textColor="@color/colorPrimary"
+                    tools:text="Rs 200" />
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{product.productMrp == null || product.productMrp == 0 ? View.GONE : View.VISIBLE}"
+                    android:text='@{"MRP "+product.productMrp}'
+                    android:paddingBottom="2dp"
+                    android:textSize="@dimen/txt_13sp"
+                    android:textColor="@color/colorPrimary"
+                    tools:text="MRP 200" />
+
+                <!-- Credit Amount -->
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:id="@+id/creditAmountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color_main"
+                    android:textSize="@dimen/txt_12sp"
+                    android:layout_marginBottom="3dp"
+                    android:visibility="@{product.productTax == null || product.productTax == 0 ? View.GONE : View.VISIBLE}"
+                    android:text='@{ "Tax : "+ product.productTax }'
+                    android:paddingBottom="4dp"
+                    tools:text="Tax : 10%" />
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
