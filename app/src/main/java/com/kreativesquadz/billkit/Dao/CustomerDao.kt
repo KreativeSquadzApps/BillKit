@@ -23,6 +23,9 @@ interface CustomerDao {
     @Query("SELECT * FROM customers WHERE id = :id")
     fun getCustomer(id: String): Customer
 
+    @Query("SELECT * FROM customers WHERE id = :id")
+    fun getCustomerLiveData(id: String): LiveData<Customer>
+
     @Query("DELETE FROM customers")
     fun deleteCustomer()
 
@@ -31,4 +34,18 @@ interface CustomerDao {
 
     @Update
     suspend fun update(customer: Customer)
+
+    @Query("UPDATE customers SET creditAmount = creditAmount + :creditedAmount WHERE id = :id")
+    fun updateCreditAmount(id: Long?, creditedAmount: Double)
+
+    @Query("UPDATE customers SET creditAmount = creditAmount - :creditedAmount WHERE id = :id")
+    fun removeCreditAmount(id: Long?, creditedAmount: Double)
+
+
+    @Query("DELETE FROM customers WHERE id = :id")
+    fun deleteCustomer(id : Long)
+
+
+
+
 }

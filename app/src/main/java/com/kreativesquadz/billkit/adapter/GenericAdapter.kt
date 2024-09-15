@@ -35,7 +35,7 @@ class GenericAdapter<T>(
     override fun getItemCount(): Int = items.size
 
     fun submitList(newItems: List<T>) {
-        items = newItems
+        items = newItems.toList()  // This creates a fresh copy of the list
         notifyDataSetChanged()
     }
 

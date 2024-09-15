@@ -14,6 +14,7 @@ import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.model.CustomerCreditDetail
 import com.kreativesquadz.billkit.model.Invoice
 import timber.log.Timber
 import java.io.IOException
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 class CustomerManagRepository @Inject constructor( private val db : AppDatabase) {
     private val customerDao: CustomerDao = db.customerDao()
+    private val creditDetailsDao = db.creditDetailsDao()
 
     fun loadAllCustomers(): LiveData<Resource<List<Customer>>> {
         return object : NetworkBoundResource<List<Customer>, List<Customer>>() {
@@ -49,23 +51,64 @@ class CustomerManagRepository @Inject constructor( private val db : AppDatabase)
             }
         }.asLiveData()
     }
-    suspend fun addCustomer(customer: Customer) : LiveData<Boolean>  {
+
+    suspend fun addCustomer(customer: Customer): LiveData<Boolean> {
         val statusLiveData = MutableLiveData<Boolean>()
         customerDao.insertCustomer(customer)
         statusLiveData.value = true
-       return statusLiveData
+        return statusLiveData
     }
 
     fun getCustomer(id: String): Customer {
         return customerDao.getCustomer(id)
     }
 
+    fun getCustomerLiveData(id: String): LiveData<Customer> {
+        return customerDao.getCustomerLiveData(id)
+    }
+
+
     suspend fun getUnsyncedCustomers(): List<Customer> {
         return customerDao.getUnsyncedCustomers()
     }
 
     suspend fun markCustomerAsSynced(customer: Customer) {
-         customerDao.update(customer.copy(isSynced = 1))
+        customerDao.update(customer.copy(isSynced = 1))
+    }
+
+    suspend fun updateCreditAmount(id: Long, creditAmount: Double) {
+        customerDao.updateCreditAmount(id, creditAmount)
+        creditDetailsDao.insertCustomerCreditDetail(
+            CustomerCreditDetail(
+                customerId = id,
+                creditDate = System.currentTimeMillis().toString(),
+                creditType = "Manual",
+                creditAmount = creditAmount
+            )
+        )
+    }
+
+    suspend fun removeCreditAmount(id: Long, creditAmount: Double, type: String) {
+        customerDao.removeCreditAmount(id, creditAmount)
+        creditDetailsDao.insertCustomerCreditDetail(
+            CustomerCreditDetail(
+                customerId = id,
+                creditDate = System.currentTimeMillis().toString(),
+                creditType = type,
+                creditAmount = creditAmount
+            )
+        )
+    }
+
+    suspend fun updateCustomer(customer: Customer) : LiveData<Boolean>  {
+        val statusLiveData = MutableLiveData<Boolean>()
+        customerDao.update(customer)
+        statusLiveData.value = true
+        return statusLiveData
+    }
+
+    fun deleteCustomer(id: Long)  {
+        customerDao.deleteCustomer(id)
     }
 
 }

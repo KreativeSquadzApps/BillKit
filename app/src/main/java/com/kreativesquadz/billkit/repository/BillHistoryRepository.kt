@@ -108,4 +108,9 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
         return invoiceDao.getInvoiceItems(id)
     }
 
+
+    fun getAllInvoicesFlow(customerId: Long): Flow<List<Invoice>> {
+        return invoiceDao.getAllInvoicesFlow(customerId)
+    }
+
 }

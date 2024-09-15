@@ -73,6 +73,7 @@ class InvoiceFragment : Fragment() {
                   }
 
               }
+              Log.e("ooooooooooo",it.toString())
               binding.istTaxAvalaible = isTaxAvailable
           }
       }

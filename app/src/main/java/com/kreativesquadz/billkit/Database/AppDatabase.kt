@@ -6,6 +6,7 @@ import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.kreativesquadz.billkit.Dao.CompanyDetailsDao
+import com.kreativesquadz.billkit.Dao.CreditDetailsDao
 import com.kreativesquadz.billkit.Dao.CreditNoteDao
 import com.kreativesquadz.billkit.Dao.CustomerDao
 import com.kreativesquadz.billkit.Dao.GSTDao
@@ -20,6 +21,7 @@ import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.model.CustomerCreditDetail
 import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
@@ -36,7 +38,8 @@ import kotlin.concurrent.Volatile
 
 
 @Database(entities = [User::class,Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class,
-    UserSetting::class,Category::class, Product::class,CreditNote::class, Staff::class,UserSession::class,GST::class, SavedOrderEntity::class, PdfSettings::class,ThermalPrinterSetup::class], version = 89, exportSchema = false)
+    UserSetting::class,Category::class, Product::class,CreditNote::class, Staff::class,UserSession::class,GST::class,
+    SavedOrderEntity::class, PdfSettings::class,ThermalPrinterSetup::class, CustomerCreditDetail::class], version = 91, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{
@@ -68,5 +71,6 @@ abstract class AppDatabase  : RoomDatabase() {
     abstract fun staffDao(): StaffDao
     abstract fun gstDao(): GSTDao
     abstract fun savedOrderDao(): SavedOrderDao
+    abstract fun creditDetailsDao(): CreditDetailsDao
 
 }

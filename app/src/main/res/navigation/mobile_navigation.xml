@@ -84,6 +84,11 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_customerManagementFrag_to_createCustomerFrag"
             app:destination="@id/createCustomerFrag" />
+        <action
+            android:id="@+id/action_customerManagementFrag_to_customerDetailsFragment"
+            app:destination="@id/customerDetailsFragment" />
+
+
     </fragment>
 
     <fragment
@@ -319,6 +324,50 @@
             android:name="product"
             app:argType="com.kreativesquadz.billkit.model.Product" />
     </fragment>
+    <fragment
+        android:id="@+id/customerDetailsFragment"
+        android:name="com.kreativesquadz.billkit.ui.customerManag.customerDetails.CustomerDetailsFragment"
+        android:label="Customer Details">
+
+        <argument
+            android:name="customer"
+            app:argType="com.kreativesquadz.billkit.model.Customer"/>
+        <action
+            android:id="@+id/action_customerDetailsFragment_to_invoiceFragment"
+            app:destination="@id/invoiceFragment"
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_customerDetailsFragment_to_addCreditFragment"
+            app:destination="@id/addCreditFragment" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_customerDetailsFragment_to_editCustomerFragment"
+            app:destination="@id/editCustomerFragment" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/addCreditFragment"
+        android:name="com.kreativesquadz.billkit.ui.customerManag.customerDetails.addCreditFrag.AddCreditFragment"
+        android:label="Add Credit" >
+        <argument
+            android:name="customer"
+            app:argType="com.kreativesquadz.billkit.model.Customer" />
+    </fragment>
+    <fragment
+        android:id="@+id/editCustomerFragment"
+        android:name="com.kreativesquadz.billkit.ui.customerManag.editCustomer.EditCustomerFragment"
+        android:label="EditCustomerFragment" />
 
 
 </navigation>

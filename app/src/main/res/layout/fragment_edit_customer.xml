@@ -5,43 +5,15 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerViewModel" />
-
-        <variable
-            name="resetValue"
-            type="String" />
+            name="customer"
+            type="com.kreativesquadz.billkit.model.Customer" />
     </data>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10dp"
-                android:layout_marginEnd="@dimen/_10dp"
-                android:background="@drawable/corner_four_grey">
-
-                <TextView
-                    android:fontFamily="@font/montserrat_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/txt_16sp"
-                    android:padding="@dimen/_10dp"
-                    android:text="Load From Contact"/>
-
-            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -59,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Customer Name"
-                    android:text="@{resetValue}"
+                    android:text="@{customer.customerName}"
                     android:id="@+id/etCustomerName"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -80,7 +52,7 @@
                     android:layout_weight="1"
                     android:hint="Shop Contact Number"
                     android:inputType="number"
-                    android:text="@{resetValue}"
+                    android:text="@{customer.shopContactNumber}"
                     android:id="@+id/etShopContactNumber"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -101,30 +73,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="GST Number"
-                    android:text="@{resetValue}"
+                    android:text="@{customer.gstNo}"
                     android:id="@+id/etGSTNo"/>
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10dp"
-                android:layout_marginEnd="@dimen/_10dp"
-                android:layout_marginBottom="@dimen/_5dp"
-                android:layout_marginTop="@dimen/_5dp"
-                app:endIconMode="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <AutoCompleteTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Total Sales"
-                    android:inputType="number"
-                    android:text="@{resetValue}"
-                    android:id="@+id/etTotalSales"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -145,40 +95,18 @@
                     android:layout_weight="1"
                     android:hint="Address"
                     android:lines="3"
-                    android:text="@{resetValue}"
+                    android:text="@{customer.address}"
                     android:id="@+id/etAddress"/>
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10dp"
-                android:layout_marginEnd="@dimen/_10dp"
-                android:layout_marginBottom="@dimen/_5dp"
-                android:layout_marginTop="@dimen/_5dp"
-                app:endIconMode="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <AutoCompleteTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Credit Amount"
-                    android:inputType="number"
-                    android:text="@{resetValue}"
-                    android:id="@+id/etCreditAmount"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Add"
+                android:text="Update"
                 android:layout_marginStart="@dimen/_10dp"
                 android:layout_marginEnd="@dimen/_10dp"
-                android:id="@+id/btnSubmit"
+                android:id="@+id/btnUpdate"
                 android:textSize="@dimen/txt_18sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
@@ -186,6 +114,5 @@
 
         </LinearLayout>
 
-    </ScrollView>
 
 </layout>

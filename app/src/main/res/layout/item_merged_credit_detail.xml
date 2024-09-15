@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
+        <variable
+            name="mergedCreditDetail"
+            type="com.kreativesquadz.billkit.model.MergedCreditDetail" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_marginStart="@dimen/_10dp"
+        android:layout_marginEnd="@dimen/_10dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:background="@drawable/corner_four_grey"
+        android:padding="16dp">
+
+        <TextView
+            android:fontFamily="@font/montserrat_medium"
+            android:id="@+id/creditDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="@dimen/txt_16sp"
+            android:textColor="@color/text_color_main"
+            app:dateStamp="@{mergedCreditDetail.date}"
+            tools:text="date" />
+
+        <TextView
+            android:fontFamily="@font/montserrat_regular"
+            android:id="@+id/creditType"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="@dimen/txt_16sp"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:text="@{mergedCreditDetail.creditType}"
+            tools:text="Manual"/>
+
+        <TextView
+            android:fontFamily="@font/montserrat_medium"
+            android:id="@+id/creditAmount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="@dimen/txt_16sp"
+            app:isManual="@{mergedCreditDetail.creditType}"
+            android:gravity="end"
+            android:textStyle="bold"
+            android:text='@{"- "+Double.toString(mergedCreditDetail.amount)}'
+            tools:text="- 80000" />
+
+
+
+    </LinearLayout>
+</layout>

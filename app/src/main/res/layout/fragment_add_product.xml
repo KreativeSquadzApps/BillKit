@@ -329,7 +329,6 @@
                     android:layout_height="match_parent"
                     app:cardCornerRadius="@dimen/_5dp"
                     app:cardUseCompatPadding="true"
-
                     android:textStyle="bold"
                     app:cardBackgroundColor="@color/colorPrimaryDark"
                     android:textColor="@color/text_color_heading"
@@ -346,6 +345,7 @@
                         android:textColor="@color/white"/>
 
                 </androidx.cardview.widget.CardView>
+
 
         </LinearLayout>
 

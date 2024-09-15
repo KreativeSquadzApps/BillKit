@@ -8,6 +8,7 @@ import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.BluetoothRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
+import com.kreativesquadz.billkit.repository.CreditRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
@@ -99,6 +100,11 @@ object AppModule {
     @Provides
     fun providePreferencesHelper(@ApplicationContext appContext: Context): PreferencesHelper {
         return PreferencesHelper(appContext)
+    }
+
+    @Provides
+    fun provideCreditRepository(providedb: AppDatabase): CreditRepository {
+        return CreditRepository(providedb)
     }
 
 }

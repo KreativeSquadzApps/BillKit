@@ -1,6 +1,8 @@
 package com.kreativesquadz.billkit.ui.customerManag
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,18 +17,24 @@ import com.kreativesquadz.billkit.databinding.FragmentCustomerManagementBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.ui.customerManag.customerDetails.CustomerSharedViewModel
 
 class CustomerManagementFrag : Fragment() {
     var _binding: FragmentCustomerManagementBinding? = null
     val binding get() = _binding!!
     private lateinit var adapter: GenericAdapter<Customer>
     private val viewModel: CustomerManagementViewModel by activityViewModels()
+    private val sharedViewModel: CustomerSharedViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getCustomers()
     }
+//    override fun onResume() {
+//        super.onResume()
+//        viewModel.getCustomers()
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +48,21 @@ class CustomerManagementFrag : Fragment() {
         return binding.root
     }
 
+
+
     private fun onClickListeners(){
+        binding.etCustomer.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.customer.value?.data?.let {
+                    adapter.submitList(it.filter { customer ->
+                        customer.customerName.contains(s.toString(), ignoreCase = true)})
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         binding.btnCreateCustomer.setOnClickListener {
             findNavController().navigate(R.id.action_customerManagementFrag_to_createCustomerFrag)
         }
@@ -65,7 +87,10 @@ class CustomerManagementFrag : Fragment() {
             viewModel.customer.value?.data ?: emptyList(),
             object : OnItemClickListener<Customer> {
                 override fun onItemClick(item: Customer) {
-                    // Handle item click
+                    sharedViewModel.setCustomer(item.id.toString())
+                    val action = CustomerManagementFragDirections.actionCustomerManagementFragToCustomerDetailsFragment(item)
+                    findNavController().navigate(action)
+
                 }
             },
             R.layout.item_customer,

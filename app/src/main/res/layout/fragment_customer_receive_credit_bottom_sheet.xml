@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<data>
+    <variable
+        name="customer"
+        type="com.kreativesquadz.billkit.model.Customer" /> <!-- Replace "your.package.name" with your actual package name -->
+
+</data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lite_grey"
+            android:orientation="horizontal"
+            >
+
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_weight="1"
+                android:id="@+id/btnDismiss"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="@dimen/_10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@android:drawable/ic_delete"
+                android:layout_height="34dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:padding="16dp">
+
+            <!-- Customer Name -->
+            <TextView android:fontFamily="@font/montserrat_medium"
+                android:id="@+id/customerNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text='@{customer.CustomerName}'
+                android:textSize="@dimen/txt_16sp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:paddingBottom="4dp"
+                tools:text="DEMO" />
+
+            <!-- Shop Contact Number -->
+
+
+
+            <!-- Credit Amount -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dp"
+                android:orientation="horizontal">
+                <TextView android:fontFamily="@font/montserrat_medium"
+                    android:id="@+id/shopContactNumberTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{customer.ShopContactNumber}'
+                    android:textColor="@color/text_color_main"
+                    android:textSize="@dimen/txt_14sp"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:paddingBottom="4dp"
+                    tools:text=" 9971380539" />
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:id="@+id/creditAmountTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="end"
+                    android:layout_marginEnd="@dimen/_10dp"
+                    android:text="@{customer.creditAmount}"
+                    android:textSize="@dimen/txt_16sp"
+                    android:paddingBottom="4dp"
+                    android:textStyle="bold"
+                    tools:text="5500.00" />
+            </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconMode="none">
+
+                <AutoCompleteTextView
+                    android:id="@+id/etCreditAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="Received Amount" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/_20dp"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:id="@+id/btnCash"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_5dp"
+                    android:layout_marginEnd="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toStartOf="@+id/btnOnline"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:padding="@dimen/_5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="4"
+                        android:layout_gravity="center"
+                        android:src="@drawable/cash_light"
+                        android:id="@+id/backImage" />
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_main"
+                        android:text="Cash"
+                        android:textSize="@dimen/txt_12sp"
+                        android:layout_weight="1"
+                        android:id="@+id/tvCash"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnOnline"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_5dp"
+                    android:layout_marginEnd="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toStartOf="@+id/btnWaveOf"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btnCash"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:padding="@dimen/_5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_18dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/creditcard_light" />
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Online"
+                        android:textSize="@dimen/txt_12sp"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnWaveOf"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_5dp"
+                    android:layout_marginEnd="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btnOnline"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:padding="@dimen/_5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_18dp"
+                        android:layout_weight="4"
+                        android:src="@drawable/writing_light" />
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_12sp"
+                        android:text="Waive OFF"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+</layout>

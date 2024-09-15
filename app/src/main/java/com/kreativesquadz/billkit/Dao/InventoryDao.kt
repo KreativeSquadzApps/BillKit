@@ -64,9 +64,6 @@ interface InventoryDao {
     fun updateProductStock(id: Long?, quantity: Int)
 
 
-
-
-
     @Query("SELECT * FROM products WHERE productBarcode = :barcode")
     fun selectProductByBarcode(barcode: String): Product
 

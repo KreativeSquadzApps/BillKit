@@ -3,6 +3,7 @@ package com.kreativesquadz.billkit.adapter
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.paging.Config
 import com.kreativesquadz.billkit.R
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -71,6 +72,15 @@ fun hideOnZero(view: TextView, text: Int?) {
     }
 }
 
+@BindingAdapter("isPriceStringEmpty")
+fun isPriceStringEmpty(view: TextView, price: String?) {
+    if (price.isNullOrEmpty()) {
+        view.text = "${com.kreativesquadz.billkit.Config.CURRENCY} 0.0"
+    } else {
+        view.text = "${com.kreativesquadz.billkit.Config.CURRENCY} $price"
+    }
+}
+
 @BindingAdapter("rate")
 fun rate(view: TextView, text: String) {
     // This splits the text at '0' and joins it back together with spaces
@@ -120,6 +130,24 @@ fun isSelected(textView: TextView, isSelected: Boolean?) {
         context.getColor(R.color.white) // Use your selected color resource
     } else {
         context.getColor(R.color.text_color_heading) // Use your default color resource
+    }
+    textView.setTextColor(color)
+}
+
+@BindingAdapter("isManual")
+fun isManual(textView: TextView, manual: String) {
+    val context = textView.context
+    val color = if (manual.equals("Cash", ignoreCase = true)) {
+        context.getColor(R.color.green) // Use your selected color resource
+    }
+    else if (manual.equals("Online", ignoreCase = true)) {
+        context.getColor(R.color.green) // Use your selected color resource
+    }
+    else if (manual.equals("Waive Off", ignoreCase = true)) {
+        context.getColor(R.color.green) // Use your selected color resource
+    }
+    else {
+        context.getColor(R.color.red) // Use your default color resource
     }
     textView.setTextColor(color)
 }

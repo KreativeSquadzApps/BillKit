@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
 
         <variable
             name="customer"
@@ -14,72 +15,116 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="5dp"
+        android:layout_marginStart="@dimen/_15dp"
+        android:layout_marginEnd="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_15dp"
+        app:cardCornerRadius="@dimen/_10dp"
         app:cardElevation="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Customer Name -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:id="@+id/customerNameTextView"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/corner_four_grey"
+            android:weightSum="3">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{customer.CustomerName}"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingBottom="4dp"
-                tools:text="DEMO" />
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:padding="16dp">
 
-            <!-- Shop Contact Number -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:id="@+id/shopContactNumberTextView"
+                <!-- Customer Name -->
+                <TextView android:fontFamily="@font/montserrat_medium"
+                    android:id="@+id/customerNameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{customer.CustomerName}"
+                    android:textSize="@dimen/txt_16sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp"
+                    tools:text="DEMO" />
+
+                <!-- Shop Contact Number -->
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:id="@+id/shopContactNumberTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{customer.ShopContactNumber}"
+                    android:textColor="@color/text_color_main"
+                    android:textSize="@dimen/txt_12sp"
+                    android:paddingBottom="4dp"
+                    tools:text="9971380539" />
+
+                <!-- GST Number -->
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:id="@+id/gstNumberTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='@{"GST No : "+customer.gstNo}'
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/txt_12sp"
+                    android:paddingBottom="4dp"
+                    tools:text="GST No : 26895" />
+
+                <!-- Credit Amount -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_11sp"
+                        android:text="Credit Amount :  "
+                        android:paddingBottom="4dp" />
+                    <TextView
+                        android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/creditAmountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimary"
+                        app:isPriceStringEmpty="@{customer.CreditAmount}"
+                        android:paddingBottom="4dp"
+                        android:textStyle="bold"
+                        tools:text="5500.00" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{customer.ShopContactNumber}"
-                android:paddingBottom="4dp"
-                tools:text="9971380539" />
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="end"
+                    android:layout_marginEnd="@dimen/_12dp"
+                    android:layout_marginBottom="@dimen/_20dp"
+                    android:orientation="vertical">
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_11sp"
+                        android:text="Total Sales :  " />
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/totalSalesTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        app:isPriceStringEmpty="@{customer.totalSales}"
+                        tools:text="5500.0000" />
+                </LinearLayout>
 
-            <!-- GST Number -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:id="@+id/gstNumberTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{customer.gstNo}"
-                android:paddingBottom="4dp"
-                tools:text="26895" />
-
-            <!-- Total Sales -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:id="@+id/totalSalesTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{customer.TotalSales}"
-                android:paddingBottom="4dp"
-                tools:text="Rs 26619.84" />
-
-            <!-- Address -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:id="@+id/addressTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{customer.Address}"
-                android:paddingBottom="4dp"
-                tools:text="deml" />
-
-            <!-- Credit Amount -->
-            <TextView android:fontFamily="@font/montserrat_regular"
-                android:id="@+id/creditAmountTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{customer.CreditAmount}"
-                android:paddingBottom="4dp"
-                tools:text="5500.00" />
-
+            </LinearLayout>
         </LinearLayout>
+
+
     </androidx.cardview.widget.CardView>
 </layout>

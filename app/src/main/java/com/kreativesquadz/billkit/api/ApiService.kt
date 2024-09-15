@@ -6,6 +6,7 @@ import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.model.CustomerCreditDetail
 import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.LoginResponse
@@ -16,6 +17,7 @@ import com.kreativesquadz.billkit.model.Staff
 import com.kreativesquadz.billkit.model.User
 import com.kreativesquadz.billkit.model.UserSetting
 import com.kreativesquadz.billkit.model.request.CreditNoteStatusUpdate
+import com.kreativesquadz.billkit.model.request.CustomerCreditRequest
 import com.kreativesquadz.billkit.model.request.InvoiceRequest
 import com.kreativesquadz.billkit.model.request.InvoiceStatusUpdate
 import com.kreativesquadz.billkit.model.request.LoginRequest
@@ -74,6 +76,25 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addCustomer(@Body customer: Customer): Response<ApiStatus>
 
+
+    @POST("/api/addCustomerCreditDetail")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun addCustomerCreditDetail(@Body customerCreditDetail: CustomerCreditDetail): Response<ApiStatus>
+
+
+
+    @DELETE("/api/deletecustomer/{id}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun deleteCustomer(@Path("id") id: Long): Response<ResponseBody>
+
+    @PUT( "/api/updatecustomer")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateCustomer(@Body customer: Customer?): Response<ApiStatus>
+
+
+    @PUT( "/api/updateCustomerCredit")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateCustomerCredit(@Body customerCreditRequest: CustomerCreditRequest?): Response<ApiStatus>
 
     @POST("/api/user_settings")
     @Headers("X-API-KEY: " + Config.API_Key)

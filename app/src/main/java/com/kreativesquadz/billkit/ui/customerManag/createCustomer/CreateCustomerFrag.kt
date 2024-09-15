@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.kreativesquadz.billkit.databinding.FragmentCreateCustomerBinding
 import com.kreativesquadz.billkit.model.Customer
 
@@ -38,6 +39,8 @@ class CreateCustomerFrag : Fragment() {
         binding.btnSubmit.setOnClickListener {
             if (!binding.etShopContactNumber.text.toString().isEmpty()){
                 viewModel.addCustomerObj(getCustomerData(),requireContext())
+                Toast.makeText(requireContext(),"Customer added successfully",Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
             }else{
                 Toast.makeText(requireContext(),"Please enter contact number",Toast.LENGTH_SHORT).show()
             }
@@ -52,10 +55,6 @@ class CreateCustomerFrag : Fragment() {
                         binding.etAddress.text.toString(),
                         binding.etCreditAmount.text.toString(),0)
     }
-
-
-
-
     private fun observers(){
         viewModel.customerStatus.observe(viewLifecycleOwner) {
             if (it) {

@@ -9,6 +9,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InvoiceDao {
@@ -61,4 +62,8 @@ interface InvoiceDao {
 
     @Query("SELECT * FROM invoice_items WHERE orderId = :orderId")
     fun getInvoiceItemsByOrderId(orderId: Long): List<InvoiceItem>
+
+    @Query("SELECT * FROM invoices WHERE customerId = :customerId AND creditAmount > 0  ORDER BY invoiceDate DESC")
+    fun getAllInvoicesFlow(customerId : Long): Flow<List<Invoice>>
+
 }
