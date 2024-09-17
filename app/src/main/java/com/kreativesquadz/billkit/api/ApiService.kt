@@ -171,6 +171,14 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addStaff(@Body staff: Staff): Response<ApiStatus>
 
+    @DELETE("/api/deletestaff/{id}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun deleteStaff(@Path("id") id: Long): Response<ResponseBody>
+
+    @PUT( "/api/updatestaff")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateStaff(@Body staff: Staff?): Response<ApiStatus>
+
 
     @GET("/api/gsttax/{userId}")
     @Headers("X-API-KEY: " + Config.API_Key)

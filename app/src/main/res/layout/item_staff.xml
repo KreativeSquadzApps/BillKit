@@ -43,17 +43,32 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TextView android:fontFamily="@font/montserrat_regular"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/staffStatus"
-                android:text="@{staff.status}"
-                tools:text="Active"
-                android:textSize="@dimen/txt_12sp"
-                android:textColor="@color/text_color_heading"
-                android:layout_marginEnd="@dimen/_10dp"
+                android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="horizontal">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="@dimen/_10dp"
+                    android:layout_height="@dimen/_10dp"
+                    app:cardCornerRadius="@dimen/_5dp"
+                    android:layout_marginEnd="@dimen/_5dp"
+                    android:layout_gravity="center"
+                    app:cardElevation="0dp"
+                    app:isActive="@{staff.status}"
+                    />
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/staffStatus"
+                    android:text="@{staff.status}"
+                    tools:text="Active"
+                    android:textSize="@dimen/txt_12sp"
+                    android:textColor="@color/text_color_heading"
+                    android:layout_marginEnd="@dimen/_10dp" />
+
+            </LinearLayout>
 
 
             <TextView android:fontFamily="@font/montserrat_regular"
@@ -64,7 +79,7 @@
                 tools:text="Imtiaz"
                 android:textAllCaps="true"
                 android:textSize="@dimen/txt_16sp"
-                android:textColor="@color/text_color_heading"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/_10dp"
                 app:layout_constraintStart_toEndOf="@+id/circleName"

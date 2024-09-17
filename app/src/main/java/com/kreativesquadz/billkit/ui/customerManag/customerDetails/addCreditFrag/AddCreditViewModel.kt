@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.ui.customerManag.customerDetails.addCreditFrag
 
 import android.content.Context
+import androidx.camera.core.impl.utils.ContextUtil.getApplicationContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
@@ -11,6 +12,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.repository.CreditRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
+import com.kreativesquadz.billkit.utils.enqueueWork
 import com.kreativesquadz.billkit.worker.SyncCustomerCreditWorker
 import com.kreativesquadz.billkit.worker.UpdateCustomerCreditWorker
 import com.kreativesquadz.billkit.worker.UpdateProductStockWorker
@@ -19,24 +21,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddCreditViewModel @Inject constructor(private val creditRepository: CreditRepository,
+class AddCreditViewModel @Inject constructor(private val workManager: WorkManager,
+                                             private val creditRepository: CreditRepository,
                                              private val customerManagRepository: CustomerManagRepository) : ViewModel() {
 
 
 
 
-    fun updateCreditAmount( context: Context,id : Long ,credit : Double){
+    fun updateCreditAmount(id : Long ,credit : Double){
         viewModelScope.launch {
             customerManagRepository.updateCreditAmount(id,credit)
-            updateCreditWork(context, id.toString(),credit)
-            updateCustomerCreditDetailsWork(context,id.toString(),credit)
+            updateCreditWork(id.toString(),credit)
+            updateCustomerCreditDetailsWork(id.toString(),credit)
         }
     }
 
 
 
 
-    private fun updateCreditWork (context: Context, id: String, credit: Double ) {
+    private fun updateCreditWork (id: String, credit: Double ) {
         val data = Data.Builder()
             .putString("id",id)
             .putDouble("credit",credit)
@@ -51,14 +54,13 @@ class AddCreditViewModel @Inject constructor(private val creditRepository: Credi
             .setInputData(data)
             .build()
 
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            "updateCreditWork",
-            ExistingWorkPolicy.REPLACE,
-            syncWorkRequest
-        )
+        workManager.enqueueUniqueWork("updateCreditWork",
+            ExistingWorkPolicy.APPEND,
+            syncWorkRequest)
+
     }
 
-    private fun updateCustomerCreditDetailsWork (context: Context, id: String,credit: Double) {
+    private fun updateCustomerCreditDetailsWork (id: String,credit: Double) {
         val data = Data.Builder()
             .putString("id",id)
             .putString("type","Manual")
@@ -74,10 +76,9 @@ class AddCreditViewModel @Inject constructor(private val creditRepository: Credi
             .setInputData(data)
             .build()
 
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            "updateCustomerCreditDetailsWork",
-            ExistingWorkPolicy.REPLACE,
-            syncWorkRequest
-        )
+        workManager.enqueueUniqueWork("updateCustomerCreditDetailsWork",
+        ExistingWorkPolicy.APPEND,
+        syncWorkRequest)
+
     }
 }

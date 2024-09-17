@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.di
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.bluetooth.BluetoothService
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
@@ -33,6 +34,11 @@ object AppModule {
     @Singleton
     fun providedb(@ApplicationContext appContext: Context): AppDatabase {
         return AppDatabase.getInstance(appContext)!!
+    }
+
+    @Provides
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager {
+        return WorkManager.getInstance(context)
     }
 
     @Provides

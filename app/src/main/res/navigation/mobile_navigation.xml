@@ -273,7 +273,7 @@
     <fragment
         android:id="@+id/addStaffFragment"
         android:name="com.kreativesquadz.billkit.ui.staffManag.add.AddStaffFragment"
-        android:label="AddStaffFragment" />
+        android:label="Add Staff" />
     <fragment
         android:id="@+id/staffDetailsFragment"
         android:name="com.kreativesquadz.billkit.ui.staffManag.staffDetails.StaffDetailsFragment"
@@ -288,6 +288,13 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_staffDetailsFragment_to_billHistoryFrag"
             app:destination="@id/billHistoryFrag" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_staffDetailsFragment_to_editStaffFragment"
+            app:destination="@id/editStaffFragment" />
     </fragment>
     <fragment
         android:id="@+id/taxSettingsFragment"
@@ -308,7 +315,7 @@
     <fragment
         android:id="@+id/printerSettingsFragment"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.printerSettings.PrinterSettingsFragment"
-        android:label="PrinterSettingsFragment" >
+        android:label="Printer Settings" >
         <action app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
             app:popEnterAnim="@anim/zoom_in"
@@ -368,6 +375,14 @@
         android:id="@+id/editCustomerFragment"
         android:name="com.kreativesquadz.billkit.ui.customerManag.editCustomer.EditCustomerFragment"
         android:label="EditCustomerFragment" />
+    <fragment
+        android:id="@+id/editStaffFragment"
+        android:name="com.kreativesquadz.billkit.ui.staffManag.edit.EditStaffFragment"
+        android:label="Edit Staff" >
+        <argument
+            android:name="staff"
+            app:argType="com.kreativesquadz.billkit.model.Staff" />
+    </fragment>
 
 
 </navigation>

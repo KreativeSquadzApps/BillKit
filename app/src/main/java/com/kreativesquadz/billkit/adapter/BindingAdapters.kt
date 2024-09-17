@@ -1,7 +1,9 @@
 package com.kreativesquadz.billkit.adapter
 
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.paging.Config
 import com.kreativesquadz.billkit.R
@@ -80,6 +82,22 @@ fun isPriceStringEmpty(view: TextView, price: String?) {
         view.text = "${com.kreativesquadz.billkit.Config.CURRENCY} $price"
     }
 }
+@BindingAdapter("isActiveText")
+fun isActiveText(view: TextView, status: String?) {
+    if (status.equals("Active", ignoreCase = true)) {
+        view.text = "Deactivate"
+    } else {
+        view.text = "Active"
+    }
+}
+@BindingAdapter("isActiveVisible")
+fun isActiveVisible(view: LinearLayout, status: String?) {
+    if (status.equals("Active", ignoreCase = true)) {
+        view.visibility = View.GONE
+    } else {
+        view.visibility = View.VISIBLE
+    }
+}
 
 @BindingAdapter("rate")
 fun rate(view: TextView, text: String) {
@@ -150,6 +168,17 @@ fun isManual(textView: TextView, manual: String) {
         context.getColor(R.color.red) // Use your default color resource
     }
     textView.setTextColor(color)
+}
+@BindingAdapter("isActive")
+fun isActive(textView: CardView, manual: String) {
+    val context = textView.context
+    val color = if (manual.equals("Active", ignoreCase = true)) {
+        context.getColor(R.color.green) // Use your selected color resource
+    }
+    else {
+        context.getColor(R.color.red) // Use your default color resource
+    }
+    textView.setCardBackgroundColor(color)
 }
 
 @BindingAdapter("cardBackgroundColorSelected")

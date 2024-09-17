@@ -25,6 +25,21 @@
                     android:layout_marginEnd="@dimen/_15dp"
                     android:padding="10dp">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:orientation="horizontal">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="@dimen/_10dp"
+                        app:cardCornerRadius="@dimen/_5dp"
+                        android:layout_marginEnd="@dimen/_5dp"
+                        android:layout_gravity="center"
+                        app:cardElevation="0dp"
+                        app:isActive="@{staff.status}"
+                        />
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -33,9 +48,12 @@
                         tools:text="Active"
                         android:textSize="@dimen/txt_12sp"
                         android:textColor="@color/text_color_heading"
-                        android:layout_marginEnd="@dimen/_10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        android:layout_marginEnd="@dimen/_10dp" />
+
+                </LinearLayout>
+
+
+
 
 
                     <TextView android:fontFamily="@font/montserrat_regular"
@@ -76,100 +94,121 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/staffEmail"/>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/staffRole">
+
+                    <!-- Edit Button -->
                     <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:baselineAligned="false"
-                        android:weightSum="3"
+                        android:id="@+id/btnEdit"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:layout_marginEnd="@dimen/_5dp"
+                        android:background="@drawable/corner_four_grey"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/staffRole">
+                        app:layout_constraintEnd_toStartOf="@id/btnActivate"
+                        app:layout_constraintHorizontal_chainStyle="spread">
 
-                        <LinearLayout
-                            android:id="@+id/btnEdit"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:weightSum="3"
-                            android:layout_margin="@dimen/_10dp"
-                            android:background="@drawable/corner_four_grey">
+                            android:layout_weight="2"
+                            android:padding="@dimen/_5dp"
+                            android:src="@android:drawable/ic_menu_edit" />
 
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="2"
-                                android:padding="@dimen/_5dp"
-                                android:src="@android:drawable/ic_menu_edit" />
-
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@color/colorPrimary"
-                                android:text="Edit"
-                                android:layout_weight="1"
-                                android:id="@+id/backText"
-                                android:gravity="center|start" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/btnActivate"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/backText"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:weightSum="3"
-                            android:layout_margin="@dimen/_10dp"
-                            android:background="@drawable/corner_four_grey">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="2"
-                                android:padding="@dimen/_5dp"
-                                android:src="@android:drawable/ic_media_play" />
-
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@android:color/holo_green_dark"
-                                android:text="Activate"
-                                android:layout_weight="1"
-                                android:gravity="center|start" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/btnDelete"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:weightSum="3"
-                            android:layout_margin="@dimen/_10dp"
-                            android:background="@drawable/corner_four_grey">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="2"
-                                android:padding="@dimen/_5dp"
-                                android:src="@android:drawable/ic_menu_delete" />
-
-
-                            <TextView android:fontFamily="@font/montserrat_regular"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="@color/red"
-                                android:text="Delete"
-                                android:layout_weight="1"
-                                android:gravity="center|start" />
-                        </LinearLayout>
-
-
-
-
+                            android:layout_weight="2"
+                            android:textColor="@color/colorPrimary"
+                            android:text="Edit"
+                            android:textSize="@dimen/txt_14sp"
+                            android:gravity="center|start"
+                            android:fontFamily="@font/montserrat_regular" />
                     </LinearLayout>
+
+                    <!-- Activate Button -->
+                    <LinearLayout
+                        android:id="@+id/btnActivate"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:layout_marginEnd="@dimen/_5dp"
+                        android:background="@drawable/corner_four_grey"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/btnEdit"
+                        app:layout_constraintEnd_toStartOf="@id/btnDelete">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:padding="@dimen/_5dp"
+                            android:src="@android:drawable/ic_media_play" />
+
+                        <TextView
+                            android:id="@+id/staffStatusr"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            app:isActiveText="@{staff.status}"
+                            android:textColor="@android:color/holo_green_dark"
+                            android:textSize="@dimen/txt_14sp"
+                            android:gravity="center|start"
+                            tools:text="Active"
+                            android:fontFamily="@font/montserrat_regular" />
+                    </LinearLayout>
+
+                    <!-- Delete Button -->
+                    <LinearLayout
+                        android:id="@+id/btnDelete"
+                        android:layout_width="0dp"
+                        app:isActiveVisible="@{staff.status}"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:layout_marginEnd="@dimen/_5dp"
+                        android:background="@drawable/corner_four_grey"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/btnActivate"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:padding="@dimen/_5dp"
+                            android:src="@android:drawable/ic_menu_delete" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:textColor="@color/red"
+                            android:text="Delete"
+                            android:textSize="@dimen/txt_14sp"
+                            android:gravity="center|start"
+                            android:fontFamily="@font/montserrat_regular" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -234,7 +273,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/tvTotalSales"
-                            android:text="@{staff.totalSalesCount}"
+                            android:text="@{staff.totalSalesAmount}"
                             tools:text="500"
                             android:gravity="center"
                             android:textAllCaps="true"

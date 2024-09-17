@@ -1,6 +1,7 @@
-package com.kreativesquadz.billkit.ui.staffManag.staffDetails
+package com.kreativesquadz.billkit.ui.staffManag.edit
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,31 +11,36 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.model.Staff
 import com.kreativesquadz.billkit.repository.StaffManagRepository
-import com.kreativesquadz.billkit.worker.DeleteCategoryWorker
-import com.kreativesquadz.billkit.worker.DeleteStaffWorker
+import com.kreativesquadz.billkit.worker.UpdaterStaffDetailsWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StaffDetailsViewModel @Inject constructor(var repository: StaffManagRepository) :
-    ViewModel() {
-        val staffDetails = MutableLiveData<Staff>()
+class EditStaffViewModel @Inject constructor(private val repository: StaffManagRepository) : ViewModel() {
+    private var _staffStatus = MutableLiveData<ApiStatus>()
+    val staffStatus: LiveData<ApiStatus> get() = _staffStatus
 
-        fun getStaffDetails(id: Long){
-            staffDetails.value = repository.getStaffById(id)
+
+
+    fun addStaffObj(context: Context, staff: Staff) {
+        if(staff.name.isEmpty()){
+            val apiStatus = ApiStatus(400,"Staff Name cannot be empty" )
+            _staffStatus.value = apiStatus
+            return
         }
-
-    fun deleteStaff(context: Context, id : Long){
         viewModelScope.launch {
-            repository.deleteStaff(id)
-            deleteStaffWork(context,id.toString())
+            repository.updateStaff(staff)
+            scheduleStaffDetailsUpdate(context , staff.id.toString())
+            val apiStatus = ApiStatus(200,"Staff Updated Successfully" )
+            _staffStatus.value = apiStatus
         }
     }
 
-    private fun deleteStaffWork (context: Context, id: String ) {
+    fun scheduleStaffDetailsUpdate(context: Context, id: String) {
         val data = Data.Builder()
             .putString("id",id)
             .build()
@@ -43,13 +49,13 @@ class StaffDetailsViewModel @Inject constructor(var repository: StaffManagReposi
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val syncWorkRequest = OneTimeWorkRequestBuilder<DeleteStaffWorker>()
+        val syncWorkRequest = OneTimeWorkRequestBuilder<UpdaterStaffDetailsWorker>()
             .setConstraints(constraints)
             .setInputData(data)
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork(
-            "deleteStaffWork",
+            "scheduleStaffDetailsUpdate",
             ExistingWorkPolicy.REPLACE,
             syncWorkRequest
         )

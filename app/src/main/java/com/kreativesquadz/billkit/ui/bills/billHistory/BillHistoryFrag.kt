@@ -2,6 +2,7 @@ package com.kreativesquadz.billkit.ui.bills.billHistory
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.filter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
@@ -73,25 +75,20 @@ class BillHistoryFrag : Fragment() {
             createdBy = userSession.sessionUser
         }
 
-//        viewModel.invoices.observe(viewLifecycleOwner) {
-//            Log.d("TAG", "observers: $it")
-//            it.data?.let { it1 ->
-//                if (target.isNullOrEmpty()){
-//                    adapter.submitList(it1.filter { it.createdBy == createdBy })
-//                }else{
-//                    adapter.submitList(it1.filter { it.createdBy == target })
-//                }
-//            }
-//        }
-
 
         viewModel.invoicess.observe(viewLifecycleOwner) {
-
+            Log.d("TAG", "observers: $it")
 
         }
         lifecycleScope.launch {
             viewModel.invoices.collectLatest { pagingData ->
-                adapter.submitData(pagingData)
+                pagingData.let { it1 ->
+                    if (target.isNullOrEmpty()){
+                        adapter.submitData(it1)
+                    }else{
+                        adapter.submitData(it1.filter { it.createdBy == target })
+                    }
+                }
             }
         }
 

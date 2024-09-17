@@ -29,6 +29,9 @@ interface StaffDao {
     @Query("DELETE FROM staff")
     fun deleteStaffList()
 
+    @Query("DELETE FROM staff WHERE id = :id")
+    fun deleteStaffById(id: Long)
+
 
     @Query("SELECT * FROM staff WHERE id = :id")
     fun selectStaffById(id: Long): Staff

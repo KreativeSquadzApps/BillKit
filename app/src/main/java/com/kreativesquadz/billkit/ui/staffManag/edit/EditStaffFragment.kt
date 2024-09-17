@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.ui.staffManag.add
+package com.kreativesquadz.billkit.ui.staffManag.edit
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -12,26 +12,28 @@ import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
-import com.kreativesquadz.billkit.databinding.FragmentAddStaffBinding
-import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.databinding.FragmentEditStaffBinding
 import com.kreativesquadz.billkit.model.Staff
-import com.kreativesquadz.billkit.model.UserSetting
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AddStaffFragment : Fragment() {
-    var _binding: FragmentAddStaffBinding? = null
+class EditStaffFragment : Fragment() {
+    private var _binding: FragmentEditStaffBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AddStaffViewModel by viewModels()
+    private val viewModel: EditStaffViewModel by viewModels()
     val roleList = listOf("Administrator",
         "Cashier",
         "Sales")
     var role = ""
     var permissions : MutableList<String> = ArrayList()
 
+    val staffDetails by lazy {
+        arguments?.getSerializable("staff") as? Staff
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getStaffList()
+
 
     }
 
@@ -39,7 +41,8 @@ class AddStaffFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddStaffBinding.inflate(inflater, container, false)
+        _binding = FragmentEditStaffBinding.inflate(inflater,container, false)
+        binding.staffDetails = staffDetails
         permissions()
         observers()
         onClickListeners()
@@ -64,14 +67,25 @@ class AddStaffFragment : Fragment() {
     }
 
     private fun permissions(){
-        binding.switchBillHistory.isSelected = false
-        binding.switchInventory.isSelected = false
-        binding.switchCustomer.isSelected = false
-        binding.switchCreditNote.isSelected = false
-        binding.switchCredit.isSelected = false
-        binding.switchDaybook.isSelected = false
-        binding.switchShopDetails.isSelected = false
-
+        staffDetails?.permissions?.let {
+            it.split(",").forEach { permission ->
+                permissions.add(permission)
+                when (permission) {
+                    resources.getString(R.string.menu_bill_history) -> binding.switchBillHistory.isChecked = true
+                    resources.getString(R.string.menu_inventory) -> binding.switchInventory.isChecked = true
+                    resources.getString(R.string.menu_customer_management) -> binding.switchCustomer.isChecked = true
+                    resources.getString(R.string.menu_credit_notes) -> binding.switchCreditNote.isChecked = true
+                    resources.getString(R.string.menu_credit_details) -> binding.switchCredit.isChecked = true
+                    resources.getString(R.string.menu_dayBook) -> binding.switchDaybook.isChecked = true
+                    resources.getString(R.string.menu_settings_shop_details) -> binding.switchShopDetails.isChecked = true
+                    else -> {}
+                }
+            }
+        } ?: run {
+            // Handle the case where permissions is null
+            // Maybe log an error or set default switch states
+        }
+        binding.switchBillHistory.isSelected = true
         binding.switchBillHistory.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked) {
                 permissions.add(resources.getString(R.string.menu_bill_history))
@@ -127,18 +141,21 @@ class AddStaffFragment : Fragment() {
     }
 
     private fun getStaff(): Staff {
+        if (role.isEmpty()){
+            role = binding.dropdownRole.text.toString()
+        }
         return Staff(
-            id = 0,
+            id = staffDetails?.id ?: 0,
             adminId = Config.userId,
             name = binding.etName.text.toString(),
             mailId = binding.etEmail.text.toString(),
             password = binding.etPassword.text.toString(),
-            status = "Active",
+            status = staffDetails?.status ?: "Active",
             role = role,
-            totalSalesCount = 0,
-            totalSalesAmount = 0.0,
+            totalSalesCount = staffDetails?.totalSalesCount ?: 0,
+            totalSalesAmount = staffDetails?.totalSalesAmount ?: 0.0,
             permissions = permissions.joinToString ("," ),
-            isSynced = 0)
+            isSynced = staffDetails?.isSynced ?: 0)
     }
 
     private fun setupSpinnerRole(itemList: List<String>) {
@@ -149,6 +166,7 @@ class AddStaffFragment : Fragment() {
             staticItems = itemList
         )
         binding.dropdownRole.setAdapter(adapterStockUnit)
+        binding.dropdownRole.setText(role, false)
         binding.dropdownRole.setOnItemClickListener { _, _, position, _ ->
             val selectedItem = adapterStockUnit.getItem(position)
             role = selectedItem!!
@@ -160,5 +178,4 @@ class AddStaffFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

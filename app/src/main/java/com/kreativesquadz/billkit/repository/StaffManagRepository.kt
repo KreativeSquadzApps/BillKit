@@ -50,6 +50,17 @@ class StaffManagRepository @Inject constructor(private val db: AppDatabase) {
         statusLiveData.value = true
         return statusLiveData
     }
+    suspend fun updateStaff(Staff: Staff) : LiveData<Boolean> {
+        val statusLiveData = MutableLiveData<Boolean>()
+        staffDao.updateStaff(Staff)
+        statusLiveData.value = true
+        return statusLiveData
+    }
+
+
+     fun deleteStaff(id: Long) {
+        staffDao.deleteStaffById(id)
+    }
 
     suspend fun getUnsyncedStaff(): List<Staff> {
         return staffDao.getUnsyncedStaff()

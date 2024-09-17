@@ -53,7 +53,7 @@ class AddCreditFragment : Fragment() {
         binding.btnAddCredit.setOnClickListener {
             if (binding.etCreditAmount.text.toString().isNotEmpty()){
                 customerCredit?.let {
-                    viewModel.updateCreditAmount(requireContext(),it.id,binding.etCreditAmount.text.toString().toDouble())
+                    viewModel.updateCreditAmount(it.id,binding.etCreditAmount.text.toString().toDouble())
                     sharedViewModel.setCustomer(it.id.toString())
                     findNavController().popBackStack()
 

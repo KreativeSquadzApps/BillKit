@@ -15,6 +15,7 @@ data class Staff(
     val status: String,
     val role: String,
     val totalSalesCount: Int,
+    val totalSalesAmount: Double,
     val permissions: String,
     val isSynced : Int = 0
 ) : Serializable
