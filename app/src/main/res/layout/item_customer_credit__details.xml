@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
+
+        <variable
+            name="creditCustomer"
+            type="com.kreativesquadz.billkit.model.Customer" /> <!-- Replace "your.package.name" with your actual package name -->
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15dp"
+        android:layout_marginEnd="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_15dp"
+        app:cardCornerRadius="@dimen/_10dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/corner_four_grey"
+            android:weightSum="3">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:padding="@dimen/_12dp">
+
+                <!-- Customer Name -->
+                <TextView android:fontFamily="@font/montserrat_medium"
+                    android:id="@+id/customerNameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{creditCustomer.CustomerName}"
+                    android:textSize="@dimen/txt_16sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp"
+                    tools:text="DEMO" />
+
+                <!-- Shop Contact Number -->
+                <TextView android:fontFamily="@font/montserrat_regular"
+                    android:id="@+id/shopContactNumberTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{creditCustomer.ShopContactNumber}"
+                    android:textColor="@color/text_color_main"
+                    android:textSize="@dimen/txt_14sp"
+                    android:paddingBottom="4dp"
+                    tools:text="9971380539" />
+
+
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:id="@+id/totalSalesTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/txt_16sp"
+                        app:isPriceStringEmpty="@{creditCustomer.creditAmount}"
+                        tools:text="5500.0000" />
+                </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>

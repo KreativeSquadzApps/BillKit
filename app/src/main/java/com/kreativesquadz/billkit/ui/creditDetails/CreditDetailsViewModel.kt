@@ -1,7 +1,11 @@
 package com.kreativesquadz.billkit.ui.creditDetails
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class CreditDetailsViewModel : ViewModel() {
+@HiltViewModel
+class CreditDetailsViewModel @Inject constructor() : ViewModel() {
+
     
 }

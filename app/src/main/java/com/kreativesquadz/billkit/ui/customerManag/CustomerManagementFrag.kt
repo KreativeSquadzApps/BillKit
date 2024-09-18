@@ -76,12 +76,6 @@ class CustomerManagementFrag : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-
     private fun setupRecyclerView() {
         adapter = GenericAdapter(
             viewModel.customer.value?.data ?: emptyList(),
@@ -100,6 +94,9 @@ class CustomerManagementFrag : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 }
