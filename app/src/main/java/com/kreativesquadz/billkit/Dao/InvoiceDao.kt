@@ -66,4 +66,7 @@ interface InvoiceDao {
     @Query("SELECT * FROM invoices WHERE customerId = :customerId AND creditAmount > 0  ORDER BY invoiceDate DESC")
     fun getAllInvoicesFlow(customerId : Long): Flow<List<Invoice>>
 
+    @Query("SELECT * FROM invoices WHERE invoiceDate BETWEEN :startDate AND :endDate ORDER BY invoiceDate DESC")
+    suspend fun getInvoicesByDate(startDate: Long,  endDate: Long): List<Invoice>
+
 }

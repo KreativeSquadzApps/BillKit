@@ -113,4 +113,8 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
         return invoiceDao.getAllInvoicesFlow(customerId)
     }
 
+    suspend fun getInvoicesByDate(startDate: Long, endDate: Long) : List<Invoice>{
+       return invoiceDao.getInvoicesByDate(startDate, endDate)
+    }
+
 }
