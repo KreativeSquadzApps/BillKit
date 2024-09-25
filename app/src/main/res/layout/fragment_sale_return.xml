@@ -80,7 +80,7 @@
                         android:textSize="@dimen/txt_16sp"
                         app:layout_constraintStart_toEndOf="@id/txtInvoice"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="@{invoice.id}"
+                        android:text="@{invoice.invoiceNumber}"
                         tools:text="777"/>
 
                     <androidx.appcompat.widget.AppCompatTextView

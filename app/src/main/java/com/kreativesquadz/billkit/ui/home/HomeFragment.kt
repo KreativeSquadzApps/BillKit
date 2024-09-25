@@ -88,6 +88,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel.getUserSettings()
+        sharedViewModel.loadCompanyDetails()
     }
 
     override fun onCreateView(
@@ -149,6 +150,17 @@ class HomeFragment : Fragment() {
 
 
     private fun observers(){
+        sharedViewModel.loadCompanyDetailsDb().observe(viewLifecycleOwner){
+            it?.let {
+                Log.e("KKKK",it.toString())
+            }
+        }
+        homeViewModel.getInvoiceHistory().observe(viewLifecycleOwner){
+            it.data?.let {
+                //Log.d("invoiceHistory", it.toString())
+            }
+        }
+
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
             Log.d("itemssssssss", items.toString())
             adapter.submitList(items.asReversed())

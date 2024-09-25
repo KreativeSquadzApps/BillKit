@@ -6,8 +6,16 @@ import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
+import com.kreativesquadz.billkit.api.common.common.Resource
+import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
@@ -15,7 +23,10 @@ import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.repository.LoginRepository
+import com.kreativesquadz.billkit.repository.SettingsRepository
+import com.kreativesquadz.billkit.worker.AddCompanyDetailsWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -24,7 +35,11 @@ import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
+class SharedViewModel @Inject constructor(val workManager: WorkManager,
+                                          val loginRepository: LoginRepository,
+                                          val settingsRepository: SettingsRepository) : ViewModel() {
+      private var invoicePrefix: String? = null
+     private var invoiceNumber: Int? = null
     private val _items = MutableLiveData<MutableList<InvoiceItem>>().apply { value = mutableListOf() }
     val items: LiveData<MutableList<InvoiceItem>> get() = _items
     var list = mutableListOf<InvoiceItem>()
@@ -65,6 +80,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
     var creditNoteId : Int?=0
 
    var isReversedAmountNQty = false
+
 
     fun getAmount(view: View){
         val amount = (view as TextView).text ?: ""
@@ -156,6 +172,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         if (product.productMrp != null && product.productMrp.toString().toDouble() > 0.0) {
             productMrp = product.productMrp
         }
+
         val homeItem =  InvoiceItem(
             invoiceId = invoiceId,
             itemName = "${product.productName}  ( ${product.productPrice} )   $include ${defaultQty}",
@@ -163,7 +180,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             quantity = defaultQty!!.toInt(),
             returnedQty = 0,
             totalPrice = ((product.productPrice.toString().toDouble() * defaultQty)),
-            taxRate = product.productTax.toString().toDouble(),
+            taxRate = product.productTax?.toString()?.toDouble() ?: 0.0,
             productMrp = productMrp
 
         )
@@ -326,7 +343,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         return selectedCreditNote.value
     }
 
-    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double? ) : Invoice{
+    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?,invoicePrefixNumber : String) : Invoice{
         var createdBy = "Created By Admin"
         val loginSession = loginRepository.getUserSessions()
         if (loginSession != null){
@@ -340,7 +357,7 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         }
         val invoice = Invoice(
             invoiceId = generateInvoiceId(),
-            invoiceNumber = "INV ${getInvoiceItemCount()}",
+            invoiceNumber = invoicePrefixNumber,
             invoiceDate = System.currentTimeMillis().toString(),
             invoiceTime = System.currentTimeMillis().toString(),
             createdBy = createdBy,
@@ -358,6 +375,12 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
             creditNoteId = creditNoteId?:0,
             status = "Active"
         )
+        viewModelScope.launch {
+            invoiceNumber?.let {
+                settingsRepository.updateInvoiceNumber(Config.userId, it.plus(1))
+            }
+        }
+
         return invoice
     }
     fun getItemsList(): List<InvoiceItem> {
@@ -401,9 +424,11 @@ class SharedViewModel @Inject constructor(val loginRepository: LoginRepository) 
         return (timestamp / 1000).toInt() * 1000 + counter
     }
 
-    fun generateInvoiceItemId(): Int {
-        val timestamp = System.currentTimeMillis()
-        val counter = (0 until 100).random() // Choose a random number as the counter
-        return (timestamp / 100).toInt() * 100 + counter
+     fun loadCompanyDetails() : LiveData<Resource<CompanyDetails>> {
+        return  settingsRepository.loadCompanyDetails(Config.userId)
+    }
+
+    fun loadCompanyDetailsDb() : LiveData<CompanyDetails> {
+        return  settingsRepository.loadCompanyDetailsDb(Config.userId)
     }
 }

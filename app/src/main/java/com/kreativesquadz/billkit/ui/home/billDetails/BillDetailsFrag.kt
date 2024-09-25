@@ -24,7 +24,7 @@ import com.kreativesquadz.billkit.ui.dialogs.gstDialogFragment.AddGstDialogFragm
 import com.kreativesquadz.billkit.ui.dialogs.gstDialogFragment.AddGstDialogViewModel
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.InvoiceItem
-import com.kreativesquadz.billkit.ui.home.billDetails.creditNoteBottomSheet.CreditNoteBottomSheetFrag
+import com.kreativesquadz.billkit.ui.bottomSheet.creditNoteBottomSheet.CreditNoteBottomSheetFrag
 import com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet.CustomerAddBottomSheetFrag
 import com.kreativesquadz.billkit.ui.bottomSheet.editItemBottomSheet.EditItemBottomSheetFrag
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
@@ -44,6 +44,8 @@ class BillDetailsFrag : Fragment() {
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     val df = DecimalFormat("#")
     var isCustomerSelected = false
+    var invoicePrefixNumber = ""
+    var invoicePrefix = ""
 
 
 
@@ -51,7 +53,6 @@ class BillDetailsFrag : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel.getUserSettings()
         sharedViewModel.getTotalAmount()
-
     }
 
     override fun onCreateView(
@@ -79,27 +80,33 @@ class BillDetailsFrag : Fragment() {
     private fun onClickListeners(){
         binding.btnCash.setOnClickListener {
                       viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble()),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble(),invoicePrefixNumber),
                                          items =  sharedViewModel.getItemsList(),
                                          creditNoteId =  sharedViewModel.getCreditNote()?.id,
                                          context =  requireContext())
+                        viewModel.updateInvoicePrefixNumber(invoicePrefix)
+
         }
 
         binding.btnOnline.setOnClickListener{
                         viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0,invoicePrefixNumber),
                                          items =  sharedViewModel.getItemsList(),
                                          creditNoteId =  sharedViewModel.getCreditNote()?.id,
                                          context =  requireContext())
+            viewModel.updateInvoicePrefixNumber(invoicePrefix)
+
         }
 
         binding.btnCredit.setOnClickListener{
             if (isCustomerSelected){
                 viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0),
+                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0,invoicePrefixNumber),
                     items =  sharedViewModel.getItemsList(),
                     creditNoteId =  sharedViewModel.getCreditNote()?.id,
                     context =  requireContext())
+                viewModel.updateInvoicePrefixNumber(invoicePrefix)
+
             }else{
                 Toast.makeText(requireContext(), "Please select customer", Toast.LENGTH_SHORT).show()
             }
@@ -169,12 +176,17 @@ class BillDetailsFrag : Fragment() {
 
 
     private fun observers(){
+        sharedViewModel.loadCompanyDetailsDb().observe(viewLifecycleOwner){
+            it?.let {
+                invoicePrefixNumber = it.InvoicePrefix + it.InvoiceNumber
+                invoicePrefix = it.InvoicePrefix
+            }
+        }
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
             sharedViewModel.getTotalAmount()
             binding.amountTotalTax.text =  "Total Tax : " + sharedViewModel.getTotalTax()
             binding.itemsCount.text = "Items : "+ sharedViewModel.getInvoiceItemCount()
-
         }
 
         viewModel.invoiceId.observe(viewLifecycleOwner){

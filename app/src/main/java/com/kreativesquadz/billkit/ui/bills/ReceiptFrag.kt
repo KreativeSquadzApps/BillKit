@@ -49,6 +49,7 @@ import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.InvoiceTax
+import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.utils.addBackPressHandler
@@ -81,6 +82,7 @@ class ReceiptFrag : Fragment() {
     }
 
     private var pdfSettings = PdfSettings()
+    private var invoicePrinterSettings = InvoicePrinterSettings()
     private var thermalPrinterSetup: ThermalPrinterSetup? = null
 
 
@@ -106,7 +108,6 @@ class ReceiptFrag : Fragment() {
     }
 
     fun observers(){
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -125,6 +126,77 @@ class ReceiptFrag : Fragment() {
                     }
                 }
             }
+        }
+        lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        launch {
+                            viewModel.invoicePrinterSettings.collect { invoicePrinterSettings ->
+                                this@ReceiptFrag.invoicePrinterSettings = invoicePrinterSettings
+                                binding.tvFooter.text = invoicePrinterSettings.printerFooter
+
+                                val printerCompanyInfoValues = invoicePrinterSettings.printerCompanyInfo.split(" ")
+                                val isPrinterCompanyLogo = printerCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
+                                val isPrinterCompanyEmail = printerCompanyInfoValues.getOrNull(1)?.toIntOrNull() ?: 0
+                                val isPrinterCompanyPhone = printerCompanyInfoValues.getOrNull(2)?.toIntOrNull() ?: 0
+                                val isPrinterCompanyGst = printerCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
+
+                                val printerItemTableValues = pdfSettings.pdfItemTable.split(" ")
+                                val  isPrinterItemTableCustomerDetails = printerItemTableValues.getOrNull(0)?.toIntOrNull() ?: 0
+                                val  isPrinterItemTableMrp = printerItemTableValues.getOrNull(1)?.toIntOrNull() ?: 0
+                                val isPrinterItemTablePayment = printerItemTableValues.getOrNull(2)?.toIntOrNull() ?: 0
+                                val isPrinterItemTableQty = printerItemTableValues.getOrNull(3)?.toIntOrNull() ?: 0
+
+                                if (isPrinterCompanyLogo.toBoolean()){
+
+                                }
+
+                                if (isPrinterCompanyEmail.toBoolean()){
+                                    binding.isVisibleEmail.visibility = View.VISIBLE
+                                }else{
+                                    binding.isVisibleEmail.visibility = View.GONE
+                                }
+
+                                if (isPrinterCompanyPhone.toBoolean()){
+                                    binding.isVisibleContact.visibility = View.VISIBLE
+                                }else{
+                                    binding.isVisibleContact.visibility = View.GONE
+                                }
+
+                                if (isPrinterCompanyGst.toBoolean()){
+                                    binding.isVisibleGst.visibility = View.VISIBLE
+                                }else{
+                                    binding.isVisibleGst.visibility = View.GONE
+                                }
+
+                                if (isPrinterItemTableCustomerDetails.toBoolean()){
+                                    binding.isCustomerAvailable = true
+                                }else{
+                                    binding.isCustomerAvailable = false
+                                }
+
+                                if (isPrinterItemTableMrp.toBoolean()){
+                                    binding.istMrpAvalaible = true
+                                }else{
+                                    binding.istMrpAvalaible = false
+                                }
+
+                                if (isPrinterItemTablePayment.toBoolean()){
+                                    binding.paymentViews.visibility = View.VISIBLE
+                                }else{
+                                    binding.paymentViews.visibility = View.GONE
+                                }
+
+                                if (isPrinterItemTableQty.toBoolean()){
+                                    binding.tvItems.visibility = View.VISIBLE
+                                }else{
+                                    binding.tvItems.visibility = View.GONE
+                                }
+
+
+
+                            }
+                        }
+                    }
         }
 
         viewModel.invoiceData.observe(viewLifecycleOwner) {
@@ -310,7 +382,7 @@ class ReceiptFrag : Fragment() {
     }
 
 
-    fun generateReceiptPdf(context: Context,pdfSettings: PdfSettings, items: List<InvoiceItem>,companyDetails: CompanyDetails,invoice: Invoice,customer : Customer?) {
+    private fun generateReceiptPdf(context: Context, pdfSettings: PdfSettings, items: List<InvoiceItem>, companyDetails: CompanyDetails, invoice: Invoice, customer : Customer?) {
         val pdfCompanyInfoValues = pdfSettings.pdfCompanyInfo.split(" ")
       val isCompanyLogo = pdfCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
        val isCompanyEmail = pdfCompanyInfoValues.getOrNull(1)?.toIntOrNull() ?: 0
@@ -753,7 +825,7 @@ class ReceiptFrag : Fragment() {
         viewModel.printUsingDefaultPrinter(receipt)
 
     }
-    fun centerText(text: String, paperWidth: String): String {
+    private fun centerText(text: String, paperWidth: String): String {
         val width = when (paperWidth) {
             "80MM" -> 48
             "58MM" -> 32
@@ -767,7 +839,7 @@ class ReceiptFrag : Fragment() {
         }.padEnd(width)
     }
 
-    fun formatItem(slNo: String, name: String, quantity: String, rate: String,tax : String, total: String, paperWidth: String): String {
+    private fun formatItem(slNo: String, name: String, quantity: String, rate: String, tax : String, total: String, paperWidth: String): String {
         if (isTaxAvailable){
             val format = when (paperWidth) {
                 "80MM" -> "%-5s %-19s %7s %7s %6s %10s"
@@ -785,7 +857,7 @@ class ReceiptFrag : Fragment() {
             return String.format(format, slNo, name, quantity, rate, total)
         }
     }
-    fun formatTax(paperWidth: String, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
+    private fun formatTax(paperWidth: String, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
         val format = when (paperWidth) {
             "80MM" -> "%-7s %-12s %6s %9s"
             "58MM" -> "%-5s %-8s %4s %6s"
@@ -793,16 +865,8 @@ class ReceiptFrag : Fragment() {
         }
         return String.format(format, taxType, taxableAmount, rate, taxAmount)
     }
-    fun formatTaxData(paperWidth: String, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
-        val format = when (paperWidth) {
-            "80MM" -> "%-7s %-12s %6s %9s"
-            "58MM" -> "%-15s %-8s %4s %6s"
-            else -> "%-15s %-8s %4s %6s"
-        }
-        return String.format(format, taxType, taxableAmount, rate, taxAmount)
-    }
 
-    fun createReceiptString(
+    private fun createReceiptString(
         businessName: String,
         place: String,
         contactNumber: String,
@@ -907,7 +971,7 @@ class ReceiptFrag : Fragment() {
         return receipt.toString()
     }
 
-    fun generateSeparatorLine(paperWidth: String): String {
+    private fun generateSeparatorLine(paperWidth: String): String {
         val receiptWidth = when (paperWidth) {
             "80MM" -> 58 // Typical character width for 80mm paper
             "58MM" -> 42 // Typical character width for 58mm paper

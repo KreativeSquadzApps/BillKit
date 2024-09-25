@@ -30,7 +30,7 @@ class CustomerDetailsViewModel @Inject constructor(private val customerRepositor
         }
     }
 
-    private fun deleteCustomerWork (context: Context, id: String ) {
+    private fun deleteCustomerWork (context: Context, id: String ){
         val data = Data.Builder()
             .putString("id",id)
             .build()
@@ -46,7 +46,7 @@ class CustomerDetailsViewModel @Inject constructor(private val customerRepositor
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             "deleteCustomerWork",
-            ExistingWorkPolicy.REPLACE,
+            ExistingWorkPolicy.APPEND,
             syncWorkRequest
         )
     }

@@ -20,8 +20,10 @@ import javax.inject.Inject
 class TabPdfViewModel @Inject constructor(val userSettingRepository: UserSettingRepository) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     private val _pdfSettings = MutableStateFlow(PdfSettings())
     val pdfSettings: StateFlow<PdfSettings> = _pdfSettings.asStateFlow()
+
     private val _isExpanded = MutableStateFlow(false)
     val isExpanded: StateFlow<Boolean> get() = _isExpanded
 
@@ -29,6 +31,8 @@ class TabPdfViewModel @Inject constructor(val userSettingRepository: UserSetting
     fun setLoading(isLoading: Boolean) {
         _isLoading.value = isLoading
     }
+
+
 
     fun updateSettings(newSettings: PdfSettings) {
         _isLoading.value = true
@@ -70,6 +74,7 @@ class TabPdfViewModel @Inject constructor(val userSettingRepository: UserSetting
             _pdfSettings.value = userSettingRepository.getPdfSetting(Config.userId)!!
         }
     }
+
 
     fun setExpandedState(isExpanded: Boolean) {
         viewModelScope.launch {

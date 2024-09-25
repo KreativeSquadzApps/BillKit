@@ -32,12 +32,7 @@ class MainActivityViewModel @Inject constructor(val settingsRepository: Settings
     val _loginResponse = MutableLiveData<LoginResponse>()
      val loginResponse : LiveData<LoginResponse> = _loginResponse
 
-    fun getCompanyDetails() : LiveData<Resource<CompanyDetails>> {
-        viewModelScope.launch {
-            companyDetailsMain = settingsRepository.loadCompanyDetails(Config.userId)
-        }
-        return companyDetailsMain
-    }
+
 
     fun getSesssion() {
            val loginSession = loginRepository.getUserSessions()

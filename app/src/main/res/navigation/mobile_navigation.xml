@@ -219,7 +219,15 @@
         android:id="@+id/invoiceSettings"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.InvoiceSettings"
         android:label="Invoice Settings"
-        tools:layout="@layout/fragment_invoice_settings" />
+        tools:layout="@layout/fragment_invoice_settings" >
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_invoiceSettings_to_invoiceResetFragment"
+            app:destination="@id/invoiceResetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createCustomerFrag"
         android:name="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerFrag"
@@ -382,6 +390,16 @@
         <argument
             android:name="staff"
             app:argType="com.kreativesquadz.billkit.model.Staff" />
+    </fragment>
+    <fragment
+        android:id="@+id/invoiceResetFragment"
+        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabInvoiceFrag.invoiceResetFrag.InvoiceResetFragment"
+        android:label="InvoiceResetFragment">
+
+        <argument android:name="invoicePrefix"
+            app:argType="string"/>
+        <argument android:name="invoiceNumber"
+            app:argType="integer"/>
     </fragment>
 
 

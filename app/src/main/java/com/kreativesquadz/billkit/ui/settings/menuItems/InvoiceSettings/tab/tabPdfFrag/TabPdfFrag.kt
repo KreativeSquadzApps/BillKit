@@ -31,17 +31,16 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
     private var _binding: FragmentTabPdfBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TabPdfViewModel by viewModels()
+
     private var isCompanyLogo = 0
     private var isCompanyEmail = 0
     private var isCompanyPhone = 0
     private var isCompanyAddress = 0
     private var isCompanyGst = 0
-
     private var isItemTableCustomerDetails = 0
     private var isItemTableMrp = 0
     private var isItemTablePayment = 0
     private var isItemTableQty = 0
-
     private var isUpdateEnable = false
 
 
@@ -59,9 +58,9 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
         _binding = FragmentTabPdfBinding.inflate(inflater, container, false)
         observers()
         onClickListener()
-
         return binding.root
     }
+
     override fun observers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -79,6 +78,7 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
         }
 
         val currentSettings = getPdfSettingObj()
+
         binding.etFooterText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 

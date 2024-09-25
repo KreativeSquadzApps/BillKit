@@ -105,7 +105,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintBottom_toBottomOf="@id/tvTime"
-                                    android:text="@{invoice.id}"
+                                    android:text="@{invoice.invoiceNumber}"
                                     tools:text="41"/>
 
                                 <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"

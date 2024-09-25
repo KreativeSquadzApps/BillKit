@@ -25,6 +25,7 @@ import com.kreativesquadz.billkit.model.CustomerCreditDetail
 import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.InvoicePrefixNumber
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.SavedOrder
 import com.kreativesquadz.billkit.model.SavedOrderEntity
@@ -32,6 +33,7 @@ import com.kreativesquadz.billkit.model.Staff
 import com.kreativesquadz.billkit.model.User
 import com.kreativesquadz.billkit.model.UserSession
 import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import kotlin.concurrent.Volatile
@@ -39,7 +41,8 @@ import kotlin.concurrent.Volatile
 
 @Database(entities = [User::class,Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class,
     UserSetting::class,Category::class, Product::class,CreditNote::class, Staff::class,UserSession::class,GST::class,
-    SavedOrderEntity::class, PdfSettings::class,ThermalPrinterSetup::class, CustomerCreditDetail::class], version = 92, exportSchema = false)
+    SavedOrderEntity::class, PdfSettings::class,ThermalPrinterSetup::class, CustomerCreditDetail::class, InvoicePrinterSettings::class,
+    InvoicePrefixNumber::class], version = 97, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{

@@ -13,6 +13,7 @@ import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import timber.log.Timber
@@ -53,29 +54,6 @@ class UserSettingRepository @Inject constructor(val db: AppDatabase) {
             }
         }.asLiveData()
     }
-
-//    suspend fun updateDiscount(userSetting: UserSetting?): LiveData<Boolean> {
-//        val statusLiveData = MutableLiveData<Boolean>()
-//        try {
-//            val response = ApiClient.getApiService().updateUserSetting(userSetting)
-//            if (response.isSuccessful) {
-//                Timber.tag("Response").d(response.body().toString())
-//                statusLiveData.value = true
-//            } else {
-//                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-//                statusLiveData.value = false
-//
-//
-//            }
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//            Resource.error("Network error: ${e.message}", null)
-//            statusLiveData.value = false
-//        }
-//        Timber.tag("Response").e(statusLiveData.value.toString())
-//        return statusLiveData
-//    }
-
     fun insert(userSetting: UserSetting) {
         userSettingDao.insert(userSetting)
     }
@@ -83,15 +61,18 @@ class UserSettingRepository @Inject constructor(val db: AppDatabase) {
         return userSettingDao.getUserById(userId)
     }
 
+ fun getUserSettingById(userId: Long): UserSetting {
+        return userSettingDao.getUserSettingById(userId)
+    }
+
+
+
     fun insertPdfSetting(pdfSetting: PdfSettings) : Long {
        return userSettingDao.insertPdfSettings(pdfSetting)
     }
-
     fun getPdfSetting(userId: Long): PdfSettings? {
         return userSettingDao.getUserPdfSettingsById(userId)
     }
-
-
     suspend fun updatePdfSetting(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String) {
             userSettingDao.updatePdfSettings(userId, pdfCompanyInfo, pdfItemTable, pdfFooter)
       //  userSettingDao.updatePdfSettings(pdfSetting)
@@ -99,17 +80,26 @@ class UserSettingRepository @Inject constructor(val db: AppDatabase) {
 
 
 
+    fun insertInvoicePrinterSetting(invoicePrinterSetting: InvoicePrinterSettings) : Long {
+       return userSettingDao.insertInvoicePrinterSettings(invoicePrinterSetting)
+    }
+    fun getInvoicePrinterSetting(userId: Long): InvoicePrinterSettings? {
+        return userSettingDao.getInvoicePrinterSettingsById(userId)
+    }
+    suspend fun updateInvoicePrinterSetting(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String) {
+            userSettingDao.updateInvoicePrinterSettings(userId, pdfCompanyInfo, pdfItemTable, pdfFooter)
+    }
+
+
+
+
+
     fun insertPrinterSetting(thermalPrinterSetup: ThermalPrinterSetup) : Long {
        return userSettingDao.insertPrinterSettings(thermalPrinterSetup)
     }
-
-
-
     fun getPrinterSetting(userId: Long): ThermalPrinterSetup? {
         return userSettingDao.getUserPrinterSettingsById(userId)
     }
-
-
     suspend fun updatePrinterSetting(userId: Long, printerSize : String, printerMode : String, fontSize : String, enableAutoPrint : Boolean, openCashDrawer : Boolean, disconnectAfterPrint : Boolean, autoCutAfterPrint : Boolean, defaultPrinterAddress : String,defaultprinterName : String ) {
             userSettingDao.updatePrinterSettings(userId, printerSize, printerMode, fontSize, enableAutoPrint, openCashDrawer, disconnectAfterPrint, autoCutAfterPrint, defaultPrinterAddress, defaultprinterName)
       //  userSettingDao.updatePdfSettings(pdfSetting)

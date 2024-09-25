@@ -16,6 +16,7 @@ import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
@@ -69,8 +70,13 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     val pdfSettings: StateFlow<PdfSettings> = _pdfSettings.asStateFlow()
 
 
+    private val _invoicePrinterSettings = MutableStateFlow(InvoicePrinterSettings())
+    val invoicePrinterSettings: StateFlow<InvoicePrinterSettings> = _invoicePrinterSettings.asStateFlow()
+
+
     private val _allDataReady = MutableLiveData<Boolean>()
     val allDataReady: LiveData<Boolean> = _allDataReady
+
 
     fun fetchAllDetails(invoiceId: String) = viewModelScope.launch {
         try {
@@ -78,17 +84,21 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
             val invoiceDetailsDeferred = async { billHistoryRepository.getInvoiceById(invoiceId.toInt()).asFlow().first() }
             val invoiceItemsDeferred = async { billHistoryRepository.getInvoiceItems(invoiceId.toLong())}
             val pdfSettingsDeferred = async { userSettingRepository.getPdfSetting(Config.userId) ?: PdfSettings()}
+            val invoicePrinterSettingsDeferred = async { userSettingRepository.getInvoicePrinterSetting(Config.userId) ?: InvoicePrinterSettings()}
 
 
             val companyDetails = companyDetailsDeferred.await()
             val invoiceDetails = invoiceDetailsDeferred.await()
             val invoiceItems = invoiceItemsDeferred.await()
             val pdfSettings = pdfSettingsDeferred.await()
+            val invoicePrinterSettings = invoicePrinterSettingsDeferred.await()
 
             _companyDetails.value = companyDetails
             _invoiceData.value = invoiceDetails
             _invoiceItems.value = invoiceItems
             _pdfSettings.value = pdfSettings
+            _invoicePrinterSettings.value = invoicePrinterSettings
+
             checkIfAllDataReady()
         } catch (e: Exception) {
             // Handle exceptions
@@ -99,17 +109,13 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
             _allDataReady.value = true
         }
     }
-
-
-
     fun getCustomerById(id: String) : Customer {
         return customerManagRepository.getCustomer(id)
     }
-
-
     fun getGstListByValue(taxAmounts: List<Double>): LiveData<List<GST>> {
         return taxRepository.getGSTListByTaxValues(taxAmounts)
     }
+
 
     private fun insertPrinterSetting(thermalPrinterSetup: ThermalPrinterSetup) {
         viewModelScope.launch {

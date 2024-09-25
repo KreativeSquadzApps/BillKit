@@ -15,6 +15,7 @@ data class CompanyDetails (
     var id: Int = 0,
     var userId : Long = Config.userId,
     var BusinessName: String = "",
+    var BusinessImage: String  = "",
     var Place: String  = "",
     var ShopContactNumber: String  = "",
     var ShopEmail: String  = "",
@@ -25,15 +26,10 @@ data class CompanyDetails (
     var InvoiceNumber: Int  = 0,
 ): Serializable{
     fun isContentEquals(other: CompanyDetails): Boolean{
-        return this.BusinessName == other.BusinessName && this.Place == other.Place
+        return this.BusinessName == other.BusinessName && this.BusinessImage == other.BusinessImage && this.Place == other.Place
                 && this.ShopContactNumber == other.ShopContactNumber && this.ShopEmail == other.ShopEmail
                 && this.GSTNo == other.GSTNo && this.FSSAINo == other.FSSAINo &&
                 this.CurrencySymbol == other.CurrencySymbol && this.InvoicePrefix == other.InvoicePrefix &&
                 this.InvoiceNumber == other.InvoiceNumber
-
-
-
-
-
     }
 }

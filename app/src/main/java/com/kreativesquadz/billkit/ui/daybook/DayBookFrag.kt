@@ -141,7 +141,7 @@ class DayBookFrag : Fragment() {
 
         }
         tableRow.addView(createTextView("Sale"))
-        tableRow.addView(createTextView(invoice.id.toString()))
+        tableRow.addView(createTextView(invoice.invoiceNumber.toString()))
         tableRow.addView(createTextView(customerName))
         tableRow.addView(createTextView(invoice.totalAmount.toString()))
         tableRow.addView(createTextViewLast(invoice.cashAmount.toString()))
@@ -155,9 +155,6 @@ class DayBookFrag : Fragment() {
     }
 
     private fun setCurrentDateOnCalendar(textView: TextView) {
-        for (i in binding.invoiceTableLayout.childCount - 1 downTo 1) {
-            binding.invoiceTableLayout.removeViewAt(i)
-        }
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -179,7 +176,9 @@ class DayBookFrag : Fragment() {
             }
             val selectedTimestamp = selectedCalendar.timeInMillis
             viewModel.saveSelectedDate(selectedTimestamp)
-
+            for (i in binding.invoiceTableLayout.childCount - 1 downTo 1) {
+                binding.invoiceTableLayout.removeViewAt(i)
+            }
             val startOfDay = selectedCalendar.timeInMillis
             selectedCalendar.add(Calendar.DAY_OF_MONTH, 1)
             val endOfDay = selectedCalendar.timeInMillis - 1

@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.ui.home.billDetails.creditNoteBottomSheet
+package com.kreativesquadz.billkit.ui.bottomSheet.creditNoteBottomSheet
 
 import android.os.Bundle
 import android.util.DisplayMetrics

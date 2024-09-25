@@ -53,7 +53,7 @@
                 android:id="@+id/tvinvoiceId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{creditNote.invoiceId}"
+                android:text="@{creditNote.invoiceNumber}"
                 android:textStyle="bold"
                 android:layout_marginTop="@dimen/_5dp"
                 android:textColor="@color/text_color_heading"

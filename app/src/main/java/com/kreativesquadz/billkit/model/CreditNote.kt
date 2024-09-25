@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class CreditNote(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val invoiceId: Long,
+    val invoiceNumber: String,
     val createdBy: String,
     val dateTime: String,
     val status: String,

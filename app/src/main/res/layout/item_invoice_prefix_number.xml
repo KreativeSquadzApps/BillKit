@@ -1,0 +1,89 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
+        <variable
+            name="invoicePrefixNumber"
+            type="com.kreativesquadz.billkit.model.InvoicePrefixNumber" />
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lite_grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="@dimen/_10dp"
+            android:id="@+id/top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize= "@dimen/txt_14sp"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_10dp"
+                android:textColor="@color/text_color_main"
+                android:text="@{invoicePrefixNumber.invoicePrefix}"/>
+            <TextView
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize= "@dimen/txt_14sp"
+                android:layout_weight="1"
+                android:textColor="@color/text_color_main"
+                android:text="@{invoicePrefixNumber.invoiceNumber}"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+                <TextView
+                    android:fontFamily="@font/montserrat_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize= "@dimen/txt_12sp"
+                    android:textStyle="bold"
+                    android:id="@+id/tvReuse"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="@dimen/_30dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Reuse"/>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="@dimen/_25dp"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:id="@+id/ivDelete"
+                    android:src="@drawable/trash"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</layout>

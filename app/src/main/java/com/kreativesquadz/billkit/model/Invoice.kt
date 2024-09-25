@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.kreativesquadz.billkit.Config
 import java.io.Serializable
 
 @Entity(
@@ -11,7 +12,9 @@ import java.io.Serializable
 
 )
 data class Invoice(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val userId : Long = Config.userId,
     val invoiceId: Int,
     val invoiceNumber: String,
     val invoiceDate: String,

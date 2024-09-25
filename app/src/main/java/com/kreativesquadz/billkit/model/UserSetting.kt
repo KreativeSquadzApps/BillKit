@@ -13,3 +13,6 @@ data class UserSetting(
     val password: String,
     val isSynced: Int = 0
 ) : Serializable
+
+
+

@@ -87,6 +87,7 @@ class SaleReturnFragment : Fragment() {
             invoice?.let {
                 val creditNote = CreditNote(
                     invoiceId = it.id,
+                    invoiceNumber = it.invoiceNumber,
                     createdBy = it.createdBy,
                     dateTime = it.invoiceDate,
                     status = "Active",

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
+import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -17,6 +18,7 @@ import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.InvoicePrefixNumber
 import com.kreativesquadz.billkit.model.UserSetting
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
@@ -25,7 +27,10 @@ import com.kreativesquadz.billkit.repository.SavedOrderRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import com.kreativesquadz.billkit.worker.SyncInvoicesWorker
+import com.kreativesquadz.billkit.worker.UpdateInvoicePrefixIncrementWorker
+import com.kreativesquadz.billkit.worker.UpdateInvoicePrefixWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,11 +38,13 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class BillDetailsViewModel @Inject constructor(val billHistoryRepository: BillHistoryRepository,
+class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
+                                               val billHistoryRepository: BillHistoryRepository,
                                                val userSettingRepository: UserSettingRepository,
                                                val inventoryRepository: InventoryRepository,
                                                val creditNoteRepository: CreditNoteRepository,
-                                               val savedOrderRepository: SavedOrderRepository)
+                                               val savedOrderRepository: SavedOrderRepository,
+                                               val settingsRepository: SettingsRepository)
     : ViewModel() {
 
 
@@ -111,5 +118,40 @@ class BillDetailsViewModel @Inject constructor(val billHistoryRepository: BillHi
 
     }
 
+    private fun updateInvoicePrefixNumberWorker(id: Long) {
+        val data = Data.Builder()
+            .putLong("id", id)
+            .build()
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
+        val syncWorkRequestsss = OneTimeWorkRequestBuilder<UpdateInvoicePrefixIncrementWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .build()
+
+        workManager.enqueueUniqueWork(
+            "UpdateInvoicePrefixIncrementWorker",
+            ExistingWorkPolicy.REPLACE,
+            syncWorkRequestsss
+        )
+    }
+
+    fun updateInvoicePrefixNumber(invoicePrefix: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+               val invoicePrefixNumber = settingsRepository.getInvoicePrefixNumberWithPrefix(invoicePrefix)
+                Log.d("ViewModel", "InvoicePrefixNumber: ${invoicePrefixNumber}")
+                settingsRepository.updateInvoiceNumberAndPrefix(Config.userId,
+                    invoicePrefixNumber.id.toLong(),
+                    invoicePrefixNumber.invoicePrefix,
+                    invoicePrefixNumber.invoiceNumber.toInt()+1)
+                updateInvoicePrefixNumberWorker(invoicePrefixNumber.id.toLong())
+            } catch (e: Exception) {
+                // Handle error or log it
+                Log.e("ViewModel", "Error: ${e.message}")
+            }
+        }
+    }
 }

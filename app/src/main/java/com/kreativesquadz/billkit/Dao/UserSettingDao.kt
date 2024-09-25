@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 
@@ -19,16 +20,34 @@ interface UserSettingDao {
      fun getUserById(userId: Long): LiveData<UserSetting>
 
 
+    @Query("SELECT * FROM users_settings WHERE userId = :userId")
+     fun getUserSettingById(userId: Long): UserSetting
+
+
+
+
+
      @Query("SELECT * FROM pdf_settings WHERE userId = :userId")
      fun getUserPdfSettingsById(userId: Long): PdfSettings?
 
      @Insert(onConflict = OnConflictStrategy.REPLACE)
      fun insertPdfSettings(pdfSettings: PdfSettings) : Long
 
-
-
     @Query("UPDATE pdf_settings SET pdfCompanyInfo = :pdfCompanyInfo, pdfItemTable = :pdfItemTable,pdfFooter = :pdfFooter WHERE userId = :userId")
     suspend fun updatePdfSettings(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String)
+
+
+
+     @Query("SELECT * FROM invoice_printer_settings WHERE userId = :userId")
+     fun getInvoicePrinterSettingsById(userId: Long): InvoicePrinterSettings?
+
+     @Insert(onConflict = OnConflictStrategy.REPLACE)
+     fun insertInvoicePrinterSettings(invoicePrinterSettings: InvoicePrinterSettings) : Long
+
+    @Query("UPDATE invoice_printer_settings SET printerCompanyInfo = :printerCompanyInfo, printerItemTable = :printerItemTable,printerFooter = :printerFooter WHERE userId = :userId")
+    suspend fun updateInvoicePrinterSettings(userId: Long, printerCompanyInfo: String, printerItemTable: String, printerFooter: String)
+
+
 
 
 

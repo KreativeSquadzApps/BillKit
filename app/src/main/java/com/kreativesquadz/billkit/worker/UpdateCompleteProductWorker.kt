@@ -19,12 +19,10 @@ class UpdateCompleteProductWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        Log.d("UpdateCompleteProductWorker", "started")
         return try {
             val id = inputData.getString("id") ?: ""
             val product = repository.getProduct(id.toLong())
             ApiClient.getApiService().updateProduct(product)
-            Log.d("UpdateCompleteProductWorker", product.toString())
             Result.success()
         } catch (e: Exception) {
             Result.retry()

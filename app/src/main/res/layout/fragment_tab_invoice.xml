@@ -5,8 +5,13 @@
 
     <data>
         <variable
+            name="isUpdateEnable"
+            type="Boolean" />
+        <variable
             name="companyDetails"
             type="com.kreativesquadz.billkit.model.CompanyDetails" />
+
+
     </data>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="none"
-                    android:layout_marginBottom="80dp">
+                    android:layout_marginBottom="100dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -65,12 +70,13 @@
                                 android:layout_weight="3">
 
                                     <ImageView
+                                        android:id="@+id/imageView"
                                         android:layout_width="match_parent"
                                         android:layout_height="80dp"
                                         android:layout_margin="@dimen/_10dp"
-                                        android:padding="@dimen/_20dp"
+                                        android:scaleType="centerCrop"
                                         android:background="@drawable/corner_four_grey"
-                                        android:src="@drawable/add_image"/>
+                                        android:src="@drawable/baseline_add_24"/>
 
 
                             </LinearLayout>
@@ -226,6 +232,118 @@
                                 android:hint="Currency Symbol" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10dp"
+                            android:padding="@dimen/_10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3"
+                            android:background="@drawable/corner_four_grey">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingTop="@dimen/_5dp"
+                                    android:paddingBottom="@dimen/_5dp"
+                                    android:layout_weight="1">
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:fontFamily="@font/montserrat_regular"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/txtInvoicePrefix"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        android:textSize="@dimen/txt_14sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/text_color_main"
+                                        android:text="Invoice Prefix : "/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:fontFamily="@font/montserrat_bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/tvInvoicePrefix"
+                                        android:textSize="@dimen/txt_14sp"
+                                        android:textColor="@color/colorPrimary"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/txtInvoicePrefix"
+                                        tools:text="prefix"/>
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingBottom="@dimen/_5dp"
+                                    android:layout_weight="1">
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:fontFamily="@font/montserrat_regular"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/txtInvoiceNumber"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        android:textSize="@dimen/txt_14sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/text_color_main"
+                                        android:text="Invoice Number : "/>
+
+                                    <androidx.appcompat.widget.AppCompatTextView
+                                        android:fontFamily="@font/montserrat_bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/tvInvoiceNumber"
+                                        android:textSize="@dimen/txt_14sp"
+                                        android:textColor="@color/colorPrimary"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/txtInvoiceNumber"
+                                        tools:text="82"/>
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:layout_weight="2">
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/btnReset"
+                                    app:cardCornerRadius="@dimen/_5dp"
+                                    app:cardUseCompatPadding="true"
+                                    android:textStyle="bold"
+                                    app:cardBackgroundColor="@color/colorPrimaryDark"
+                                    android:textColor="@color/text_color_heading">
+
+                                    <TextView android:fontFamily="@font/montserrat_regular"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Reset"
+                                        android:textStyle="bold"
+                                        android:padding="@dimen/_10dp"
+                                        android:gravity="center"
+                                        android:textSize="@dimen/txt_14sp"
+                                        android:textColor="@color/white"/>
+
+                                </androidx.cardview.widget.CardView>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
 
                         <Switch
                             android:fontFamily="@font/montserrat_bold"
@@ -253,13 +371,6 @@
                             android:thumb="@drawable/custom_thumb"
                             android:track="@drawable/custom_track"/>
 
-                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_10dp"
-                            android:id="@+id/tvInvoicePrefix"
-                            android:textSize="20sp"
-                            android:text="@{companyDetails.InvoicePrefix}"/>
 
 
 
@@ -268,7 +379,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="90dp"
                     android:background="@color/lite_grey_200"
                     android:paddingTop="@dimen/_10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -277,20 +388,21 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:id="@+id/btnupdate"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         app:cardCornerRadius="@dimen/_10dp"
                         app:cardUseCompatPadding="true"
                         android:textStyle="bold"
                         android:layout_marginStart="@dimen/_20dp"
                         android:layout_marginEnd="@dimen/_20dp"
                         android:layout_marginBottom="@dimen/_10dp"
-                        app:cardBackgroundColor="@color/colorPrimaryDark"
+                        app:cardBackgroundColor="@{isUpdateEnable ? @color/colorPrimary : @color/lite_grey }"
+                        tools:cardBackgroundColor="@color/colorPrimary"
                         android:textColor="@color/text_color_heading"
                         android:gravity="center">
 
                         <TextView android:fontFamily="@font/montserrat_medium"
                             android:layout_width="match_parent"
-                            android:id="@+id/iv_equals"
+                            android:id="@+id/tv_update"
                             android:layout_height="match_parent"
                             android:text="Update"
                             android:padding="@dimen/_10dp"
@@ -298,6 +410,15 @@
                             android:gravity="center"
                             android:textSize="20sp"
                             android:textColor="@color/white"/>
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            style="?android:attr/progressBarStyleHorizontal"/>
 
                     </androidx.cardview.widget.CardView>
 

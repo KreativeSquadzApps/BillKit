@@ -9,6 +9,7 @@ import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.CustomerCreditDetail
 import com.kreativesquadz.billkit.model.GST
 import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.model.InvoicePrefixNumber
 import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.SavedOrder
@@ -57,6 +58,11 @@ interface ApiService {
     suspend fun createInvoice(@Body invoiceRequest: InvoiceRequest): Response<ApiStatus>
 
 
+    @POST("/api/addcompanyDetails")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun addCompanyDetails(@Body companyDetails: CompanyDetails?): Response<ApiStatus>
+
+
     @GET("api/companyDetails/{userId}")
     @Headers("X-API-KEY: " + Config.API_Key)
     fun loadCompanyDetails(@Path("userId") userId: Long): LiveData<ApiResponse<CompanyDetails>>
@@ -99,6 +105,24 @@ interface ApiService {
     @POST("/api/user_settings")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addUserSetting(@Body userSetting: UserSetting): Response<ApiStatus>
+
+
+    @POST("/api/addInvoicePrefixNumber")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun addInvoicePrefixNumber(@Body invoicePrefixNumber: InvoicePrefixNumber): Response<ApiStatus>
+
+    @GET("/api/invoicePrefixNumber/{userId}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    fun loadInvoicePrefixNumber(@Path("userId") userId: Long): LiveData<ApiResponse<List<InvoicePrefixNumber>>>
+
+    @DELETE("/api/deleteInvoicePrefixNumber/{id}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun deleteInvoicePrefixNumber(@Path("id") id: Long): Response<ResponseBody>
+
+    @PUT( "/api/updateCompanyInvoicePrefixNumber")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateCompanyInvoicePrefixNumber(@Body invoicePrefixNumber: InvoicePrefixNumber?): Response<ApiStatus>
+
 
 
     @GET("/api/user_settings/{userId}")
@@ -146,7 +170,6 @@ interface ApiService {
     @PUT("/api/updateproduct")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun updateProduct(@Body product: Product?): Response<ApiStatus>
-
 
 
     @GET("/api/credit_notes/{userId}")

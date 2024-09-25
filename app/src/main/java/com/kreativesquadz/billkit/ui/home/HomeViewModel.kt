@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kreativesquadz.billkit.Config
+import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.Product
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(val inventoryRepository: InventoryRepository,
                                         val userSettingRepository: UserSettingRepository,
-                                        val savedOrderRepository: SavedOrderRepository,)  : ViewModel(){
+                                        val savedOrderRepository: SavedOrderRepository,
+                                        val billHistoryRepository: BillHistoryRepository)  : ViewModel(){
 
     lateinit var userSetting : LiveData<UserSetting>
 
@@ -37,6 +39,10 @@ class HomeViewModel @Inject constructor(val inventoryRepository: InventoryReposi
     fun getUserSettings(): LiveData<UserSetting> {
         userSetting = userSettingRepository.getUserSetting(Config.userId)
         return userSetting
+    }
+
+    fun getInvoiceHistory(): LiveData<Resource<List<Invoice>>> {
+      return  billHistoryRepository.loadAllInvoices()
     }
 
 

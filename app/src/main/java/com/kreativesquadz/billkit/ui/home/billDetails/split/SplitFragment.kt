@@ -36,6 +36,9 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
     private val dialogGstViewModel: AddGstDialogViewModel by activityViewModels()
     private var isCustomerSelected = false
     val df = DecimalFormat("#")
+    var invoicePrefixNumber = ""
+    var invoicePrefix = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +72,12 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
     }
 
     override fun observers() {
+        sharedViewModel.loadCompanyDetails().observe(viewLifecycleOwner){
+            it?.data?.let {
+                invoicePrefixNumber = it.InvoicePrefix + it.InvoiceNumber
+                invoicePrefix = it.InvoicePrefix
+            }
+        }
         sharedViewModel.isCustomerSelected.observe(viewLifecycleOwner){
             it?.let {
                 isCustomerSelected = it
@@ -128,10 +137,12 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
        binding.saveBill.setOnClickListener {
            if (isCustomerSelected){
                billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value),
+                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,invoicePrefixNumber),
                    items =  sharedViewModel.getItemsList(),
                    creditNoteId =  sharedViewModel.getCreditNote()?.id,
                    context =  requireContext())
+               billDetailsViewModel.updateInvoicePrefixNumber(invoicePrefix)
+
 
            }else{
                Toast.makeText(requireContext(),"Please select a customer",Toast.LENGTH_SHORT).show()

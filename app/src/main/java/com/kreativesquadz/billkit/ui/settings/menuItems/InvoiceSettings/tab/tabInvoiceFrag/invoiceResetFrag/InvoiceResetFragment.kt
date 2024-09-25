@@ -1,0 +1,158 @@
+package com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabInvoiceFrag.invoiceResetFrag
+
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kreativesquadz.billkit.BR
+import com.kreativesquadz.billkit.Config
+import com.kreativesquadz.billkit.R
+import com.kreativesquadz.billkit.adapter.InvoicePrefixNumberAdapter
+import com.kreativesquadz.billkit.adapter.showCustomAlertDialog
+import com.kreativesquadz.billkit.databinding.FragmentInvoiceResetBinding
+import com.kreativesquadz.billkit.interfaces.OnItemClickListener
+import com.kreativesquadz.billkit.model.DialogData
+import com.kreativesquadz.billkit.model.InvoicePrefixNumber
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class InvoiceResetFragment : Fragment() {
+    private var _binding: FragmentInvoiceResetBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: InvoiceResetViewModel by activityViewModels()
+    private lateinit var adapter: InvoicePrefixNumberAdapter<InvoicePrefixNumber>
+    private val invoicePrefix by lazy {
+        arguments?.getString("invoicePrefix")
+    }
+    private val invoiceNumber by lazy {
+        arguments?.getInt("invoiceNumber")
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.getInvoicePrefixNumberList()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentInvoiceResetBinding.inflate(inflater,container,false)
+        observers()
+        onClickListeners()
+        setupRecyclerView()
+        return binding.root
+    }
+
+    private fun observers(){
+        setInvoicePrefixNumberText(invoicePrefix ?: "",invoiceNumber ?: 0)
+        viewModel.invoicePrefixNumberList.observe(viewLifecycleOwner){
+            it.data?.let { it1 ->
+                Log.d("InvoiceResetFragment", "observers: ${invoicePrefix}")
+                val filteredList = it1.filter { list -> list.invoicePrefix != binding.tvInvoicePrefix.text}
+                adapter.submitList(filteredList)
+            }
+        }
+
+    }
+
+
+    private fun onClickListeners(){
+        binding.btnUpdate.setOnClickListener {
+            if (binding.etInvoicePrefix.text.toString().isNotEmpty() && binding.etInvoiceNumber.text.toString().isNotEmpty()){
+                viewModel.addInvoicePrefixNumber(getInvoicePrefixNumber())
+                setInvoicePrefixNumberText(binding.etInvoicePrefix.text.toString(),binding.etInvoiceNumber.text.toString().toInt())
+                binding.etInvoicePrefix.setText("")
+                binding.etInvoiceNumber.setText("")
+            }else{
+                binding.etInvoicePrefix.error = "Please enter invoice prefix"
+                binding.etInvoiceNumber.error = "Please enter invoice number"
+            }
+
+        }
+
+    }
+
+    private fun getInvoicePrefixNumber() : InvoicePrefixNumber{
+       return InvoicePrefixNumber(id = 0, userId = Config.userId,
+            invoicePrefix =  binding.etInvoicePrefix.text.toString(),
+            invoiceNumber =  binding.etInvoiceNumber.text.toString().toLong())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupRecyclerView( ) {
+        adapter = InvoicePrefixNumberAdapter(
+            viewModel.invoicePrefixNumberList.value?.data?.filter {list -> list.invoicePrefix != binding.tvInvoicePrefix.text} ?: emptyList(),
+            object : OnItemClickListener<InvoicePrefixNumber> {
+                override fun onItemClick(item: InvoicePrefixNumber) {
+
+                }
+            },object : OnItemClickListener<InvoicePrefixNumber> {
+                override fun onItemClick(item: InvoicePrefixNumber) {
+                    setupPopup(item.invoicePrefix,true){
+                        viewModel.deleteInvoicePrefixNumber(item.id.toLong())
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            },object : OnItemClickListener<InvoicePrefixNumber> {
+                override fun onItemClick(item: InvoicePrefixNumber) {
+                    setupPopup(item.invoicePrefix,false){
+                        setInvoicePrefixNumberText(item.invoicePrefix,item.invoiceNumber.toInt())
+                        viewModel.reuseInvoicePrefixNumber(item)
+                        adapter.notifyDataSetChanged()
+                       // viewModel.getInvoicePrefixNumberList()
+                    }
+                }
+            },
+            R.layout.item_invoice_prefix_number,
+            BR.invoicePrefixNumber // Variable ID generated by data binding
+        )
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+    private fun setupPopup(name : String,isDelete : Boolean ,action: () -> Unit){
+        val dialogData: DialogData
+        if(isDelete){
+            dialogData = DialogData(
+                title = "Delete Invoice Prefix",
+                info = "Are you sure you want to Delete Prefix ${name} ?",
+                positiveButtonText = "Delete",
+                negativeButtonText = "Cancel"
+            )
+        } else{
+            dialogData = DialogData(
+                title = "Reuse Invoice Prefix",
+                info = "Are you sure you want to Reuse Prefix ${name} ?",
+                positiveButtonText = "Reuse",
+                negativeButtonText = "Cancel"
+            )
+        }
+
+        showCustomAlertDialog(
+            context = requireActivity(),
+            dialogData = dialogData,
+            positiveAction = {
+                action()
+            },
+            negativeAction = {
+                // Handle negative button action
+                // E.g., dismiss the dialog
+            }
+        )
+    }
+
+    private fun setInvoicePrefixNumberText(invoicePrefix: String, invoiceNumber: Int){
+        binding.tvInvoicePrefix.text = invoicePrefix
+        binding.tvInvoiceNumber.text = invoiceNumber.toString()
+    }
+
+}

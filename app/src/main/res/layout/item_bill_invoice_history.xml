@@ -59,7 +59,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/txt_13sp"
-                        android:text='@{invoice.id+""}'
+                        android:text='@{invoice.invoiceNumber}'
                         tools:text="2000"/>
 
                     <TextView android:fontFamily="@font/montserrat_bold"

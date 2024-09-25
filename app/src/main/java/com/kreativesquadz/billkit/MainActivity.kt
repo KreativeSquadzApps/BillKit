@@ -34,7 +34,6 @@ class MainActivity  : AppCompatActivity(), HomeFragment.DrawerToggleListener {
         setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbar)
         viewModel.getSesssion()
-        viewModel.getCompanyDetails()
         navigationSetup()
 
 
