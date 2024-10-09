@@ -9,9 +9,8 @@ import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.SavedOrder
-import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
-import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.repository.SavedOrderRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository

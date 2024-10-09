@@ -8,7 +8,8 @@ import com.kreativesquadz.billkit.api.ApiClient
 import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
+import com.kreativesquadz.billkit.model.settings.TaxSettings
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -68,9 +69,30 @@ class GstTaxRepository @Inject constructor(val db: AppDatabase){
    suspend fun markGstAsSynced(gst: GST) {
       gstTaxDao.update(gst.copy(isSynced = 1))
    }
+   suspend fun updateGst(gst: GST) {
+      gstTaxDao.update(gst)
+   }
 
+   fun deleteGSTById(id: Int){
+      gstTaxDao.deleteGSTById(id)
+   }
 
+   // LiveData to observe changes in tax settings
+   fun getTaxSettings(): LiveData<TaxSettings>{
+      return gstTaxDao.getTaxSettings(1)
+   }
+    fun getTaxSettingsObj(): TaxSettings?{
+         return gstTaxDao.getTaxSettingsObj(1)
+      }
 
+   // Function to save or update the tax settings
+   suspend fun saveTaxSettings(taxSettings: TaxSettings) {
+      gstTaxDao.insertTaxSettings(taxSettings)
+   }
+
+   suspend fun updateTaxSettings(taxSettings: TaxSettings) {
+      gstTaxDao.updateTaxSettings(taxSettings)
+   }
 
 
 }

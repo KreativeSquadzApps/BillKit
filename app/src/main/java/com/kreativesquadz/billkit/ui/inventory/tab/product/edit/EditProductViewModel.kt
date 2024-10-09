@@ -1,7 +1,6 @@
 package com.kreativesquadz.billkit.ui.inventory.tab.product.edit
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +16,7 @@ import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Category
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
@@ -25,7 +24,6 @@ import com.kreativesquadz.billkit.worker.DeleteProductWorker
 import com.kreativesquadz.billkit.worker.UpdateCompleteProductWorker
 import com.kreativesquadz.billkit.worker.UpdateProductStockWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

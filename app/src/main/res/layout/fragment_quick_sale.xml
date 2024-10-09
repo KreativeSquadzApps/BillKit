@@ -359,10 +359,9 @@
 
                                     <TextView android:fontFamily="@font/montserrat_regular"
                                         android:layout_width="match_parent"
-                                        android:id="@+id/iv_equals"
+                                        android:id="@+id/btnAddItem"
                                         android:layout_height="match_parent"
                                         android:text="Add\n Item"
-                                        android:onClick="@{() -> sharedViewModels.addItem()}"
                                         android:textStyle="bold"
                                         android:gravity="center"
                                         

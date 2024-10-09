@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.model
+package com.kreativesquadz.billkit.model.settings
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

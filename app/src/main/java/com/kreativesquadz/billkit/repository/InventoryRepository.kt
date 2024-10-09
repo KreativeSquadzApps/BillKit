@@ -117,6 +117,11 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
         return inventoryDao.selectProductByBarcode(barcode)
     }
 
+    fun getProductsForUserByTax(tax : Double): LiveData<List<Product>> {
+        return inventoryDao.getProductsForUserByTax(tax)
+    }
+
+
      fun deleteProduct(id: Long)  {
         inventoryDao.deleteProduct(id)
      }

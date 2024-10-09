@@ -3,9 +3,6 @@ package com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tab
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,21 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.databinding.FragmentTabInvoiceBinding
 import com.kreativesquadz.billkit.interfaces.OnTextChangedCallback
 import com.kreativesquadz.billkit.model.CompanyDetails
-import com.kreativesquadz.billkit.model.InvoicePrefixNumber
-import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.InvoiceSettingsDirections
 import com.kreativesquadz.billkit.utils.setupTextWatcher
-import kotlinx.coroutines.launch
 
 class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
     var _binding: FragmentTabInvoiceBinding? = null

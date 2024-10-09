@@ -2,17 +2,10 @@ package com.kreativesquadz.billkit.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kreativesquadz.billkit.BR
-import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
-import com.kreativesquadz.billkit.model.Category
-import com.kreativesquadz.billkit.model.GST
-import com.kreativesquadz.billkit.model.Product
 
 class GenericAdapter<T>(
     private var items: List<T>,

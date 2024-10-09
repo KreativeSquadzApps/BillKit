@@ -13,13 +13,9 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
-import com.kreativesquadz.billkit.api.ApiStatus
-import com.kreativesquadz.billkit.api.common.common.Resource
-import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
-import com.kreativesquadz.billkit.model.InvoicePrefixNumber
-import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
@@ -28,11 +24,8 @@ import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import com.kreativesquadz.billkit.worker.SyncInvoicesWorker
 import com.kreativesquadz.billkit.worker.UpdateInvoicePrefixIncrementWorker
-import com.kreativesquadz.billkit.worker.UpdateInvoicePrefixWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

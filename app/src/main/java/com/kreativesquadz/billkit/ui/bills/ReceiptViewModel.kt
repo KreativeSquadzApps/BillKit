@@ -1,19 +1,14 @@
 package com.kreativesquadz.billkit.ui.bills
 
-import android.bluetooth.BluetoothDevice
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.kreativesquadz.billkit.Config
-import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
@@ -26,14 +21,12 @@ import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel

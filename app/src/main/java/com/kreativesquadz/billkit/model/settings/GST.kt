@@ -1,7 +1,8 @@
-package com.kreativesquadz.billkit.model
+package com.kreativesquadz.billkit.model.settings
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "gst_table")
 data class GST(
@@ -10,6 +11,6 @@ data class GST(
     val userId: Int,
     val taxAmount: Double,
     val taxType: String,
-    val productCount: Int,
+    var productCount: Int ,
     val isSynced: Int = 0
-)
+) : Serializable

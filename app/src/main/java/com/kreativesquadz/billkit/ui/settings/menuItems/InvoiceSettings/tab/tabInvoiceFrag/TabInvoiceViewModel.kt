@@ -6,13 +6,10 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
-import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -20,8 +17,7 @@ import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
-import com.kreativesquadz.billkit.model.UserSetting
-import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
+import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import com.kreativesquadz.billkit.worker.AddCompanyDetailsWorker

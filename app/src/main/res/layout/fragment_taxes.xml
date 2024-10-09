@@ -19,6 +19,7 @@
             android:textSize="@dimen/txt_20sp"
             android:padding="@dimen/_10dp"
             android:gravity="center"
+            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:text="Add New Tax" />
 
@@ -60,7 +61,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <AutoCompleteTextView
-                    android:id="@+id/etProductMrp"
+                    android:id="@+id/etTaxValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

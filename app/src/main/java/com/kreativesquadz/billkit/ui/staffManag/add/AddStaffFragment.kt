@@ -13,9 +13,7 @@ import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
 import com.kreativesquadz.billkit.databinding.FragmentAddStaffBinding
-import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.Staff
-import com.kreativesquadz.billkit.model.UserSetting
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
@@ -16,8 +17,8 @@ import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
 import com.kreativesquadz.billkit.databinding.FragmentTaxesBinding
 import com.kreativesquadz.billkit.interfaces.FragmentBaseFunctions
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
-import com.kreativesquadz.billkit.model.Customer
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
+import com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.TaxSettingsFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,6 +56,7 @@ class TaxesFragment : Fragment(), FragmentBaseFunctions {
         viewModel.gstTax.observe(viewLifecycleOwner) {
             it.data?.let {
                 adapter.submitList(it)
+
             }
         }
 
@@ -66,12 +68,27 @@ class TaxesFragment : Fragment(), FragmentBaseFunctions {
     }
     override fun onClickListener() {
         binding.btnAdd.setOnClickListener {
-            val gst = GST(userId = Config.userId.toInt(),
-                taxType = selectedTaxTpe ,
-                taxAmount = binding.etProductMrp.text.toString().toDouble(),
-                productCount = 0,
-                isSynced = 0  )
-            viewModel.addGstObj(gst,requireContext())
+            if (binding.etTaxValue.text.toString().isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter Tax Percentage", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else if (binding.etTaxValue.text.toString().toDouble() <= 0) {
+                Toast.makeText(requireContext(), "Please enter valid Tax Percentage", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else{
+                val gst = GST(userId = Config.userId.toInt(),
+                    taxType = selectedTaxTpe ,
+                    taxAmount = binding.etTaxValue.text.toString().toDouble(),
+                    productCount = 0,
+                    isSynced = 0)
+                val enteredTaxAmount = binding.etTaxValue.text.toString().toDouble()
+
+                if (viewModel.gstTax.value?.data?.any { it.taxAmount == enteredTaxAmount } == true) {
+                    Toast.makeText(requireContext(), "Tax already exists", Toast.LENGTH_SHORT).show()
+                } else {
+                    viewModel.addGstObj(gst, requireContext())
+                }
+            }
+
         }
     }
 
@@ -95,7 +112,8 @@ class TaxesFragment : Fragment(), FragmentBaseFunctions {
             viewModel.gstTax.value?.data ?: emptyList(),
             object : OnItemClickListener<GST> {
                 override fun onItemClick(item: GST) {
-                    // Handle item click
+                    val action = TaxSettingsFragmentDirections.actionTaxSettingsFragmentToTaxDetailsSettingFragment(item)
+                    findNavController().navigate(action)
                 }
             },
             R.layout.item_tax,

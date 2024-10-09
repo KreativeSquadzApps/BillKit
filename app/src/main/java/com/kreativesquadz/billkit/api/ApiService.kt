@@ -7,7 +7,7 @@ import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.CustomerCreditDetail
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoicePrefixNumber
 import com.kreativesquadz.billkit.model.LoginResponse
@@ -15,8 +15,7 @@ import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.SavedOrder
 import com.kreativesquadz.billkit.model.SavedOrderEntity
 import com.kreativesquadz.billkit.model.Staff
-import com.kreativesquadz.billkit.model.User
-import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.model.request.CreditNoteStatusUpdate
 import com.kreativesquadz.billkit.model.request.CustomerCreditRequest
 import com.kreativesquadz.billkit.model.request.InvoiceRequest
@@ -24,17 +23,14 @@ import com.kreativesquadz.billkit.model.request.InvoiceStatusUpdate
 import com.kreativesquadz.billkit.model.request.LoginRequest
 import com.kreativesquadz.billkit.model.request.ProductStockRequest
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiService {
 
@@ -211,6 +207,11 @@ interface ApiService {
     @POST("/api/addgsttax")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addGstTax(@Body gst: GST): Response<ApiStatus>
+
+    @DELETE("/api/deleteGstTax/{id}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun deleteGstTax(@Path("id") id: Int): Response<ResponseBody>
+
 
 
     @POST("orders")

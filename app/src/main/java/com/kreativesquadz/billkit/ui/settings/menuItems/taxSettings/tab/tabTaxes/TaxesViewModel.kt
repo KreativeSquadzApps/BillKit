@@ -13,10 +13,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.common.common.Resource
-import com.kreativesquadz.billkit.model.Customer
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.repository.GstTaxRepository
-import com.kreativesquadz.billkit.worker.SyncCustomerWorker
 import com.kreativesquadz.billkit.worker.SyncGstWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

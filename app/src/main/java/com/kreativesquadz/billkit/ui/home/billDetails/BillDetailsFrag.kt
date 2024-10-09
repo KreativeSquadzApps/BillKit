@@ -176,6 +176,7 @@ class BillDetailsFrag : Fragment() {
 
 
     private fun observers(){
+
         sharedViewModel.loadCompanyDetailsDb().observe(viewLifecycleOwner){
             it?.let {
                 invoicePrefixNumber = it.InvoicePrefix + it.InvoiceNumber

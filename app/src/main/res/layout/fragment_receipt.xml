@@ -25,7 +25,7 @@
             type="com.kreativesquadz.billkit.model.Customer" />
         <variable
             name="taxGst"
-            type="com.kreativesquadz.billkit.model.GST" />
+            type="com.kreativesquadz.billkit.model.settings.GST" />
         <variable
             name="isPrintLoading"
             type="Boolean" />

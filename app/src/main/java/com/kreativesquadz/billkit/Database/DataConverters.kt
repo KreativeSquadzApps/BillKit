@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.Staff
+import com.kreativesquadz.billkit.model.settings.TaxOption
 import java.io.Serializable
 
 class DataConverters : Serializable {
@@ -72,6 +73,25 @@ class DataConverters : Serializable {
         return Gson().fromJson(staff, type)
     }
 
+    @TypeConverter
+    fun fromTaxOption(taxOption: TaxOption): String {
+        return when (taxOption) {
+            is TaxOption.PriceIncludesTax -> "PriceIncludesTax"
+            is TaxOption.PriceExcludesTax -> "PriceExcludesTax"
+            is TaxOption.ZeroRatedTax -> "ZeroRatedTax"
+            is TaxOption.ExemptTax -> "ExemptTax"
+        }
+    }
 
+    @TypeConverter
+    fun toTaxOption(value: String): TaxOption {
+        return when (value) {
+            "PriceIncludesTax" -> TaxOption.PriceIncludesTax
+            "PriceExcludesTax" -> TaxOption.PriceExcludesTax
+            "ZeroRatedTax" -> TaxOption.ZeroRatedTax
+            "ExemptTax" -> TaxOption.ExemptTax
+            else -> throw IllegalArgumentException("Unknown TaxOption: $value")
+        }
+    }
 
 }

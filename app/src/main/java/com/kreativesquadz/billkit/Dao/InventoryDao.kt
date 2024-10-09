@@ -42,6 +42,9 @@ interface InventoryDao {
     @Query("SELECT * FROM products WHERE userId = :userId")
     fun getProductsForUser(userId: Long): LiveData<List<Product>>
 
+    @Query("SELECT * FROM products WHERE productTax = :productTax")
+    fun getProductsForUserByTax(productTax: Double): LiveData<List<Product>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProductList(product: List<Product>)
 
@@ -66,6 +69,7 @@ interface InventoryDao {
 
     @Query("SELECT * FROM products WHERE productBarcode = :barcode")
     fun selectProductByBarcode(barcode: String): Product
+
 
     @Query("SELECT * FROM products WHERE productId = :productId")
     fun selectProductById( productId: Long): Product

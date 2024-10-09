@@ -5,8 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
-import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup

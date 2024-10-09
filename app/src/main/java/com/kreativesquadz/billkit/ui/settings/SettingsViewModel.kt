@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
-
     fun logout() {
         viewModelScope.launch {
             loginRepository.logout()

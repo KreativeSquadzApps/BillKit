@@ -42,8 +42,7 @@ import com.kreativesquadz.billkit.adapter.showCustomAlertDialog
 import com.kreativesquadz.billkit.databinding.FragmentEditProductBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.DialogData
-import com.kreativesquadz.billkit.model.GST
-import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.utils.collapse
 import com.kreativesquadz.billkit.utils.expand

@@ -6,15 +6,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
-import com.kreativesquadz.billkit.model.Category
-import com.kreativesquadz.billkit.model.GST
-import com.kreativesquadz.billkit.model.InvoicePrefixNumber
-import com.kreativesquadz.billkit.model.Product
 
 class InvoicePrefixNumberAdapter<T>(
     private var items: List<T>,

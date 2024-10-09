@@ -2,22 +2,17 @@ package com.kreativesquadz.billkit.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.kreativesquadz.billkit.Dao.UserSettingDao
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.api.ApiClient
 import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
-import com.kreativesquadz.billkit.model.CompanyDetails
-import com.kreativesquadz.billkit.model.Customer
-import com.kreativesquadz.billkit.model.Invoice
-import com.kreativesquadz.billkit.model.UserSetting
+import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 class UserSettingRepository @Inject constructor(val db: AppDatabase) {

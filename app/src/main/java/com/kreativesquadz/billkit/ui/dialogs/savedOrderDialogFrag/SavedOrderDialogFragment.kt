@@ -28,7 +28,6 @@ class SavedOrderDialogFragment : BaseDialogFragment<DialogFragmentSavedOrderBind
     private val taxesViewModel: TaxesViewModel by activityViewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     val df = DecimalFormat("#")
-    private var selectedGst : String ?= null
 
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): DialogFragmentSavedOrderBinding {

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="gstDetailsdd"
+            type="com.kreativesquadz.billkit.model.settings.GST" /> <!-- Replace "your.package.name" with your actual package name -->
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/corner_four_grey"
+                android:layout_margin="@dimen/_20dp"
+                android:paddingEnd="@dimen/_10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="2dp"
+                android:paddingStart="@dimen/_10dp">
+
+                <TextView android:fontFamily="@font/montserrat_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{gstDetailsdd.taxAmount+"%"}'
+                    android:maxLength="5"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/txt_16sp"
+                    android:textColor="@color/text_color_heading"
+                    tools:text="18.0%"
+                    android:paddingBottom="@dimen/_10dp"
+                    android:paddingTop="@dimen/_10dp"
+                    android:paddingStart="@dimen/_5dp"
+                    android:paddingEnd="@dimen/_5dp"
+                    android:textAllCaps="true"
+                    android:gravity="center"
+                    android:id="@+id/circleName"
+                    android:background="@drawable/corner_four_stroke"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:id="@+id/productCountView"
+                    android:padding="@dimen/_10dp"
+                    android:layout_marginEnd="@dimen/_10dp"
+                    app:layout_constraintEnd_toStartOf="@id/ivDelete"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvProductsCount"
+                        android:gravity="center"
+                        android:text="@{gstDetailsdd.productCount}"
+                        tools:text="2"
+                        android:textSize="@dimen/txt_18sp"
+                        android:textColor="@color/text_color_heading"/>
+
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtProducts"
+                        android:text="Products"
+                        android:gravity="center"
+                        android:textSize="@dimen/txt_14sp"
+                        android:textColor="@color/text_color_heading"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/_30dp"
+                    android:layout_height="@dimen/_30dp"
+                    android:id="@+id/ivDelete"
+                    android:src="@drawable/trash"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+
+                <TextView android:fontFamily="@font/montserrat_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/staffName"
+                    android:text="@{gstDetailsdd.taxType}"
+                    tools:text="Imtiaz"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/txt_16sp"
+                    android:textColor="@color/text_color_heading"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/_10dp"
+                    app:layout_constraintStart_toEndOf="@+id/circleName"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20dp"
+            android:textColor="@color/text_color_main"
+            android:text="Products"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerView"
+            tools:listitem="@layout/item_tax_details_products"
+            tools:itemCount="4"/>
+
+
+    </LinearLayout>
+
+</layout>

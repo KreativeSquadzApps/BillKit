@@ -1,12 +1,8 @@
 package com.kreativesquadz.billkit.ui.settings.menuItems.printerSettings
 
-import android.bluetooth.BluetoothDevice
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kreativesquadz.billkit.Config
-import com.kreativesquadz.billkit.model.UserSetting
-import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.repository.BluetoothRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository

@@ -6,678 +6,699 @@
 
 </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/_10dp"
-        android:layout_marginEnd="@dimen/_10dp">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/calenderView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:background="@drawable/corner_four_grey"
-            android:orientation="horizontal"
-            android:padding="@dimen/_10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/calender" />
-
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5dp"
-                android:layout_marginEnd="@dimen/_5dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="20-06-2021"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/txt_16sp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:background="@drawable/corner_four_grey"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10dp"
-                android:src="@android:drawable/stat_sys_download"
-                app:tint="@color/text_color_main" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_5dp"
-                android:layout_marginEnd="@dimen/_5dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:gravity="center"
-                android:paddingEnd="@dimen/_20dp"
-                android:text="Save"
-                android:textColor="@color/black"
-                android:textSize="@dimen/txt_16sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/totalLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:background="@drawable/corner_four_grey"
-            android:baselineAligned="false"
-            android:padding="@dimen/_5dp"
-            android:weightSum="7"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/calenderView">
+            android:paddingBottom="@dimen/_10dp"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp">
 
             <LinearLayout
+                android:id="@+id/calenderView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@drawable/corner_four_grey"
+                android:orientation="horizontal"
+                android:padding="@dimen/_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/calender" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:layout_marginEnd="@dimen/_5dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="20-06-2021"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/txt_16sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@drawable/corner_four_grey"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10dp"
+                    android:src="@android:drawable/stat_sys_download"
+                    app:tint="@color/text_color_main" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:layout_marginEnd="@dimen/_5dp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
+                    android:paddingEnd="@dimen/_20dp"
+                    android:text="Save"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_16sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_10dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
+                android:layout_marginEnd="@dimen/_10dp">
 
-                <TextView
-                    android:id="@+id/txtTotalSales"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="Total Sales"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp" />
-
-                <TextView
-                    android:id="@+id/txtTotalExpenses"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="Total Expenses"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp" />
-
-                <TextView
-                    android:id="@+id/txtTotalPurchases"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="Total Purchases"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp" />
-
-                <TextView
-                    android:id="@+id/txtSalesCredit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="Sales Credit Given"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp" />
-
-                <TextView
-                    android:id="@+id/txtSalesCreditReceived"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="Sales Credit Received"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp" />
-
-                <TextView
-                    android:id="@+id/txtPurchaseCreditAdded"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="Purchase Cr Added"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp" />
-
-                <TextView
-                    android:id="@+id/txtPurchaseCreditPaid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:paddingTop="@dimen/_5dp"
-                    android:paddingBottom="@dimen/_5dp"
-                    android:text="Purchase Credit paid"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="-35dp"
-                android:layout_weight="3"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvTotalSalesCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:gravity="end"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvTotalExpensesCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:gravity="end"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvTotalPurchasesCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:gravity="end"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSalesCreditCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:gravity="end"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSalesCreditReceivedCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:gravity="end"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvPurchaseCreditAddedCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:gravity="end"
-                    android:paddingTop="@dimen/_5dp"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvPurchaseCreditPaidCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:gravity="end"
-                    android:paddingTop="@dimen/_5dp"
-                    android:paddingBottom="@dimen/_5dp"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_12sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="40dp"
-                android:layout_weight="2"
-                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5dp"
+                    android:id="@+id/totalLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10dp"
-                    android:layout_marginBottom="@dimen/_10dp"
-                    android:background="@color/text_color_main" />
+                    android:background="@drawable/corner_four_grey"
+                    android:baselineAligned="false"
+                    android:padding="@dimen/_5dp"
+                    android:weightSum="7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvTotalSales"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:gravity="start"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        android:layout_weight="2"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvTotalExpenses"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:gravity="start"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/txtTotalSales"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="Total Sales"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp" />
 
-                    <TextView
-                        android:id="@+id/tvTotalPurchases"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:gravity="start"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/txtTotalExpenses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="Total Expenses"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp" />
 
-                    <TextView
-                        android:id="@+id/tvSalesCredit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:gravity="start"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/txtTotalPurchases"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="Total Purchases"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp" />
 
-                    <TextView
-                        android:id="@+id/tvSalesCreditReceived"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:gravity="start"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/txtSalesCredit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="Sales Credit Given"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp" />
 
-                    <TextView
-                        android:id="@+id/tvPurchaseCreditAdded"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:gravity="start"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/txtSalesCreditReceived"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="Sales Credit Received"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp" />
 
-                    <TextView
-                        android:id="@+id/tvPurchaseCreditPaid"
+                        <TextView
+                            android:id="@+id/txtPurchaseCreditAdded"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="Purchase Cr Added"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp" />
+
+                        <TextView
+                            android:id="@+id/txtPurchaseCreditPaid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:paddingTop="@dimen/_5dp"
+                            android:paddingBottom="@dimen/_5dp"
+                            android:text="Purchase Credit paid"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:gravity="start"
-                        android:paddingTop="@dimen/_5dp"
-                        android:paddingBottom="@dimen/_5dp"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="-35dp"
+                        android:layout_weight="3"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTotalSalesCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvTotalExpensesCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvTotalPurchasesCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSalesCreditCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSalesCreditReceivedCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPurchaseCreditAddedCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:paddingTop="@dimen/_5dp"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPurchaseCreditPaidCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="end"
+                            android:paddingTop="@dimen/_5dp"
+                            android:paddingBottom="@dimen/_5dp"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="40dp"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/_5dp"
+                            android:layout_marginTop="@dimen/_10dp"
+                            android:layout_marginBottom="@dimen/_10dp"
+                            android:background="@color/text_color_main" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTotalSales"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:gravity="start"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvTotalExpenses"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:gravity="start"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvTotalPurchases"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:gravity="start"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvSalesCredit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:gravity="start"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvSalesCreditReceived"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:gravity="start"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvPurchaseCreditAdded"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:gravity="start"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvPurchaseCreditPaid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:gravity="start"
+                                android:paddingTop="@dimen/_5dp"
+                                android:paddingBottom="@dimen/_5dp"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/paymentOutLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:background="@drawable/corner_four_darker_red"
-            android:orientation="vertical"
-            android:padding="@dimen/_10dp"
-            android:gravity="center"
-            app:layout_constraintEnd_toStartOf="@+id/paymentInLayout"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/totalLayout">
-
-            <TextView
-                android:id="@+id/tvTotalPaymentOut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="@dimen/_5dp"
-                android:text="Rs.0"
-                android:textColor="@color/white"
-                android:textSize="@dimen/txt_12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtTotalPaymentOut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="@dimen/_5dp"
-                android:text="Total Payment Out"
-                android:textColor="@color/white"
-                android:textSize="@dimen/txt_12sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_5dp"
-                android:background="@color/white" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:weightSum="2">
-
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:id="@+id/paymentOutLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:background="@drawable/corner_four_darker_red"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10dp"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    app:layout_constraintEnd_toStartOf="@+id/paymentInLayout"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/totalLayout">
 
                     <TextView
-                        android:id="@+id/tvTotalCash"
+                        android:id="@+id/tvTotalPaymentOut"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
                         android:paddingTop="@dimen/_5dp"
                         android:text="Rs.0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/txt_12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtTotalPaymentOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:paddingTop="@dimen/_5dp"
+                        android:text="Total Payment Out"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/txt_12sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:background="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTotalCash"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Rs.0"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtTotalCash"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Cash"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTotalOnline"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Rs.0"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtTotalOnline"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Online"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentInLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:background="@drawable/corner_four_green"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:padding="@dimen/_10dp"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/paymentOutLayout"
+                    app:layout_constraintTop_toBottomOf="@id/totalLayout">
+
+                    <TextView
+                        android:id="@+id/tvTotalPaymentIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:paddingTop="@dimen/_5dp"
+                        android:text="Rs.0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/txt_12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtTotalPaymentIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:paddingTop="@dimen/_5dp"
+                        android:text="Total Payment In"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/txt_12sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:background="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        android:weightSum="2">
 
-                    <TextView
-                        android:id="@+id/txtTotalCash"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="Cash"
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTotalCashIn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Rs.0"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtTotalCashIn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Cash"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTotalOnlineIn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Rs.0"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtTotalOnlineIn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:paddingTop="@dimen/_5dp"
+                                android:text="Online"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/txt_12sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/paymentOutLayout">
 
-                    <TextView
-                        android:id="@+id/tvTotalOnline"
-                        android:layout_width="wrap_content"
+                    <TableLayout
+                        android:id="@+id/invoiceTableLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="Rs.0"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
+                        android:stretchColumns="1"
+                        android:layout_marginTop="@dimen/_15dp"
+                        android:background="@android:color/white">
 
-                    <TextView
-                        android:id="@+id/txtTotalOnline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="Online"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp" />
+                        <!-- Header Row -->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Category"
+                                android:textColor="@color/text_color_main"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/txt_13sp"
+                                android:background="@drawable/table_border_trans"
+                                android:gravity="center" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Particulars"
+                                android:textSize="@dimen/txt_13sp"
+                                android:textColor="@color/text_color_main"
+                                android:background="@drawable/table_border_trans"
+                                android:textStyle="bold"
+                                android:gravity="center" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Name"
+                                android:textColor="@color/text_color_main"
+                                android:background="@drawable/table_border_trans"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/txt_13sp"
+                                android:gravity="center" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Total"
+                                android:textColor="@color/text_color_main"
+                                android:background="@drawable/table_border_trans"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/txt_13sp"
+                                android:gravity="center" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color_main"
+                                android:text="CashIn/CashOut"
+                                android:background="@drawable/table_border_trans"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/txt_13sp"
+                                android:gravity="center"/>
+                        </TableRow>
+
+
+                    </TableLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/paymentInLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:background="@drawable/corner_four_green"
-            android:orientation="vertical"
-            android:layout_marginStart="@dimen/_10dp"
-            android:padding="@dimen/_10dp"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/paymentOutLayout"
-            app:layout_constraintTop_toBottomOf="@id/totalLayout">
-
-            <TextView
-                android:id="@+id/tvTotalPaymentIn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="@dimen/_5dp"
-                android:text="Rs.0"
-                android:textColor="@color/white"
-                android:textSize="@dimen/txt_12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtTotalPaymentIn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="@dimen/_5dp"
-                android:text="Total Payment In"
-                android:textColor="@color/white"
-                android:textSize="@dimen/txt_12sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_5dp"
-                android:background="@color/white" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:weightSum="2">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvTotalCashIn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="Rs.0"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtTotalCashIn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="Cash"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvTotalOnlineIn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="Rs.0"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtTotalOnlineIn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:paddingTop="@dimen/_5dp"
-                        android:text="Online"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/txt_12sp" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/paymentOutLayout">
-
-            <TableLayout
-                android:id="@+id/invoiceTableLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:stretchColumns="1"
-                android:layout_marginTop="@dimen/_15dp"
-                android:background="@android:color/white">
-
-                <!-- Header Row -->
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Category"
-                        android:textColor="@color/text_color_main"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/txt_13sp"
-                        android:background="@drawable/table_border_trans"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Particulars"
-                        android:textSize="@dimen/txt_13sp"
-                        android:textColor="@color/text_color_main"
-                        android:background="@drawable/table_border_trans"
-                        android:textStyle="bold"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Name"
-                        android:textColor="@color/text_color_main"
-                        android:background="@drawable/table_border_trans"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/txt_13sp"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Total"
-                        android:textColor="@color/text_color_main"
-                        android:background="@drawable/table_border_trans"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/txt_13sp"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:textColor="@color/text_color_main"
-                        android:text="CashIn/CashOut"
-                        android:background="@drawable/table_border_trans"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/txt_13sp"
-                        android:gravity="center"/>
-                </TableRow>
-
-
-            </TableLayout>
-
-        </LinearLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

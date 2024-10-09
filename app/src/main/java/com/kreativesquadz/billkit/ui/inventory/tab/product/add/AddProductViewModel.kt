@@ -15,7 +15,7 @@ import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Category
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository

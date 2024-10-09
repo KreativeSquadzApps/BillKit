@@ -22,14 +22,16 @@ import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.model.settings.GST
+import com.kreativesquadz.billkit.model.settings.TaxOption
+import com.kreativesquadz.billkit.model.settings.TaxSettings
+import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
-import com.kreativesquadz.billkit.worker.AddCompanyDetailsWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -37,8 +39,10 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(val workManager: WorkManager,
                                           val loginRepository: LoginRepository,
-                                          val settingsRepository: SettingsRepository) : ViewModel() {
-      private var invoicePrefix: String? = null
+                                          val settingsRepository: SettingsRepository,
+                                          val gstTaxRepository: GstTaxRepository) : ViewModel() {
+
+    private var invoicePrefix: String? = null
      private var invoiceNumber: Int? = null
     private val _items = MutableLiveData<MutableList<InvoiceItem>>().apply { value = mutableListOf() }
     val items: LiveData<MutableList<InvoiceItem>> get() = _items
@@ -81,6 +85,25 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
    var isReversedAmountNQty = false
 
+    val taxSettings: LiveData<TaxSettings> = gstTaxRepository.getTaxSettings()
+
+    fun initializeTaxSettings() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val taxSettings = gstTaxRepository.getTaxSettingsObj()
+            if (taxSettings == null) {
+                // Insert default tax settings if no settings exist
+                val defaultTaxSettings = TaxSettings(
+                    defaultTaxOption = TaxOption.ExemptTax, // Default value
+                    selectedTaxPercentage = 0.0f // Default percentage
+                )
+                gstTaxRepository.saveTaxSettings(defaultTaxSettings)
+            }
+        }
+    }
+
+
+    // Function to update the default tax setting when user changes it in settings
+
 
     fun getAmount(view: View){
         val amount = (view as TextView).text ?: ""
@@ -96,7 +119,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         amountValue.value = amountBuilder.toString()
     }
 
-    fun addItem(){
+    fun addItem(taxRate: Float?, include: String?){
+
         if (amountBuilder.toString().isEmpty()){
             return
         }
@@ -113,8 +137,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                 } else {
                     ammountArray[0] to ammountArray[1]
                 }
-
-
                 if (amnt.isEmpty()){
                     amnt = "1"
                 }
@@ -130,10 +152,10 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                     quantity = qty.toInt(),
                     returnedQty = 0,
                     totalPrice = finalAmount,
-                    taxRate = 0.00,
+                    taxRate = taxRate?.toDouble() ?: 0.00,
                     productMrp = amnt.toDouble()
-
                 )
+
                 list.add(homeItem)
             }
         }else{
@@ -148,7 +170,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                 quantity = qty.toInt(),
                 returnedQty = 0,
                 totalPrice = finalAmount,
-                taxRate = 0.00,
+                taxRate = taxRate?.toDouble() ?: 0.00,
                 productMrp = amountBuilder.toString().toDouble()
 
             )
@@ -431,4 +453,5 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     fun loadCompanyDetailsDb() : LiveData<CompanyDetails> {
         return  settingsRepository.loadCompanyDetailsDb(Config.userId)
     }
+
 }

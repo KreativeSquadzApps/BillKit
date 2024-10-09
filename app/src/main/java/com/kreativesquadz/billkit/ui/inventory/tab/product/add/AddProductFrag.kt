@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import com.kreativesquadz.billkit.BR
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.appcompat.widget.SwitchCompat
@@ -25,7 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -37,7 +35,7 @@ import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
 import com.kreativesquadz.billkit.databinding.FragmentAddProductBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
-import com.kreativesquadz.billkit.model.GST
+import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.utils.collapse
 import com.kreativesquadz.billkit.utils.expand
