@@ -8,6 +8,7 @@ import java.text.DecimalFormat
 class AddGstDialogViewModel : ViewModel() {
     val dialogText = MutableLiveData<String>()
     val gstText = MutableLiveData<String>()
+    val taxableAmount = MutableLiveData<String>()
     val percentage = MutableLiveData<String>()
     val totalAmountLivedata = MutableLiveData<String>()
     val isApplied = MutableLiveData<Boolean>(false)

@@ -137,7 +137,7 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
        binding.saveBill.setOnClickListener {
            if (isCustomerSelected){
                billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,invoicePrefixNumber),
+                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,0.0,"",invoicePrefixNumber),
                    items =  sharedViewModel.getItemsList(),
                    creditNoteId =  sharedViewModel.getCreditNote()?.id,
                    context =  requireContext())

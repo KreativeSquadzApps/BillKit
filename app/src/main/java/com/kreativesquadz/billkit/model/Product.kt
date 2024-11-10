@@ -17,6 +17,7 @@ data class Product(
     val productBarcode: String?=null,
     val productStockUnit: String?=null,
     val productTax: Double?=null,
+    val productTaxType : String?=null,
     var productStock: Int?=null,
     val productDefaultQty: Int?=null,
     val isSynced: Int = 0,

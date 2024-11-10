@@ -38,7 +38,6 @@ class TabPdfViewModel @Inject constructor(val userSettingRepository: UserSetting
         _isLoading.value = true
         viewModelScope.launch {
             try {
-                // Update the repository with the new settings
                 userSettingRepository.updatePdfSetting(
                     newSettings.userId,
                     newSettings.pdfCompanyInfo,

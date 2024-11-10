@@ -19,25 +19,24 @@ class SplashScreenActivity  : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.getInitialData()
+        viewModel.checkLoginAndLoadData()
+        viewModel.navigationState.observe(this) { state ->
+            when (state) {
+                SplashNavigationState.NavigateToMain -> navigateToMainScreen()
+                SplashNavigationState.NavigateToLogin -> navigateToLoginScreen()
+            }
+        }
+
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.isDataLoaded.observe(this) { isLoaded ->
-            if (isLoaded.isDataLoaded) {
-                if (isLoaded.isLoggedIn){
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else{
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-            }
+    private fun navigateToMainScreen() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
 
-        }
+    private fun navigateToLoginScreen() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
 }

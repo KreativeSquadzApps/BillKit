@@ -73,10 +73,10 @@ class AddGstDialogFragment : BaseDialogFragment<DialogFragmentAddGstBinding>() {
                 if (selectedGst !=null){
                     val newTotal = gst/100 * selectedGst!!.replace("%", "").trim().toDouble()
                     binding.totalAmount.text = Config.CURRENCY+df.format(newTotal)
-                    viewModel.gstText.value = df.format(newTotal)
+                    viewModel.gstText.value = df.format(newTotal) + "|"  + selectedGst!!.replace("%","") +"|"+ gstAmount
                 }else{
                     Toast.makeText(requireContext(), "Please select a tax", Toast.LENGTH_SHORT).show()
-                    binding.etProductMrp.setText("")
+                    binding.etProductGst.setText("")
                 }
 
             }

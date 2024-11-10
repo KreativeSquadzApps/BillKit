@@ -150,6 +150,8 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                     if (viewModel.isCompanyDetailsUpdated(it, currentSettings)) {
                         viewModel.updateCompanyDetailsSettings(currentSettings)
                         Toast.makeText(requireContext(), "Settings Updated", Toast.LENGTH_SHORT).show()
+                        binding.isUpdateEnable = false
+
                     }
                 }
 

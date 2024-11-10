@@ -7,6 +7,10 @@
             name="isUpdateEnable"
             type="Boolean" />
 
+        <variable
+            name="selectedColor"
+            type="Integer" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,26 +48,215 @@
                         android:textSize="@dimen/txt_16sp"
                         android:background="?attr/selectableItemBackground" />
 
-                    <!-- Hidden Dropdown Content -->
                     <LinearLayout
                         android:id="@+id/dropdown_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone"
                         android:padding="@dimen/_20dp"
                         android:background="@color/lite_grey_200">
-
-                        <ImageView
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="500dp"
-                            android:layout_marginTop="-30dp"
-                            android:src="@drawable/invoice_pdf_demo">
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="-30dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="400dp"
+                                android:src="@drawable/invoice_pdf_demo">
+                            </ImageView>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_marginEnd="@dimen/_8dp"
+                                    android:layout_marginStart="@dimen/_8dp">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="end"
+                                        android:paddingEnd="@dimen/_40dp"
+                                        android:textSize="@dimen/txt_15sp"
+                                        android:layout_marginTop="120dp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/black"
+                                        android:background="@{selectedColor}"
+                                        android:text="Invoice"/>
 
-                        </ImageView>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="35dp"
+                                        android:paddingTop="2dp"
+                                        android:paddingBottom="2dp"
+                                        android:weightSum="6">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:paddingStart="@dimen/_10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+                                            android:text="SL No"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:paddingStart="@dimen/_10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+                                            android:text="ITEM"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:gravity="end"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+                                            android:text="QTY"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:gravity="center"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+                                            android:text="PRICE"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:gravity="end"
+                                            android:paddingEnd="@dimen/_10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+                                            android:text="TAX"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:gravity="end"
+                                            android:paddingEnd="@dimen/_10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+                                            android:text="AMOUNT"/>
+
+
+                                    </LinearLayout>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/txt_10sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginTop="45dp"
+                                        android:padding="@dimen/_8dp"
+                                        android:layout_gravity="end"
+                                        android:textColor="@color/black"
+                                        android:background="@{selectedColor}"
+                                        android:text="Total : 1225.0"/>
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="11dp"
+                                        android:weightSum="5">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:layout_marginEnd="10dp"
+                                            android:paddingStart="@dimen/_10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+                                            android:text="SL No"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:layout_marginStart="-10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+
+                                            android:text="TAX TYPE"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+
+                                            android:text="TAXABLE AMT"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:gravity="center"
+                                            android:paddingEnd="@dimen/_10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+
+                                            android:text="RATE"/>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="@dimen/txt_8sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1"
+                                            android:gravity="end"
+                                            android:paddingEnd="@dimen/_10dp"
+                                            android:textColor="@color/white"
+                                            android:background="@{selectedColor}"
+
+                                            android:text="TAX AMT"/>
+
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </FrameLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal"
+                            android:id="@+id/recyclerView"
+                            tools:listitem="@layout/item_colors"
+                            android:layout_marginTop="-20dp" />
+
 
                         <!-- Add more content here -->
                     </LinearLayout>
+
+
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/layoutCompanyInfo"

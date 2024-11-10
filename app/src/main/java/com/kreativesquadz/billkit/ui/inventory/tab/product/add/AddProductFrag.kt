@@ -37,6 +37,7 @@ import com.kreativesquadz.billkit.databinding.FragmentAddProductBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.utils.TaxType
 import com.kreativesquadz.billkit.utils.collapse
 import com.kreativesquadz.billkit.utils.expand
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,10 +58,7 @@ class AddProductFrag : Fragment() {
                                 "Quintal (Qtl)", "Roll (Rol)", "Square Feet (Sqf)",
                                 "Square Meter (Sqm)", "Tablets (Tbs)","Jar (Jar)")
 
-    val taxTypeList = listOf("Price includes Tax",
-        "Price is without Tax",
-        "Zero Rated Tax",
-        "Exempt Tax")
+
     private val requestCodeCameraPermission = 200
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
@@ -83,7 +81,7 @@ class AddProductFrag : Fragment() {
         onClickListeners()
         setupSpinner()
         setupSpinnerStockUnit(stockUnitList)
-        setupSpinnerTaxType(taxTypeList)
+        setupSpinnerTaxType()
         observers()
         binding.isCameraOpen = isCameraClicked
         return binding.root
@@ -163,6 +161,7 @@ class AddProductFrag : Fragment() {
             productBarcode = binding.etBarcode.text.toString(),
             productStockUnit = binding.dropdownStockUnit.text.toString(),
             productTax = selectedTaxValue,
+            productTaxType = binding.dropdownTaxType.text.toString(),
             productStock = binding.etCurrentStock.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
             productDefaultQty = binding.etDefaultQty.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
             isSynced = 0)
@@ -196,7 +195,8 @@ class AddProductFrag : Fragment() {
             Toast.makeText(requireContext(), selectedItem, Toast.LENGTH_SHORT).show()
         }
     }
-    private fun setupSpinnerTaxType(itemList: List<String>) {
+    private fun setupSpinnerTaxType() {
+      val itemList = TaxType.getList().map{ it.displayName }
         val adapterStockUnit = GenericSpinnerAdapter(
             context = requireContext(),
             layoutResId = R.layout.dropdown_item, // Use your custom layout

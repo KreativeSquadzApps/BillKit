@@ -66,7 +66,6 @@ class InvoiceFragment : Fragment() {
               }
           }
           viewModel.invoiceItems.observe(viewLifecycleOwner){
-              setupRecyclerView(it)
               it?.forEach {
                   if(it.taxRate > 0){
                       isTaxAvailable = true
@@ -75,6 +74,7 @@ class InvoiceFragment : Fragment() {
               }
               Log.e("ooooooooooo",it.toString())
               binding.istTaxAvalaible = isTaxAvailable
+              setupRecyclerView(it)
           }
       }
 

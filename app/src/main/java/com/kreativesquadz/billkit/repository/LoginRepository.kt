@@ -25,10 +25,15 @@ class LoginRepository @Inject constructor(private val db: AppDatabase) {
     private val userSessionDao : UserSessionDao = db.userSessionDao()
 
     suspend fun login(username: String, password: String, isStaff: Boolean) {
-        val response = ApiClient.getApiService().login(LoginRequest(username, password,isStaff))
-        if (response.code == 200){
-            saveSession(loginResponse = response)
+        try {
+            val response = ApiClient.getApiService().login(LoginRequest(username, password,isStaff))
+            if (response.code == 200){
+                saveSession(loginResponse = response)
+            }
+        }catch (Exception : Exception){
+            Log.e("Exception",Exception.toString())
         }
+
 
     }
     suspend fun logout() {

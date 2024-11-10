@@ -64,7 +64,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <AutoCompleteTextView
-                        android:id="@+id/etProductMrp"
+                        android:id="@+id/etProductGst"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/txt_14sp"

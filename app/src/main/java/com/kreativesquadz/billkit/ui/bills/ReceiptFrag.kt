@@ -55,7 +55,6 @@ import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.utils.addBackPressHandler
 import com.kreativesquadz.billkit.utils.toBoolean
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -80,10 +79,10 @@ class ReceiptFrag : Fragment() {
     val target by lazy {
         arguments?.getString("target")
     }
-
     private var pdfSettings = PdfSettings()
     private var invoicePrinterSettings = InvoicePrinterSettings()
     private var thermalPrinterSetup: ThermalPrinterSetup? = null
+    private var customGstAmount: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,7 +139,10 @@ class ReceiptFrag : Fragment() {
                                 val isPrinterCompanyPhone = printerCompanyInfoValues.getOrNull(2)?.toIntOrNull() ?: 0
                                 val isPrinterCompanyGst = printerCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
 
-                                val printerItemTableValues = pdfSettings.pdfItemTable.split(" ")
+
+
+
+                                val printerItemTableValues = invoicePrinterSettings.printerItemTable.split(" ")
                                 val  isPrinterItemTableCustomerDetails = printerItemTableValues.getOrNull(0)?.toIntOrNull() ?: 0
                                 val  isPrinterItemTableMrp = printerItemTableValues.getOrNull(1)?.toIntOrNull() ?: 0
                                 val isPrinterItemTablePayment = printerItemTableValues.getOrNull(2)?.toIntOrNull() ?: 0
@@ -201,6 +203,10 @@ class ReceiptFrag : Fragment() {
 
         viewModel.invoiceData.observe(viewLifecycleOwner) {
             binding.invoice = it
+            if (it.customGstAmount != null){
+                isTaxAvailable = true
+                customGstAmount = it.customGstAmount
+            }
             binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().minus(it.subtotal.toInt())
                 //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
             it.discount?.apply{
@@ -222,19 +228,18 @@ class ReceiptFrag : Fragment() {
         }
 
         viewModel.invoiceItems.observe(viewLifecycleOwner){
-            setupRecyclerView(it)
             it?.forEach {
                 if(it.taxRate > 0){
                     isTaxAvailable = true
+                    binding.istProductTaxAvalaible = true
                 }
                 if(it.productMrp != it.unitPrice){
                     isMrpAvailable = true
                 }
-
             }
             binding.istTaxAvalaible = isTaxAvailable
             binding.istMrpAvalaible = isMrpAvailable
-
+            setupRecyclerView(it)
         }
 
 
@@ -314,8 +319,8 @@ class ReceiptFrag : Fragment() {
                 } else {
                     // Tax rate doesn't exist, add a new entry
                     taxList.add(it.taxRate)
-                    taxAmount = it.totalPrice * it.taxRate / 100
-                    invoiceTax.add(InvoiceTax("", it.totalPrice, it.taxRate, taxAmount))
+                    taxAmount = (it.unitPrice * it.quantity) * it.taxRate / 100
+                    invoiceTax.add(InvoiceTax("", it.unitPrice * it.quantity, it.taxRate, taxAmount))
                 }
             }
             if(it.productMrp != it.unitPrice){
@@ -323,8 +328,12 @@ class ReceiptFrag : Fragment() {
             }
 
         }
-
-
+        customGstAmount?.let {
+            val customGstAmount = it.split("|")[0].toDouble()
+            val customGstRateApplied = it.split("|")[1].toDouble()
+            val taxableAmount = it.split("|")[2].toDouble()
+                invoiceTax.add(InvoiceTax("Custom GST",taxableAmount, customGstRateApplied, customGstAmount))
+             }
         viewModel.getGstListByValue(taxList).observe(viewLifecycleOwner) { gstList ->
             gstList?.let { gstItems ->
                 gstItems.forEach { gst ->
@@ -333,12 +342,13 @@ class ReceiptFrag : Fragment() {
                             invoiceItem.taxType = gst.taxType
                         }
                     }
+
                 }
-                setupRecyclerViewGst(invoiceTax)
+
             }
-
-
         }
+        setupRecyclerViewGst(invoiceTax)
+
 
         adapter = AdapterReceipt(
             receiptInvoiceItem ?: emptyList(),

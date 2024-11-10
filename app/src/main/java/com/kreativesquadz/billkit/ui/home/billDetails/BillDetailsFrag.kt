@@ -35,17 +35,18 @@ import java.text.DecimalFormat
 
 @AndroidEntryPoint
 class BillDetailsFrag : Fragment() {
+    private var _binding : FragmentBillDetailsBinding? = null
     private val viewModel: BillDetailsViewModel by activityViewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val dialogViewModel: DialogViewModel by activityViewModels()
     private val dialogGstViewModel: AddGstDialogViewModel by activityViewModels()
-    private var _binding : FragmentBillDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     val df = DecimalFormat("#")
     var isCustomerSelected = false
     var invoicePrefixNumber = ""
     var invoicePrefix = ""
+    var customGstAmount : String ? = null
 
 
 
@@ -80,32 +81,30 @@ class BillDetailsFrag : Fragment() {
     private fun onClickListeners(){
         binding.btnCash.setOnClickListener {
                       viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble(),invoicePrefixNumber),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble(),0.0 ,customGstAmount,invoicePrefixNumber),
                                          items =  sharedViewModel.getItemsList(),
                                          creditNoteId =  sharedViewModel.getCreditNote()?.id,
                                          context =  requireContext())
-                        viewModel.updateInvoicePrefixNumber(invoicePrefix)
+
 
         }
 
         binding.btnOnline.setOnClickListener{
                         viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0,invoicePrefixNumber),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0,0.0,customGstAmount,invoicePrefixNumber),
                                          items =  sharedViewModel.getItemsList(),
                                          creditNoteId =  sharedViewModel.getCreditNote()?.id,
                                          context =  requireContext())
-            viewModel.updateInvoicePrefixNumber(invoicePrefix)
 
         }
 
         binding.btnCredit.setOnClickListener{
             if (isCustomerSelected){
                 viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0,invoicePrefixNumber),
+                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0,0.0,customGstAmount,invoicePrefixNumber),
                     items =  sharedViewModel.getItemsList(),
                     creditNoteId =  sharedViewModel.getCreditNote()?.id,
                     context =  requireContext())
-                viewModel.updateInvoicePrefixNumber(invoicePrefix)
 
             }else{
                 Toast.makeText(requireContext(), "Please select customer", Toast.LENGTH_SHORT).show()
@@ -192,6 +191,7 @@ class BillDetailsFrag : Fragment() {
 
         viewModel.invoiceId.observe(viewLifecycleOwner){
             it?.let {
+                viewModel.updateInvoicePrefixNumber(invoicePrefix)
                 val action = BillDetailsFragDirections.actionBillDetailsFragToReceiptFrag(viewModel.invoiceId.value.toString(),Config.BillDetailsFragmentToReceiptFragment)
                 findNavController().navigate(action)
                 viewModel.clearInvoiceStatus()
@@ -242,7 +242,6 @@ class BillDetailsFrag : Fragment() {
             binding.amountTotal.text = "Amount : "+ (totalAmount.replace(Config.CURRENCY, "").toDouble()
                     - sharedViewModel.getTotalTax().replace(Config.CURRENCY, "").toDouble())
             //binding.amountTotal.text =  "Amount : " + totalAmount
-
         }
 
         dialogViewModel.isApplied.observe(viewLifecycleOwner) {
@@ -255,10 +254,14 @@ class BillDetailsFrag : Fragment() {
         }
         dialogGstViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
-                binding.gstAppliedAmount = dialogGstViewModel.gstText.value.toString().substringAfter(" ")
-                sharedViewModel.addGst(dialogGstViewModel.gstText.value.toString().substringAfter(" "))
+                val customGstAmountApplied = dialogGstViewModel.gstText.value.toString().substringBefore("|")
+                //val customGstRateApplied = dialogGstViewModel.gstText.value.toString().substringAfter("|")
+                binding.gstAppliedAmount = customGstAmountApplied
+                sharedViewModel.addGst(customGstAmountApplied)
+                customGstAmount = dialogGstViewModel.gstText.value.toString()
             }else{
                 sharedViewModel.removeGst()
+                customGstAmount = null
             }
         }
 
@@ -297,9 +300,6 @@ class BillDetailsFrag : Fragment() {
                 if (sharedViewModel.items.value.isNullOrEmpty()){
                     findNavController().popBackStack()
                 }
-
-
-
             }
         }
 

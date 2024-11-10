@@ -18,6 +18,9 @@
             name="istTaxAvalaible"
             type="Boolean" />
         <variable
+            name="istProductTaxAvalaible"
+            type="Boolean" />
+        <variable
             name="istMrpAvalaible"
             type="Boolean" />
         <variable
@@ -284,7 +287,7 @@
                             android:text="Tax"
                             android:gravity="center"
 
-                            android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
+                            android:visibility="@{istProductTaxAvalaible ? View.VISIBLE : View.GONE}"
                             android:textColor="@color/text_color_main"
                             app:layout_constraintEnd_toStartOf="@+id/total"
                             app:layout_constraintHorizontal_bias="0.5"
@@ -497,9 +500,9 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/gstRecyclerview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/gstRecyclerview"
                         android:nestedScrollingEnabled="false"
                         tools:itemCount="2"
                         tools:listitem="@layout/item_gst" />

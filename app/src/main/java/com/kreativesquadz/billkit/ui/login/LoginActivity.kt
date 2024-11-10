@@ -54,14 +54,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun updateUiWithUser() {
+    private fun updateUiWithUser(){
         loginViewModel.userSession.observe(this@LoginActivity) {
-            Log.e("ooooooppp", it.toString())
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
-
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

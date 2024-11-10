@@ -1,6 +1,5 @@
 package com.kreativesquadz.billkit
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -34,12 +33,24 @@ class MainActivity  : AppCompatActivity(), HomeFragment.DrawerToggleListener {
         setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbar)
         viewModel.getSesssion()
+        observers()
         navigationSetup()
-
-
-
     }
 
+    private fun observers(){
+        viewModel.companyDetails.observe(this){
+
+        }
+        viewModel.invoicePrefixNumberList.observe(this){
+
+        }
+        viewModel.customer.observe(this){
+
+        }
+        viewModel.gstTax.observe(this){
+
+        }
+    }
     private fun navigationSetup(){
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView

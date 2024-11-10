@@ -28,6 +28,7 @@ import com.kreativesquadz.billkit.model.settings.TaxSettings
 import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
+import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -185,27 +186,54 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         if (product == null){
             return
         }
-        var defaultQty = product.productDefaultQty
-        if (defaultQty == 0){
-            defaultQty = 1
-        }
+        val defaultQty = product.productDefaultQty ?: 1
       val invoiceId =  generateInvoiceId().toLong()
         var productMrp = product.productPrice
         if (product.productMrp != null && product.productMrp.toString().toDouble() > 0.0) {
             productMrp = product.productMrp
+        }
+        val finalTotalPrice = (product.productPrice.toString().toDouble() * defaultQty)
+        var finalPrice = finalTotalPrice
+
+            product.productTaxType?.let { taxTypeString ->
+            val taxType = TaxType.fromString(taxTypeString)
+            taxType?.let { type ->
+                when (type) {
+                    TaxType.PriceIncludesTax -> {
+                        product.productTax?.let { it1 ->
+                            val productTax =   product.productPrice?.times(it1)?.div(100) ?: 0.0
+                            finalPrice = finalTotalPrice
+                        }
+
+                        // Handle PriceIncludesTax
+                    }
+                    TaxType.PriceWithoutTax -> {
+                        product.productTax?.let { it1 ->
+                            val productTax =   product.productPrice?.times(it1)?.div(100) ?: 0.0
+                            finalPrice = finalTotalPrice   +  (productTax * defaultQty)
+                        }
+                    // Handle PriceWithoutTax
+                    }
+                    TaxType.ZeroRatedTax -> {
+                        // Handle ZeroRatedTax
+                    }
+                    TaxType.ExemptTax -> {
+                        // Handle ExemptTax
+                    }
+                }
+            }
         }
 
         val homeItem =  InvoiceItem(
             invoiceId = invoiceId,
             itemName = "${product.productName}  ( ${product.productPrice} )   $include ${defaultQty}",
             unitPrice = product.productPrice.toString().toDouble(),
-            quantity = defaultQty!!.toInt(),
+            quantity = defaultQty,
             returnedQty = 0,
-            totalPrice = ((product.productPrice.toString().toDouble() * defaultQty)),
+            totalPrice = finalPrice,
             taxRate = product.productTax?.toString()?.toDouble() ?: 0.0,
-            productMrp = productMrp
-
-        )
+            productMrp = productMrp,
+            )
         list.add(homeItem)
         _items.value = list
     }
@@ -232,8 +260,38 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             if (isMatch.equals(product?.productName+":")){
                 it.itemName = "${product?.productName} ( ${product?.productPrice} )  $include ${it.quantity + 1}"
                 it.quantity += 1
-                it.totalPrice = ((product?.productPrice.toString()
-                    .toDouble() * it.quantity))
+
+                val finalTotalPrice = (product?.productPrice.toString().toDouble() * it.quantity)
+                var finalPrice = finalTotalPrice
+
+                product?.productTaxType?.let { taxTypeString ->
+                    val taxType = TaxType.fromString(taxTypeString)
+                    taxType?.let { type ->
+                        when (type) {
+                            TaxType.PriceIncludesTax -> {
+                                product.productTax?.let { it1 ->
+                                val productTax =   product.productPrice?.times(it1)?.div(100) ?: 0.0
+                                    finalPrice = finalTotalPrice   +  (productTax * it.quantity)
+                                }
+                                // Handle PriceIncludesTax
+                            }
+                            TaxType.PriceWithoutTax -> {
+                                product.productTax?.let { it1 ->
+                                    val productTax =   product.productPrice?.times(it1)?.div(100) ?: 0.0
+                                    finalPrice = finalTotalPrice   +  (productTax * it.quantity)
+                                }
+                            }
+                            TaxType.ZeroRatedTax -> {
+                                // Handle ZeroRatedTax
+                            }
+                            TaxType.ExemptTax -> {
+                                // Handle ExemptTax
+                            }
+                        }
+                    }
+                }
+
+                it.totalPrice = finalPrice
 
                 return@any true
             }
@@ -267,12 +325,12 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         var totalAmount = 0.0
 
         list.forEach { item ->
-            val itemTax = item.taxRate?:0 * item.unitPrice * item.quantity / 100
-            totalTax += itemTax
-            subtotal += item.totalPrice - itemTax
+            totalTax = item.taxRate * item.unitPrice * item.quantity / 100
+            subtotal += item.totalPrice - totalTax
+            totalAmount += item.totalPrice
         }
 
-        totalAmount = subtotal + totalTax - (discounted ?: 0) - (creditNoteAmount ?: 0)
+        totalAmount = totalAmount - (discounted ?: 0) - (creditNoteAmount ?: 0)
         if (gstAddedAmount != null) {
             totalAmount += gstAddedAmount!!
         }
@@ -365,7 +423,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         return selectedCreditNote.value
     }
 
-    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?,invoicePrefixNumber : String) : Invoice{
+    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?
+                    , packageAmount: Double? ,customGstAmount: String?,invoicePrefixNumber : String) : Invoice{
         var createdBy = "Created By Admin"
         val loginSession = loginRepository.getUserSessions()
         if (loginSession != null){
@@ -389,6 +448,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             cashAmount = cashAmount,
             onlineAmount = onlineAmount,
             creditAmount = creditAmount,
+            packageAmount = packageAmount,
+            customGstAmount = customGstAmount,
             totalAmount = getTotalAmountDouble(),
             totalGst = gstAddedAmount?.toDouble() ?: 0.0,
             customerId = getCustomerId(),

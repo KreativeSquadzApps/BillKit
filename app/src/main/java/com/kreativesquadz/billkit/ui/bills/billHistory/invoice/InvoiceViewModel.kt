@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.ui.bills.billHistory.invoice
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,14 +35,17 @@ class InvoiceViewModel @Inject constructor(val customerManagRepository: Customer
   fun getInvoiceDetails(invoiceId: String) : LiveData<Invoice> {
     return billHistoryRepository.getInvoiceById(invoiceId.toInt())
   }
-  fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
-    try {
-      val items = billHistoryRepository.getInvoiceItems(id)
-      _invoiceItems.postValue(items)
-    } catch (e: Exception) {
-      // Handle exception, e.g., show a message to the user
+    fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
+        if (_invoiceItems.value.isNullOrEmpty()) { // Only fetch if data is not already loaded
+            try {
+                val items = billHistoryRepository.getInvoiceItems(id)
+                Log.e("InvoiceViewModel", "Fetched invoice items: $items")
+                _invoiceItems.postValue(items)
+            } catch (e: Exception) {
+                // Handle exception
+            }
+        }
     }
-  }
    fun updateInvoiceStatus( context: Context, status: String, invoiceId: Int) {
      viewModelScope.launch {
        billHistoryRepository.updateInvoiceStatus(status,invoiceId)

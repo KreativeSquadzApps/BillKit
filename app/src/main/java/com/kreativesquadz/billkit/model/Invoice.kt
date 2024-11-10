@@ -25,6 +25,8 @@ data class Invoice(
     val cashAmount: Double? = null,
     val onlineAmount: Double? = null,
     val creditAmount: Double? = null,
+    val packageAmount: Double? = null,
+    val customGstAmount: String? = null,
     val totalAmount: Double,
     val totalGst: Double,
     val customerId: Long? = null,
@@ -50,6 +52,8 @@ data class InvoiceItem(
     var returnedQty: Int? = 0,
     var totalPrice: Double,
     val productMrp: Double?=null,
-    val taxRate: Double
+    val taxRate: Double,
+    val productTaxType : String?=null
+
 ) : Serializable
 

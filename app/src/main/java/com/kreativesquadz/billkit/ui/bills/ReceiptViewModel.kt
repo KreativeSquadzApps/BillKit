@@ -70,7 +70,6 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     private val _allDataReady = MutableLiveData<Boolean>()
     val allDataReady: LiveData<Boolean> = _allDataReady
 
-
     fun fetchAllDetails(invoiceId: String) = viewModelScope.launch {
         try {
             val companyDetailsDeferred = async { settingsRepository.loadCompanyDetailsDb(Config.userId).asFlow().first()}
@@ -102,6 +101,7 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
             _allDataReady.value = true
         }
     }
+
     fun getCustomerById(id: String) : Customer {
         return customerManagRepository.getCustomer(id)
     }
