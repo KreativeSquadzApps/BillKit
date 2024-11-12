@@ -282,12 +282,12 @@
                             </LinearLayout>
 
 
-                            <androidx.recyclerview.widget.RecyclerView
+                            <com.kreativesquadz.billkit.utils.ExpandingRecyclerView
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
+                                android:layout_height="wrap_content"
                                 android:id="@+id/recyclerView"
                                 tools:listitem="@layout/item_invoice_item"
-                                tools:itemCount="1"
+                                tools:itemCount="2"
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintTop_toBottomOf="@+id/txtItem"/>
 
@@ -297,95 +297,141 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/recyclerView"
                                 android:layout_height="1dp"/>
-                            <androidx.constraintlayout.widget.ConstraintLayout
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/_10dp"
+                            android:id="@+id/footerDataView"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvTotalItems"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_13sp"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text='@{"Total items : "+invoice.totalItems}'
+                                tools:text="Total items : 2"/>
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvCash"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_13sp"
+                                android:visibility="@{invoice.cashAmount==null||invoice.cashAmount==0 ? View.GONE : View.VISIBLE }"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
+                                android:text='@{"Cash : "+invoice.cashAmount}'
+                                tools:text="Cash : 1020.00 "/>
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvOnline"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_13sp"
+                                android:visibility="@{invoice.onlineAmount==null||invoice.onlineAmount==0 ? View.GONE : View.VISIBLE }"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvCash"
+                                android:text='@{"Online : "+invoice.onlineAmount}'
+                                tools:text="Online : 1020.00 "/>
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvCredit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_13sp"
+                                android:visibility="@{invoice.creditAmount==null||invoice.creditAmount==0 ? View.GONE : View.VISIBLE }"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvOnline"
+                                android:text='@{"Credit : "+invoice.creditAmount}'
+                                tools:text="Credit : 1020.00 "/>
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvSubTotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_13sp"
+                                android:layout_marginEnd="@dimen/_10dp"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text='@{"Sub Total : "+ invoice.subtotal}'
+                                tools:text="Sub Total : 1020"/>
+                            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvDiscount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_13sp"
+                                android:layout_marginEnd="@dimen/_10dp"
+                                android:layout_marginStart="10dp"
+                                app:hideOnZero="@{invoice.discount}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tvSubTotal"
+                                android:text='@{"Discount : "+ invoice.discount}'
+                                tools:text="Discount : 1020"/>
+                            <TextView android:fontFamily="@font/montserrat_regular"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tvTotalTax"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tvDiscount"
+                                android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:gravity="end"
+                                android:layout_marginEnd="@dimen/_10dp"
+                                android:layout_marginStart="10dp"
+                                android:textColor="@color/text_color_main"
+                                tools:text="Total Tax  Rs 11100.00"/>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvPackaging"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_12sp"
+                                android:visibility="@{invoice.packageAmount==null||invoice.packageAmount==0 ? View.GONE : View.VISIBLE }"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvTotalTax"
+                                android:text='@{"Packaging : "+invoice.packageAmount}'
+                                tools:text="Packaging : 1020.00 "/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/cardFooter"
-                                android:paddingTop="@dimen/_20dp"
+                                android:paddingTop="@dimen/_10dp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+                                app:layout_constraintTop_toBottomOf="@+id/footerDataView">
 
-
-
-                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
-                                    android:id="@+id/tvTotalItems"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_13sp"
-                                    android:layout_marginStart="10dp"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    android:text='@{"Total items : "+invoice.totalItems}'
-                                    tools:text="Total items : 2"/>
-
-                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
-                                    android:id="@+id/tvCash"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_13sp"
-                                    android:layout_marginStart="10dp"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
-                                    android:text='@{"Cash : "+invoice.cashAmount}'
-                                    tools:text="Cash : 1020.00 "/>
-
-
-                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
-                                    android:id="@+id/tvSubTotal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_13sp"
-                                    android:layout_marginEnd="@dimen/_10dp"
-                                    android:layout_marginStart="10dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    android:text='@{"Sub Total : "+ invoice.subtotal}'
-                                    tools:text="Sub Total : 1020"/>
-
-                                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
-                                    android:id="@+id/tvDiscount"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:textColor="@color/text_color_main"
-                                    android:textSize="@dimen/txt_13sp"
-                                    android:layout_marginEnd="@dimen/_10dp"
-                                    android:layout_marginStart="10dp"
-                                    app:hideOnZero="@{invoice.discount}"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvSubTotal"
-                                    android:text='@{"Discount : "+ invoice.discount}'
-                                    tools:text="Discount : 1020"/>
-
-                                <TextView android:fontFamily="@font/montserrat_regular"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/tvTotalTax"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvDiscount"
-                                    android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold"
-                                    android:gravity="end"
-                                    android:layout_marginEnd="@dimen/_10dp"
-                                    android:layout_marginStart="10dp"
-                                    android:textColor="@color/text_color_main"
-                                    tools:text="Total Tax  Rs 11100.00"/>
 
                                 <View
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
                                     android:id="@+id/viewfooter"
-                                    android:layout_marginTop="@dimen/_10dp"
                                     android:background="@color/lite_grey"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/tvTotalTax"/>
+                                    app:layout_constraintTop_toTopOf="parent"/>
 
                                 <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                     android:id="@+id/tvTotalAmount"
@@ -446,8 +492,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textSize="@dimen/txt_12sp"
                         android:textColor="@color/text_color_main"
-                        android:text="Sales Return"
+                        android:text="Return"
                         android:gravity="center" />
                 </LinearLayout>
 
@@ -480,6 +527,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_12sp"
                         android:text="Cancel Bill"
                         android:gravity="center" />
 
@@ -496,7 +544,7 @@
                     android:layout_marginBottom="@dimen/_10dp"
                     android:layout_marginStart="@dimen/_5dp"
                     android:background="@drawable/corner_four_grey"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/btnEdit"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/btnCancel"
                     app:layout_constraintTop_toTopOf="parent">
@@ -512,8 +560,44 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textSize="@dimen/txt_12sp"
                         android:textColor="@color/text_color_main"
                         android:text="Receipt"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="5"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:layout_marginStart="@dimen/_5dp"
+                    android:background="@drawable/corner_four_grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btnReceipt"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:paddingTop="@dimen/_15dp"
+                        android:layout_weight="4"
+                        app:tint="@color/colorPrimaryDark"
+                        android:src="@drawable/edit" />
+
+                    <TextView android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_main"
+                        android:text="Edit"
+                        android:textSize="@dimen/txt_12sp"
                         android:gravity="center" />
 
                 </LinearLayout>

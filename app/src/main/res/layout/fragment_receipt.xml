@@ -18,6 +18,9 @@
             name="istTaxAvalaible"
             type="Boolean" />
         <variable
+            name="istPackagingAvalaible"
+            type="Boolean" />
+        <variable
             name="istProductTaxAvalaible"
             type="Boolean" />
         <variable
@@ -318,9 +321,9 @@
                         android:layout_marginBottom="5dp"/>
 
 
-                    <androidx.recyclerview.widget.RecyclerView
+                    <com.kreativesquadz.billkit.utils.ExpandingRecyclerView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:id="@+id/itemListRecyclerview"
                         android:nestedScrollingEnabled="false"
                         tools:itemCount="3"
@@ -341,7 +344,7 @@
                         android:orientation="horizontal"
                         android:weightSum="2">
                         <TextView android:fontFamily="@font/montserrat_regular"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text='@{"Items : " + invoice.totalItems}'
                             android:textSize="12sp"
@@ -352,17 +355,28 @@
                             tools:text="Items: 3"/>
 
                         <TextView android:fontFamily="@font/montserrat_regular"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text='@{"Sub Total  Rs " + invoice.subtotal}'
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:gravity="end"
+                            android:layout_gravity="end"
                             android:textColor="@color/text_color_main"
                             tools:text="Sub Total  Rs 990.00"/>
 
                     </LinearLayout>
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvPackaging"
+                        android:visibility="@{istPackagingAvalaible ? View.VISIBLE : View.GONE}"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:gravity="end"
+                        android:textColor="@color/text_color_main"
+                        tools:text="Packaging Rs 11100.00"/>
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

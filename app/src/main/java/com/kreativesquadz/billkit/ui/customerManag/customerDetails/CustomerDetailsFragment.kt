@@ -1,5 +1,7 @@
 package com.kreativesquadz.billkit.ui.customerManag.customerDetails
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -59,6 +61,19 @@ class CustomerDetailsFragment : Fragment() {
         sharedViewModel.customer.observe(viewLifecycleOwner) { customer ->
             binding.customer = customer
             this.customer = customer
+            this.customer?.creditAmount?.let {
+                if (it == "0" || it.isEmpty() || it == "0.0"){
+                    binding.ivDelete.alpha = 1.0f
+                    binding.ivDelete.clearColorFilter()
+                    binding.ivDelete.isEnabled = true
+                    binding.ivDelete.isClickable = true
+                }else{
+                    binding.ivDelete.alpha = 0.5f
+                    binding.ivDelete.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN)
+                    binding.ivDelete.isEnabled = false
+                    binding.ivDelete.isClickable = false
+                }
+            }
         }
     }
 

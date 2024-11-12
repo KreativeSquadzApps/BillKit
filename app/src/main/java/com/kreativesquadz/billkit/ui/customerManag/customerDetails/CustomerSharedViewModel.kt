@@ -27,5 +27,4 @@ class CustomerSharedViewModel @Inject constructor(private val repository: Custom
     }
 
 
-
 }

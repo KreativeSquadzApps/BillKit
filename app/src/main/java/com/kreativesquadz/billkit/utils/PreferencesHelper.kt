@@ -12,6 +12,9 @@ class PreferencesHelper(context: Context) {
     fun getSelectedDate(): Long {
         return preferences.getLong("selected_date", System.currentTimeMillis())
     }
+    fun removeSelectedDate() {
+        preferences.edit().remove("selected_date").apply()
+    }
 
      fun saveSelectedDateCreditNote(timestamp: Long) {
         preferences.edit().putLong("selected_date_crreditnote", timestamp).apply()
@@ -21,5 +24,7 @@ class PreferencesHelper(context: Context) {
         return preferences.getLong("selected_date_crreditnote", System.currentTimeMillis())
     }
 
-
+    fun removeSelectedDateCreditNote() {
+        preferences.edit().remove("selected_date_crreditnote").apply()
+    }
 }

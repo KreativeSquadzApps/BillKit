@@ -67,6 +67,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     var amountBuilder = StringBuilder()
     private var discounted : Int? = null
     private var gstAddedAmount : Int? = null
+    private var packageAmount : Int? = null
     private var creditNoteAmount : Int? = null
 
     var _isDiscountApplied = MutableLiveData<Boolean>()
@@ -74,6 +75,9 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
     var _isGstApplied = MutableLiveData<Boolean>()
     val isGstApplied : LiveData<Boolean> get() = _isGstApplied
+
+    var _isPackageApplied = MutableLiveData<Boolean>()
+    val isPackageApplied : LiveData<Boolean> get() = _isPackageApplied
 
     var _isCreditNoteApplied = MutableLiveData<Boolean>()
     val isCreditNoteApplied : LiveData<Boolean> get() = _isCreditNoteApplied
@@ -334,6 +338,9 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         if (gstAddedAmount != null) {
             totalAmount += gstAddedAmount!!
         }
+        if (packageAmount != null) {
+            totalAmount += packageAmount!!
+        }
 
         return Triple(subtotal, totalTax, totalAmount)
     }
@@ -395,11 +402,22 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         gstAddedAmount = gst.toInt()
         _isGstApplied.value = true
         getTotalAmount()
-
     }
+
     fun removeGst(){
         _isGstApplied.value = false
         gstAddedAmount = null
+        getTotalAmount()
+    }
+
+    fun addPackage(packageAmount: String){
+        this.packageAmount = packageAmount.toInt()
+        _isPackageApplied.value = true
+        getTotalAmount()
+    }
+    fun removePackage(){
+        _isPackageApplied.value = false
+        this.packageAmount = null
         getTotalAmount()
     }
 
@@ -424,7 +442,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     }
 
     fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?
-                    , packageAmount: Double? ,customGstAmount: String?,invoicePrefixNumber : String) : Invoice{
+                    , packageAmounts: Double? ,customGstAmount: String?,invoicePrefixNumber : String) : Invoice{
         var createdBy = "Created By Admin"
         val loginSession = loginRepository.getUserSessions()
         if (loginSession != null){
@@ -448,7 +466,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             cashAmount = cashAmount,
             onlineAmount = onlineAmount,
             creditAmount = creditAmount,
-            packageAmount = packageAmount,
+            packageAmount = packageAmount?.toDouble(),
             customGstAmount = customGstAmount,
             totalAmount = getTotalAmountDouble(),
             totalGst = gstAddedAmount?.toDouble() ?: 0.0,

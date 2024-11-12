@@ -36,7 +36,6 @@ class InvoiceViewModel @Inject constructor(val customerManagRepository: Customer
     return billHistoryRepository.getInvoiceById(invoiceId.toInt())
   }
     fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
-        if (_invoiceItems.value.isNullOrEmpty()) { // Only fetch if data is not already loaded
             try {
                 val items = billHistoryRepository.getInvoiceItems(id)
                 Log.e("InvoiceViewModel", "Fetched invoice items: $items")
@@ -44,7 +43,7 @@ class InvoiceViewModel @Inject constructor(val customerManagRepository: Customer
             } catch (e: Exception) {
                 // Handle exception
             }
-        }
+
     }
    fun updateInvoiceStatus( context: Context, status: String, invoiceId: Int) {
      viewModelScope.launch {

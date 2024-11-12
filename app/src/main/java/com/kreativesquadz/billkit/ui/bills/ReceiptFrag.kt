@@ -103,6 +103,7 @@ class ReceiptFrag : Fragment() {
         onClickListeners()
         addBackPressHandler(viewLifecycleOwner, ::shouldAllowBack)
         binding.isPrintLoading  = false
+        binding.istPackagingAvalaible = false
         return binding.root
     }
 
@@ -207,13 +208,23 @@ class ReceiptFrag : Fragment() {
                 isTaxAvailable = true
                 customGstAmount = it.customGstAmount
             }
-            binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().minus(it.subtotal.toInt())
-                //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
-            it.discount?.apply{
-                binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt())
-               // binding.tvtotals.text = it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt()).toString()
-
+            if (it.packageAmount == null || it.packageAmount <= 0){
+                binding.istPackagingAvalaible = false
+            }else{
+                binding.istPackagingAvalaible = true
+                binding.tvPackaging.text = "Packaging Rs "+ it.packageAmount
             }
+            binding.tvTotalTax.text =  "Total Tax Rs " + it.totalAmount.toInt().minus(it.subtotal.toInt()).toDouble()
+                //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
+            val discountApplied = it.discount?.toInt() ?: 0
+            it.discount?.apply{
+                binding.tvTotalTax.text =  "Total Tax Rs " + it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt()).toDouble()
+               // binding.tvtotals.text = it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt()).toString()
+            }
+            it.packageAmount?.apply {
+                binding.tvTotalTax.text =  "Total Tax Rs " + it.totalAmount.toInt().plus(discountApplied).minus(it.packageAmount.toInt()).minus(it.subtotal.toInt()).toDouble()
+            }
+
             invoiceP = it
             binding.isCustomerAvailable = it?.customerId != null
             binding.customer = viewModel.getCustomerById(it?.customerId.toString())
@@ -364,7 +375,10 @@ class ReceiptFrag : Fragment() {
         )
         binding.itemListRecyclerview.adapter = adapter
         binding.itemListRecyclerview.layoutManager = LinearLayoutManager(context)
-
+        val itemHeight = resources.getDimensionPixelSize(R.dimen._70dp) // set this to your item height
+        val params = binding.itemListRecyclerview.layoutParams
+        params.height = itemHeight * adapter.itemCount
+        binding.itemListRecyclerview.layoutParams = params
 
     }
 
@@ -409,7 +423,7 @@ class ReceiptFrag : Fragment() {
 
 
 
-        val file = File(context.getExternalFilesDir(null), "Invoice ${invoiceId}.pdf")
+        val file = File(context.getExternalFilesDir(null), "Invoice ${invoice.invoiceNumber}.pdf")
         val writer = PdfWriter(file)
         val pdfDocument = PdfDocument(writer)
         val document = Document(pdfDocument)
@@ -526,7 +540,7 @@ class ReceiptFrag : Fragment() {
         }
     }
 
-        val invoiceId = Paragraph("Invoice No : ${invoiceId}")
+        val invoiceId = Paragraph("Invoice No : ${invoice.invoiceNumber}")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
             .setFontSize(14f)
             .setFontColor(ColorConstants.BLACK)

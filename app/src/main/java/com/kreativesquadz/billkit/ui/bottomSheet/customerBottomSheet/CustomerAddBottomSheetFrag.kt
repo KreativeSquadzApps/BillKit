@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -89,6 +90,10 @@ class CustomerAddBottomSheetFrag : BottomSheetDialogFragment() {
     private fun onClickListeners() {
         binding.btnDismiss.setOnClickListener {
             dismiss()
+        }
+        binding.addCustomer.setOnClickListener{
+            dismiss()
+            findNavController().navigate(R.id.action_billDetailsFrag_to_createCustomerFrag)
         }
     }
 

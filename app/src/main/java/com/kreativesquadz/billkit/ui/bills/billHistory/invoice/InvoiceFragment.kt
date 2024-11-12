@@ -32,9 +32,10 @@ class InvoiceFragment : Fragment() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.fetchInvoiceItems(invoice!!.id)
+
     }
 
     override fun onCreateView(
@@ -56,7 +57,6 @@ class InvoiceFragment : Fragment() {
               binding.invoice = it
               binding.isCustomerAvailable = it.customerId != null
               binding.customer = viewModel.getCustomerById(it.customerId.toString())
-
               binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().minus(it.subtotal.toInt())
               //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
               it.discount?.apply{
@@ -70,15 +70,18 @@ class InvoiceFragment : Fragment() {
                   if(it.taxRate > 0){
                       isTaxAvailable = true
                   }
-
               }
-              Log.e("ooooooooooo",it.toString())
+
               binding.istTaxAvalaible = isTaxAvailable
               setupRecyclerView(it)
           }
       }
 
     private  fun onClickListeners() {
+        binding.btnEdit.setOnClickListener{
+            val action = InvoiceFragmentDirections.actionInvoiceFragmentToEditBillDetailsFrag(invoice!!)
+            findNavController().navigate(action)
+        }
         binding.btnReceipt.setOnClickListener {
             val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.id.toString(),Config.InvoiceFragmentToReceiptFragment)
             findNavController().navigate(action)
@@ -130,6 +133,10 @@ class InvoiceFragment : Fragment() {
         )
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        val itemHeight = resources.getDimensionPixelSize(R.dimen._25dp) // set this to your item height
+        val params = binding.recyclerView.layoutParams
+        params.height = itemHeight * adapter.itemCount
+        binding.recyclerView.layoutParams = params
     }
 
     override fun onDestroyView() {

@@ -171,6 +171,13 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_billDetailsFrag_to_splitFragment"
             app:destination="@id/splitFragment" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_billDetailsFrag_to_createCustomerFrag"
+            app:destination="@id/createCustomerFrag" />
     </fragment>
     <fragment
         android:id="@+id/receiptFrag"
@@ -220,6 +227,13 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_invoiceFragment_to_saleReturnFragment"
             app:destination="@id/saleReturnFragment" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_invoiceFragment_to_editBillDetailsFrag"
+            app:destination="@id/editBillDetailsFrag" />
 
     </fragment>
     <fragment
@@ -425,6 +439,27 @@
         android:id="@+id/posSettingsFrag"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.posSettings.PosSettingsFrag"
         android:label="POS Settings" />
+    <fragment
+        android:id="@+id/editBillDetailsFrag"
+        android:name="com.kreativesquadz.billkit.ui.home.editBillDetails.EditBillDetailsFrag"
+        android:label="EditBillDetailsFrag" >
+
+        <argument
+            android:name="invoice"
+            app:argType="com.kreativesquadz.billkit.model.Invoice" />
+    </fragment>
+    <dialog
+        android:id="@+id/customerAddBottomSheetFrag"
+        android:name="com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet.CustomerAddBottomSheetFrag"
+        android:label="CustomerAddBottomSheetFrag" >
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_customerAddBottomSheetFrag_to_createCustomerFrag"
+            app:destination="@id/createCustomerFrag" />
+    </dialog>
 
 
 </navigation>

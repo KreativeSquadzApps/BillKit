@@ -38,6 +38,7 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
     val df = DecimalFormat("#")
     var invoicePrefixNumber = ""
     var invoicePrefix = ""
+    var customGstAmount : String ? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,24 +130,45 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
                 dialogGstViewModel.onRemoveClicked()
             }
         }
+        dialogGstViewModel.isApplied.observe(viewLifecycleOwner) {
+            if (it == true) {
+                val customGstAmountApplied = dialogGstViewModel.gstText.value.toString().substringBefore("|")
+                //val customGstRateApplied = dialogGstViewModel.gstText.value.toString().substringAfter("|")
+                sharedViewModel.addGst(customGstAmountApplied)
+                customGstAmount = dialogGstViewModel.gstText.value.toString()
+            }else{
+                sharedViewModel.removeGst()
+                customGstAmount = null
+            }
+        }
 
 
     }
 
     override fun onClickListener() {
        binding.saveBill.setOnClickListener {
-           if (isCustomerSelected){
+           if (binding.etCredit.text.toString().trim().isEmpty() || binding.etCredit.text.toString().equals((Config.CURRENCY)+"0")){
                billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,0.0,"",invoicePrefixNumber),
+                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,0.0,customGstAmount,invoicePrefixNumber),
                    items =  sharedViewModel.getItemsList(),
                    creditNoteId =  sharedViewModel.getCreditNote()?.id,
                    context =  requireContext())
                billDetailsViewModel.updateInvoicePrefixNumber(invoicePrefix)
-
-
            }else{
-               Toast.makeText(requireContext(),"Please select a customer",Toast.LENGTH_SHORT).show()
+               if (isCustomerSelected){
+                   billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
+                       invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,0.0,customGstAmount,invoicePrefixNumber),
+                       items =  sharedViewModel.getItemsList(),
+                       creditNoteId =  sharedViewModel.getCreditNote()?.id,
+                       context =  requireContext())
+                   billDetailsViewModel.updateInvoicePrefixNumber(invoicePrefix)
+
+
+               }else{
+                   Toast.makeText(requireContext(),"Please select a customer",Toast.LENGTH_SHORT).show()
+               }
            }
+
 
        }
     }

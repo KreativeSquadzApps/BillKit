@@ -7,8 +7,8 @@
     <data>
         <import type="android.view.View" />
         <variable
-            name="sharedViewModel"
-            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+            name="invoice"
+            type="com.kreativesquadz.billkit.model.Invoice" />
         <variable
             name="isCustomerSelected"
             type="Boolean" />
@@ -18,9 +18,6 @@
             type="Boolean" />
         <variable
             name="isGSTApplied"
-            type="Boolean" />
-        <variable
-            name="isPackagingApplied"
             type="Boolean" />
         <variable
             name="isCreditNoteApplied"
@@ -43,16 +40,9 @@
   <variable
             name="isGST"
             type="Boolean" />
-        <variable
-            name="isPackaging"
-            type="Boolean" />
 
         <variable
             name="gstAppliedAmount"
-            type="String" />
-
-        <variable
-            name="packagingAppliedAmount"
             type="String" />
 
 
@@ -192,7 +182,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textStyle="bold"
-                android:text='@{"Amount : " + sharedViewModel.getSubTotalamount()}'
+                android:text='@{"Amount : " + invoice.subtotal}'
                 android:textColor="@color/text_color_heading"
                 android:id="@+id/amountTotal"
                 tools:text="Amount : "/>
@@ -203,7 +193,7 @@
                 android:layout_marginTop="@dimen/_10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clearOrder"
-                android:text='@{"Items Count : " + sharedViewModel.getInvoiceItemCount()}'
+                android:text='@{"Items Count : " + invoice.totalItems}'
                 android:textColor="@color/text_color_heading"
                 android:id="@+id/itemsCount"
                 tools:text="Items Count : "/>
@@ -257,7 +247,6 @@
                         android:id="@+id/tvGst"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -271,68 +260,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/packagingView"
-                app:layout_constraintStart_toStartOf="parent"
-                android:visibility="@{isPackaging ? View.VISIBLE : View.GONE}"
-                app:layout_constraintTop_toBottomOf="@+id/gstView">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="@{isPackagingApplied ? View.VISIBLE : View.GONE}"
-                    >
-
-                    <ImageView
-                        android:id="@+id/removePack"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="@dimen/_10dp"
-                        android:src="@drawable/close_circle"
-                        android:paddingEnd="@dimen/_8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_10dp"
-                        app:layout_constraintStart_toEndOf="@+id/removePack"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Add Packaging :  "
-                        android:id="@+id/txtPackageAmount"
-                        android:textColor="@color/colorPrimary" />
-
-                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_10dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtPackageAmount"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="@{packagingAppliedAmount}"
-                        android:textColor="@color/colorPrimary"
-                        tools:text="10"
-                        android:id="@+id/tvPack"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="Add Packaging"
-                    android:visibility="@{isPackagingApplied ? View.GONE : View.VISIBLE}"
-                    android:textColor="@color/colorPrimary"
-                    android:id="@+id/addPackaging"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="wrap_content"
@@ -340,7 +267,7 @@
                 android:layout_marginTop="@dimen/_10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/amountTotal"
-                android:text='@{"Total Tax : " + sharedViewModel.getTotalTax()}'
+                android:text='@{"Total Tax : " + invoice.totalItems}'
                 android:textColor="@color/text_color_main"
                 android:id="@+id/amountTotalTax"
                 tools:text="Total Tax : "/>

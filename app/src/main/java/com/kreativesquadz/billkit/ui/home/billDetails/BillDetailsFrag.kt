@@ -27,6 +27,8 @@ import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.ui.bottomSheet.creditNoteBottomSheet.CreditNoteBottomSheetFrag
 import com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet.CustomerAddBottomSheetFrag
 import com.kreativesquadz.billkit.ui.bottomSheet.editItemBottomSheet.EditItemBottomSheetFrag
+import com.kreativesquadz.billkit.ui.dialogs.packageDialog.AddPackagingDialogFragment
+import com.kreativesquadz.billkit.ui.dialogs.packageDialog.AddPackagingDialogViewModel
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.RoundingMode
@@ -40,6 +42,7 @@ class BillDetailsFrag : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val dialogViewModel: DialogViewModel by activityViewModels()
     private val dialogGstViewModel: AddGstDialogViewModel by activityViewModels()
+    private val dialogPackagingViewModel: AddPackagingDialogViewModel by activityViewModels()
     private val binding get() = _binding!!
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     val df = DecimalFormat("#")
@@ -75,6 +78,7 @@ class BillDetailsFrag : Fragment() {
 
     private fun init(){
         binding.isGST = true
+        binding.isPackaging = true
 
     }
 
@@ -121,6 +125,7 @@ class BillDetailsFrag : Fragment() {
             val customerAddBottomSheetFrag = CustomerAddBottomSheetFrag()
             customerAddBottomSheetFrag.show(parentFragmentManager, "CustomerAddBottomSheetFrag")
         }
+
         binding.addCreditNote.setOnClickListener {
             val creditNoteBottomSheetFrag = CreditNoteBottomSheetFrag()
             creditNoteBottomSheetFrag.show(parentFragmentManager, "CustomerAddBottomSheetFrag")
@@ -134,10 +139,13 @@ class BillDetailsFrag : Fragment() {
         }
 
 
+
         binding.clearOrder.setOnClickListener {
             findNavController().popBackStack()
             sharedViewModel.clearOrder()
             dialogViewModel.onRemoveClicked()
+            dialogGstViewModel.onRemoveClicked()
+            dialogPackagingViewModel.onRemoveClicked()
 
         }
 
@@ -146,6 +154,9 @@ class BillDetailsFrag : Fragment() {
         }
         binding.addGst.setOnClickListener {
             showAddGstDialog()
+        }
+        binding.addPackaging.setOnClickListener {
+            showAddPackagingDialog()
         }
 
         binding.removeDiscount.setOnClickListener{
@@ -156,7 +167,9 @@ class BillDetailsFrag : Fragment() {
             sharedViewModel.removeGst()
         }
 
-
+        binding.removePack.setOnClickListener{
+            sharedViewModel.removePackage()
+        }
 
 
     }
@@ -171,6 +184,10 @@ class BillDetailsFrag : Fragment() {
         val dialog = AddGstDialogFragment()
         dialog.show(childFragmentManager, AddGstDialogFragment.TAG)
         dialogGstViewModel.setTotalAmount(sharedViewModel.totalLivedata.value.toString())
+  }
+    private fun showAddPackagingDialog() {
+        val dialog = AddPackagingDialogFragment()
+        dialog.show(childFragmentManager, AddPackagingDialogFragment.TAG)
   }
 
 
@@ -198,6 +215,7 @@ class BillDetailsFrag : Fragment() {
                 sharedViewModel.clearOrder()
                 dialogViewModel.onRemoveClicked()
                 dialogGstViewModel.onRemoveClicked()
+                dialogPackagingViewModel.onRemoveClicked()
             }
         }
 
@@ -212,6 +230,9 @@ class BillDetailsFrag : Fragment() {
 
         sharedViewModel.isGstApplied.observe(viewLifecycleOwner) { isGstApplied ->
             binding.isGSTApplied = isGstApplied
+        }
+        sharedViewModel.isPackageApplied.observe(viewLifecycleOwner) { isPackagingApplied ->
+            binding.isPackagingApplied = isPackagingApplied
         }
 
 
@@ -262,6 +283,15 @@ class BillDetailsFrag : Fragment() {
             }else{
                 sharedViewModel.removeGst()
                 customGstAmount = null
+            }
+        }
+        dialogPackagingViewModel.isApplied.observe(viewLifecycleOwner) {
+            if (it == true) {
+                val packageAmountApplied = dialogPackagingViewModel.packagingText.value.toString()
+                binding.packagingAppliedAmount = packageAmountApplied
+                sharedViewModel.addPackage(packageAmountApplied)
+            }else{
+                sharedViewModel.removePackage()
             }
         }
 

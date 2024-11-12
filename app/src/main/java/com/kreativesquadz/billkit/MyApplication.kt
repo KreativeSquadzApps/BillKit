@@ -6,6 +6,7 @@ import javax.inject.Inject
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.kreativesquadz.billkit.utils.PreferencesHelper
 import dagger.hilt.android.HiltAndroidApp
 
 
@@ -13,6 +14,8 @@ import dagger.hilt.android.HiltAndroidApp
 class MyApplication : Application(), Configuration.Provider {
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
 
     override fun getWorkManagerConfiguration(): Configuration {
         return Configuration.Builder()
@@ -21,6 +24,8 @@ class MyApplication : Application(), Configuration.Provider {
     }
     override fun onCreate() {
         super.onCreate()
+        preferencesHelper.removeSelectedDate()
+        preferencesHelper.removeSelectedDateCreditNote()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

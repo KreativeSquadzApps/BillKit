@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10dp"
                 android:layout_marginEnd="@dimen/_10dp"
+                android:id="@+id/loadContact"
                 android:background="@drawable/corner_four_grey">
 
                 <TextView
