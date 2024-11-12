@@ -26,15 +26,17 @@ class LoginRepository @Inject constructor(private val db: AppDatabase) {
 
     suspend fun login(username: String, password: String, isStaff: Boolean) {
         try {
-            val response = ApiClient.getApiService().login(LoginRequest(username, password,isStaff))
-            if (response.code == 200){
+            val response = ApiClient.getApiService().login(LoginRequest(username, password, isStaff))
+            if (response != null && response.code == 200) {
                 saveSession(loginResponse = response)
+            } else {
+                Log.e("LoginError", "Login failed with code: ${response?.code}")
+                // Handle specific error response here, maybe show a message to the user
             }
-        }catch (Exception : Exception){
-            Log.e("Exception",Exception.toString())
+        } catch (e: Exception) {
+            Log.e("Exception", "An error occurred: ${e.localizedMessage}")
+            // Handle network or other unexpected errors
         }
-
-
     }
     suspend fun logout() {
         userDao.deleteAllUsers()

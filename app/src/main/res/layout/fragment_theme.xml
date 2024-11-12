@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/_10dp"
+                android:weightSum="2"
+                android:id="@+id/dark_theme_layout"
+                android:orientation="horizontal"
+                android:background="@drawable/unselected_corner_four_stroke">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_10dp"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dark Theme"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_22sp"/>
+                    <TextView
+                        android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Experience a relaxed and natural look with our dark theme"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:gravity="center"
+                        android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_14sp"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_10dp"
+
+                    android:layout_weight="1">
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/_10dp"
+                android:weightSum="2"
+                android:id="@+id/light_theme_layout"
+                android:orientation="horizontal"
+                android:background="@drawable/selected_corner_four_stroke">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_10dp"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Light Theme"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_22sp"/>
+                    <TextView
+                        android:fontFamily="@font/montserrat_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=" Stay organized and productive with our light theme "
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:gravity="center"
+                        android:textColor="@color/text_color_main"
+                        android:textSize="@dimen/txt_14sp"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_10dp"
+                    android:layout_weight="1">
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
+import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
+import com.kreativesquadz.billkit.adapter.showCustomAlertDialog
 import com.kreativesquadz.billkit.databinding.FragmentSettingsBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.DialogData
 import com.kreativesquadz.billkit.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,7 +64,8 @@ class SettingsFrag : Fragment() {
                 getString(R.string.settings_item_2),
                 getString(R.string.settings_item_3),
                 getString(R.string.settings_item_4),
-                getString(R.string.settings_item_5)),
+                getString(R.string.settings_item_5),
+                getString(R.string.settings_item_6)),
             object : OnItemClickListener<String> {
                 override fun onItemClick(item: String) {
                     when (item) {
@@ -79,7 +83,12 @@ class SettingsFrag : Fragment() {
 
                         }
                         getString(R.string.settings_item_5) -> {
-
+                            findNavController().navigate(R.id.action_settingsFrag_to_themeFragment)
+                        }
+                        getString(R.string.settings_item_5) -> {
+                            setupPopup{
+                                viewModel.hardReset(Config.userId,requireContext())
+                            }
                         }
 
                     }
@@ -90,6 +99,27 @@ class SettingsFrag : Fragment() {
         )
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+    private fun setupPopup(action: () -> Unit){
+
+        val dialogData = DialogData(
+            title = "Hard Reset",
+            info = "Are you sure you want to Reset the complete data ?",
+            positiveButtonText = "YES",
+            negativeButtonText = "Cancel"
+        )
+
+        showCustomAlertDialog(
+            context = requireActivity(),
+            dialogData = dialogData,
+            positiveAction = {
+                action()
+            },
+            negativeAction = {
+                // Handle negative button action
+                // E.g., dismiss the dialog
+            }
+        )
     }
 
 }

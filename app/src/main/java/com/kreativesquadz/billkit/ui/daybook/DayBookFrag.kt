@@ -142,6 +142,7 @@ class DayBookFrag : Fragment() {
         }
         tableRow.addView(createTextView("Sale"))
         tableRow.addView(createTextView(invoice.invoiceNumber.toString()))
+        tableRow.addView(createTextView(invoice.createdBy.replace("Created By","")))
         tableRow.addView(createTextView(customerName))
         tableRow.addView(createTextView(invoice.totalAmount.toString()))
         tableRow.addView(createTextViewLast(invoice.cashAmount.toString()))

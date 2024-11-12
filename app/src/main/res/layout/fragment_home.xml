@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/text_color_heading_reverse"
         android:fitsSystemWindows="true"
         tools:context="ui.home.HomeFragment">
 
@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/white"
+            android:background="@color/text_color_heading_reverse"
             android:cursorVisible="true"
             android:ellipsize="start"
             android:focusable="false"

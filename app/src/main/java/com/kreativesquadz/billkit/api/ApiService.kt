@@ -36,7 +36,7 @@ interface ApiService {
 
     @Headers("X-API-KEY: " + Config.API_Key)
     @POST("api/login")
-    suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
+    suspend fun login(@Body loginRequest: LoginRequest): LoginResponse?
 
 
     @Headers("X-API-KEY: " + Config.API_Key)
@@ -219,5 +219,11 @@ interface ApiService {
 
     @GET("orders")
     fun getSavedOrders(): LiveData<ApiResponse<List<SavedOrderEntity>>>
+
+
+    @DELETE("/api/reset/{userId}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun hardReset(@Path("userId") userId: Long): Response<ResponseBody>
+
 
 }

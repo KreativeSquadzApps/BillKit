@@ -495,7 +495,7 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:textSize="20sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/text_color_heading_reverse"/>
 
             </androidx.cardview.widget.CardView>
 

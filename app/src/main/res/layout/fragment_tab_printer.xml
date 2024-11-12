@@ -277,7 +277,7 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:textSize="20sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/text_color_heading_reverse"/>
                 <ProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="match_parent"

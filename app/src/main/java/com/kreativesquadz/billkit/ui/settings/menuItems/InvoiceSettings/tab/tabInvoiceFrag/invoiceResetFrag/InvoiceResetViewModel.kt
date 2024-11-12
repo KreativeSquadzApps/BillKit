@@ -95,7 +95,7 @@ class InvoiceResetViewModel  @Inject constructor(val workManager: WorkManager,
     }
 
     fun reuseInvoicePrefixNumber(invoicePrefixNumber: InvoicePrefixNumber) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
                 settingsRepository.updateInvoiceNumberAndPrefix(Config.userId,
                     invoicePrefixNumber.id.toLong() ,

@@ -414,7 +414,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:paddingTop="@dimen/_5dp"
                         android:text="Rs.0"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_color_heading_reverse"
                         android:textSize="@dimen/txt_12sp"
                         android:textStyle="bold" />
 
@@ -425,7 +425,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:paddingTop="@dimen/_5dp"
                         android:text="Total Payment Out"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_color_heading_reverse"
                         android:textSize="@dimen/txt_12sp"
                         android:textStyle="bold" />
 
@@ -433,7 +433,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="@dimen/_5dp"
-                        android:background="@color/white" />
+                        android:background="@color/text_color_heading_reverse" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -455,7 +455,7 @@
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Rs.0"
                                 android:gravity="center"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp"
                                 android:textStyle="bold" />
 
@@ -467,7 +467,7 @@
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Cash"
                                 android:gravity="center"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp" />
                         </LinearLayout>
 
@@ -485,7 +485,7 @@
                                 android:fontFamily="@font/montserrat_medium"
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Rs.0"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp"
                                 android:textStyle="bold" />
 
@@ -496,7 +496,7 @@
                                 android:fontFamily="@font/montserrat_medium"
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Online"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp" />
                         </LinearLayout>
 
@@ -525,7 +525,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:paddingTop="@dimen/_5dp"
                         android:text="Rs.0"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_color_heading_reverse"
                         android:textSize="@dimen/txt_12sp"
                         android:textStyle="bold" />
 
@@ -536,7 +536,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:paddingTop="@dimen/_5dp"
                         android:text="Total Payment In"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_color_heading_reverse"
                         android:textSize="@dimen/txt_12sp"
                         android:textStyle="bold" />
 
@@ -544,7 +544,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="@dimen/_5dp"
-                        android:background="@color/white" />
+                        android:background="@color/text_color_heading_reverse" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -566,7 +566,7 @@
                                 android:fontFamily="@font/montserrat_medium"
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Rs.0"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp"
                                 android:textStyle="bold" />
 
@@ -577,7 +577,7 @@
                                 android:fontFamily="@font/montserrat_medium"
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Cash"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp" />
                         </LinearLayout>
 
@@ -595,7 +595,7 @@
                                 android:fontFamily="@font/montserrat_medium"
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Rs.0"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp"
                                 android:textStyle="bold" />
 
@@ -606,7 +606,7 @@
                                 android:fontFamily="@font/montserrat_medium"
                                 android:paddingTop="@dimen/_5dp"
                                 android:text="Online"
-                                android:textColor="@color/white"
+                                android:textColor="@color/text_color_heading_reverse"
                                 android:textSize="@dimen/txt_12sp" />
                         </LinearLayout>
 
@@ -649,6 +649,15 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:text="Particulars"
+                                android:textSize="@dimen/txt_13sp"
+                                android:textColor="@color/text_color_main"
+                                android:background="@drawable/table_border_trans"
+                                android:textStyle="bold"
+                                android:gravity="center" /><TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Created"
                                 android:textSize="@dimen/txt_13sp"
                                 android:textColor="@color/text_color_main"
                                 android:background="@drawable/table_border_trans"

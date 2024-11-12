@@ -23,7 +23,8 @@
     <string name="settings_item_2">Tax Settings</string>
     <string name="settings_item_3">POS Settings</string>
     <string name="settings_item_4">Printer Setup</string>
-    <string name="settings_item_5">Reset</string>
+    <string name="settings_item_5">Theme</string>
+    <string name="settings_item_6">Reset</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

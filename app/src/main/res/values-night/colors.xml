@@ -10,6 +10,8 @@
     <color name="background_color">#393646</color>
     <color name="background_color_popup">#393646</color>
     <color name="background_color_lite">#b0a5ab</color>
+    <color name="main_color">#822812</color>
+    <color name="lite_grey_200">#3f3f3f</color>
 
 
     <color name="popup">#6D5D6E</color>

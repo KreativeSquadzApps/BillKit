@@ -336,7 +336,7 @@
                                         android:padding="@dimen/_10dp"
                                         android:gravity="center"
                                         android:textSize="@dimen/txt_14sp"
-                                        android:textColor="@color/white"/>
+                                        android:textColor="@color/text_color_heading_reverse"/>
 
                                 </androidx.cardview.widget.CardView>
 
@@ -409,7 +409,7 @@
                             android:textStyle="bold"
                             android:gravity="center"
                             android:textSize="20sp"
-                            android:textColor="@color/white"/>
+                            android:textColor="@color/text_color_heading_reverse"/>
                         <ProgressBar
                             android:id="@+id/progressBar"
                             android:layout_width="match_parent"

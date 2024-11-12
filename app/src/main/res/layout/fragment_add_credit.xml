@@ -165,7 +165,7 @@
                         android:fontFamily="@font/montserrat_regular"
                         android:gravity="center"
                         android:text="Add Credit"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_color_heading_reverse"
                         android:textSize="@dimen/txt_14sp"
                         android:textStyle="bold" />
 

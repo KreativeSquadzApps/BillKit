@@ -36,7 +36,7 @@
                 android:paddingRight="@dimen/_30dp"
                 android:gravity="center"
                 android:textSize="@dimen/txt_14sp"
-                android:textColor="@color/white"/>
+                android:textColor="@color/text_color_heading_reverse"/>
 
         </androidx.cardview.widget.CardView>
 

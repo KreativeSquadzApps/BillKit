@@ -1,5 +1,7 @@
 package com.kreativesquadz.billkit.repository
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -147,10 +149,20 @@ class SettingsRepository @Inject constructor(val db : AppDatabase) {
     }
 
 
-
-
-
-
+    suspend fun hardRest(userId: Long,context: Context) {
+        try {
+            val response = ApiClient.getApiService().hardReset(userId)
+            if (response.isSuccessful) {
+                val database = AppDatabase.getInstance(context)
+                database?.clearAllTables()
+            } else {
+                // Handle specific error response here, maybe show a message to the user
+            }
+        } catch (e: Exception) {
+            Log.e("Exception", "An error occurred: ${e.localizedMessage}")
+            // Handle network or other unexpected errors
+        }
+    }
 
 
 
