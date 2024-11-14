@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
 import androidx.work.Data
@@ -13,17 +14,20 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
+import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
+import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.repository.SavedOrderRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import com.kreativesquadz.billkit.worker.SyncInvoicesWorker
 import com.kreativesquadz.billkit.worker.UpdateInvoicePrefixIncrementWorker
+import com.kreativesquadz.billkit.worker.UpdateInvoiceWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +41,9 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
                                                    val inventoryRepository: InventoryRepository,
                                                    val creditNoteRepository: CreditNoteRepository,
                                                    val savedOrderRepository: SavedOrderRepository,
-                                                   val settingsRepository: SettingsRepository)
+                                                   val settingsRepository: SettingsRepository,
+                                                   val customerManagRepository: CustomerManagRepository
+)
     : ViewModel() {
 
 
@@ -47,50 +53,26 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
     lateinit var userSetting : LiveData<UserSetting>
     val invoiceId: LiveData<Long?> get() = _invoiceID
 
-    private val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
+    val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
-//    fun addInvoice(creditNoteId : Int? ,invoice: Invoice,context: Context) {
-//        viewModelScope.launch {
-//            _invoiceID.value = billHistoryRepository.addInvoice(invoice)
-//
-//            creditNoteRepository.redeemCreditNoteById(creditNoteId)
-//            invoice.invoiceItems.forEach{
-//                inventoryRepository.decrementProductStock(it.itemName.split(" ")[0],it.quantity)
-//            }
-//            scheduleInvoiceSync(context)
-//            _invoiceStatus.value = true
-//        }
-//
-//    }
-
-    fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
-        if (_invoiceItems.value.isNullOrEmpty()) { // Only fetch if data is not already loaded
-            try {
-                val items = billHistoryRepository.getInvoiceItems(id)
-                _invoiceItems.postValue(items)
-            } catch (e: Exception) {
-                // Handle exception
+    fun updateInvoice(invoice: Invoice,creditNoteId : Int?) {
+        viewModelScope.launch {
+            billHistoryRepository.updateInvoice(invoice)
+            if (invoice.creditNoteAmount != 0){
+                creditNoteRepository.redeemCreditNoteById(creditNoteId)
             }
+            invoice.invoiceItems?.forEach{
+                inventoryRepository.decrementProductStock(it.itemName.split(" ")[0],it.quantity)
+            }
+            updateInvoiceWorker(invoice.id)
         }
+
     }
 
-    fun insertInvoiceWithItems(isSavedOrderIdExist: Long?,invoice: Invoice, items: List<InvoiceItem>,creditNoteId : Int?,context: Context)  {
-        try {
-            viewModelScope.launch{
-                if(isSavedOrderIdExist != null){
-                    deleteSavedOrder(isSavedOrderIdExist)
-                }
-                val invoiceId =  billHistoryRepository.insertInvoiceWithItems(invoice, items)
-                creditNoteRepository.redeemCreditNoteById(creditNoteId)
-                _invoiceID.value = invoiceId
-                scheduleInvoiceSync(context)
-            }
-
-
-        } catch (e: Exception) {
-            // Handle exception, e.g., show a message to the user
-        }
+    fun getCustomerById(customerId: String): LiveData<Customer> = liveData {
+        val customer = customerManagRepository.getCustomer(customerId) // suspend function
+        emit(customer)
     }
 
     fun clearInvoiceStatus() {
@@ -99,19 +81,24 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
 
 
 
-    fun scheduleInvoiceSync(context: Context) {
+    private fun updateInvoiceWorker(id: Long) {
+        val data = Data.Builder()
+            .putLong("id", id)
+            .build()
+
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val syncWorkRequest = OneTimeWorkRequestBuilder<SyncInvoicesWorker>()
+        val syncWorkRequestInvoice = OneTimeWorkRequestBuilder<UpdateInvoiceWorker>()
             .setConstraints(constraints)
+            .setInputData(data)
             .build()
 
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            "invoiceSyncWork",
-            ExistingWorkPolicy.KEEP,
-            syncWorkRequest
+        workManager.enqueueUniqueWork(
+            "syncWorkRequestInvoice",
+            ExistingWorkPolicy.REPLACE,
+            syncWorkRequestInvoice
         )
     }
 
@@ -121,45 +108,5 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
     }
 
 
-    fun deleteSavedOrder(orderId: Long) {
-            savedOrderRepository.deleteSavedOrder(orderId)
 
-    }
-
-    private fun updateInvoicePrefixNumberWorker(id: Long) {
-        val data = Data.Builder()
-            .putLong("id", id)
-            .build()
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncWorkRequestsss = OneTimeWorkRequestBuilder<UpdateInvoicePrefixIncrementWorker>()
-            .setConstraints(constraints)
-            .setInputData(data)
-            .build()
-
-        workManager.enqueueUniqueWork(
-            "UpdateInvoicePrefixIncrementWorker",
-            ExistingWorkPolicy.REPLACE,
-            syncWorkRequestsss
-        )
-    }
-
-    fun updateInvoicePrefixNumber(invoicePrefix: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-               val invoicePrefixNumber = settingsRepository.getInvoicePrefixNumberWithPrefix(invoicePrefix)
-                Log.d("ViewModel", "InvoicePrefixNumber: ${invoicePrefixNumber}")
-                settingsRepository.updateInvoiceNumberAndPrefix(Config.userId,
-                    invoicePrefixNumber.id.toLong(),
-                    invoicePrefixNumber.invoicePrefix,
-                    invoicePrefixNumber.invoiceNumber.toInt()+1)
-                updateInvoicePrefixNumberWorker(invoicePrefixNumber.id.toLong())
-            } catch (e: Exception) {
-                // Handle error or log it
-                Log.e("ViewModel", "Error: ${e.message}")
-            }
-        }
-    }
 }

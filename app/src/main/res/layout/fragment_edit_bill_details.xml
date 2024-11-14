@@ -20,6 +20,9 @@
             name="isGSTApplied"
             type="Boolean" />
         <variable
+            name="isPackagingApplied"
+            type="Boolean" />
+        <variable
             name="isCreditNoteApplied"
             type="Boolean" />
         <variable
@@ -44,8 +47,12 @@
         <variable
             name="gstAppliedAmount"
             type="String" />
-
-
+        <variable
+            name="isPackaging"
+            type="Boolean" />
+        <variable
+            name="packagingAppliedAmount"
+            type="String" />
 
     </data>
 
@@ -167,14 +174,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recyclerView">
 
-            <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="Clear Order"
-                android:textColor="@color/red"
-                android:id="@+id/clearOrder" />
+
 
             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="wrap_content"
@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clearOrder"
+                app:layout_constraintTop_toTopOf="parent"
                 android:text='@{"Items Count : " + invoice.totalItems}'
                 android:textColor="@color/text_color_heading"
                 android:id="@+id/itemsCount"
@@ -257,6 +257,68 @@
                     android:visibility="@{isGSTApplied ? View.GONE : View.VISIBLE}"
                     android:textColor="@color/colorPrimary"
                     android:id="@+id/addGst"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/packagingView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gstView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{isPackagingApplied ? View.VISIBLE : View.GONE}"
+                    >
+
+                    <ImageView
+                        android:id="@+id/removePack"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:src="@drawable/close_circle"
+                        android:paddingEnd="@dimen/_8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/removePack"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Add Packaging :  "
+                        android:id="@+id/txtPackageAmount"
+                        android:textColor="@color/colorPrimary" />
+
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/txtPackageAmount"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="@{packagingAppliedAmount}"
+                        android:textColor="@color/colorPrimary"
+                        tools:text="10"
+                        android:id="@+id/tvPack"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Add Packaging"
+                    android:visibility="@{isPackagingApplied ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/addPackaging"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -409,10 +471,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="80dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="90dp"
             android:padding="10dp">
 
             <LinearLayout
@@ -425,17 +488,16 @@
                 android:layout_marginBottom="@dimen/_5dp"
                 android:layout_marginEnd="@dimen/_10dp"
                 android:layout_marginStart="@dimen/_10dp"
-                android:background="@drawable/corner_four_grey"
                 app:layout_constraintEnd_toStartOf="@+id/btnOnline"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="4"
+                    android:paddingTop="@dimen/_5dp"
                     android:layout_gravity="center"
                     android:src="@drawable/cash_light"
                     android:id="@+id/backImage" />
@@ -446,7 +508,7 @@
                     android:textColor="@color/text_color_main"
                     android:text="Cash"
                     android:layout_weight="1"
-                    android:id="@+id/tvCash"
+                    android:id="@+id/txtCash"
                     android:gravity="center" />
             </LinearLayout>
 
@@ -461,17 +523,15 @@
                 android:layout_marginBottom="@dimen/_5dp"
                 android:layout_marginEnd="@dimen/_10dp"
                 android:layout_marginStart="@dimen/_10dp"
-                android:background="@drawable/corner_four_grey"
                 app:layout_constraintEnd_toStartOf="@+id/btnSplit"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btnCash"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:paddingTop="@dimen/_18dp"
+                    android:paddingTop="@dimen/_5dp"
                     android:layout_weight="4"
                     android:src="@drawable/creditcard_light" />
 
@@ -481,6 +541,8 @@
                     android:layout_weight="1"
                     android:textColor="@color/text_color_main"
                     android:text="Online"
+                    android:id="@+id/txtOnline"
+
                     android:gravity="center" />
 
             </LinearLayout>
@@ -495,17 +557,15 @@
                 android:layout_marginBottom="@dimen/_5dp"
                 android:layout_marginEnd="@dimen/_10dp"
                 android:layout_marginStart="@dimen/_10dp"
-                android:background="@drawable/corner_four_grey"
                 app:layout_constraintEnd_toStartOf="@+id/btnCredit"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btnOnline"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:paddingTop="@dimen/_18dp"
+                    android:paddingTop="@dimen/_5dp"
                     android:layout_weight="4"
                     android:src="@drawable/split_light" />
 
@@ -515,6 +575,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/text_color_main"
                     android:text="Split"
+                    android:id="@+id/txtSplit"
                     android:gravity="center" />
 
             </LinearLayout>
@@ -530,17 +591,15 @@
                 android:layout_marginBottom="@dimen/_5dp"
                 android:layout_marginEnd="@dimen/_10dp"
                 android:layout_marginStart="@dimen/_10dp"
-                android:background="@drawable/corner_four_grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btnSplit"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:padding="@dimen/_12dp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:paddingTop="@dimen/_18dp"
+                    android:paddingTop="@dimen/_5dp"
                     android:layout_weight="4"
                     android:src="@drawable/writing_light" />
 
@@ -548,14 +607,60 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/text_color_main"
                     android:text="Credit"
+                    android:id="@+id/txtCredit"
                     android:gravity="center" />
 
             </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@color/lite_grey_200"
+            android:paddingTop="@dimen/_10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:id="@+id/btnupdate"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="@dimen/_10dp"
+                app:cardUseCompatPadding="true"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_20dp"
+                android:layout_marginEnd="@dimen/_20dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                tools:cardBackgroundColor="@color/lite_grey_200"
+                android:textColor="@color/text_color_heading"
+                android:gravity="center">
+
+                <TextView android:fontFamily="@font/montserrat_medium"
+                    android:layout_width="match_parent"
+                    android:id="@+id/tv_update"
+                    android:layout_height="match_parent"
+                    android:text="Update"
+                    android:padding="@dimen/_10dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_color_heading_reverse"/>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    style="?android:attr/progressBarStyleHorizontal"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

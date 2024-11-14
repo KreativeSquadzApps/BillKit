@@ -149,7 +149,7 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
        binding.saveBill.setOnClickListener {
            if (binding.etCredit.text.toString().trim().isEmpty() || binding.etCredit.text.toString().equals((Config.CURRENCY)+"0")){
                billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,0.0,customGstAmount,invoicePrefixNumber),
+                   invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,customGstAmount,invoicePrefixNumber),
                    items =  sharedViewModel.getItemsList(),
                    creditNoteId =  sharedViewModel.getCreditNote()?.id,
                    context =  requireContext())
@@ -157,7 +157,7 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
            }else{
                if (isCustomerSelected){
                    billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                       invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,0.0,customGstAmount,invoicePrefixNumber),
+                       invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,customGstAmount,invoicePrefixNumber),
                        items =  sharedViewModel.getItemsList(),
                        creditNoteId =  sharedViewModel.getCreditNote()?.id,
                        context =  requireContext())

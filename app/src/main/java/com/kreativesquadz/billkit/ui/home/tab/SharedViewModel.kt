@@ -25,6 +25,7 @@ import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.model.settings.TaxSettings
+import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
@@ -41,7 +42,8 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(val workManager: WorkManager,
                                           val loginRepository: LoginRepository,
                                           val settingsRepository: SettingsRepository,
-                                          val gstTaxRepository: GstTaxRepository) : ViewModel() {
+                                          val gstTaxRepository: GstTaxRepository,
+                                          val billHistoryRepository: BillHistoryRepository) : ViewModel() {
 
     private var invoicePrefix: String? = null
      private var invoiceNumber: Int? = null
@@ -50,7 +52,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     var list = mutableListOf<InvoiceItem>()
     private val _selectedCustomer = MutableLiveData<Customer?>()
     val selectedCustomer: LiveData<Customer?> get() = _selectedCustomer
-
+    val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
+    val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
     private val _selectedCreditNote = MutableLiveData<CreditNote?>()
     val selectedCreditNote: LiveData<CreditNote?> get() = _selectedCreditNote
 
@@ -255,9 +258,20 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         if (position != -1){
             list[position] = newItem
         }
+        _invoiceItems.value = list
         _items.value = list
     }
 
+    fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
+        if (_invoiceItems.value.isNullOrEmpty()) { // Only fetch if data is not already loaded
+            try {
+                val items = billHistoryRepository.getInvoiceItems(id)
+                _invoiceItems.postValue(items)
+            } catch (e: Exception) {
+                // Handle exception
+            }
+        }
+    }
     fun isProductAdded(product: Product?): Boolean {
         val isAdded = list.any {
             val isMatch = it.itemName.split("(")[0].trim()+":"
@@ -441,8 +455,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         return selectedCreditNote.value
     }
 
-    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?
-                    , packageAmounts: Double? ,customGstAmount: String?,invoicePrefixNumber : String) : Invoice{
+    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?,customGstAmount: String?,invoicePrefixNumber : String) : Invoice{
         var createdBy = "Created By Admin"
         val loginSession = loginRepository.getUserSessions()
         if (loginSession != null){

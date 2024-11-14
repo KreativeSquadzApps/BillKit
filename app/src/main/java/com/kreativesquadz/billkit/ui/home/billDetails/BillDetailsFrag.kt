@@ -84,8 +84,8 @@ class BillDetailsFrag : Fragment() {
 
     private fun onClickListeners(){
         binding.btnCash.setOnClickListener {
-                      viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble(),0.0 ,customGstAmount,invoicePrefixNumber),
+                      viewModel.insertInvoiceWithItems(isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble() ,customGstAmount,invoicePrefixNumber),
                                          items =  sharedViewModel.getItemsList(),
                                          creditNoteId =  sharedViewModel.getCreditNote()?.id,
                                          context =  requireContext())
@@ -95,7 +95,7 @@ class BillDetailsFrag : Fragment() {
 
         binding.btnOnline.setOnClickListener{
                         viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0,0.0,customGstAmount,invoicePrefixNumber),
+                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0,customGstAmount,invoicePrefixNumber),
                                          items =  sharedViewModel.getItemsList(),
                                          creditNoteId =  sharedViewModel.getCreditNote()?.id,
                                          context =  requireContext())
@@ -105,7 +105,7 @@ class BillDetailsFrag : Fragment() {
         binding.btnCredit.setOnClickListener{
             if (isCustomerSelected){
                 viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0,0.0,customGstAmount,invoicePrefixNumber),
+                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0,customGstAmount,invoicePrefixNumber),
                     items =  sharedViewModel.getItemsList(),
                     creditNoteId =  sharedViewModel.getCreditNote()?.id,
                     context =  requireContext())

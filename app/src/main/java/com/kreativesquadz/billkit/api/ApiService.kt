@@ -53,6 +53,9 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun createInvoice(@Body invoiceRequest: InvoiceRequest): Response<ApiStatus>
 
+    @PUT("/api/updateinvoice")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateInvoice(@Body invoiceRequest: InvoiceRequest): Response<ApiStatus>
 
     @POST("/api/addcompanyDetails")
     @Headers("X-API-KEY: " + Config.API_Key)
@@ -166,6 +169,7 @@ interface ApiService {
     @PUT("/api/updateproduct")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun updateProduct(@Body product: Product?): Response<ApiStatus>
+
 
 
     @GET("/api/credit_notes/{userId}")

@@ -85,7 +85,7 @@ class SettingsFrag : Fragment() {
                         getString(R.string.settings_item_5) -> {
                             findNavController().navigate(R.id.action_settingsFrag_to_themeFragment)
                         }
-                        getString(R.string.settings_item_5) -> {
+                        getString(R.string.settings_item_6) -> {
                             setupPopup{
                                 viewModel.hardReset(Config.userId,requireContext())
                             }
