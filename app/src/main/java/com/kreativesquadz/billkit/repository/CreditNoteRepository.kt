@@ -34,6 +34,10 @@ class CreditNoteRepository @Inject constructor(val db: AppDatabase) {
     suspend fun getCreditNoteByInvoiceId(invoiceId: Long) : CreditNote?  {
        return creditNoteDao.getCreditNoteByInvoiceId(invoiceId)
     }
+    suspend fun getCreditNoteById(id: Long) : CreditNote?  {
+        return creditNoteDao.getCreditNoteById(id)
+    }
+
     suspend fun getUnsyncedCreditNote(): List<CreditNote> {
         return creditNoteDao.getUnsyncedCreditNote()
     }

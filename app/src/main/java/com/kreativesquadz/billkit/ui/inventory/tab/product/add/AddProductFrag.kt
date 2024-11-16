@@ -64,6 +64,7 @@ class AddProductFrag : Fragment() {
     private var isCameraClicked = false
     private var selectedPosition: Int = -1 // Keeps track of selected switch position
     private var selectedTaxValue: Double? = null
+    private var selectedTaxType: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

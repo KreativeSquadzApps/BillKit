@@ -14,6 +14,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
+import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
@@ -56,24 +57,37 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
     val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
-    fun updateInvoice(invoice: Invoice,creditNoteId : Int?) {
-        viewModelScope.launch {
-            billHistoryRepository.updateInvoice(invoice)
-            if (invoice.creditNoteAmount != 0){
+    fun updateInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>,creditNoteId : Int?,invoiceId: Long)  {
+        try {
+            viewModelScope.launch{
+                Log.e("itemsLLL",items.toString())
+                Log.e("invoiceLLL",invoice.toString())
+               val updated = billHistoryRepository.updateInvoiceWithItems(invoice, items,invoiceId)
                 creditNoteRepository.redeemCreditNoteById(creditNoteId)
-            }
-            invoice.invoiceItems?.forEach{
-                inventoryRepository.decrementProductStock(it.itemName.split(" ")[0],it.quantity)
-            }
-            updateInvoiceWorker(invoice.id)
-        }
+                updateInvoiceWorker(invoice.id)
+                if (updated){
+                    _invoiceID.value = 1
+                }else{
+                    _invoiceID.value = 0
+                }
 
+            }
+        } catch (e: Exception) {
+            // Handle exception, e.g., show a message to the user
+        }
     }
+
 
     fun getCustomerById(customerId: String): LiveData<Customer> = liveData {
         val customer = customerManagRepository.getCustomer(customerId) // suspend function
         emit(customer)
     }
+   fun getCreditNoteById(creditNoteId: Long): LiveData<CreditNote> = liveData {
+       val creditNote = creditNoteRepository.getCreditNoteById(creditNoteId) // suspend function
+       if (creditNote != null) {
+           emit(creditNote)
+       }
+   }
 
     fun clearInvoiceStatus() {
         _invoiceID.value = null
@@ -90,15 +104,15 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val syncWorkRequestInvoice = OneTimeWorkRequestBuilder<UpdateInvoiceWorker>()
+        val syncWorkRequestInvoiceUpdate = OneTimeWorkRequestBuilder<UpdateInvoiceWorker>()
             .setConstraints(constraints)
             .setInputData(data)
             .build()
 
         workManager.enqueueUniqueWork(
-            "syncWorkRequestInvoice",
-            ExistingWorkPolicy.REPLACE,
-            syncWorkRequestInvoice
+            "syncWorkRequestInvoiceUpdate",
+            ExistingWorkPolicy.KEEP,
+            syncWorkRequestInvoiceUpdate
         )
     }
 

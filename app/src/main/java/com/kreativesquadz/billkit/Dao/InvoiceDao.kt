@@ -3,6 +3,7 @@ package com.kreativesquadz.billkit.Dao
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -28,6 +29,16 @@ interface InvoiceDao {
     @Query("DELETE FROM invoice_items")
     fun deleteInvoiceItems()
 
+    @Delete
+    suspend fun deleteInvoiceItem(invoiceItem: InvoiceItem)
+
+    @Update
+    suspend fun updateInvoiceItem(invoiceItem: InvoiceItem)
+
+
+
+
+
     @Query("DELETE FROM invoices")
     fun deleteInvoices()
     @Query("UPDATE invoice_items SET returnedQty = :returnedQty WHERE invoiceId = :invoiceId AND itemName = :itemName")
@@ -47,6 +58,10 @@ interface InvoiceDao {
 
     @Update
     suspend fun update(invoice: Invoice)
+    @Update
+    suspend fun updateInvoice(invoice: Invoice): Int
+
+
 
     @Query("SELECT * FROM invoices WHERE id = :id")
     fun getInvoiceById(id: Int): LiveData<Invoice>

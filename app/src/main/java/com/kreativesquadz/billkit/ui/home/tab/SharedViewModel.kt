@@ -54,7 +54,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     val selectedCustomer: LiveData<Customer?> get() = _selectedCustomer
     val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
-    private val _selectedCreditNote = MutableLiveData<CreditNote?>()
+    public val _selectedCreditNote = MutableLiveData<CreditNote?>()
     val selectedCreditNote: LiveData<CreditNote?> get() = _selectedCreditNote
 
     val amountValue: MutableLiveData<String> by lazy {
@@ -107,6 +107,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                 gstTaxRepository.saveTaxSettings(defaultTaxSettings)
             }
         }
+
     }
 
 
@@ -127,7 +128,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         amountValue.value = amountBuilder.toString()
     }
 
-    fun addItem(taxRate: Float?, include: String?){
+    fun addItem(taxRate: Float?){
 
         if (amountBuilder.toString().isEmpty()){
             return
@@ -152,14 +153,37 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                     qty = "1"
                 }
                 val finalAmount = amnt.replace("X", "").toDouble() * qty.toDouble()
+                val itemAmount = amnt.replace("X", "").toDouble()
+               val selectedTaxPercentage = taxSettings.value?.selectedTaxPercentage
+
                 val invoiceId =  generateInvoiceId().toLong()
+                var finalPrice = finalAmount
+
+                taxSettings.value?.defaultTaxOption?.let {
+                    if (it == TaxOption.ExemptTax){
+                        finalPrice = finalAmount
+                    }
+                    if (it == TaxOption.PriceIncludesTax){
+                        finalPrice = finalAmount
+                    }
+                    if (it == TaxOption.PriceExcludesTax){
+                        selectedTaxPercentage?.let {
+                            val productTax =   itemAmount.times(it).div(100)
+                            finalPrice = finalAmount   +  (productTax * qty.toDouble())
+                        }
+                    }
+                    if (it == TaxOption.ZeroRatedTax){
+                        finalPrice = finalAmount
+                    }
+
+                }
                 val homeItem =  InvoiceItem(
                     invoiceId = invoiceId,
-                    itemName = "$itemName ( $amnt )  $include $qty",
+                    itemName = "$itemName ( $amnt ) X $qty",
                     unitPrice = amnt.toDouble(),
                     quantity = qty.toInt(),
                     returnedQty = 0,
-                    totalPrice = finalAmount,
+                    totalPrice = finalPrice,
                     taxRate = taxRate?.toDouble() ?: 0.00,
                     productMrp = amnt.toDouble()
                 )
@@ -170,14 +194,36 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             val include = "X"
             val qty = "1"
             val finalAmount = amount.toDouble() * qty.toDouble()
+            val selectedTaxPercentage = taxSettings.value?.selectedTaxPercentage
+
             val invoiceId =  generateInvoiceId().toLong()
+            var finalPrice = finalAmount
+
+            taxSettings.value?.defaultTaxOption?.let {
+                if (it == TaxOption.ExemptTax){
+                    finalPrice = finalAmount
+                }
+                if (it == TaxOption.PriceIncludesTax){
+                    finalPrice = finalAmount
+                }
+                if (it == TaxOption.PriceExcludesTax){
+                    selectedTaxPercentage?.let {
+                        val productTax =   finalAmount.times(it).div(100)
+                        finalPrice = finalAmount   +  (productTax * qty.toDouble())
+                    }
+                }
+                if (it == TaxOption.ZeroRatedTax){
+                    finalPrice = finalAmount
+                }
+
+            }
             val homeItem =  InvoiceItem(
                 invoiceId = invoiceId,
                 itemName = "$itemName ( $amountBuilder )  $include $qty",
                 unitPrice = amountBuilder.toString().toDouble(),
                 quantity = qty.toInt(),
                 returnedQty = 0,
-                totalPrice = finalAmount,
+                totalPrice = finalPrice,
                 taxRate = taxRate?.toDouble() ?: 0.00,
                 productMrp = amountBuilder.toString().toDouble()
 
@@ -274,15 +320,20 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     }
     fun isProductAdded(product: Product?): Boolean {
         val isAdded = list.any {
-            val isMatch = it.itemName.split("(")[0].trim()+":"
-            if (isMatch.equals(product?.productName+":")){
-                it.itemName = "${product?.productName} ( ${product?.productPrice} )  $include ${it.quantity + 1}"
-                it.quantity += 1
+            val isMatch = it.itemName.split("(")[0].trim()
+            if (isMatch == product?.productName?.trim()){
+                it.itemName = "${product.productName} ( ${product.productPrice} )  $include ${it.quantity + 1}"
+                if (product.productDefaultQty !=null && product.productDefaultQty > 0){
+                    it.quantity += product.productDefaultQty
+                }else{
+                    it.quantity += 1
+                }
 
-                val finalTotalPrice = (product?.productPrice.toString().toDouble() * it.quantity)
+
+                val finalTotalPrice = (product.productPrice.toString().toDouble() * it.quantity)
                 var finalPrice = finalTotalPrice
 
-                product?.productTaxType?.let { taxTypeString ->
+                product.productTaxType?.let { taxTypeString ->
                     val taxType = TaxType.fromString(taxTypeString)
                     taxType?.let { type ->
                         when (type) {
@@ -325,6 +376,9 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         amountValue.value = amountBuilder.clear().toString()
         updateDeselectCustomer()
         removeDiscount()
+        removeGst()
+        removePackage()
+        removeCreditNote()
     }
 
 

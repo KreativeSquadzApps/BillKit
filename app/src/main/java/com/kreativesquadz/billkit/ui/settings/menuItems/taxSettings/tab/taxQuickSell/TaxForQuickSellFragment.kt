@@ -21,6 +21,7 @@ import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
+import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,10 +34,7 @@ class  TaxForQuickSellFragment : Fragment() {
     private var selectedPosition: Int = -1 // Keeps track of selected switch position
     private var selectedTaxValue: Double? = null
     private var selectedTaxOption: TaxOption = TaxOption.ExemptTax // Default value
-    val taxTypeList = listOf("Price includes Tax",
-        "Price is without Tax",
-        "Zero Rated Tax",
-        "Exempt Tax")
+    val itemList = TaxType.getList().map{ it.displayName }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initializeTaxSettings()
@@ -47,7 +45,7 @@ class  TaxForQuickSellFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTaxForQuickSellBinding.inflate(inflater, container, false)
-        setupSpinnerTaxType(taxTypeList)
+        setupSpinnerTaxType()
         setupRecyclerView()
         observers()
         onClickListeners()
@@ -91,8 +89,7 @@ class  TaxForQuickSellFragment : Fragment() {
                     2 -> binding.recyclerView.visibility = View.GONE
                     3 -> binding.recyclerView.visibility = View.GONE
                 }
-                binding.dropdownTaxType.setText(taxTypeList[position])
-
+                binding.dropdownTaxType.setText(itemList[position])
             }
 
         }
@@ -136,7 +133,7 @@ class  TaxForQuickSellFragment : Fragment() {
         }
     }
 
-    private fun setupSpinnerTaxType(itemList: List<String>) {
+    private fun setupSpinnerTaxType() {
         val adapterStockUnit = GenericSpinnerAdapter(
             context = requireContext(),
             layoutResId = R.layout.dropdown_item, // Use your custom layout

@@ -63,6 +63,13 @@ interface InventoryDao {
     @Query("UPDATE products SET productStock = productStock - :quantity WHERE productName = :productName")
     fun decrementProductStock(productName: String?, quantity: Int)
 
+    @Query("UPDATE products SET productStock = productStock + :quantity WHERE productName = :productName")
+    fun incrementProductStock(productName: String?, quantity: Int)
+
+
+
+
+
     @Query("UPDATE products SET productStock = productStock + :quantity WHERE productId = :id")
     fun updateProductStock(id: Long?, quantity: Int)
 

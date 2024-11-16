@@ -35,6 +35,9 @@ interface CreditNoteDao {
     @Query("SELECT * FROM credit_notes WHERE invoiceId = :invoiceId LIMIT 1")
     suspend fun getCreditNoteByInvoiceId(invoiceId: Long): CreditNote?
 
+    @Query("SELECT * FROM credit_notes WHERE id = :id LIMIT 1")
+    suspend fun getCreditNoteById(id: Long): CreditNote?
+
     @Query("DELETE FROM credit_notes")
     fun deleteCreditNoteList()
 

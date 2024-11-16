@@ -97,7 +97,7 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
             // Insert each invoice item
             items.forEach { item ->
                 invoiceDao.insertInvoiceItem(item.copy(invoiceId = invoiceId))
-                val productName = item.itemName.split(" ")[0]
+                val productName = item.itemName.split("(")[0]
                 inventoryDao.decrementProductStock(productName, item.quantity)
             }
             return invoiceId
@@ -107,8 +107,60 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
 
     }
 
+    suspend fun updateInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>,invoiceId : Long) : Boolean {
+        val updated: Boolean
+        try {
+            val rowsUpdated = invoiceDao.updateInvoice(invoice.copy(id = invoiceId))
+            if (rowsUpdated == 0) {
+                updated = false
+            } else {
+                updated = true
+            }
+            // Get the existing items for the invoice
+            val existingItems = invoiceDao.getInvoiceItems(invoice.id)
 
-     fun getInvoiceItems(id: Long): List<InvoiceItem> {
+            // Remove items that are no longer in the updated list
+            existingItems.forEach { existingItem ->
+                if (items.none { it.id == existingItem.id }) {
+                    // If item is removed, restore the stock for the product
+                    val productName = existingItem.itemName.split("(")[0].trim()
+                    inventoryDao.incrementProductStock(productName, existingItem.quantity)
+                    invoiceDao.deleteInvoiceItem(existingItem)
+                }
+            }
+
+            // Update or insert the remaining items
+            items.forEach { item ->
+                invoiceDao.updateInvoiceItem(item)
+
+                if (item.id == 0L) {
+                    // New item, insert it
+                    invoiceDao.insertInvoiceItem(item.copy(invoiceId = invoice.id))
+                } else {
+                    // Existing item, update it
+                    //invoiceDao.updateInvoiceItem(item)
+
+                    // Adjust inventory based on quantity change
+                    val existingItem = existingItems.find { it.id == item.id }
+                    if (existingItem != null) {
+                        val quantityDifference = item.quantity - existingItem.quantity
+                        val productName = item.itemName.split("(")[0].trim()
+                        if (quantityDifference > 0) {
+                            inventoryDao.decrementProductStock(productName, quantityDifference)
+                        } else if (quantityDifference < 0) {
+                            inventoryDao.incrementProductStock(productName, -quantityDifference)
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            throw e
+        }
+        return updated
+    }
+
+
+    fun getInvoiceItems(id: Long): List<InvoiceItem> {
         return invoiceDao.getInvoiceItems(id)
     }
 

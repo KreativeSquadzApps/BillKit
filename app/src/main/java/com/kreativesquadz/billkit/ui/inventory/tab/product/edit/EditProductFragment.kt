@@ -44,6 +44,7 @@ import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.DialogData
 import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.utils.TaxType
 import com.kreativesquadz.billkit.utils.collapse
 import com.kreativesquadz.billkit.utils.expand
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,15 +64,12 @@ class EditProductFragment : Fragment() {
         "Quintal (Qtl)", "Roll (Rol)", "Square Feet (Sqf)",
         "Square Meter (Sqm)", "Tablets (Tbs)","Jar (Jar)")
 
-    val taxTypeList = listOf("Price includes Tax",
-        "Price is without Tax",
-        "Zero Rated Tax",
-        "Exempt Tax")
     private val requestCodeCameraPermission = 200
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
     private var selectedPosition: Int = -1 // Keeps track of selected switch position
     private var selectedTaxValue: Double? = null
+    private var selectedTaxType: String = ""
 
     val productEdit by lazy {
         arguments?.getSerializable("product") as? Product
@@ -90,12 +88,15 @@ class EditProductFragment : Fragment() {
         _binding = FragmentEditProductBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.product = productEdit
+        productEdit?.productTaxType?.let{
+            selectedTaxType = it
+        }
         setupRecyclerView()
         onClickListeners()
         setupSpinner()
         setupSpinnerStockUnit(stockUnitList)
         observers()
-        setupSpinnerTaxType(taxTypeList)
+        setupSpinnerTaxType()
         binding.isCameraOpen = isCameraClicked
         return binding.root
     }
@@ -123,6 +124,7 @@ class EditProductFragment : Fragment() {
                                 val preselectedSwitch = preselectedBinding.root.findViewById<SwitchCompat>(R.id.switchTax)
                                 preselectedSwitch.isChecked = true
                                 selectedTaxValue = it[selectedPosition].taxAmount
+
                             }
                         }
                     }
@@ -210,6 +212,7 @@ class EditProductFragment : Fragment() {
             productBarcode = binding.etBarcode.text.toString(),
             productStockUnit = binding.dropdownStockUnit.text.toString(),
             productTax = selectedTaxValue,
+            productTaxType = selectedTaxType,
             productStock = binding.etCurrentStock.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
             productDefaultQty = binding.etDefaultQty.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
             isSynced = 1)
@@ -251,7 +254,8 @@ class EditProductFragment : Fragment() {
 
         }
     }
-    private fun setupSpinnerTaxType(itemList: List<String>) {
+    private fun setupSpinnerTaxType() {
+        val itemList = TaxType.getList().map{ it.displayName }
         val adapterStockUnit = GenericSpinnerAdapter(
             context = requireContext(),
             layoutResId = R.layout.dropdown_item, // Use your custom layout
@@ -259,33 +263,45 @@ class EditProductFragment : Fragment() {
             staticItems = itemList
         )
         binding.dropdownTaxType.setAdapter(adapterStockUnit)
-        if (productEdit?.productTax == null || productEdit?.productTax == 0.0){
-            binding.dropdownTaxType.setText(itemList[3],false)
-            binding.recyclerView.visibility = View.GONE
-        }else{
-            binding.dropdownTaxType.setText(itemList[0],false)
-            binding.recyclerView.visibility = View.VISIBLE
+        when(productEdit?.productTaxType){
+            "Price includes Tax" -> {
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+            "Price is without Tax" -> {
+                binding.recyclerView.visibility = View.VISIBLE
+                }
+            "Zero Rated Tax" -> {
+                binding.recyclerView.visibility = View.GONE
+            }
+            "Exempt Tax" -> {
+                binding.recyclerView.visibility = View.GONE
+            }
         }
+        binding.dropdownTaxType.setText(selectedTaxType,false)
+
 
         binding.dropdownTaxType.setOnItemClickListener { _, _, position, _ ->
             val selectedItem = adapterStockUnit.getItem(position)
             when(selectedItem){
                 "Price includes Tax" -> {
                     binding.recyclerView.visibility = View.VISIBLE
+                    selectedTaxType = selectedItem
 
                 }
                 "Price is without Tax" -> {
                     binding.recyclerView.visibility = View.VISIBLE
-
+                    selectedTaxType = selectedItem
                 }
                 "Zero Rated Tax" -> {
                     binding.recyclerView.visibility = View.GONE
                     selectedTaxValue = null
+                    selectedTaxType = ""
 
                 }
                 "Exempt Tax" -> {
                     binding.recyclerView.visibility = View.GONE
                     selectedTaxValue = null
+                    selectedTaxType = ""
                 }
             }
 

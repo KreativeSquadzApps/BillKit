@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.kreativesquadz.billkit.databinding.FragmentQuickSaleBinding
 import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
+import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,29 +44,7 @@ class QuickSaleFragment : Fragment() {
     private fun onClickListener() {
         binding.btnAddItem.setOnClickListener {
             Log.d("TAG", "observersoooo: $selectedTaxValue")
-
-            val position = when (selectedTaxOption) {
-                is TaxOption.PriceIncludesTax -> 0
-                is TaxOption.PriceExcludesTax -> 1
-                is TaxOption.ZeroRatedTax -> 2
-                is TaxOption.ExemptTax -> 3
-            }
-            when(position){
-                0 -> {
-                    sharedViewModel.addItem(selectedTaxValue,"Price Includes Tax")
-                }
-                1 -> {
-                    sharedViewModel.addItem(selectedTaxValue,"Price Excludes Tax")
-                }
-                2 -> {
-                    sharedViewModel.addItem(selectedTaxValue,"Zero Rated Tax")
-                    }
-                3 -> {
-                    sharedViewModel.addItem(selectedTaxValue,"Exempt Tax")
-                }
-
-            }
-
+            sharedViewModel.addItem(selectedTaxValue)
         }
     }
 

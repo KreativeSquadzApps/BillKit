@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -44,12 +45,14 @@ class EditBillDetailsFrag : Fragment() {
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     val df = DecimalFormat("#")
     var isCustomerSelected = false
-    var invoicePrefixNumber = ""
-    var invoicePrefix = ""
     var customGstAmount : String ? = null
     val invoice by lazy {
         arguments?.getSerializable("invoice") as? Invoice
     }
+    var cashAmount : Double = 0.0
+    var onlineAmount : Double = 0.0
+    var creditAmount : Double = 0.0
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +68,6 @@ class EditBillDetailsFrag : Fragment() {
         _binding = FragmentEditBillDetailsBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.invoice = invoice
-
         binding.customer  = sharedViewModel.selectedCustomer.value
         init()
         observers()
@@ -77,51 +79,40 @@ class EditBillDetailsFrag : Fragment() {
         binding.isGST = true
         binding.isCustomerSelected = false
         btnUpdateState()
+        invoice?.discount?.let {
+            if (it !=0 ){
+                dialogViewModel.isApplied.value = true
+            }
+        }
+         invoice?.customGstAmount?.let {
+             dialogGstViewModel.isApplied.value = true
+        }
 
+         invoice?.packageAmount?.let {
+             dialogPackagingViewModel.isApplied.value = true
+        }
+        invoice?.creditNoteId?.let {
+           val  creditNote = viewModel.getCreditNoteById(it.toLong())
+            if (creditNote.value?.totalAmount != 0.0 && creditNote.value?.totalAmount != null){
+                sharedViewModel.addCreditNote(creditNote.value)
+                sharedViewModel._isCreditNoteApplied.value  = true
+            }
+        }
     }
 
     private fun onClickListeners(){
         binding.btnupdate.setOnClickListener{
-//            viewModel.updateInvoice(sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,customGstAmount,invoicePrefixNumber),sharedViewModel.getCreditNote()?.id)
-            findNavController().popBackStack()
+            viewModel.updateInvoiceWithItems(sharedViewModel.getInvoice(onlineAmount = onlineAmount, creditAmount = creditAmount.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = cashAmount,customGstAmount,invoice?.invoiceNumber!!)
+                ,sharedViewModel.list,
+                sharedViewModel.getCreditNote()?.id,
+                invoice!!.id)
         }
-//        binding.btnCash.setOnClickListener {
-//                      viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-//                                          invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = 0.0, cashAmount = sharedViewModel.getTotalAmountDouble(),0.0 ,customGstAmount,invoicePrefixNumber),
-//                                         items =  sharedViewModel.getItemsList(),
-//                                         creditNoteId =  sharedViewModel.getCreditNote()?.id,
-//                                         context =  requireContext())
-//
-//
-//        }
-//
-//        binding.btnOnline.setOnClickListener{
-//                        viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-//                                          invoice = sharedViewModel.getInvoice(onlineAmount = sharedViewModel.getTotalAmountDouble(), creditAmount = 0.0, cashAmount = 0.0,0.0,customGstAmount,invoicePrefixNumber),
-//                                         items =  sharedViewModel.getItemsList(),
-//                                         creditNoteId =  sharedViewModel.getCreditNote()?.id,
-//                                         context =  requireContext())
-//
-//        }
-//
-//        binding.btnCredit.setOnClickListener{
-//            if (isCustomerSelected){
-//                viewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
-//                    invoice = sharedViewModel.getInvoice(onlineAmount = 0.0, creditAmount = sharedViewModel.getTotalAmountDouble(), cashAmount = 0.0,0.0,customGstAmount,invoicePrefixNumber),
-//                    items =  sharedViewModel.getItemsList(),
-//                    creditNoteId =  sharedViewModel.getCreditNote()?.id,
-//                    context =  requireContext())
-//
-//            }else{
-//                Toast.makeText(requireContext(), "Please select customer", Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
-//
-//        binding.btnSplit.setOnClickListener {
-////            val action = EditBillDetailsFragDirections.actionBillDetailsFragToSplitFragment()
-////            findNavController().navigate(action)
-//        }
+
+
+        binding.btnSplit.setOnClickListener {
+//            val action = EditBillDetailsFragDirections.actionBillDetailsFragToSplitFragment()
+//            findNavController().navigate(action)
+        }
 
         binding.addCustomer.setOnClickListener {
             val customerAddBottomSheetFrag = CustomerAddBottomSheetFrag()
@@ -190,20 +181,23 @@ class EditBillDetailsFrag : Fragment() {
         if (invoice?.cashAmount!=0.0 && invoice?.onlineAmount == 0.0  && invoice?.creditAmount == 0.0) {
             binding.btnCash.setBackgroundResource(R.drawable.corner_four_green)
             binding.txtCash.setTextColor(resources.getColor(R.color.text_color_heading_reverse))
+            cashAmount = sharedViewModel.getTotalAmountDouble()
 
         }else{
             binding.btnCash.setBackgroundResource(R.drawable.corner_four_grey)
             binding.txtCash.setTextColor(resources.getColor(R.color.text_color_main))
-
+            cashAmount = 0.0
         }
 
         if (invoice?.onlineAmount!=0.0 && invoice?.cashAmount == 0.0  && invoice?.creditAmount == 0.0) {
             binding.btnOnline.setBackgroundResource(R.drawable.corner_four_green)
             binding.txtOnline.setTextColor(resources.getColor(R.color.text_color_heading_reverse))
+            onlineAmount = sharedViewModel.getTotalAmountDouble()
 
         }else{
             binding.btnOnline.setBackgroundResource(R.drawable.corner_four_grey)
             binding.txtOnline.setTextColor(resources.getColor(R.color.text_color_main))
+            onlineAmount = 0.0
 
         }
 
@@ -212,10 +206,12 @@ class EditBillDetailsFrag : Fragment() {
             binding.btnSplit.setBackgroundResource(R.drawable.corner_four_grey)
             binding.txtCredit.setTextColor(resources.getColor(R.color.text_color_main))
             binding.txtSplit.setTextColor(resources.getColor(R.color.text_color_heading_reverse))
+            creditAmount = sharedViewModel.getTotalAmountDouble()
 
         }else{
             binding.btnCredit.setBackgroundResource(R.drawable.corner_four_grey)
             binding.txtCredit.setTextColor(resources.getColor(R.color.text_color_main))
+            creditAmount = 0.0
 
         }
         invoice?.customerId?.let { customerId ->
@@ -237,6 +233,7 @@ class EditBillDetailsFrag : Fragment() {
                 binding.amountTotalTax.text =  "Total Tax : " + sharedViewModel.getTotalTax()
                 binding.itemsCount.text = "Items : "+ sharedViewModel.getInvoiceItemCount()
                 btnUpdateState()
+
             }
 
         }
@@ -251,16 +248,22 @@ class EditBillDetailsFrag : Fragment() {
 //        }
         viewModel.invoiceId.observe(viewLifecycleOwner){
             it?.let {
+                if (it.toInt() == 1){
+                    viewModel.clearInvoiceStatus()
+                    sharedViewModel.clearOrder()
+                    dialogViewModel.onRemoveClicked()
+                    dialogGstViewModel.onRemoveClicked()
+                    findNavController().popBackStack()
+                }else{
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                }
 
-                viewModel.clearInvoiceStatus()
-                sharedViewModel.clearOrder()
-                dialogViewModel.onRemoveClicked()
-                dialogGstViewModel.onRemoveClicked()
             }
         }
 
         sharedViewModel.isCustomerSelected.observe(viewLifecycleOwner) { isCustomerSelected ->
             binding.isCustomerSelected = isCustomerSelected
+
             btnUpdateStateCustomer()
             this.isCustomerSelected = isCustomerSelected
         }
@@ -308,19 +311,36 @@ class EditBillDetailsFrag : Fragment() {
 
         dialogViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
-                sharedViewModel.addDiscount(dialogViewModel.dialogText.value.toString().substringAfter(" "))
-                binding.discountedAmount = dialogViewModel.dialogText.value.toString().substringAfter(" ")
+                if (dialogViewModel.dialogText.value != null){
+                    binding.discountedAmount = dialogViewModel.dialogText.value.toString()
+                    sharedViewModel.addDiscount(dialogViewModel.dialogText.value.toString().substringAfter(" "))
+                }else{
+                    sharedViewModel.addDiscount(invoice?.discount.toString())
+                    binding.discountedAmount = invoice?.discount.toString()
+                }
+
             }else{
                 sharedViewModel.removeDiscount()
             }
         }
+
         dialogGstViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
-                val customGstAmountApplied = dialogGstViewModel.gstText.value.toString().substringBefore("|")
-                //val customGstRateApplied = dialogGstViewModel.gstText.value.toString().substringAfter("|")
-                binding.gstAppliedAmount = customGstAmountApplied
-                sharedViewModel.addGst(customGstAmountApplied)
-                customGstAmount = dialogGstViewModel.gstText.value.toString()
+
+                if (dialogGstViewModel.gstText.value != null){
+                    val customGstAmountApplied = dialogGstViewModel.gstText.value.toString().substringBefore("|")
+                    //val customGstRateApplied = dialogGstViewModel.gstText.value.toString().substringAfter("|")
+                    binding.gstAppliedAmount = customGstAmountApplied
+                    sharedViewModel.addGst(customGstAmountApplied)
+                    customGstAmount = dialogGstViewModel.gstText.value.toString()
+                }else{
+                    val customGstAmountApplied = invoice?.customGstAmount.toString().substringBefore("|")
+                    //val customGstRateApplied = dialogGstViewModel.gstText.value.toString().substringAfter("|")
+                    binding.gstAppliedAmount = customGstAmountApplied
+                    sharedViewModel.addGst(customGstAmountApplied)
+                    customGstAmount = invoice?.customGstAmount.toString().substringBefore("|")
+                }
+
             }else{
                 sharedViewModel.removeGst()
                 customGstAmount = null
@@ -328,9 +348,15 @@ class EditBillDetailsFrag : Fragment() {
         }
         dialogPackagingViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
-                val packageAmountApplied = dialogPackagingViewModel.packagingText.value.toString()
-                binding.packagingAppliedAmount = packageAmountApplied
-                sharedViewModel.addPackage(packageAmountApplied)
+                if (dialogPackagingViewModel.packagingText.value != null){
+                    val packageAmountApplied = dialogPackagingViewModel.packagingText.value.toString()
+                    binding.packagingAppliedAmount = packageAmountApplied
+                    sharedViewModel.addPackage(packageAmountApplied)
+                }else{
+                    val packageAmountApplied = invoice?.packageAmount.toString()
+                    binding.packagingAppliedAmount = packageAmountApplied
+                    sharedViewModel.addPackage(packageAmountApplied)
+                }
             }else{
                 sharedViewModel.removePackage()
             }
@@ -385,7 +411,7 @@ class EditBillDetailsFrag : Fragment() {
 
     private fun btnUpdateState() {
 
-        if (invoice?.totalAmount == sharedViewModel.getTotalAmountDouble() || invoice?.customerId == sharedViewModel.selectedCustomer.value?.id ){
+        if (invoice?.totalAmount == sharedViewModel.getTotalAmountDouble() ){
             binding.btnupdate.setCardBackgroundColor(resources.getColor(R.color.lite_grey_200))
             binding.btnupdate.isEnabled = false
         }else{
@@ -407,13 +433,18 @@ class EditBillDetailsFrag : Fragment() {
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         sharedViewModel.list.clear()
         sharedViewModel.clearOrder()
         sharedViewModel.clearItemsList()
         dialogViewModel.onRemoveClicked()
         sharedViewModel._invoiceItems.value = null
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
         _binding = null
     }
 }
