@@ -329,7 +329,7 @@ class BillDetailsFrag : Fragment() {
             }
             dialogPackagingViewModel.isApplied.observe(viewLifecycleOwner) {
                 if (it == true) {
-                    if (dialogPackagingViewModel.packagingText.value == null) {
+                    if (dialogPackagingViewModel.packagingText.value != null) {
                         val packageAmountApplied =
                             dialogPackagingViewModel.packagingText.value.toString()
                         binding.packagingAppliedAmount = packageAmountApplied

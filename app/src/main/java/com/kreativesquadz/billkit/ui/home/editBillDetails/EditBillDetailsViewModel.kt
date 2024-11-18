@@ -57,16 +57,17 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
     val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
-    fun updateInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>,creditNoteId : Int?,invoiceId: Long)  {
+    fun updateInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>,invoiceId: Long)  {
         try {
             viewModelScope.launch{
-                Log.e("itemsLLL",items.toString())
-                Log.e("invoiceLLL",invoice.toString())
                val updated = billHistoryRepository.updateInvoiceWithItems(invoice, items,invoiceId)
-                creditNoteRepository.redeemCreditNoteById(creditNoteId)
-                updateInvoiceWorker(invoice.id)
+                Log.e("updated", updated.toString())
                 if (updated){
                     _invoiceID.value = 1
+                    invoice.creditNoteId?.let {
+                        creditNoteRepository.redeemCreditNoteById(it)
+                    }
+                    updateInvoiceWorker(invoiceId)
                 }else{
                     _invoiceID.value = 0
                 }

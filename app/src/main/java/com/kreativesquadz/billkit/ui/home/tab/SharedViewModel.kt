@@ -128,6 +128,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         amountValue.value = amountBuilder.toString()
     }
 
+
     fun addItem(taxRate: Float?){
 
         if (amountBuilder.toString().isEmpty()){
@@ -178,6 +179,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
                 }
                 val homeItem =  InvoiceItem(
+                    id = 0,
                     invoiceId = invoiceId,
                     itemName = "$itemName ( $amnt ) X $qty",
                     unitPrice = amnt.toDouble(),
@@ -234,7 +236,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         amountValue.value = amountBuilder.clear().toString()
     }
 
-
     fun addProduct(product: Product?){
         if (product == null){
             return
@@ -290,6 +291,9 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         list.add(homeItem)
         _items.value = list
     }
+
+
+
     fun removeItemAt(position: Int){
         Log.e("pree",list.toString())
         list.removeAt(position)

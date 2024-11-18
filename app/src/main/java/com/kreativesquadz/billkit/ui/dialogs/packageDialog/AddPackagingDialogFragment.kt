@@ -5,16 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.customdialog.BaseDialogFragment
-import com.kreativesquadz.billkit.BR
-import com.kreativesquadz.billkit.Config
-import com.kreativesquadz.billkit.R
-import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
-import com.kreativesquadz.billkit.databinding.DialogFragmentAddGstBinding
 import com.kreativesquadz.billkit.databinding.DialogFragmentAddPackagingBinding
-import com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.tab.tabTaxes.TaxesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.RoundingMode
 import java.text.DecimalFormat

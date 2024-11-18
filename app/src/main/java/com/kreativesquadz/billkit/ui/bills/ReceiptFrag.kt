@@ -85,6 +85,7 @@ class ReceiptFrag : Fragment() {
     private var customGstAmount: String? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.fetchAllDetails(invoiceId!!)
@@ -345,6 +346,7 @@ class ReceiptFrag : Fragment() {
             val taxableAmount = it.split("|")[2].toDouble()
                 invoiceTax.add(InvoiceTax("Custom GST",taxableAmount, customGstRateApplied, customGstAmount))
              }
+
         viewModel.getGstListByValue(taxList).observe(viewLifecycleOwner) { gstList ->
             gstList?.let { gstItems ->
                 gstItems.forEach { gst ->
@@ -834,6 +836,8 @@ class ReceiptFrag : Fragment() {
             customerName = customer?.customerName,
             customerNumber = customer?.shopContactNumber,
             customerGst = customer?.gstNo,
+            packageAmount = invoice.packageAmount,
+            customGstAmount = invoice.customGstAmount,
             customerAddress = customer?.address,
             items = invoiceItems,
             totalItems = invoiceItems.size,
@@ -849,11 +853,12 @@ class ReceiptFrag : Fragment() {
         viewModel.printUsingDefaultPrinter(receipt)
 
     }
+
     private fun centerText(text: String, paperWidth: String): String {
         val width = when (paperWidth) {
-            "80MM" -> 48
-            "58MM" -> 32
-            else -> 32
+            "80MM" -> 58
+            "58MM" -> 52
+            else -> 52
         }
         val padding = (width - text.length) / 2
         return if (padding > 0) {
@@ -863,24 +868,43 @@ class ReceiptFrag : Fragment() {
         }.padEnd(width)
     }
 
-    private fun formatItem(slNo: String, name: String, quantity: String, rate: String, tax : String, total: String, paperWidth: String): String {
+    private fun formatItem(slNo: String, name: String, quantity: String, rate: String, tax : String, total: String, paperWidth: Int): String {
         if (isTaxAvailable){
-            val format = when (paperWidth) {
-                "80MM" -> "%-5s %-19s %7s %7s %6s %10s"
-                "58MM" -> "%-3s %-11s %5s %6s %4s %7s"
-                else -> "%-3s %-11s %5s %6s %4s %7s"
+            val weights = listOf(0.2f, 0.5f, 0.5f, 0.5f, 0.5f, 2f)
+            val totalWeight = weights.sum()
+
+            // Calculate column widths based on paperWidth
+            val columnWidths = weights.map { weight -> ((weight / totalWeight) * paperWidth).toInt()}
+
+            // Format each column with its calculated width
+            return buildString {
+                append(slNo.padEnd(columnWidths[0]))
+                append(name.padEnd(columnWidths[1]))
+                append(quantity.padStart(columnWidths[2]))
+                append(rate.padStart(columnWidths[3]))
+                append(tax.padStart(columnWidths[4]))
+                append(total.padStart(columnWidths[5]))
             }
-            return String.format(format, slNo, name, quantity, rate,tax, total)
 
         }else{
-            val format = when (paperWidth) {
-                "80MM" -> "%-5s %-19s %7s %7s %10s"
-                "58MM" -> "%-3s %-11s %5s %6s %7s"
-                else -> "%-3s %-11s %5s %6s %7s"
+            val weights = listOf(0.5f, 2.0f, 0.5f, 0.5f, 1.5f)
+            val totalWeight = weights.sum()
+
+            // Calculate column widths based on paperWidth
+            val columnWidths = weights.map { weight -> ((weight / totalWeight) * paperWidth.toInt()).toInt()}
+
+            // Format each column with its calculated width
+            return buildString {
+                append(slNo.padEnd(columnWidths[0]))
+                append(name.padEnd(columnWidths[1]))
+                append(quantity.padStart(columnWidths[2]))
+                append(rate.padStart(columnWidths[3]))
+                append(total.padStart(columnWidths[4]))
             }
-            return String.format(format, slNo, name, quantity, rate, total)
         }
+
     }
+
     private fun formatTax(paperWidth: String, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
         val format = when (paperWidth) {
             "80MM" -> "%-7s %-12s %6s %9s"
@@ -901,6 +925,8 @@ class ReceiptFrag : Fragment() {
         customerName: String?,
         customerNumber: String?,
         customerGst: String?,
+        packageAmount: Double?,
+        customGstAmount: String?,
         customerAddress: String?,
         items: List<InvoiceItem>,
         totalItems: Int,
@@ -915,10 +941,11 @@ class ReceiptFrag : Fragment() {
     ): String {
         val receipt = StringBuilder()
         var separatorLine = ""
-        var paperWidth = "58MM" // Default to 58MM, adjust as needed
+        var paperWidth = "45MM" // Default to 58MM, adjust as needed
 
         thermalPrinterSetup?.let {
-            paperWidth = it.printerSize
+            //paperWidth = it.printerSize
+            Log.e("Paper Width", paperWidth)
             separatorLine = generateSeparatorLine(paperWidth)
         }
 
@@ -942,8 +969,8 @@ class ReceiptFrag : Fragment() {
             receipt.append(separatorLine)
         }
 
+            receipt.append(formatItem("SL No.", "Item", "Qty", "Rate","Tax", "Total",paperWidth.replace("MM","").toInt()))
         // Items Header
-       receipt.append(formatItem("SL No.", "Item", "Qty", "Rate","Tax", "Total", paperWidth)).append("\n")
 
         receipt.append(separatorLine)
 
@@ -951,7 +978,17 @@ class ReceiptFrag : Fragment() {
         var slNo = 0
         for (item in items) {
             slNo++
-            receipt.append(formatItem(slNo.toString(), item.itemName.split("(")[0], item.quantity.toString(), item.unitPrice.toString(),item.taxRate.toString(), item.totalPrice.toString(), paperWidth)).append("\n")
+            receipt.append(
+                formatItem(
+                    slNo.toString(),
+                    item.itemName.split("(")[0], // Extract name before parentheses
+                    item.quantity.toString(),
+                    item.unitPrice.toString(),
+                    item.taxRate.toString(),
+                    item.totalPrice.toString(),
+                    paperWidth.replace("MM","").toInt()
+                )
+            ).append("\n")
         }
         receipt.append(separatorLine)
 
@@ -966,6 +1003,14 @@ class ReceiptFrag : Fragment() {
             receipt.append(String.format("%-15s %s", "Total Tax:", totalTax)).append("\n")
         }
         receipt.append(separatorLine)
+
+        packageAmount?.let {
+            receipt.append(String.format("%-15s %s", "Package Amount:", packageAmount)).append("")
+            receipt.append(separatorLine)
+        }
+
+        receipt.append(separatorLine)
+
         receipt.append(centerText("Total: $totalAmount", paperWidth)).append("\n")
 
         if (isTaxAvailable){
@@ -973,7 +1018,6 @@ class ReceiptFrag : Fragment() {
             receipt.append(formatTax(paperWidth,"TaxType","Taxable Amount","Rate","Tax Amount"))
             receipt.append(separatorLine)
             invoiceTax.forEach {
-                Log.d("TAG", "createReceiptString: "+it.taxType)
                 receipt.append(formatTax(paperWidth,it.taxType,it.taxableAmount.toString(),it.rate.toString(),it.taxAmount.toString())).append("\n")
             }
         }
@@ -1003,6 +1047,7 @@ class ReceiptFrag : Fragment() {
         }
         return "-".repeat(receiptWidth) + "\n"
     }
+
 
 
     override fun onDestroyView() {

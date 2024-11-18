@@ -104,7 +104,6 @@ class EditBillDetailsFrag : Fragment() {
         binding.btnupdate.setOnClickListener{
             viewModel.updateInvoiceWithItems(sharedViewModel.getInvoice(onlineAmount = onlineAmount, creditAmount = creditAmount.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = cashAmount,customGstAmount,invoice?.invoiceNumber!!)
                 ,sharedViewModel.list,
-                sharedViewModel.getCreditNote()?.id,
                 invoice!!.id)
         }
 
@@ -145,10 +144,6 @@ class EditBillDetailsFrag : Fragment() {
         binding.removeGst.setOnClickListener{
             sharedViewModel.removeGst()
         }
-
-
-
-
     }
 
     private fun showAddDiscountDialog() {
@@ -221,8 +216,8 @@ class EditBillDetailsFrag : Fragment() {
                 sharedViewModel.updateSelectedCustomer(customer)
 
             }
-
         }
+
         sharedViewModel.invoiceItems.observe(viewLifecycleOwner){
             it?.let {
                 sharedViewModel.list = it.toMutableList()
@@ -281,14 +276,16 @@ class EditBillDetailsFrag : Fragment() {
             binding.isCreditNoteApplied = isCreditNoteApplied
         }
 
+
         sharedViewModel.selectedCustomer.observe(viewLifecycleOwner) { customer ->
             btnUpdateStateCustomer()
             binding.customer = customer
         }
+
         sharedViewModel.selectedCreditNote.observe(viewLifecycleOwner) { creditNote ->
             binding.creditNote = creditNote
-
         }
+
         viewModel.userSetting.observe(viewLifecycleOwner){
             it.let {
                 if (it?.isdiscount==0){
@@ -309,6 +306,7 @@ class EditBillDetailsFrag : Fragment() {
             //binding.amountTotal.text =  "Amount : " + totalAmount
         }
 
+
         dialogViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
                 if (dialogViewModel.dialogText.value != null){
@@ -324,9 +322,9 @@ class EditBillDetailsFrag : Fragment() {
             }
         }
 
+
         dialogGstViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
-
                 if (dialogGstViewModel.gstText.value != null){
                     val customGstAmountApplied = dialogGstViewModel.gstText.value.toString().substringBefore("|")
                     //val customGstRateApplied = dialogGstViewModel.gstText.value.toString().substringAfter("|")
@@ -340,12 +338,13 @@ class EditBillDetailsFrag : Fragment() {
                     sharedViewModel.addGst(customGstAmountApplied)
                     customGstAmount = invoice?.customGstAmount.toString().substringBefore("|")
                 }
-
             }else{
-                sharedViewModel.removeGst()
-                customGstAmount = null
+                    sharedViewModel.removeGst()
+                    customGstAmount = null
             }
         }
+
+
         dialogPackagingViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
                 if (dialogPackagingViewModel.packagingText.value != null){
@@ -380,6 +379,7 @@ class EditBillDetailsFrag : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         setupSwipeToDelete(binding.recyclerView)
     }
+
     private fun setupSwipeToDelete(recyclerView: RecyclerView) {
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
@@ -389,16 +389,16 @@ class EditBillDetailsFrag : Fragment() {
             ): Boolean {
                 return false
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 sharedViewModel.removeItemAt(position)
-                if (sharedViewModel.items.value.isNullOrEmpty()){
+                sharedViewModel.getTotalAmount()
+                adapter.notifyItemRemoved(position)
+                if (sharedViewModel.list.size == 0){
                     findNavController().popBackStack()
                 }
             }
         }
-
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
@@ -410,7 +410,6 @@ class EditBillDetailsFrag : Fragment() {
     }
 
     private fun btnUpdateState() {
-
         if (invoice?.totalAmount == sharedViewModel.getTotalAmountDouble() ){
             binding.btnupdate.setCardBackgroundColor(resources.getColor(R.color.lite_grey_200))
             binding.btnupdate.isEnabled = false
@@ -418,8 +417,8 @@ class EditBillDetailsFrag : Fragment() {
             binding.btnupdate.setCardBackgroundColor(resources.getColor(R.color.colorPrimary))
             binding.btnupdate.isEnabled = true
         }
-
     }
+
     private fun btnUpdateStateCustomer() {
         if(invoice?.customerId != sharedViewModel.selectedCustomer.value?.id){
             binding.btnupdate.setCardBackgroundColor(resources.getColor(R.color.colorPrimary))
@@ -427,10 +426,7 @@ class EditBillDetailsFrag : Fragment() {
         }else{
             binding.btnupdate.setCardBackgroundColor(resources.getColor(R.color.lite_grey_200))
             binding.btnupdate.isEnabled = false
-
-
         }
-
     }
 
     override fun onDestroy() {
@@ -444,7 +440,6 @@ class EditBillDetailsFrag : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 }

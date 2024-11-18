@@ -121,7 +121,7 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
 
             // Remove items that are no longer in the updated list
             existingItems.forEach { existingItem ->
-                if (items.none { it.id == existingItem.id }) {
+                if (items.none { it.invoiceId == existingItem.invoiceId }) {
                     // If item is removed, restore the stock for the product
                     val productName = existingItem.itemName.split("(")[0].trim()
                     inventoryDao.incrementProductStock(productName, existingItem.quantity)
@@ -130,29 +130,31 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
             }
 
             // Update or insert the remaining items
-            items.forEach { item ->
-                invoiceDao.updateInvoiceItem(item)
-
-                if (item.id == 0L) {
-                    // New item, insert it
-                    invoiceDao.insertInvoiceItem(item.copy(invoiceId = invoice.id))
-                } else {
-                    // Existing item, update it
-                    //invoiceDao.updateInvoiceItem(item)
-
-                    // Adjust inventory based on quantity change
-                    val existingItem = existingItems.find { it.id == item.id }
-                    if (existingItem != null) {
-                        val quantityDifference = item.quantity - existingItem.quantity
-                        val productName = item.itemName.split("(")[0].trim()
-                        if (quantityDifference > 0) {
-                            inventoryDao.decrementProductStock(productName, quantityDifference)
-                        } else if (quantityDifference < 0) {
-                            inventoryDao.incrementProductStock(productName, -quantityDifference)
-                        }
-                    }
-                }
-            }
+//            items.forEach { item ->
+//               // invoiceDao.updateInvoiceItem(item)
+//                Log.e("item", item.toString())
+//
+//                if (item.id == 0L) {
+//                    // New item, insert it
+//                    //invoiceDao.insertInvoiceItem(item.copy(invoiceId = invoice.id))
+//                }
+//                else {
+//                    // Existing item, update it
+//                    //invoiceDao.updateInvoiceItem(item)
+//
+//                    // Adjust inventory based on quantity change
+//                    val existingItem = existingItems.find { it.id == item.id }
+//                    if (existingItem != null) {
+//                        val quantityDifference = item.quantity - existingItem.quantity
+//                        val productName = item.itemName.split("(")[0].trim()
+//                        if (quantityDifference > 0) {
+//                            inventoryDao.decrementProductStock(productName, quantityDifference)
+//                        } else if (quantityDifference < 0) {
+//                            inventoryDao.incrementProductStock(productName, -quantityDifference)
+//                        }
+//                    }
+//                }
+//            }
         } catch (e: Exception) {
             throw e
         }

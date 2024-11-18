@@ -22,7 +22,7 @@ class UpdateInvoiceWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            val id = inputData.getString("id") ?: ""
+            val id = inputData.getLong("id", 0)
             val invoice = repository.getInvoiceByIdWithoutLiveData(id.toInt())
             val items = repository.getInvoiceItems(invoice.id)
             ApiClient.getApiService().updateInvoice(InvoiceRequest(invoice, items))

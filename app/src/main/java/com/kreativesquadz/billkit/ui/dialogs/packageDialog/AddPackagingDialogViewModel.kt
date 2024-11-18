@@ -19,6 +19,7 @@ class AddPackagingDialogViewModel : ViewModel() {
             _dismissDialog.value = true
             return
         }
+
         isApplied.value = true
         _dismissDialog.value = true
     }
