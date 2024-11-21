@@ -40,18 +40,7 @@ class BillHistoryFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = viewModel.getSelectedDate()
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
 
-        }
-        val startOfDay = calendar.timeInMillis
-        calendar.add(Calendar.DAY_OF_MONTH, 1)
-        val endOfDay = calendar.timeInMillis - 1
-        viewModel.getPagedInvoicesFromDb(startOfDay, endOfDay)
 
     }
 
@@ -66,6 +55,22 @@ class BillHistoryFrag : Fragment() {
         observers()
         onClickListener()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = viewModel.getSelectedDate()
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+
+        }
+        val startOfDay = calendar.timeInMillis
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val endOfDay = calendar.timeInMillis - 1
+        viewModel.getPagedInvoicesFromDb(startOfDay, endOfDay)
     }
 
     private fun observers(){
@@ -109,6 +114,7 @@ class BillHistoryFrag : Fragment() {
         adapter = GenericAdapterPagination(
             object : OnItemClickListener<Invoice> {
                 override fun onItemClick(item: Invoice) {
+                    Log.e("TAG", "onItemClick: $item")  
                      val action = BillHistoryFragDirections.actionBillHistoryFragToInvoiceFragment(item,Config.BillDetailsFragmentToReceiptFragment)
                     findNavController().navigate(action)
                 }

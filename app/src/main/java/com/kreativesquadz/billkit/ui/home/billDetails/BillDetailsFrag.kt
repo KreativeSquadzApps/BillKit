@@ -247,6 +247,7 @@ class BillDetailsFrag : Fragment() {
                     dialogViewModel.onRemoveClicked()
                     dialogGstViewModel.onRemoveClicked()
                     dialogPackagingViewModel.onRemoveClicked()
+                    sharedViewModel.invoiceId = sharedViewModel.generateInvoiceId().toLong()
                 }
             }
 

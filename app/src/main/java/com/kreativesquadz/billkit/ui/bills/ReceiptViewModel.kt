@@ -51,7 +51,7 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     val invoiceData: LiveData<Invoice> = _invoiceData
 
 
-    private val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
+    val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
 
@@ -73,7 +73,7 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     fun fetchAllDetails(invoiceId: String) = viewModelScope.launch {
         try {
             val companyDetailsDeferred = async { settingsRepository.loadCompanyDetailsDb(Config.userId).asFlow().first()}
-            val invoiceDetailsDeferred = async { billHistoryRepository.getInvoiceById(invoiceId.toInt()).asFlow().first() }
+            val invoiceDetailsDeferred = async { billHistoryRepository.getInvoiceByInvoiceId(invoiceId.toInt()).asFlow().first() }
             val invoiceItemsDeferred = async { billHistoryRepository.getInvoiceItems(invoiceId.toLong())}
             val pdfSettingsDeferred = async { userSettingRepository.getPdfSetting(Config.userId) ?: PdfSettings()}
             val invoicePrinterSettingsDeferred = async { userSettingRepository.getInvoicePrinterSetting(Config.userId) ?: InvoicePrinterSettings()}

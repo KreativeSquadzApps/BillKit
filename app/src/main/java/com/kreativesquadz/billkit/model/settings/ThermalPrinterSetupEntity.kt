@@ -9,7 +9,7 @@ import java.io.Serializable
 @Entity(tableName = "thermal_printer_setup")
 data class ThermalPrinterSetup(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val printerSize: String = "58MM",
+    val printerSize: String = "40MM",
     val printerMode: String = "CONFIG-1",
     val fontSize: String = "Medium",
     val enableAutoPrint: Boolean = false,

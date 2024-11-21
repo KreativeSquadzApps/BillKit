@@ -449,7 +449,7 @@
     <fragment
         android:id="@+id/editBillDetailsFrag"
         android:name="com.kreativesquadz.billkit.ui.home.editBillDetails.EditBillDetailsFrag"
-        android:label="EditBillDetailsFrag" >
+        android:label="Edit Invoice">
 
         <argument
             android:name="invoice"

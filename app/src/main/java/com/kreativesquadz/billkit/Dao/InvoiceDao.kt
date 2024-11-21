@@ -18,7 +18,7 @@ interface InvoiceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
      fun insertInvoices(invoiceList: List<Invoice>)
 
-    @Query("SELECT * FROM invoices ")
+    @Query("SELECT * FROM invoices")
     fun getAllInvoices(): LiveData<List<Invoice>>
 
 
@@ -32,39 +32,42 @@ interface InvoiceDao {
     @Delete
     suspend fun deleteInvoiceItem(invoiceItem: InvoiceItem)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateInvoiceItem(invoiceItem: InvoiceItem)
-
-
-
-
 
     @Query("DELETE FROM invoices")
     fun deleteInvoices()
+
     @Query("UPDATE invoice_items SET returnedQty = :returnedQty WHERE invoiceId = :invoiceId AND itemName = :itemName")
     suspend fun updateReturnedQty(invoiceId: Long, itemName: String, returnedQty: Int)
 
-
     @Query("UPDATE invoices SET status = :status WHERE id = :invoiceId")
     suspend fun updateInvoiceStatus(status : String,  invoiceId: Int)
+
     @Insert
     fun insertRepo(invoice: Invoice) : Long
+
     @Insert
     suspend fun insert(invoice: Invoice) : Long
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-     fun insertInvoiceItem(invoiceItem: InvoiceItem)
+    fun insertInvoiceItem(invoiceItem: InvoiceItem)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertInvoiceItem(invoiceList: List<InvoiceItem>)
 
     @Update
     suspend fun update(invoice: Invoice)
-    @Update
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateInvoice(invoice: Invoice): Int
 
 
-
     @Query("SELECT * FROM invoices WHERE id = :id")
-    fun getInvoiceById(id: Int): LiveData<Invoice>
+     fun getInvoiceById(id: Int): LiveData<Invoice>
+
+    @Query("SELECT * FROM invoices WHERE invoiceId = :invoiceId")
+    fun getInvoiceByInvoiceId(invoiceId: Int): LiveData<Invoice>
 
     @Query("SELECT * FROM invoices WHERE id = :id")
     fun getInvoiceByIdWithoutLiveData(id: Int): Invoice

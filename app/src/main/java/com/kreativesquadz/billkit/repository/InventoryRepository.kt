@@ -146,8 +146,7 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
 
 
      fun decrementProductStock(productName: String?, quantity: Int) {
-
-        inventoryDao.decrementProductStock(productName,quantity)
+         inventoryDao.decrementProductStock(productName,quantity)
     }
 
 

@@ -20,11 +20,13 @@ import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.DialogData
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 
 class InvoiceFragment : Fragment() {
     var _binding: FragmentInvoiceBinding? = null
     val binding get() = _binding!!
     private val viewModel: InvoiceViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     var isTaxAvailable = false  
     val invoice by lazy {
@@ -33,7 +35,9 @@ class InvoiceFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchInvoiceItems(invoice!!.id)
+        viewModel.getInvoiceDetails(invoice?.id.toString())
+        viewModel.fetchInvoiceItems(invoice!!.invoiceId.toLong())
+        Log.e("invoiceId",invoice!!.invoiceId.toString())
     }
 
 
@@ -51,8 +55,7 @@ class InvoiceFragment : Fragment() {
 
 
       fun observers(){
-          val invoice = viewModel.getInvoiceDetails(invoice?.id.toString())
-          invoice.observe(viewLifecycleOwner) {
+          viewModel.invoice.observe(viewLifecycleOwner) {
               binding.invoice = it
               binding.isCustomerAvailable = it.customerId != null
               binding.customer = viewModel.getCustomerById(it.customerId.toString())
@@ -73,6 +76,7 @@ class InvoiceFragment : Fragment() {
 
               binding.istTaxAvalaible = isTaxAvailable
               setupRecyclerView(it)
+              Log.e("invoiceItemsoooooo", it.toString())
           }
       }
 
@@ -82,7 +86,7 @@ class InvoiceFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.btnReceipt.setOnClickListener {
-            val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.id.toString(),Config.InvoiceFragmentToReceiptFragment)
+            val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.invoiceId.toString(),Config.InvoiceFragmentToReceiptFragment)
             findNavController().navigate(action)
         }
 

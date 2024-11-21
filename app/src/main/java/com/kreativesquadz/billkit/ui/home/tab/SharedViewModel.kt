@@ -32,6 +32,7 @@ import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
@@ -63,10 +64,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     var _isCustomerSelected = MutableLiveData<Boolean>()
     val isCustomerSelected : LiveData<Boolean> get() = _isCustomerSelected
     val include = "X"
-
     val amount: LiveData<String> get() = amountValue
-
-
     var amountBuilder = StringBuilder()
     private var discounted : Int? = null
     private var gstAddedAmount : Int? = null
@@ -90,10 +88,10 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     val totalLivedata : LiveData<String> get() = _totalLivedata
     val df = DecimalFormat("#")
     var creditNoteId : Int?=0
-
-   var isReversedAmountNQty = false
-
+    var isReversedAmountNQty = false
     val taxSettings: LiveData<TaxSettings> = gstTaxRepository.getTaxSettings()
+    var invoiceId =  generateInvoiceId().toLong()
+
 
     fun initializeTaxSettings() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -157,7 +155,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                 val itemAmount = amnt.replace("X", "").toDouble()
                val selectedTaxPercentage = taxSettings.value?.selectedTaxPercentage
 
-                val invoiceId =  generateInvoiceId().toLong()
                 var finalPrice = finalAmount
 
                 taxSettings.value?.defaultTaxOption?.let {
@@ -180,6 +177,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                 }
                 val homeItem =  InvoiceItem(
                     id = 0,
+                    orderId = invoiceId,
                     invoiceId = invoiceId,
                     itemName = "$itemName ( $amnt ) X $qty",
                     unitPrice = amnt.toDouble(),
@@ -198,7 +196,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             val finalAmount = amount.toDouble() * qty.toDouble()
             val selectedTaxPercentage = taxSettings.value?.selectedTaxPercentage
 
-            val invoiceId =  generateInvoiceId().toLong()
             var finalPrice = finalAmount
 
             taxSettings.value?.defaultTaxOption?.let {
@@ -220,6 +217,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
             }
             val homeItem =  InvoiceItem(
+                orderId = invoiceId,
                 invoiceId = invoiceId,
                 itemName = "$itemName ( $amountBuilder )  $include $qty",
                 unitPrice = amountBuilder.toString().toDouble(),
@@ -241,13 +239,12 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             return
         }
         val defaultQty = product.productDefaultQty ?: 1
-      val invoiceId =  generateInvoiceId().toLong()
         var productMrp = product.productPrice
         if (product.productMrp != null && product.productMrp.toString().toDouble() > 0.0) {
             productMrp = product.productMrp
         }
         val finalTotalPrice = (product.productPrice.toString().toDouble() * defaultQty)
-        var finalPrice = finalTotalPrice
+         var finalPrice = finalTotalPrice
 
             product.productTaxType?.let { taxTypeString ->
             val taxType = TaxType.fromString(taxTypeString)
@@ -269,6 +266,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                     // Handle PriceWithoutTax
                     }
                     TaxType.ZeroRatedTax -> {
+
                         // Handle ZeroRatedTax
                     }
                     TaxType.ExemptTax -> {
@@ -279,6 +277,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         }
 
         val homeItem =  InvoiceItem(
+            orderId = invoiceId,
             invoiceId = invoiceId,
             itemName = "${product.productName}  ( ${product.productPrice} )   $include ${defaultQty}",
             unitPrice = product.productPrice.toString().toDouble(),
@@ -315,8 +314,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
         if (_invoiceItems.value.isNullOrEmpty()) { // Only fetch if data is not already loaded
             try {
-                val items = billHistoryRepository.getInvoiceItems(id)
-                _invoiceItems.postValue(items)
+                val invoiceItemsDeferred = async { billHistoryRepository.getInvoiceItems(id)}
+                _invoiceItems.value = invoiceItemsDeferred.await()
             } catch (e: Exception) {
                 // Handle exception
             }
@@ -483,7 +482,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     }
 
     fun addPackage(packageAmount: String){
-        this.packageAmount = packageAmount.toInt()
+        this.packageAmount = packageAmount.toDouble().toInt()
         _isPackageApplied.value = true
         getTotalAmount()
     }
@@ -526,7 +525,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             }
         }
         val invoice = Invoice(
-            invoiceId = generateInvoiceId(),
+            invoiceId = invoiceId.toInt(),
             invoiceNumber = invoicePrefixNumber,
             invoiceDate = System.currentTimeMillis().toString(),
             invoiceTime = System.currentTimeMillis().toString(),
@@ -545,7 +544,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             isSynced = 0,
             creditNoteAmount = creditNoteAmount?:0,
             creditNoteId = creditNoteId?:0,
-            status = "Active"
+            status = "Active",
+            invoiceItems =  getInvoiceItem()
         )
         viewModelScope.launch {
             invoiceNumber?.let {
@@ -589,7 +589,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         return customerId
     }
 
-    fun generateInvoiceId(): Int {
+   public fun generateInvoiceId(): Int {
         // Generate a unique invoiceId using a combination of timestamp and counter
         val timestamp = System.currentTimeMillis()
         val counter = (0 until 1000).random() // Choose a random number as the counter

@@ -66,8 +66,14 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
                 if(isSavedOrderIdExist != null){
                     deleteSavedOrder(isSavedOrderIdExist)
                 }
+                Log.e("BBBinvoice", invoice.toString())
+
                 val invoiceId =  billHistoryRepository.insertInvoiceWithItems(invoice, items)
                 creditNoteRepository.redeemCreditNoteById(creditNoteId)
+                items.forEach{
+                    Log.e("NNNNNN", it.quantity.toString())
+                    inventoryRepository.decrementProductStock(it.itemName.split("(")[0],it.quantity)
+                }
                 _invoiceID.value = invoiceId
                 scheduleInvoiceSync(context)
             }
@@ -95,7 +101,7 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             "invoiceSyncWork",
-            ExistingWorkPolicy.KEEP,
+            ExistingWorkPolicy.APPEND,
             syncWorkRequest
         )
     }

@@ -60,7 +60,7 @@ class EditBillDetailsViewModel @Inject constructor(val workManager: WorkManager,
     fun updateInvoiceWithItems(invoice: Invoice, items: List<InvoiceItem>,invoiceId: Long)  {
         try {
             viewModelScope.launch{
-               val updated = billHistoryRepository.updateInvoiceWithItems(invoice, items,invoiceId)
+               val updated = billHistoryRepository. updateInvoiceWithItems(invoice, items)
                 Log.e("updated", updated.toString())
                 if (updated){
                     _invoiceID.value = 1

@@ -24,7 +24,7 @@ class UpdateInvoiceWorker @AssistedInject constructor(
         return try {
             val id = inputData.getLong("id", 0)
             val invoice = repository.getInvoiceByIdWithoutLiveData(id.toInt())
-            val items = repository.getInvoiceItems(invoice.id)
+            val items = repository.getInvoiceItems(invoice.invoiceId.toLong())
             ApiClient.getApiService().updateInvoice(InvoiceRequest(invoice, items))
             Result.success()
         } catch (e: Exception) {

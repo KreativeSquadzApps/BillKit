@@ -29,10 +29,15 @@ class InvoiceViewModel @Inject constructor(val customerManagRepository: Customer
                                                                                      ) : ViewModel() {
   private val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
   val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
+
+    private val _invoice = MutableLiveData<Invoice>()
+    val invoice: LiveData<Invoice> get() = _invoice
+
   fun getCustomerById(id: String) : Customer {
     return customerManagRepository.getCustomer(id)
   }
   fun getInvoiceDetails(invoiceId: String) : LiveData<Invoice> {
+      _invoice.postValue(billHistoryRepository.getInvoiceByIdWithoutLiveData(invoiceId.toInt()))
     return billHistoryRepository.getInvoiceById(invoiceId.toInt())
   }
     fun fetchInvoiceItems(id: Long) = viewModelScope.launch {

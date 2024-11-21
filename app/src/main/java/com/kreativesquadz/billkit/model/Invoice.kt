@@ -43,9 +43,10 @@ data class Invoice(
 
 )
 data class InvoiceItem(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val invoiceId: Long,
-    val orderId: Long = 0, // Add this field
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    var invoiceId: Long,
+    val orderId: Long?, // Add this field
     var itemName: String,
     val unitPrice: Double,
     var quantity: Int,

@@ -48,9 +48,6 @@
             name="gstAppliedAmount"
             type="String" />
         <variable
-            name="isPackaging"
-            type="Boolean" />
-        <variable
             name="packagingAppliedAmount"
             type="String" />
 

@@ -23,7 +23,10 @@ class SyncInvoicesWorker @AssistedInject constructor(
 
             val unsyncedInvoices = repository.getUnsyncedInvoices()
             for (invoice in unsyncedInvoices) {
-                val items = repository.getInvoiceItems(invoice.id)
+                val items = repository.getInvoiceItems(invoice.invoiceId.toLong())
+                items.forEach {
+                    it.invoiceId = invoice.invoiceId.toLong()
+                }
                 val invoiceRequest = InvoiceRequest(invoice.copy(isSynced = 1), items)
                 val response = ApiClient.getApiService().createInvoice(invoiceRequest)
                 if (response.body()?.message.toString().equals("Invoice added successfully")) {
