@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dantsu.escposprinter.EscPosPrinter
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.repository.BluetoothRepository
@@ -27,6 +28,7 @@ class BluetoothDeviceViewModel @Inject constructor(
     val connectingDevice = MutableLiveData<BluetoothDevice?>()
     val defaultPrinter = MutableLiveData<String?>()
 
+
     private val _printerSettings = MutableStateFlow(ThermalPrinterSetup())
     val printerSettings: StateFlow<ThermalPrinterSetup> = _printerSettings.asStateFlow()
 
@@ -44,6 +46,8 @@ class BluetoothDeviceViewModel @Inject constructor(
             }
         }
     }
+
+
 
     // Function to connect to a specific device
     fun connectToDevice(device: BluetoothDevice) {

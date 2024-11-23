@@ -1,12 +1,15 @@
 package com.kreativesquadz.billkit.repository
 
 import android.bluetooth.BluetoothDevice
+import com.dantsu.escposprinter.EscPosPrinter
 import com.kreativesquadz.billkit.bluetooth.BluetoothService
+import com.kreativesquadz.billkit.bluetooth.DantSuBluetoothService
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 
-class BluetoothRepository @Inject constructor(private val bluetoothService: BluetoothService) {
+class BluetoothRepository @Inject constructor(private val bluetoothService: BluetoothService,
+                                              private val dantSuBluetoothService: DantSuBluetoothService) {
 
     // Fetch a list of paired devices
     suspend fun getPairedDevices(): List<BluetoothDevice> {
@@ -28,8 +31,10 @@ class BluetoothRepository @Inject constructor(private val bluetoothService: Blue
         bluetoothService.closeConnection()
     }
 
-    // Get the currently connected device
-    fun getConnectedDevice(): BluetoothDevice? {
-        return bluetoothService.getConnectedDevice()
+    fun getPrinter() : EscPosPrinter? {
+        return dantSuBluetoothService.getPrinter()
     }
+
+
+
 }

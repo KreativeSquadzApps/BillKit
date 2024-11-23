@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dantsu.escposprinter.EscPosPrinter
 import com.itextpdf.io.font.constants.StandardFonts
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.io.source.ByteArrayOutputStream
@@ -947,20 +948,25 @@ class ReceiptFrag : Fragment() {
         secondValue: String,
         paperWidth: Int
     ): String {
-        // Define weights for the two columns, both taking equal space (50% each)
-        val weights = listOf(0.5f, 0.5f)
-        val totalWeight = weights.sum()
+        // Calculate the available width between the two strings
+        val totalWidth = paperWidth
+        val spacing = totalWidth - (firstValue.length + secondValue.length)
 
-        // Calculate column widths based on paperWidth
-        val columnWidths = weights.map { weight -> ((weight / totalWeight) * paperWidth).toInt() }
+        // Ensure that spacing is non-negative, handle overflow if needed
+        return if (spacing >= 0) {
+            "$firstValue${" ".repeat(spacing)}$secondValue"  // Align with proper spacing
+        } else {
+            // Truncate values to fit within the available width if too long
+            val maxFirstLength = firstValue.length + spacing / 2
+            val maxSecondLength = secondValue.length + spacing / 2
 
-        // Format the first column (left-aligned) and the second column (right-aligned)
-        return buildString {
-            append(firstValue.padEnd(columnWidths[0]))   // Left-align first value
-            append(secondValue.padStart(columnWidths[1])) // Right-align second value
-            append("\n")
+            val truncatedFirst = if (maxFirstLength > 0) firstValue.take(maxFirstLength) else ""
+            val truncatedSecond = if (maxSecondLength > 0) secondValue.take(maxSecondLength) else ""
+
+            "$truncatedFirst${" ".repeat(totalWidth - (truncatedFirst.length + truncatedSecond.length))}$truncatedSecond"
         }
     }
+
 
 
     private fun formatTax(paperWidth: Int, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
@@ -1007,10 +1013,10 @@ class ReceiptFrag : Fragment() {
     ): String {
         val receipt = StringBuilder()
         var separatorLine = ""
-        var paperWidth = "50" // Default to 58MM, adjust as needed
+        var paperWidth = "45" // Default to 58MM, adjust as needed
 
         thermalPrinterSetup?.let {
-            paperWidth = it.printerSize.replace("MM", "")
+            //paperWidth = it.printerSize.replace("MM", "")
             Log.e("Paper Width", paperWidth)
             separatorLine = generateSeparatorLine(paperWidth)
         }
@@ -1019,9 +1025,9 @@ class ReceiptFrag : Fragment() {
 
         receipt.append(formatSingleString(businessName, paperWidth.toInt()))
         receipt.append(formatSingleString("  "+place, paperWidth.toInt())).append("\n")
-       receipt.append(formatSingleString(contactNumber, paperWidth.toInt())).append("\n")
+        receipt.append(formatSingleString(contactNumber, paperWidth.toInt())).append("\n")
         receipt.append(formatSingleString("Email: $email", paperWidth.toInt()))
-       receipt.append(formatSingleString("INVOICE", paperWidth.toInt())).append("\n\n")
+        receipt.append(formatSingleString("INVOICE", paperWidth.toInt())).append("\n")
 
         // Invoice Header
        receipt.append(formatTwoStrings(invoiceDate, "Invoice: $invoiceId", paperWidth.toInt()))
@@ -1030,10 +1036,27 @@ class ReceiptFrag : Fragment() {
 
         // Customer Details
         if (isCustomerAvailable) {
-            receipt.append(formatSingleString(customerName ?: "", paperWidth.toInt())).append("\n")
-            receipt.append(formatSingleString("Contact: ${customerNumber ?: ""}", paperWidth.toInt())).append("\n")
-            receipt.append(formatSingleString("GST No: ${customerGst ?: ""}", paperWidth.toInt())).append("\n")
-            receipt.append(formatSingleString(customerAddress ?: "", paperWidth.toInt())).append("\n")
+            customerName?.let {
+                if (customerName != ""){
+                    receipt.append(formatSingleString(customerName ?: "", paperWidth.toInt())).append("\n")
+                }
+            }
+            customerNumber?.let {
+                if (customerNumber != ""){
+                    receipt.append(formatSingleString("Contact: ${customerNumber ?: ""}", paperWidth.toInt())).append("\n")
+                }
+            }
+            customerGst?.let {
+                if (customerGst != ""){
+                    receipt.append(formatSingleString("GST No: ${customerGst ?: ""}", paperWidth.toInt())).append("\n")
+                }
+            }
+            customerAddress?.let {
+                if (customerAddress != ""){
+                    receipt.append(formatSingleString(customerAddress ?: "", paperWidth.toInt())).append("\n")
+                }
+            }
+
             receipt.append( separatorLine)
         }
 
@@ -1107,13 +1130,86 @@ class ReceiptFrag : Fragment() {
         return receipt.toString()
     }
 
-    private fun generateSeparatorLine(paperWidth: String): String {
-        val receiptWidth = when (paperWidth) {
-            "80MM" -> 58 // Typical character width for 80mm paper
-            "58MM" -> 42 // Typical character width for 58mm paper
-            else -> 42 // Default to 42 if the size is unknown
+    fun createReceipt(businessName: String,
+                      place: String,
+                      contactNumber: String,
+                      email: String,
+                      invoiceDate: String,
+                      invoiceId: String,
+                      isCustomerAvailable: Boolean,
+                      customerName: String?,
+                      customerNumber: String?,
+                      customerGst: String?,
+                      packageAmount: Double?,
+                      customGstAmount: String?,
+                      customerAddress: String?,
+                      items: List<InvoiceItem>,
+                      totalItems: Int,
+                      subtotal: Double,
+                      discount: Double?,
+                      totalAmount: Double,
+                      totalTax: Double,
+                      cashAmount: Double?,
+                      onlineAmount: Double?,
+                      creditAmount: Double?,
+                      footer: String) : String  {
+        val receiptText = """
+    [C]<b>$businessName</b>
+    [C]$place
+    [C]Contact: $contactNumber
+    [C]Email: $email
+
+    []Date: $invoiceDate[R]Invoice: $invoiceId
+    ----------------------------------------------
+
+    ${if (isCustomerAvailable) """
+        [L]Customer: $customerName
+        [L]Contact: $customerNumber
+        [L]GST: $customerGst
+        ----------------------------------------------
+    """ else ""}
+    
+    [L]SL  Item       Qty  Rate  Tax   Total
+    ----------------------------------------------
+    ${
+            items.mapIndexed { index, item ->
+                "[L]${index + 1}. ${item.itemName.take(8)} [R] ${item.quantity}  ${item.unitPrice} ${item.taxRate} ${item.totalPrice}"
+            }.joinToString("\n")
         }
-        return "-".repeat(receiptWidth) + "\n"
+    ----------------------------------------------
+    [L]Total Items: $totalItems [R] Subtotal: $subtotal
+
+    ${
+            if (isTaxAvailable) """
+            [R]Total Tax: $totalTax
+            ----------------------------------------------
+            [C]<b>Tax Summary</b>
+            [L]Tax Type[R]Taxable Amount[R]Rate[R]Tax Amount
+            ${
+                invoiceTax.joinToString("\n") {
+                    "[L]${it.taxType}[R]${it.taxableAmount}[R]${it.rate}%[R]${it.taxAmount}"
+                }
+            }
+            ----------------------------------------------
+        """ else ""
+        }
+    
+    [C]Payment Mode
+    ${if (cashAmount != null && cashAmount > 0) "[L]Cash: $cashAmount" else ""}
+    ${if (onlineAmount != null && onlineAmount > 0) "[L]Online: $onlineAmount" else ""}
+    ${if (creditAmount != null && creditAmount > 0) "[L]Credit: $creditAmount" else ""}
+
+    ----------------------------------------------
+    [C]$footer
+    [C]Powered by BillKit
+""".trimIndent()
+
+        return receiptText
+    }
+
+
+    private fun generateSeparatorLine(paperWidth: String): String {
+        return "-".repeat(paperWidth.toInt()) + "\n"
     }
 
 

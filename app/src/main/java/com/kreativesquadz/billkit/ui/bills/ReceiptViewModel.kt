@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.dantsu.escposprinter.EscPosPrinter
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
@@ -151,6 +152,9 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
 
             }
         }
+    }
+    fun getPrinter() : EscPosPrinter? {
+        return repository.getPrinter()
     }
 
 }

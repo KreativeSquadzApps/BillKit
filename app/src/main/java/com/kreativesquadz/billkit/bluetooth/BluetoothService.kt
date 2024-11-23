@@ -23,7 +23,6 @@ class BluetoothService @Inject constructor(
     private val context: Context,
     private val userSettingRepository: UserSettingRepository
 ) {
-
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private var bluetoothSocket: BluetoothSocket? = null
     private var outputStream: OutputStream? = null

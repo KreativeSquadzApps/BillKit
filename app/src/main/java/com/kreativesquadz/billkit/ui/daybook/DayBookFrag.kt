@@ -20,8 +20,6 @@ import androidx.paging.filter
 import androidx.paging.map
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
-import com.kreativesquadz.billkit.bluetooth.AndroidBluetoothConnection
-import com.kreativesquadz.billkit.bluetooth.ConnectionError
 import com.kreativesquadz.billkit.databinding.FragmentDayBookBinding
 import com.kreativesquadz.billkit.model.Invoice
 import dagger.hilt.android.AndroidEntryPoint

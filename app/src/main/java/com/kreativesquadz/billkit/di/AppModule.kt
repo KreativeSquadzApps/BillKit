@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.bluetooth.BluetoothService
+import com.kreativesquadz.billkit.bluetooth.DantSuBluetoothService
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
@@ -47,6 +48,11 @@ object AppModule {
     }
 
     @Provides
+    fun provideDantSuBluetoothService(@ApplicationContext appContext: Context, userSettingRepository: UserSettingRepository): DantSuBluetoothService {
+        return DantSuBluetoothService(appContext, userSettingRepository)
+    }
+
+    @Provides
     fun provideCustomerRepository(providedb: AppDatabase): CustomerManagRepository{
         return CustomerManagRepository(providedb)
     }
@@ -78,9 +84,10 @@ object AppModule {
     }
 
     @Provides
-    fun provideBluetoothRepository(bluetoothService: BluetoothService): BluetoothRepository {
-        return BluetoothRepository(bluetoothService)
+    fun provideBluetoothRepository(bluetoothService: BluetoothService, dantSuBluetoothService: DantSuBluetoothService): BluetoothRepository {
+        return BluetoothRepository(bluetoothService , dantSuBluetoothService)
     }
+
 
     @Provides
     fun provideStaffRepository(providedb: AppDatabase): StaffManagRepository {
