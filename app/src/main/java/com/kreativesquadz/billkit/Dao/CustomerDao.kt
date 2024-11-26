@@ -39,6 +39,9 @@ interface CustomerDao {
     fun updateCreditAmount(id: Long?, creditedAmount: Double)
 
     @Query("UPDATE customers SET creditAmount = creditAmount - :creditedAmount WHERE id = :id")
+    suspend fun decrementCreditAmount(id: Long, creditedAmount: Double): Int
+
+    @Query("UPDATE customers SET creditAmount = creditAmount - :creditedAmount WHERE id = :id")
     fun removeCreditAmount(id: Long?, creditedAmount: Double)
 
 

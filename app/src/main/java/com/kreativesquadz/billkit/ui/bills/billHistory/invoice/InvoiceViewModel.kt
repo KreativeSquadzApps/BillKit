@@ -18,6 +18,7 @@ import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.worker.SyncCustomerWorker
+import com.kreativesquadz.billkit.worker.UpdateCustomerCreditWorker
 import com.kreativesquadz.billkit.worker.UpdateInvoiceStatusWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InvoiceViewModel @Inject constructor(val customerManagRepository: CustomerManagRepository,
                                            val billHistoryRepository: BillHistoryRepository,
-                                                                                     ) : ViewModel() {
+                                           private val workManager: WorkManager) : ViewModel() {
   private val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
   val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
@@ -50,10 +51,17 @@ class InvoiceViewModel @Inject constructor(val customerManagRepository: Customer
             }
 
     }
-   fun updateInvoiceStatus( context: Context, status: String, invoiceId: Int) {
+   fun updateInvoiceStatus(context: Context, status: String, invoiceId: Int , customerId: Long?,creditAmount: Double?) {
      viewModelScope.launch {
-       billHistoryRepository.updateInvoiceStatus(status,invoiceId)
-           updateInvoiceStatusWork(context,status,invoiceId.toString())
+         billHistoryRepository.updateInvoiceStatus(status,invoiceId)
+         customerId?.let {
+             creditAmount?.let {
+                 customerManagRepository.updateCreditAmount(customerId,creditAmount,"decrement")
+                 updateCreditWork(customerId.toString(),creditAmount,"decrement")
+
+             }
+         }
+         updateInvoiceStatusWork(context,status,invoiceId.toString())
         }
    }
   private fun updateInvoiceStatusWork (context: Context, status: String, invoiceId: String ) {
@@ -78,4 +86,27 @@ class InvoiceViewModel @Inject constructor(val customerManagRepository: Customer
         )
     }
 
-   }
+    private fun updateCreditWork (id: String, credit: Double,type : String) {
+        val data = Data.Builder()
+            .putString("id",id)
+            .putString("type",type)
+            .putDouble("credit",credit)
+            .build()
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncWorkRequest = OneTimeWorkRequestBuilder<UpdateCustomerCreditWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .build()
+
+        workManager.enqueueUniqueWork("updateCreditWork",
+            ExistingWorkPolicy.APPEND,
+            syncWorkRequest)
+
+    }
+
+
+}

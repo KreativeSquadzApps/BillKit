@@ -76,8 +76,12 @@ class CustomerManagRepository @Inject constructor( private val db : AppDatabase)
         customerDao.update(customer.copy(isSynced = 1))
     }
 
-    suspend fun updateCreditAmount(id: Long, creditAmount: Double) {
-        customerDao.updateCreditAmount(id, creditAmount)
+    suspend fun updateCreditAmount(id: Long, creditAmount: Double,type : String) {
+        if (type.isEmpty()){
+            customerDao.updateCreditAmount(id, creditAmount)
+        }else{
+            customerDao.decrementCreditAmount(id,creditAmount)
+        }
         creditDetailsDao.insertCustomerCreditDetail(
             CustomerCreditDetail(
                 customerId = id,

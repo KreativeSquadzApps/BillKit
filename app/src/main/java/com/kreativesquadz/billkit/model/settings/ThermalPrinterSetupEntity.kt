@@ -15,7 +15,7 @@ data class ThermalPrinterSetup(
     val enableAutoPrint: Boolean = false,
     val openCashDrawer: Boolean = false,
     val disconnectAfterPrint: Boolean = false,
-    val autoCutAfterPrint: Boolean = false,
+    val autoCutAfterPrint: Boolean = true,
     val defaultPrinterName: String = "Default",
     var defaultPrinterAddress: String = "",
     val userId: Long = Config.userId,

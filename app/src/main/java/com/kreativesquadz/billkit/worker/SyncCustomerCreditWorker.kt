@@ -30,7 +30,7 @@ class SyncCustomerCreditWorker @AssistedInject constructor(
              val response = ApiClient.getApiService().addCustomerCreditDetail(customerCreditDetails.copy(creditAmount = creditedAmount, creditType = type))
                 if (response.body()?.message.toString().equals("Customer credit detail added successfully")) {
                     //repository.markCustomerAsSynced(customer)
-                }
+                 }
 
             Result.success()
         } catch (e: Exception) {

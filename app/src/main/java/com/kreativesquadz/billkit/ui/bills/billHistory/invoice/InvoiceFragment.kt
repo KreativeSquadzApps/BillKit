@@ -113,7 +113,7 @@ class InvoiceFragment : Fragment() {
             dialogData = dialogData,
             positiveAction = {
                 invoice?.id?.let {
-                    viewModel.updateInvoiceStatus(requireContext(),"Cancelled",it.toInt())
+                    viewModel.updateInvoiceStatus(requireContext(),"Cancelled",it.toInt(),invoice?.customerId,invoice?.creditAmount)
                 }
             },
             negativeAction = {

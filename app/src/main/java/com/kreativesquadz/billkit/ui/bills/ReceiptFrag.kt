@@ -1030,7 +1030,7 @@ class ReceiptFrag : Fragment() {
         receipt.append(formatSingleString("INVOICE", paperWidth.toInt())).append("\n")
 
         // Invoice Header
-       receipt.append(formatTwoStrings(invoiceDate, "Invoice: $invoiceId", paperWidth.toInt()))
+        receipt.append(formatTwoStrings(invoiceDate, "Invoice: $invoiceId", paperWidth.toInt()))
         receipt.append(generateSeparatorLine(paperWidth))
 
 
@@ -1153,6 +1153,7 @@ class ReceiptFrag : Fragment() {
                       onlineAmount: Double?,
                       creditAmount: Double?,
                       footer: String) : String  {
+        val slWidth = 4
         val receiptText = """
     [C]<b>$businessName</b>
     [C]$place
@@ -1172,8 +1173,9 @@ class ReceiptFrag : Fragment() {
     [L]SL  Item       Qty  Rate  Tax   Total
     ----------------------------------------------
     ${
-            items.mapIndexed { index, item ->
-                "[L]${index + 1}. ${item.itemName.take(8)} [R] ${item.quantity}  ${item.unitPrice} ${item.taxRate} ${item.totalPrice}"
+        items.mapIndexed { index, item ->
+                val slNumber = "${index + 1}".padStart((slWidth + 1) / 2).padEnd(slWidth)
+                "[C]${slNumber} ${item.itemName.take(8)} [R] ${item.quantity}  ${item.unitPrice} ${item.taxRate} ${item.totalPrice}"
             }.joinToString("\n")
         }
     ----------------------------------------------

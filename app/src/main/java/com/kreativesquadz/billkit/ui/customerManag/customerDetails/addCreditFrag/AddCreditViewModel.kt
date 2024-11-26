@@ -28,10 +28,10 @@ class AddCreditViewModel @Inject constructor(private val workManager: WorkManage
 
 
 
-    fun updateCreditAmount(id : Long ,credit : Double){
+    fun updateCreditAmount(id : Long ,credit : Double,type: String){
         viewModelScope.launch {
-            customerManagRepository.updateCreditAmount(id,credit)
-            updateCreditWork(id.toString(),credit)
+            customerManagRepository.updateCreditAmount(id,credit,type)
+            updateCreditWork(id.toString(),credit,type)
             updateCustomerCreditDetailsWork(id.toString(),credit)
         }
     }
@@ -39,9 +39,10 @@ class AddCreditViewModel @Inject constructor(private val workManager: WorkManage
 
 
 
-    private fun updateCreditWork (id: String, credit: Double ) {
+    private fun updateCreditWork (id: String, credit: Double,type : String) {
         val data = Data.Builder()
             .putString("id",id)
+            .putString("type",type)
             .putDouble("credit",credit)
             .build()
 
