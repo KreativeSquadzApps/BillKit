@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="GST Number"
-                    android:textAllCaps="true"
+                    android:inputType="textCapCharacters"
                     android:text="@{resetValue}"
                     android:id="@+id/etGSTNo"/>
             </com.google.android.material.textfield.TextInputLayout>

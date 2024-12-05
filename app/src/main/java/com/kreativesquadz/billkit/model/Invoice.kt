@@ -9,8 +9,7 @@ import java.io.Serializable
 
 @Entity(
     tableName = "invoices",
-
-)
+    )
 data class Invoice(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -26,6 +25,7 @@ data class Invoice(
     val onlineAmount: Double? = null,
     val creditAmount: Double? = null,
     val packageAmount: Double? = null,
+    val otherChargesAmount: Double? = null,
     val customGstAmount: String? = null,
     val totalAmount: Double,
     val totalGst: Double,

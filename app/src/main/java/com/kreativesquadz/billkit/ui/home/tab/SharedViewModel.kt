@@ -69,6 +69,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     private var discounted : Int? = null
     private var gstAddedAmount : Int? = null
     private var packageAmount : Int? = null
+    private var otherChargesAmount : Int? = null
     private var creditNoteAmount : Int? = null
 
     var _isDiscountApplied = MutableLiveData<Boolean>()
@@ -79,6 +80,9 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
     var _isPackageApplied = MutableLiveData<Boolean>()
     val isPackageApplied : LiveData<Boolean> get() = _isPackageApplied
+
+    var _isOtherChargesApplied = MutableLiveData<Boolean>()
+    val isOtherChargesApplied : LiveData<Boolean> get() = _isOtherChargesApplied
 
     var _isCreditNoteApplied = MutableLiveData<Boolean>()
     val isCreditNoteApplied : LiveData<Boolean> get() = _isCreditNoteApplied
@@ -380,6 +384,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         removeDiscount()
         removeGst()
         removePackage()
+        removeOtherCharges()
         removeCreditNote()
     }
 
@@ -411,6 +416,10 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         if (packageAmount != null) {
             totalAmount += packageAmount!!
         }
+         if (otherChargesAmount != null) {
+            totalAmount += otherChargesAmount!!
+         }
+
 
         return Triple(subtotal, totalTax, totalAmount)
     }
@@ -491,6 +500,20 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         getTotalAmount()
     }
 
+
+    fun addOtherCharges(otherChargesAmount: String){
+        this.otherChargesAmount = otherChargesAmount.toDouble().toInt()
+        _isOtherChargesApplied.value = true
+        getTotalAmount()
+    }
+    fun removeOtherCharges(){
+        _isOtherChargesApplied.value = false
+        this.otherChargesAmount = null
+        getTotalAmount()
+    }
+
+
+
     fun addCreditNote(creditNote: CreditNote?){
         _selectedCreditNote.value = creditNote
         _isCreditNoteApplied.value = true
@@ -536,6 +559,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             onlineAmount = onlineAmount,
             creditAmount = creditAmount,
             packageAmount = packageAmount?.toDouble(),
+            otherChargesAmount = otherChargesAmount?.toDouble(),
             customGstAmount = customGstAmount,
             totalAmount = getTotalAmountDouble(),
             totalGst = gstAddedAmount?.toDouble() ?: 0.0,

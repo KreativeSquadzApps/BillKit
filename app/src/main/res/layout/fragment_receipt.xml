@@ -21,6 +21,9 @@
             name="istPackagingAvalaible"
             type="Boolean" />
         <variable
+            name="isOtherChargesAvalaible"
+            type="Boolean" />
+        <variable
             name="istProductTaxAvalaible"
             type="Boolean" />
         <variable
@@ -376,6 +379,16 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/tvPackaging"
                         android:visibility="@{istPackagingAvalaible ? View.VISIBLE : View.GONE}"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:gravity="end"
+                        android:textColor="@color/text_color_main"
+                        tools:text="Packaging Rs 11100.00"/>
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvOtherCharges"
+                        android:visibility="@{isOtherChargesAvalaible ? View.VISIBLE : View.GONE}"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:gravity="end"

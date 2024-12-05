@@ -106,6 +106,8 @@ class ReceiptFrag : Fragment() {
         addBackPressHandler(viewLifecycleOwner, ::shouldAllowBack)
         binding.isPrintLoading  = false
         binding.istPackagingAvalaible = false
+        binding.isOtherChargesAvalaible = false
+
         return binding.root
     }
 
@@ -214,6 +216,13 @@ class ReceiptFrag : Fragment() {
                 binding.istPackagingAvalaible = true
                 binding.tvPackaging.text = "Packaging Rs "+ it.packageAmount
             }
+            if (it.otherChargesAmount == null || it.otherChargesAmount <= 0){
+                binding.isOtherChargesAvalaible = false
+            }else{
+                binding.isOtherChargesAvalaible = true
+                binding.tvOtherCharges.text = "Other Charges Rs "+ it.otherChargesAmount
+            }
+
             binding.tvTotalTax.text =  "Total Tax Rs " + it.totalAmount.toInt().minus(it.subtotal.toInt()).toDouble()
                 //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
             val discountApplied = it.discount?.toInt() ?: 0
@@ -837,6 +846,7 @@ class ReceiptFrag : Fragment() {
             customerNumber = customer?.shopContactNumber,
             customerGst = customer?.gstNo,
             packageAmount = invoice.packageAmount,
+            otherChargesAmount = invoice.otherChargesAmount,
             customGstAmount = invoice.customGstAmount,
             customerAddress = customer?.address,
             items = invoiceItems,
@@ -996,6 +1006,7 @@ class ReceiptFrag : Fragment() {
         customerNumber: String?,
         customerGst: String?,
         packageAmount: Double?,
+        otherChargesAmount: Double?,
         customGstAmount: String?,
         customerAddress: String?,
         items: List<InvoiceItem>,
@@ -1095,7 +1106,9 @@ class ReceiptFrag : Fragment() {
 //
         packageAmount?.let {
             receipt.append(formatSingleStringRight("Package Amount: "+ packageAmount, paperWidth.toInt()))
-            receipt.append(generateSeparatorLine(paperWidth))
+        }
+        otherChargesAmount?.let {
+            receipt.append(formatSingleStringRight("Other Charges: "+ otherChargesAmount, paperWidth.toInt()))
         }
 ///
         receipt.append(formatSingleString("Total: $totalAmount", paperWidth.toInt()))

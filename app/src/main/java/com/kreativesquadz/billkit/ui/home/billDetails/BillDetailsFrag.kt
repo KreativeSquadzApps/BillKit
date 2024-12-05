@@ -1,8 +1,6 @@
 package com.kreativesquadz.billkit.ui.home.billDetails
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,11 +25,12 @@ import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.ui.bottomSheet.creditNoteBottomSheet.CreditNoteBottomSheetFrag
 import com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet.CustomerAddBottomSheetFrag
 import com.kreativesquadz.billkit.ui.bottomSheet.editItemBottomSheet.EditItemBottomSheetFrag
+import com.kreativesquadz.billkit.ui.dialogs.otherChargesDialog.AddOtherChargesDialogFragment
+import com.kreativesquadz.billkit.ui.dialogs.otherChargesDialog.AddOtherChargesDialogViewModel
 import com.kreativesquadz.billkit.ui.dialogs.packageDialog.AddPackagingDialogFragment
 import com.kreativesquadz.billkit.ui.dialogs.packageDialog.AddPackagingDialogViewModel
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
@@ -43,6 +42,8 @@ class BillDetailsFrag : Fragment() {
     private val dialogViewModel: DialogViewModel by activityViewModels()
     private val dialogGstViewModel: AddGstDialogViewModel by activityViewModels()
     private val dialogPackagingViewModel: AddPackagingDialogViewModel by activityViewModels()
+    private val dialogOtherChargesViewModel: AddOtherChargesDialogViewModel by activityViewModels()
+
     private val binding get() = _binding!!
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     val df = DecimalFormat("#")
@@ -79,6 +80,7 @@ class BillDetailsFrag : Fragment() {
     private fun init(){
         binding.isGST = true
         binding.isPackaging = true
+        binding.isOtherCharges = true
     }
 
     private fun onClickListeners() {
@@ -164,7 +166,7 @@ class BillDetailsFrag : Fragment() {
                 dialogViewModel.onRemoveClicked()
                 dialogGstViewModel.onRemoveClicked()
                 dialogPackagingViewModel.onRemoveClicked()
-
+                dialogOtherChargesViewModel.onRemoveClicked()
             }
 
             binding.addDiscount.setOnClickListener {
@@ -177,6 +179,11 @@ class BillDetailsFrag : Fragment() {
                 showAddPackagingDialog()
             }
 
+             binding.addOtherCharges.setOnClickListener {
+             showAddOtherChargesDialog()
+              }
+
+
             binding.removeDiscount.setOnClickListener {
                 sharedViewModel.removeDiscount()
             }
@@ -188,6 +195,12 @@ class BillDetailsFrag : Fragment() {
             binding.removePack.setOnClickListener {
                 sharedViewModel.removePackage()
             }
+
+           binding.removeOther.setOnClickListener {
+                sharedViewModel.removeOtherCharges()
+            }
+
+
 
 
         }
@@ -209,6 +222,13 @@ class BillDetailsFrag : Fragment() {
             val dialog = AddPackagingDialogFragment()
             dialog.show(childFragmentManager, AddPackagingDialogFragment.TAG)
     }
+
+     private fun showAddOtherChargesDialog() {
+            val dialog = AddOtherChargesDialogFragment()
+            dialog.show(childFragmentManager, AddOtherChargesDialogFragment.TAG)
+    }
+
+
 
 
         private fun observers() {
@@ -239,6 +259,7 @@ class BillDetailsFrag : Fragment() {
                     dialogViewModel.onRemoveClicked()
                     dialogGstViewModel.onRemoveClicked()
                     dialogPackagingViewModel.onRemoveClicked()
+                    dialogOtherChargesViewModel.onRemoveClicked()
                     sharedViewModel.invoiceId = sharedViewModel.generateInvoiceId().toLong()
                 }
             }
@@ -258,6 +279,9 @@ class BillDetailsFrag : Fragment() {
             sharedViewModel.isPackageApplied.observe(viewLifecycleOwner) { isPackagingApplied ->
                 binding.isPackagingApplied = isPackagingApplied
             }
+              sharedViewModel.isOtherChargesApplied.observe(viewLifecycleOwner) { isOtherChargesApplied ->
+                            binding.isOtherChargesApplied = isOtherChargesApplied
+                        }
 
 
             sharedViewModel.isCreditNoteApplied.observe(viewLifecycleOwner) { isCreditNoteApplied ->
@@ -299,7 +323,6 @@ class BillDetailsFrag : Fragment() {
                         binding.discountedAmount =
                             dialogViewModel.dialogText.value.toString().substringAfter(" ")
                     }
-
                 } else {
                     sharedViewModel.removeDiscount()
                 }
@@ -332,6 +355,19 @@ class BillDetailsFrag : Fragment() {
                     sharedViewModel.removePackage()
                 }
             }
+            dialogOtherChargesViewModel.isApplied.observe(viewLifecycleOwner) {
+                if (it == true) {
+                    if (dialogOtherChargesViewModel.otherChargesText.value != null) {
+                        val otherChargesAmountApplied =
+                            dialogOtherChargesViewModel.otherChargesText.value.toString()
+                        binding.otherChargesAppliedAmount = otherChargesAmountApplied
+                        sharedViewModel.addOtherCharges(otherChargesAmountApplied)
+                    }
+                } else {
+                    sharedViewModel.removeOtherCharges()
+                }
+            }
+
 
         }
 

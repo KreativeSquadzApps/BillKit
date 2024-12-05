@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -66,7 +68,7 @@ class CreateCustomerFrag : Fragment() {
         }
         binding.btnSubmit.setOnClickListener {
             val contactNumber = binding.etShopContactNumber.text.toString().trim()
-            val gstNumber = binding.etGSTNo.text.toString().trim().uppercase()
+            val gstNumber = binding.etGSTNo.text.toString().trim()
 
             if (contactNumber.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter contact number", Toast.LENGTH_SHORT).show()
@@ -98,12 +100,27 @@ class CreateCustomerFrag : Fragment() {
     private fun getCustomerData(): Customer {
         return Customer(0,binding.etCustomerName.text.toString(),
                         binding.etShopContactNumber.text.toString(),
-                        binding.etGSTNo.text.toString().uppercase(),
+                        binding.etGSTNo.text.toString(),
                         binding.etTotalSales.text.toString(),
                         binding.etAddress.text.toString(),
                         binding.etCreditAmount.text.toString(),0)
     }
     private fun observers(){
+        binding.etGSTNo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val input = s.toString()
+                if (input != input.uppercase()) {
+                    binding.etGSTNo.removeTextChangedListener(this)  // Avoid infinite loop
+                    binding.etGSTNo.setText(input.uppercase())
+                    binding.etGSTNo.setSelection(binding.etGSTNo.text.length)  // Move cursor to end
+                    binding.etGSTNo.addTextChangedListener(this)
+                }
+            }
+        })
         viewModel.customer.observe(viewLifecycleOwner) {
             Log.e("Customerllll",it.data.toString())
 
