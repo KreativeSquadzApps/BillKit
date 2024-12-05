@@ -173,9 +173,7 @@ class ReceiptFrag : Fragment() {
                                     binding.isVisibleGst.visibility = View.GONE
                                 }
 
-                                if (isPrinterItemTableCustomerDetails.toBoolean()){
-                                    binding.isCustomerAvailable = true
-                                }else{
+                                if (!isPrinterItemTableCustomerDetails.toBoolean()){
                                     binding.isCustomerAvailable = false
                                 }
 

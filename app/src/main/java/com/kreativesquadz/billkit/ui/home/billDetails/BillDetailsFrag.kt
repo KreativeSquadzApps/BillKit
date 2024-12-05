@@ -94,9 +94,7 @@ class BillDetailsFrag : Fragment() {
                     invoicePrefixNumber
                 ),
                 items = sharedViewModel.getItemsList(),
-                creditNoteId = sharedViewModel.getCreditNote()?.id,
-                context = requireContext()
-            )
+                creditNoteId = sharedViewModel.getCreditNote()?.id)
 
 
         }
@@ -112,9 +110,7 @@ class BillDetailsFrag : Fragment() {
                     invoicePrefixNumber
                 ),
                 items = sharedViewModel.getItemsList(),
-                creditNoteId = sharedViewModel.getCreditNote()?.id,
-                context = requireContext()
-            )
+                creditNoteId = sharedViewModel.getCreditNote()?.id)
         }
 
 
@@ -130,9 +126,7 @@ class BillDetailsFrag : Fragment() {
                             invoicePrefixNumber
                         ),
                         items = sharedViewModel.getItemsList(),
-                        creditNoteId = sharedViewModel.getCreditNote()?.id,
-                        context = requireContext()
-                    )
+                        creditNoteId = sharedViewModel.getCreditNote()?.id)
 
                 } else {
                     Toast.makeText(requireContext(), "Please select customer", Toast.LENGTH_SHORT)

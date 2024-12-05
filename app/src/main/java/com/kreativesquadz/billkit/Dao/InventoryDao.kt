@@ -81,6 +81,9 @@ interface InventoryDao {
     @Query("SELECT * FROM products WHERE productId = :productId")
     fun selectProductById( productId: Long): Product
 
+    @Query("SELECT * FROM products WHERE productName = :productName")
+    fun getProductByName(productName: String): Product?
+
 
 
 }

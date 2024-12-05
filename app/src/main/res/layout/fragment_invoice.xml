@@ -186,6 +186,7 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/txtCustomerDetails"
                                     android:textSize="18sp"
+                                    app:isNullorBlank="@{customer.customerName}"
                                     android:id="@+id/tvCustomerName"
                                     android:text="@{customer.customerName}"
                                     tools:text="Demo Name"/>
@@ -199,6 +200,7 @@
                                     android:textSize="18sp"
                                     android:textColor="@color/text_color_main"
                                     android:id="@+id/tvCustomerGst"
+                                    app:isNullorBlank="@{customer.gstNo}"
                                     android:text="@{customer.gstNo}"
                                     tools:text="Demo"/>
 
@@ -213,6 +215,7 @@
                                     android:layout_marginBottom="@dimen/_10dp"
                                     android:textColor="@color/text_color_main"
                                     android:id="@+id/tvCustomeradress"
+                                    app:isNullorBlank="@{customer.address}"
                                     android:text="@{customer.address}"
                                     tools:text="Demo"/>
 
@@ -229,6 +232,7 @@
                                     android:layout_marginBottom="@dimen/_10dp"
                                     android:textColor="@color/text_color_main"
                                     android:id="@+id/tvCustomerNumber"
+                                    app:isNullorBlank="@{customer.shopContactNumber}"
                                     android:text="@{customer.shopContactNumber}"
                                     tools:text="Demo"/>
 
@@ -239,7 +243,7 @@
 
                             <View
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
+                                android:layout_height="1dp"
                                 android:id="@+id/view2"
                                 android:background="@color/lite_grey"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -574,6 +578,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:weightSum="5"
+                    app:hideViewCancel="@{invoice.status}"
                     android:layout_marginTop="@dimen/_10dp"
                     android:layout_marginBottom="@dimen/_10dp"
                     android:layout_marginStart="@dimen/_5dp"

@@ -17,11 +17,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.kreativesquadz.billkit.databinding.FragmentCreateCustomerBinding
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 
 class CreateCustomerFrag : Fragment() {
     var _binding: FragmentCreateCustomerBinding? = null
     val binding get() = _binding!!
     private val viewModel: CreateCustomerViewModel by activityViewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private val target by lazy{
+        arguments?.getString("target")
+    }
+
     private val contactPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val contactUri = result.data?.data
@@ -44,9 +51,13 @@ class CreateCustomerFrag : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.resetValue = ""
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         observers()
         onClickListeners()
-        return binding.root
     }
 
     private fun onClickListeners(){
@@ -54,40 +65,50 @@ class CreateCustomerFrag : Fragment() {
             openContactPicker()
         }
         binding.btnSubmit.setOnClickListener {
-            if (binding.etShopContactNumber.text.toString().isNotEmpty()){
-                if (binding.etGSTNo.text.toString().length > 0){
-                    if (isValidGstNumber(binding.etGSTNo.text.toString())){
-                        viewModel.addCustomerObj(getCustomerData(),requireContext())
-                        Toast.makeText(requireContext(),"Customer added successfully",Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack()
-                    }else{
-                        Toast.makeText(requireContext(),"Please enter valid GST number",Toast.LENGTH_SHORT).show()
+            val contactNumber = binding.etShopContactNumber.text.toString().trim()
+            val gstNumber = binding.etGSTNo.text.toString().trim().uppercase()
+
+            if (contactNumber.isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter contact number", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (gstNumber.isNotEmpty() && !isValidGstNumber(gstNumber)) {
+                Toast.makeText(requireContext(), "Please enter a valid GST number", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            viewModel.addCustomerObj(getCustomerData(), requireContext()){ customer ->
+                if (customer == null) {
+                    Toast.makeText(context, "Customer with this name or number already exists", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (!target.isNullOrEmpty()){
+
+                        sharedViewModel.updateSelectedCustomer(customer)
                     }
-                }else{
-                    viewModel.addCustomerObj(getCustomerData(),requireContext())
-                    Toast.makeText(requireContext(),"Customer added successfully",Toast.LENGTH_SHORT).show()
+                    binding.resetValue = ""
+                    Toast.makeText(context, "Customer added successfully", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
-
-            }else{
-                Toast.makeText(requireContext(),"Please enter contact number",Toast.LENGTH_SHORT).show()
             }
+
+
         }
     }
 
     private fun getCustomerData(): Customer {
         return Customer(0,binding.etCustomerName.text.toString(),
                         binding.etShopContactNumber.text.toString(),
-                        binding.etGSTNo.text.toString(),
+                        binding.etGSTNo.text.toString().uppercase(),
                         binding.etTotalSales.text.toString(),
                         binding.etAddress.text.toString(),
                         binding.etCreditAmount.text.toString(),0)
     }
     private fun observers(){
-        viewModel.customerStatus.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.resetValue = ""
-            }
+        viewModel.customer.observe(viewLifecycleOwner) {
+            Log.e("Customerllll",it.data.toString())
+
+        }
+        viewModel.customerStatus.observe(viewLifecycleOwner) { result ->
 
         }
     }

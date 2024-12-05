@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.kreativesquadz.billkit"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -94,6 +94,7 @@ dependencies {
     implementation (libs.androidx.paging.runtime)  // Latest version of Paging 3
     implementation( libs.androidx.room.paging)
     implementation (libs.escpos.thermalprinter.android)
-
+    implementation (libs.poi)
+    implementation (libs.poi.ooxml)
 
 }

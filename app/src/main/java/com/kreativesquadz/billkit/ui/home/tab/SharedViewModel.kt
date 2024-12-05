@@ -128,7 +128,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
 
     fun addItem(taxRate: Float?){
-
         if (amountBuilder.toString().isEmpty()){
             return
         }

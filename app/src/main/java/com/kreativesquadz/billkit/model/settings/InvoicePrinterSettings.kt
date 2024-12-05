@@ -11,7 +11,7 @@ data class InvoicePrinterSettings(
     val id: Long = 0,
     val userId: Long = Config.userId,
     val printerCompanyInfo: String = "0 1 1 0",
-    val printerItemTable: String = "0 0 1 1",
+    val printerItemTable: String = "1 0 1 1",
     val printerFooter: String = "Thank You",
     val isSynced: Int = 0
 ) : Serializable {

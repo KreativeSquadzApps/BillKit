@@ -64,7 +64,8 @@ class CustomerManagementFrag : Fragment() {
         })
 
         binding.btnCreateCustomer.setOnClickListener {
-            findNavController().navigate(R.id.action_customerManagementFrag_to_createCustomerFrag)
+            val action = CustomerManagementFragDirections.actionCustomerManagementFragToCreateCustomerFrag("")
+            findNavController().navigate(action)
         }
     }
 

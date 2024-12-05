@@ -41,7 +41,7 @@ class CreditRepository @Inject constructor(val db: AppDatabase) {
             mergedDetails.add(
                 MergedCreditDetail(
                     date = invoice.invoiceDate,
-                    creditType = "Inv: ${invoice.id}",
+                    creditType = "Inv: ${invoice.invoiceNumber}",
                     amount = invoice.creditAmount
                 )
             )

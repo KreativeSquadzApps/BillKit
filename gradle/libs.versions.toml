@@ -22,6 +22,7 @@ navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
 neumorphism = "0.3.2"
 pagingRuntime = "3.3.2"
+poi = "5.2.3"
 retrofit = "2.9.0"
 roomRuntime = "2.6.1"
 ksp-version = "1.9.24-1.0.20"
@@ -53,6 +54,8 @@ androidx-startup-runtime = { module = "androidx.startup:startup-runtime", versio
 escpos-thermalprinter-android = { module = "com.github.DantSu:ESCPOS-ThermalPrinter-Android", version.ref = "escposThermalprinterAndroid" }
 itext7-core = { module = "com.itextpdf:itext7-core", version.ref = "itext7Core" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+poi = { module = "org.apache.poi:poi", version.ref = "poi" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
 work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workVersion" }
 androidx-room-runtime = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }

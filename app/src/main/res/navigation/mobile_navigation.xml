@@ -85,6 +85,10 @@
             android:id="@+id/action_customerManagementFrag_to_createCustomerFrag"
             app:destination="@id/createCustomerFrag" />
         <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_customerManagementFrag_to_customerDetailsFragment"
             app:destination="@id/customerDetailsFragment" />
 
@@ -256,10 +260,14 @@
             android:id="@+id/action_invoiceSettings_to_invoiceResetFragment"
             app:destination="@id/invoiceResetFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/createCustomerFrag"
         android:name="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerFrag"
-        android:label="Create Customer" />
+        android:label="Create Customer" >
+        <argument android:name="target" app:argType="string" />
+    </fragment>
+
     <fragment
         android:id="@+id/addProductFrag"
         android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.add.AddProductFrag"

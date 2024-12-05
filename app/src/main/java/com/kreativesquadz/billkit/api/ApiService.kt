@@ -22,6 +22,7 @@ import com.kreativesquadz.billkit.model.request.InvoiceRequest
 import com.kreativesquadz.billkit.model.request.InvoiceStatusUpdate
 import com.kreativesquadz.billkit.model.request.LoginRequest
 import com.kreativesquadz.billkit.model.request.ProductStockRequest
+import com.kreativesquadz.billkit.model.request.ProductStockRequestByName
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -165,6 +166,10 @@ interface ApiService {
     @PUT( "/api/updateproductstock")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun updateProductStock(@Body productStockRequest: ProductStockRequest?): Response<ApiStatus>
+
+    @PUT( "/api/decrementproductstock")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun decrementProductStockByName(@Body productStockRequestByName: ProductStockRequestByName?): Response<ApiStatus>
 
     @PUT("/api/updateproduct")
     @Headers("X-API-KEY: " + Config.API_Key)

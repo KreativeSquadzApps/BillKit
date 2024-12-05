@@ -139,6 +139,13 @@ fun hideViewCancel(view: View, text: String?) {
         }
     }
 
+}@BindingAdapter("isNullorBlank")
+fun isNullorBlank(view: View, text: String?) {
+    if (text.isNullOrEmpty()) {
+        view.visibility =   View.GONE
+    }else{
+        view.visibility =   View.VISIBLE
+    }
 }
 
 @BindingAdapter("isSelected")

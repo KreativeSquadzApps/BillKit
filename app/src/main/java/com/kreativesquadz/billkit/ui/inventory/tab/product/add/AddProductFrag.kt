@@ -154,17 +154,17 @@ class AddProductFrag : Fragment() {
 
     private fun getProduct():Product{
         return Product(userId = Config.userId,
-            productName = binding.etProductName.text.toString(),
+            productName = binding.etProductName.text.toString().trim(),
             category = binding.dropdown.text.toString(),
             productPrice = binding.etProductPrice.text.toString().takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0,
             productCost = binding.etProductCost.text.toString().takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0,
             productMrp = binding.etProductMrp.text.toString().takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0,
-            productBarcode = binding.etBarcode.text.toString(),
+            productBarcode = binding.etBarcode.text.toString().trim(),
             productStockUnit = binding.dropdownStockUnit.text.toString(),
             productTax = selectedTaxValue,
             productTaxType = binding.dropdownTaxType.text.toString(),
             productStock = binding.etCurrentStock.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
-            productDefaultQty = binding.etDefaultQty.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 0,
+            productDefaultQty = binding.etDefaultQty.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: 1,
             isSynced = 0)
     }
 

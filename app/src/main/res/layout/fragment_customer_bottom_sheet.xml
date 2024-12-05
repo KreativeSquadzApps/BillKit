@@ -50,8 +50,9 @@
                 android:textStyle="bold"
                 android:padding="@dimen/_10dp"
                 android:textSize="@dimen/txt_18sp"
+                android:id="@+id/etCustomer"
                 android:drawableLeft="@android:drawable/ic_menu_search"
-                android:hint="Contact/Name/GST No "
+                android:hint="Contact / Name"
                 />
 
             <ImageView

@@ -22,8 +22,10 @@ import com.kreativesquadz.billkit.repository.InventoryRepository
 import com.kreativesquadz.billkit.repository.SavedOrderRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
+import com.kreativesquadz.billkit.worker.DecrementProductStockWorker
 import com.kreativesquadz.billkit.worker.SyncInvoicesWorker
 import com.kreativesquadz.billkit.worker.UpdateInvoicePrefixIncrementWorker
+import com.kreativesquadz.billkit.worker.UpdateProductStockWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,22 +62,28 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
 //        }
 //
 //    }
-    fun insertInvoiceWithItems(isSavedOrderIdExist: Long?,invoice: Invoice, items: List<InvoiceItem>,creditNoteId : Int?,context: Context)  {
+    fun insertInvoiceWithItems(isSavedOrderIdExist: Long?,invoice: Invoice, items: List<InvoiceItem>,creditNoteId : Int?)  {
         try {
             viewModelScope.launch{
-                if(isSavedOrderIdExist != null){
-                    deleteSavedOrder(isSavedOrderIdExist)
-                }
                 Log.e("BBBinvoice", invoice.toString())
-
                 val invoiceId =  billHistoryRepository.insertInvoiceWithItems(invoice, items)
                 creditNoteRepository.redeemCreditNoteById(creditNoteId)
                 items.forEach{
+                    val productName = it.itemName.split("(")[0].trim()
+                    val quantity = it.quantity
                     Log.e("NNNNNN", it.quantity.toString())
-                    inventoryRepository.decrementProductStock(it.itemName.split("(")[0],it.quantity)
+                    val isAvailable = inventoryRepository.isProductAvailable(productName)
+                    if (isAvailable){
+                        inventoryRepository.decrementProductStock(productName,quantity)
+                        decrementProductStockWork(productName,quantity)
+                    }
                 }
+
                 _invoiceID.value = invoiceId
-                scheduleInvoiceSync(context)
+                scheduleInvoiceSync()
+                isSavedOrderIdExist?.let {
+                    deleteSavedOrder(isSavedOrderIdExist)
+                }
             }
 
 
@@ -89,23 +97,6 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
     }
 
 
-
-    fun scheduleInvoiceSync(context: Context) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncWorkRequest = OneTimeWorkRequestBuilder<SyncInvoicesWorker>()
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            "invoiceSyncWork",
-            ExistingWorkPolicy.APPEND,
-            syncWorkRequest
-        )
-    }
-
     fun getUserSettings(): LiveData<UserSetting> {
         userSetting = userSettingRepository.getUserSetting(Config.userId)
         return userSetting
@@ -115,6 +106,63 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
     fun deleteSavedOrder(orderId: Long) {
             savedOrderRepository.deleteSavedOrder(orderId)
 
+    }
+
+
+    fun updateInvoicePrefixNumber(invoicePrefix: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+               val invoicePrefixNumber = settingsRepository.getInvoicePrefixNumberWithPrefix(invoicePrefix)
+                settingsRepository.updateInvoiceNumberAndPrefix(Config.userId,
+                    invoicePrefixNumber.id.toLong(),
+                    invoicePrefixNumber.invoicePrefix,
+                    invoicePrefixNumber.invoiceNumber.toInt()+1)
+                updateInvoicePrefixNumberWorker(invoicePrefixNumber.id.toLong())
+            } catch (e: Exception) {
+                // Handle error or log it
+                Log.e("ViewModel", "Error: ${e.message}")
+            }
+        }
+    }
+
+
+    private fun scheduleInvoiceSync() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncWorkRequest = OneTimeWorkRequestBuilder<SyncInvoicesWorker>()
+            .setConstraints(constraints)
+            .build()
+
+        workManager.enqueueUniqueWork(
+            "invoiceSyncWork",
+            ExistingWorkPolicy.APPEND,
+            syncWorkRequest
+        )
+    }
+
+    private fun decrementProductStockWork (name: String , stock : Int ) {
+        val data = Data.Builder()
+            .putString("name",name)
+            .putInt("stock",stock)
+            .build()
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncWorkRequest = OneTimeWorkRequestBuilder<DecrementProductStockWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .build()
+
+
+        workManager.enqueueUniqueWork(
+            "decrementProductStockWork",
+            ExistingWorkPolicy.APPEND,
+            syncWorkRequest
+        )
     }
 
     private fun updateInvoicePrefixNumberWorker(id: Long) {
@@ -137,20 +185,5 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
         )
     }
 
-    fun updateInvoicePrefixNumber(invoicePrefix: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-               val invoicePrefixNumber = settingsRepository.getInvoicePrefixNumberWithPrefix(invoicePrefix)
-                Log.d("ViewModel", "InvoicePrefixNumber: ${invoicePrefixNumber}")
-                settingsRepository.updateInvoiceNumberAndPrefix(Config.userId,
-                    invoicePrefixNumber.id.toLong(),
-                    invoicePrefixNumber.invoicePrefix,
-                    invoicePrefixNumber.invoiceNumber.toInt()+1)
-                updateInvoicePrefixNumberWorker(invoicePrefixNumber.id.toLong())
-            } catch (e: Exception) {
-                // Handle error or log it
-                Log.e("ViewModel", "Error: ${e.message}")
-            }
-        }
-    }
+
 }

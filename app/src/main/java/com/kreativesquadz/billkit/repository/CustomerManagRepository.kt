@@ -1,13 +1,9 @@
 package com.kreativesquadz.billkit.repository
 
-
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import com.kreativesquadz.billkit.Dao.CustomerDao
-import com.kreativesquadz.billkit.Dao.InvoiceDao
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.api.ApiClient
 import com.kreativesquadz.billkit.api.ApiResponse
@@ -15,16 +11,17 @@ import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.CustomerCreditDetail
-import com.kreativesquadz.billkit.model.Invoice
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 class CustomerManagRepository @Inject constructor( private val db : AppDatabase) {
     private val customerDao: CustomerDao = db.customerDao()
     private val creditDetailsDao = db.creditDetailsDao()
 
-    fun loadAllCustomers(): LiveData<Resource<List<Customer>>> {
+   fun loadAllCustomers(): LiveData<Resource<List<Customer>>> {
         return object : NetworkBoundResource<List<Customer>, List<Customer>>() {
             override fun saveCallResult(item: List<Customer>) {
                 try {
@@ -52,20 +49,28 @@ class CustomerManagRepository @Inject constructor( private val db : AppDatabase)
         }.asLiveData()
     }
 
-    suspend fun addCustomer(customer: Customer): LiveData<Boolean> {
-        val statusLiveData = MutableLiveData<Boolean>()
-        customerDao.insertCustomer(customer)
-        statusLiveData.value = true
-        return statusLiveData
+    suspend fun addCustomer(customer: Customer): Customer? {
+        val exists = customerDao.isCustomerExists(customer.customerName, customer.shopContactNumber) > 0
+        if (!exists) {
+            customerDao.insertCustomer(customer)
+            return customerDao.getCustomerByName(customer.customerName)
+        } else {
+            return null
+        }
     }
 
     fun getCustomer(id: String): Customer {
         return customerDao.getCustomer(id)
     }
+     fun getCustomerByName(name: String): Customer {
+        return customerDao.getCustomerByName(name)
+    }
+
 
     fun getCustomerLiveData(id: String): LiveData<Customer> {
         return customerDao.getCustomerLiveData(id)
     }
+
 
 
     suspend fun getUnsyncedCustomers(): List<Customer> {
@@ -77,19 +82,26 @@ class CustomerManagRepository @Inject constructor( private val db : AppDatabase)
     }
 
     suspend fun updateCreditAmount(id: Long, creditAmount: Double,type : String) {
-        if (type.isEmpty()){
             customerDao.updateCreditAmount(id, creditAmount)
-        }else{
-            customerDao.decrementCreditAmount(id,creditAmount)
-        }
-        creditDetailsDao.insertCustomerCreditDetail(
-            CustomerCreditDetail(
-                customerId = id,
-                creditDate = System.currentTimeMillis().toString(),
-                creditType = "Manual",
-                creditAmount = creditAmount
+            creditDetailsDao.insertCustomerCreditDetail(
+                CustomerCreditDetail(
+                    customerId = id,
+                    creditDate = System.currentTimeMillis().toString(),
+                    creditType = "Manual",
+                    creditAmount = creditAmount
+                )
             )
-        )
+    }
+    suspend fun decrementInvoiceCreditAmount(id: Long, creditAmount: Double,invoiceNumber: String) {
+         customerDao.decrementCreditAmount(id,creditAmount)
+            creditDetailsDao.insertCustomerCreditDetail(
+                CustomerCreditDetail(
+                    customerId = id,
+                    creditDate = System.currentTimeMillis().toString(),
+                    creditType = "Inv: ${invoiceNumber}",
+                    creditAmount = creditAmount
+                )
+            )
     }
 
     suspend fun removeCreditAmount(id: Long, creditAmount: Double, type: String) {

@@ -179,6 +179,7 @@
                             android:textSize="12sp"
                             android:gravity="center"
                             android:textStyle="bold"
+                            app:isNullorBlank="@{customer.customerName}"
                             android:id="@+id/tvCustomerName"
                             android:text="@{customer.customerName}"
                             tools:text="Dragon"/>
@@ -188,6 +189,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
                             android:gravity="center"
+                            app:isNullorBlank="@{customer.shopContactNumber}"
                             android:textColor="@color/text_color_main"
                             android:id="@+id/tvCustomerNumber"
                             android:text='@{"Contact : " + customer.shopContactNumber}'
@@ -198,6 +200,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
                             android:gravity="center"
+                            app:isNullorBlank="@{customer.gstNo}"
                             android:textColor="@color/text_color_main"
                             android:id="@+id/tvCustomerGst"
                             android:text='@{"GST No : " + customer.gstNo}'
@@ -208,6 +211,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
                             android:gravity="center"
+                            app:isNullorBlank="@{customer.address}"
                             android:textColor="@color/text_color_main"
                             android:id="@+id/tvCustomeradress"
                             android:text="@{customer.address}"

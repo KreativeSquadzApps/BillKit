@@ -46,18 +46,21 @@ class InvoiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentInvoiceBinding.inflate(inflater, container, false)
-        onClickListeners()
-        observers()
         return binding.root
-
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onClickListeners()
+        observers()
+     }
 
 
-      fun observers(){
+    fun observers(){
           viewModel.invoice.observe(viewLifecycleOwner) {
+              Log.e("invoicepppp",it.toString())
               binding.invoice = it
-              binding.isCustomerAvailable = it.customerId != null
+              binding.isCustomerAvailable = it?.customerId != null
               binding.customer = viewModel.getCustomerById(it.customerId.toString())
               binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().minus(it.subtotal.toInt())
               //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
@@ -103,7 +106,7 @@ class InvoiceFragment : Fragment() {
     private fun setupPopup(){
         val dialogData = DialogData(
             title = "Cancel Invoice",
-            info = "Are you sure you want to Cancel this invoice ${invoice?.id} ?",
+            info = "Are you sure you want to Cancel this invoice ${invoice?.invoiceNumber} ?",
             positiveButtonText = "Cancel Invoice",
             negativeButtonText = "Cancel"
         )
@@ -113,7 +116,9 @@ class InvoiceFragment : Fragment() {
             dialogData = dialogData,
             positiveAction = {
                 invoice?.id?.let {
-                    viewModel.updateInvoiceStatus(requireContext(),"Cancelled",it.toInt(),invoice?.customerId,invoice?.creditAmount)
+                    viewModel.updateInvoiceStatus(requireContext(),"Cancelled",it.toInt(),invoice?.customerId,invoice?.creditAmount,
+                        invoice?.invoiceNumber!!,invoice?.invoiceId!!.toInt())
+
                 }
             },
             negativeAction = {

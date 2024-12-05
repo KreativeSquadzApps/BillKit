@@ -151,16 +151,14 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
                billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
                    invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,customGstAmount,invoicePrefixNumber),
                    items =  sharedViewModel.getItemsList(),
-                   creditNoteId =  sharedViewModel.getCreditNote()?.id,
-                   context =  requireContext())
+                   creditNoteId =  sharedViewModel.getCreditNote()?.id)
                billDetailsViewModel.updateInvoicePrefixNumber(invoicePrefix)
            }else{
                if (isCustomerSelected){
                    billDetailsViewModel.insertInvoiceWithItems( isSavedOrderIdExist = sharedViewModel.isSavedOrderIdExist(),
                        invoice = sharedViewModel.getInvoice(onlineAmount = viewModel.onlineAmount.value, creditAmount = binding.etCredit.text.toString().replace(Config.CURRENCY, "").trim().toDoubleOrNull() , cashAmount = viewModel.cashAmount.value,customGstAmount,invoicePrefixNumber),
                        items =  sharedViewModel.getItemsList(),
-                       creditNoteId =  sharedViewModel.getCreditNote()?.id,
-                       context =  requireContext())
+                       creditNoteId =  sharedViewModel.getCreditNote()?.id)
                    billDetailsViewModel.updateInvoicePrefixNumber(invoicePrefix)
 
 

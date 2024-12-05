@@ -41,7 +41,7 @@ interface InvoiceDao {
     @Query("UPDATE invoice_items SET returnedQty = :returnedQty WHERE invoiceId = :invoiceId AND itemName = :itemName")
     suspend fun updateReturnedQty(invoiceId: Long, itemName: String, returnedQty: Int)
 
-    @Query("UPDATE invoices SET status = :status WHERE id = :invoiceId")
+    @Query("UPDATE invoices SET status = :status WHERE invoiceId = :invoiceId")
     suspend fun updateInvoiceStatus(status : String,  invoiceId: Int)
 
     @Insert

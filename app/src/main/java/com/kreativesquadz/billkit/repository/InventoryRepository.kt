@@ -149,6 +149,15 @@ class InventoryRepository @Inject constructor(private val db : AppDatabase) {
          inventoryDao.decrementProductStock(productName,quantity)
     }
 
+    fun isProductAvailable(productName: String): Boolean {
+        val product = inventoryDao.getProductByName(productName)
+        if (product != null) {
+            return true
+        }else{
+            return false
+        }
+    }
+
 
 
 }

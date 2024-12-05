@@ -81,6 +81,7 @@
                     android:layout_weight="1"
                     android:hint="Shop Contact Number"
                     android:inputType="number"
+                    android:maxLength="10"
                     android:text="@{resetValue}"
                     android:id="@+id/etShopContactNumber"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -102,6 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="GST Number"
+                    android:textAllCaps="true"
                     android:text="@{resetValue}"
                     android:id="@+id/etGSTNo"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -146,6 +148,7 @@
                     android:layout_weight="1"
                     android:hint="Address"
                     android:lines="3"
+                    android:gravity="top"
                     android:text="@{resetValue}"
                     android:id="@+id/etAddress"/>
             </com.google.android.material.textfield.TextInputLayout>

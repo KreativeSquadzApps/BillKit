@@ -21,7 +21,9 @@ import androidx.paging.map
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.databinding.FragmentDayBookBinding
+import com.kreativesquadz.billkit.model.DayBook
 import com.kreativesquadz.billkit.model.Invoice
+import com.kreativesquadz.billkit.utils.ExcelExporter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -36,6 +38,8 @@ class DayBookFrag : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: DayBookViewModel by viewModels()
     private var selectedDate: Long = 0L
+    private val dayBook = mutableListOf<DayBook>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,11 +149,20 @@ class DayBookFrag : Fragment() {
         tableRow.addView(createTextView(invoice.totalAmount.toString()))
         tableRow.addView(createTextViewLast(invoice.cashAmount.toString()))
         binding.invoiceTableLayout.addView(tableRow)
+        val daybook = DayBook(category = "Sale", invoiceNumber = invoice.invoiceNumber.toString(),
+            createdBy = invoice.createdBy.replace("Created By",""),
+            customerName = customerName, totalAmount = invoice.totalAmount, cashAmount = invoice.cashAmount)
+        dayBook.add(daybook)
     }
 
     private fun onClickListener(){
         binding.calenderView.setOnClickListener {
             setCurrentDateOnCalendar(binding.tvDate)
+        }
+        binding.saveData.setOnClickListener {
+            val dayBookExporter = ExcelExporter<DayBook>()
+            val dayBookSuccess = dayBookExporter.saveDataToExcel(requireContext(),dayBook,"dayBook.xlsx")
+            if (dayBookSuccess) println("dayBook saved successfully!") else println("Failed to save dayBook data.")
         }
     }
 

@@ -1,6 +1,8 @@
 package com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,7 @@ import com.kreativesquadz.billkit.databinding.FragmentCustomerBottomSheetBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.Customer
+import com.kreativesquadz.billkit.ui.home.billDetails.BillDetailsFragDirections
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -91,10 +94,25 @@ class CustomerAddBottomSheetFrag : BottomSheetDialogFragment() {
         binding.btnDismiss.setOnClickListener {
             dismiss()
         }
+
         binding.addCustomer.setOnClickListener{
             dismiss()
-            findNavController().navigate(R.id.action_billDetailsFrag_to_createCustomerFrag)
+            val action = BillDetailsFragDirections.actionBillDetailsFragToCreateCustomerFrag("bottomSheet")
+            findNavController().navigate(action)
         }
+
+        binding.etCustomer.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.customer.value?.data?.let {
+                    adapter.submitList(it.filter { customer ->
+                        customer.customerName.contains(s.toString(), ignoreCase = true) ||
+                        customer.shopContactNumber.contains(s.toString(), ignoreCase = true)})
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun observers(){

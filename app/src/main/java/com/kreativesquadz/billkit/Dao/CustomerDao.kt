@@ -17,11 +17,17 @@ interface CustomerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCustomerList(customer: List<Customer>)
 
+    @Query("SELECT COUNT(*) FROM customers WHERE customerName = :name OR shopContactNumber = :number")
+    suspend fun isCustomerExists(name: String, number: String): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCustomer(customer: Customer)
 
     @Query("SELECT * FROM customers WHERE id = :id")
     fun getCustomer(id: String): Customer
+
+    @Query("SELECT * FROM customers WHERE customerName = :customerName")
+    fun getCustomerByName(customerName: String): Customer
 
     @Query("SELECT * FROM customers WHERE id = :id")
     fun getCustomerLiveData(id: String): LiveData<Customer>
