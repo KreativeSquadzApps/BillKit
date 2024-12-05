@@ -79,7 +79,6 @@ class BillDetailsFrag : Fragment() {
     private fun init(){
         binding.isGST = true
         binding.isPackaging = true
-
     }
 
     private fun onClickListeners() {
@@ -194,23 +193,22 @@ class BillDetailsFrag : Fragment() {
         }
 
 
-        private fun showAddDiscountDialog() {
+    private fun showAddDiscountDialog() {
             val dialog = AddDiscountDialogFragment()
             dialog.show(childFragmentManager, AddDiscountDialogFragment.TAG)
             dialogViewModel.setTotalAmount(sharedViewModel.totalLivedata.value.toString())
+    }
 
-        }
-
-        private fun showAddGstDialog() {
+    private fun showAddGstDialog() {
             val dialog = AddGstDialogFragment()
             dialog.show(childFragmentManager, AddGstDialogFragment.TAG)
             dialogGstViewModel.setTotalAmount(sharedViewModel.totalLivedata.value.toString())
-        }
+    }
 
-        private fun showAddPackagingDialog() {
+    private fun showAddPackagingDialog() {
             val dialog = AddPackagingDialogFragment()
             dialog.show(childFragmentManager, AddPackagingDialogFragment.TAG)
-        }
+    }
 
 
         private fun observers() {
