@@ -62,7 +62,7 @@ class CustomerManagRepository @Inject constructor( private val db : AppDatabase)
     fun getCustomer(id: String): Customer {
         return customerDao.getCustomer(id)
     }
-     fun getCustomerByName(name: String): Customer {
+    suspend fun getCustomerByName(name: String): Customer {
         return customerDao.getCustomerByName(name)
     }
 

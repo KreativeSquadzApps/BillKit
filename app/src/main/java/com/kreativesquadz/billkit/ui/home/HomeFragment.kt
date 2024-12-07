@@ -91,6 +91,15 @@ class HomeFragment : Fragment() {
         sharedViewModel.loadCompanyDetails()
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.getInvoiceHistory().observe(viewLifecycleOwner){
+            it.data?.let {
+                //Log.d("invoiceHistory", it.toString())
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -153,11 +162,6 @@ class HomeFragment : Fragment() {
         sharedViewModel.loadCompanyDetailsDb().observe(viewLifecycleOwner){
             it?.let {
                 Log.e("KKKK",it.toString())
-            }
-        }
-        homeViewModel.getInvoiceHistory().observe(viewLifecycleOwner){
-            it.data?.let {
-                //Log.d("invoiceHistory", it.toString())
             }
         }
 

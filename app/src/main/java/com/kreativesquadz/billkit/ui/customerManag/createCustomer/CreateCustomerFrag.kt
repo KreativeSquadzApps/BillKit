@@ -80,17 +80,11 @@ class CreateCustomerFrag : Fragment() {
                 return@setOnClickListener
             }
             viewModel.addCustomerObj(getCustomerData(), requireContext()){ customer ->
-                if (customer == null) {
-                    Toast.makeText(context, "Customer with this name or number already exists", Toast.LENGTH_SHORT).show()
-                } else {
-                    if (!target.isNullOrEmpty()){
-
+                if (!target.isNullOrEmpty()){
                         sharedViewModel.updateSelectedCustomer(customer)
                     }
                     binding.resetValue = ""
-                    Toast.makeText(context, "Customer added successfully", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
-                }
             }
 
 
@@ -121,12 +115,9 @@ class CreateCustomerFrag : Fragment() {
                 }
             }
         })
-        viewModel.customer.observe(viewLifecycleOwner) {
-            Log.e("Customerllll",it.data.toString())
 
-        }
         viewModel.customerStatus.observe(viewLifecycleOwner) { result ->
-
+                Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
         }
     }
     private fun openContactPicker() {

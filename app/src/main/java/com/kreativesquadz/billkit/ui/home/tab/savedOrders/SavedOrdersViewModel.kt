@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.api.common.common.Resource
-import com.kreativesquadz.billkit.api.common.common.Status
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.SavedOrder
 import com.kreativesquadz.billkit.model.SavedOrderEntity

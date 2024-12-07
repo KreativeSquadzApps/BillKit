@@ -13,6 +13,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
+import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.settings.UserSetting
@@ -48,6 +49,7 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
 
     lateinit var userSetting : LiveData<UserSetting>
     val invoiceId: LiveData<Long?> get() = _invoiceID
+    lateinit var invoicess : LiveData<Resource<List<Invoice>>>
 
 //    fun addInvoice(creditNoteId : Int? ,invoice: Invoice,context: Context) {
 //        viewModelScope.launch {
@@ -91,7 +93,9 @@ class BillDetailsViewModel @Inject constructor(val workManager: WorkManager,
             // Handle exception, e.g., show a message to the user
         }
     }
-
+    private fun fetchAllInvoices() {
+        invoicess = billHistoryRepository.loadAllInvoices()
+    }
     fun clearInvoiceStatus() {
         _invoiceID.value = null
     }

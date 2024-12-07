@@ -27,7 +27,7 @@ interface CustomerDao {
     fun getCustomer(id: String): Customer
 
     @Query("SELECT * FROM customers WHERE customerName = :customerName")
-    fun getCustomerByName(customerName: String): Customer
+   suspend fun getCustomerByName(customerName: String): Customer
 
     @Query("SELECT * FROM customers WHERE id = :id")
     fun getCustomerLiveData(id: String): LiveData<Customer>

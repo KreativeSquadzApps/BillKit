@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.filter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,28 +39,8 @@ class BillHistoryFrag : Fragment() {
     }
     private var createdBy = ""
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentBillHistoryBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        setupRecyclerView()
-        observers()
-        onClickListener()
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val calendar = Calendar.getInstance().apply {
             timeInMillis = viewModel.getSelectedDate()
             set(Calendar.HOUR_OF_DAY, 0)
@@ -70,7 +52,41 @@ class BillHistoryFrag : Fragment() {
         val startOfDay = calendar.timeInMillis
         calendar.add(Calendar.DAY_OF_MONTH, 1)
         val endOfDay = calendar.timeInMillis - 1
-        viewModel.getPagedInvoicesFromDb(startOfDay, endOfDay)
+        viewModel.fetchAllInvoices(startOfDay, endOfDay)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentBillHistoryBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        setupRecyclerView()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observers()
+        onClickListener()
+        parentFragmentManager.setFragmentResultListener("requestKey", viewLifecycleOwner) { _, bundle ->
+            val dataUpdated = bundle.getBoolean("dataUpdated", false)
+            if (dataUpdated) {
+                val calendar = Calendar.getInstance().apply {
+                    timeInMillis = viewModel.getSelectedDate()
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+
+                }
+                val startOfDay = calendar.timeInMillis
+                calendar.add(Calendar.DAY_OF_MONTH, 1)
+                val endOfDay = calendar.timeInMillis - 1
+                viewModel.fetchAllInvoices(startOfDay, endOfDay)
+            }
+        }
     }
 
     private fun observers(){
@@ -80,23 +96,36 @@ class BillHistoryFrag : Fragment() {
         viewModel.loginResponse.observe(viewLifecycleOwner) { userSession->
             createdBy = userSession.sessionUser
         }
-
-
-        viewModel.invoicess.observe(viewLifecycleOwner) {
-            Log.d("TAG", "observers: $it")
-
+        // Observe invoicesList (Resource<List<Invoice>>)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.invoicesList.collect { resource ->
+                    Log.d("TAG", " : ${resource.data}")
+                    if(resource.data == null)
+                    {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }else{
+                        binding.progressBar.visibility = View.GONE
+                    }
+                }
+            }
         }
         lifecycleScope.launch {
             viewModel.invoices.collectLatest { pagingData ->
                 pagingData.let { it1 ->
                     if (target.isNullOrEmpty()){
                         adapter.submitData(it1)
+
                     }else{
                         adapter.submitData(it1.filter { it.createdBy == target })
                     }
+
                 }
+
             }
         }
+
+
 
     }
 

@@ -13,12 +13,15 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.api.common.common.Resource
+import com.kreativesquadz.billkit.api.common.common.Status
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.repository.CustomerManagRepository
 import com.kreativesquadz.billkit.worker.SyncCustomerWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,23 +30,22 @@ class CreateCustomerViewModel @Inject constructor(val repository: CustomerManagR
     private val _customerStatus = MutableLiveData<String>()
     val customerStatus: LiveData<String> get() = _customerStatus
 
-    private var _customer = MutableLiveData<Resource<List<Customer>>>()
-    val customer: LiveData<Resource<List<Customer>>> get() = _customer
+
 
 
     fun addCustomerObj(customer: Customer, context: Context, onResult: (Customer?) -> Unit) {
         viewModelScope.launch {
-            repository.addCustomer(customer)
-            scheduleCustomerSync(context)
+           val isCustomer = repository.addCustomer(customer)
+            if (isCustomer == null) {
+                _customerStatus.value = "Customer with this name or number already exists"
+                return@launch
+            } else {
+                _customerStatus.value = "Customer added successfully"
+                scheduleCustomerSync(context)
+                val syncedCustomer = repository.getCustomerByName(customer.customerName)
+                onResult(syncedCustomer)
+            }
 
-            val result = repository.loadAllCustomers()
-                .asFlow()
-                .first { resource ->
-                    resource.status.name == "SUCCESS"  // Compare with hardcoded string
-                }
-
-            val syncedCustomer = repository.getCustomerByName(customer.customerName)
-            onResult(syncedCustomer)
         }
     }
 

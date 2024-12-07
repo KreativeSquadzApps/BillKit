@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
@@ -118,6 +119,10 @@ class InvoiceFragment : Fragment() {
                 invoice?.id?.let {
                     viewModel.updateInvoiceStatus(requireContext(),"Cancelled",it.toInt(),invoice?.customerId,invoice?.creditAmount,
                         invoice?.invoiceNumber!!,invoice?.invoiceId!!.toInt())
+                     val result = Bundle().apply {
+                        putBoolean("dataUpdated", true)  // Indicate that data is updated
+                     }
+                    setFragmentResult("requestKey", result)
 
                 }
             },
