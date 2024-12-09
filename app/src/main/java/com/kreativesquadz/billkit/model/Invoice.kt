@@ -28,6 +28,7 @@ data class Invoice(
     val otherChargesAmount: Double? = null,
     val customGstAmount: String? = null,
     val totalAmount: Double,
+    val totalTax: Double?=null,
     val totalGst: Double,
     val customerId: Long? = null,
     val isSynced: Int = 0,

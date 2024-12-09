@@ -62,8 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="@dimen/txt_13sp"
-                        android:inputType="none"
-                        android:text="58MM 2 inch" />
+                        android:inputType="none"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

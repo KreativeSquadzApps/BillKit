@@ -109,14 +109,16 @@ fun rate(view: TextView, text: String) {
 
     view.text = finalRate.toString()
 }
-@BindingAdapter("hideOnZeroDouble")
-fun hideOnZeroDouble(view: TextView, text: Double?) {
+@BindingAdapter("isZeroOrNullDouble")
+fun isZeroOrNullDouble(view: TextView, text: Double?) {
     if (text != null) {
         if (text > 0) {
             view.visibility = View.VISIBLE
         } else {
             view.visibility = View.GONE
         }
+    }else{
+        view.visibility = View.GONE
     }
 }
 @BindingAdapter("hideView")

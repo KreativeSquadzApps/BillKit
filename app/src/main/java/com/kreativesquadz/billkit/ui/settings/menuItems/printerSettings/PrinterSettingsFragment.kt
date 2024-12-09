@@ -12,8 +12,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
+import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
 import com.kreativesquadz.billkit.databinding.FragmentPrinterSettingsBinding
 import com.kreativesquadz.billkit.interfaces.FragmentBaseFunctions
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
@@ -37,6 +39,9 @@ class PrinterSettingsFragment : Fragment(), FragmentBaseFunctions {
     private var isAutoCut = false
     private var printerAddress = ""
     private var printerName = ""
+    private var printerSize : String ?= null
+
+    val printerSizeList = listOf("58MM","80MM")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +61,6 @@ class PrinterSettingsFragment : Fragment(), FragmentBaseFunctions {
         observers()
         onClickListener()
         setupSwitches()
-
         return binding.root
     }
 
@@ -97,6 +101,7 @@ class PrinterSettingsFragment : Fragment(), FragmentBaseFunctions {
         updateIsUpdateEnabled()
         updateSwitches(settings)
         binding.thermalPrinter = settings
+        printerSize = settings.printerSize
         if (settings.defaultPrinterAddress.isNotEmpty()) {
             printerAddress = settings.defaultPrinterAddress
             printerName = settings.defaultPrinterName
@@ -104,6 +109,7 @@ class PrinterSettingsFragment : Fragment(), FragmentBaseFunctions {
         }else{
             binding.isDefaultPrinterAdded = false
         }
+        setupSpinnerPrinterSize(printerSizeList)
     }
 
     private fun updateIsUpdateEnabled() {
@@ -154,7 +160,7 @@ class PrinterSettingsFragment : Fragment(), FragmentBaseFunctions {
         return ThermalPrinterSetup(
             id = 0,
             userId = Config.userId,
-            printerSize = "58MM",
+            printerSize = printerSize ?: "80MM",
             printerMode = "CONFIG-1",
             fontSize = "Medium",
             enableAutoPrint = isEnableAutoPrint,
@@ -164,6 +170,24 @@ class PrinterSettingsFragment : Fragment(), FragmentBaseFunctions {
             defaultPrinterAddress = printerAddress,
             defaultPrinterName = printerName,
         )
+    }
+
+    private fun setupSpinnerPrinterSize(itemList: List<String>) {
+        val adapterStockUnit = GenericSpinnerAdapter(
+            context = requireContext(),
+            layoutResId = R.layout.dropdown_item, // Use your custom layout
+            bindVariableId = BR.item,
+            staticItems = itemList
+        )
+        binding.dropdownPrinterSize.setText(printerSize, false)
+
+        binding.dropdownPrinterSize.setAdapter(adapterStockUnit)
+        binding.dropdownPrinterSize.setOnItemClickListener { _, _, position, _ ->
+            val selectedItem = adapterStockUnit.getItem(position)
+            binding.dropdownPrinterSize.setText(selectedItem, false)
+            printerSize = selectedItem
+            updateIsUpdateEnabled()
+        }
     }
 
     override fun onDestroyView() {

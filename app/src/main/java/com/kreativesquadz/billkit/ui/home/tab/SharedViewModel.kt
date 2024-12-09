@@ -46,26 +46,34 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                                           val gstTaxRepository: GstTaxRepository,
                                           val billHistoryRepository: BillHistoryRepository) : ViewModel() {
 
-    private var invoicePrefix: String? = null
      private var invoiceNumber: Int? = null
+
     private val _items = MutableLiveData<MutableList<InvoiceItem>>().apply { value = mutableListOf() }
     val items: LiveData<MutableList<InvoiceItem>> get() = _items
+
     var list = mutableListOf<InvoiceItem>()
+
     private val _selectedCustomer = MutableLiveData<Customer?>()
     val selectedCustomer: LiveData<Customer?> get() = _selectedCustomer
+
     val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
-    public val _selectedCreditNote = MutableLiveData<CreditNote?>()
+
+    val _selectedCreditNote = MutableLiveData<CreditNote?>()
     val selectedCreditNote: LiveData<CreditNote?> get() = _selectedCreditNote
 
     val amountValue: MutableLiveData<String> by lazy {
         MutableLiveData("0")
     }
+    val amount: LiveData<String> get() = amountValue
+
     var _isCustomerSelected = MutableLiveData<Boolean>()
     val isCustomerSelected : LiveData<Boolean> get() = _isCustomerSelected
+
     val include = "X"
-    val amount: LiveData<String> get() = amountValue
+
     var amountBuilder = StringBuilder()
+
     private var discounted : Int? = null
     private var gstAddedAmount : Int? = null
     private var packageAmount : Int? = null
@@ -87,10 +95,14 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     var _isCreditNoteApplied = MutableLiveData<Boolean>()
     val isCreditNoteApplied : LiveData<Boolean> get() = _isCreditNoteApplied
 
-
     var _totalLivedata = MutableLiveData<String>()
     val totalLivedata : LiveData<String> get() = _totalLivedata
+
+    var _subtotalLivedata = MutableLiveData<String>()
+    val subtotalLivedata : LiveData<String> get() = _subtotalLivedata
+
     val df = DecimalFormat("#")
+
     var creditNoteId : Int?=0
     var isReversedAmountNQty = false
     val taxSettings: LiveData<TaxSettings> = gstTaxRepository.getTaxSettings()
@@ -112,16 +124,18 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
     }
 
-
-    // Function to update the default tax setting when user changes it in settings
-
+    fun loadCompanyDetails() : LiveData<Resource<CompanyDetails>> {
+        return  settingsRepository.loadCompanyDetails(Config.userId)
+    }
+    fun loadCompanyDetailsDb() : LiveData<CompanyDetails> {
+        return  settingsRepository.loadCompanyDetailsDb(Config.userId)
+    }
 
     fun getAmount(view: View){
         val amount = (view as TextView).text ?: ""
         amountBuilder.append(amount.toString())
         amountValue.value = amountBuilder.toString()
     }
-
     fun delete(){
         if (amountBuilder.isEmpty()){
             return
@@ -129,7 +143,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         amountBuilder.deleteCharAt(amountBuilder.length - 1)
         amountValue.value = amountBuilder.toString()
     }
-
 
     fun addItem(taxRate: Float?){
         if (amountBuilder.toString().isEmpty()){
@@ -236,7 +249,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         _items.value = list
         amountValue.value = amountBuilder.clear().toString()
     }
-
     fun addProduct(product: Product?){
         if (product == null){
             return
@@ -293,9 +305,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         list.add(homeItem)
         _items.value = list
     }
-
-
-
     fun removeItemAt(position: Int){
         Log.e("pree",list.toString())
         list.removeAt(position)
@@ -303,7 +312,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         getSubTotalamount()
 
     }
-
     fun updateItemAt(oldItem: InvoiceItem, newItem : InvoiceItem){
         val position = list.indexOf(oldItem)
         Log.e("positionssss", position.toString())
@@ -312,17 +320,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         }
         _invoiceItems.value = list
         _items.value = list
-    }
-
-    fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
-        if (_invoiceItems.value.isNullOrEmpty()) { // Only fetch if data is not already loaded
-            try {
-                val invoiceItemsDeferred = async { billHistoryRepository.getInvoiceItems(id)}
-                _invoiceItems.value = invoiceItemsDeferred.await()
-            } catch (e: Exception) {
-                // Handle exception
-            }
-        }
     }
     fun isProductAdded(product: Product?): Boolean {
         val isAdded = list.any {
@@ -345,7 +342,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                         when (type) {
                             TaxType.PriceIncludesTax -> {
                                 product.productTax?.let { it1 ->
-                                val productTax =   product.productPrice?.times(it1)?.div(100) ?: 0.0
+                                    val productTax =   product.productPrice?.times(it1)?.div(100) ?: 0.0
                                     finalPrice = finalTotalPrice   +  (productTax * it.quantity)
                                 }
                                 // Handle PriceIncludesTax
@@ -375,28 +372,74 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         _items.value = list
         return isAdded
     }
-
-    fun clearOrder(){
-        list.clear()
-        _items.value = list
-        amountValue.value = amountBuilder.clear().toString()
-        updateDeselectCustomer()
-        removeDiscount()
-        removeGst()
-        removePackage()
-        removeOtherCharges()
-        removeCreditNote()
-    }
-
-
-    fun getInvoiceItem(): List<InvoiceItem> {
+    fun getItemsList(): List<InvoiceItem> {
         return list
     }
-
-
     fun getInvoiceItemCount(): String {
         return list.size.toString()
     }
+    fun setItemsList(items: List<InvoiceItem>) {
+        list = items.toMutableList()
+        _items.value = list
+    }
+
+    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?,customGstAmount: String?,invoicePrefixNumber : String) : Invoice{
+        var createdBy = "Created By Admin"
+        val loginSession = loginRepository.getUserSessions()
+        if (loginSession != null){
+            if (loginSession.staffId != null){
+                val loginResponse = loginRepository.getSession(null, loginSession.staffId.toLong())
+                val staff = loginResponse?.staff
+                if (staff != null){
+                    createdBy = "Created By ${staff.name}"
+                }
+            }
+        }
+        val invoice = Invoice(
+            invoiceId = invoiceId.toInt(),
+            invoiceNumber = invoicePrefixNumber,
+            invoiceDate = System.currentTimeMillis().toString(),
+            invoiceTime = System.currentTimeMillis().toString(),
+            createdBy = createdBy,
+            discount = discounted,
+            totalItems = getItemsList().size,
+            subtotal = getSubTotalamountDouble(),
+            cashAmount = cashAmount,
+            onlineAmount = onlineAmount,
+            creditAmount = creditAmount,
+            packageAmount = packageAmount?.toDouble(),
+            otherChargesAmount = otherChargesAmount?.toDouble(),
+            customGstAmount = customGstAmount,
+            totalAmount = getTotalAmountDouble(),
+            totalTax = getTotalValues().second,
+            totalGst = gstAddedAmount?.toDouble() ?: 0.0,
+            customerId = getCustomerId(),
+            isSynced = 0,
+            creditNoteAmount = creditNoteAmount?:0,
+            creditNoteId = creditNoteId?:0,
+            status = "Active",
+            invoiceItems =  getItemsList()
+        )
+        viewModelScope.launch {
+            invoiceNumber?.let {
+                settingsRepository.updateInvoiceNumber(Config.userId, it.plus(1))
+            }
+        }
+
+        return invoice
+    }
+    fun fetchInvoiceItems(id: Long) = viewModelScope.launch {
+        if (_invoiceItems.value.isNullOrEmpty()) { // Only fetch if data is not already loaded
+            try {
+                val invoiceItemsDeferred = async { billHistoryRepository.getInvoiceItems(id)}
+                _invoiceItems.value = invoiceItemsDeferred.await()
+            } catch (e: Exception) {
+                // Handle exception
+            }
+        }
+    }
+
+
 
     fun getTotalValues(): Triple<Double, Double, Double> {
         var subtotal = 0.0
@@ -404,11 +447,11 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         var totalAmount = 0.0
 
         list.forEach { item ->
-            totalTax = item.taxRate * item.unitPrice * item.quantity / 100
-            subtotal += item.totalPrice - totalTax
+            totalTax += item.taxRate * item.unitPrice * item.quantity / 100
+            subtotal += item.totalPrice
             totalAmount += item.totalPrice
         }
-
+        subtotal = subtotal - totalTax
         totalAmount = totalAmount - (discounted ?: 0) - (creditNoteAmount ?: 0)
         if (gstAddedAmount != null) {
             totalAmount += gstAddedAmount!!
@@ -416,36 +459,32 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         if (packageAmount != null) {
             totalAmount += packageAmount!!
         }
-         if (otherChargesAmount != null) {
+        if (otherChargesAmount != null) {
             totalAmount += otherChargesAmount!!
-         }
+        }
 
 
         return Triple(subtotal, totalTax, totalAmount)
     }
-
     fun getSubTotalamount(): String {
         val (subtotal, _, _) = getTotalValues()
         return Config.CURRENCY + subtotal.toString()
     }
-
     fun getTotalTax(): String {
         val (_, totalTax, _) = getTotalValues()
         df.roundingMode = RoundingMode.DOWN
         return Config.CURRENCY + df.format(totalTax)
     }
-
     fun getTotalAmount() {
-        val (_, _, totalAmount) = getTotalValues()
+        val (subtotal, _, totalAmount) = getTotalValues()
         df.roundingMode = RoundingMode.DOWN
         _totalLivedata.value = Config.CURRENCY + df.format(totalAmount)
+        _subtotalLivedata.value = Config.CURRENCY + df.format(subtotal)
     }
-
     fun getTotalAmountDouble(): Double {
         val (_, _, totalAmount) = getTotalValues()
         return totalAmount
     }
-
     fun getSubTotalamountDouble(): Double {
         val (subtotal, _, _) = getTotalValues()
         return subtotal
@@ -453,15 +492,24 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
 
 
+    fun getCreditNote() : CreditNote? {
+        return selectedCreditNote.value
+    }
     fun updateSelectedCustomer(customer: Customer?) {
         _selectedCustomer.value = customer
         _isCustomerSelected.value = true
     }
-
-
     fun updateDeselectCustomer() {
         _selectedCustomer.value = null
         _isCustomerSelected.value = false
+    }
+    fun getCustomerId() : Long?{
+        val selectedCustomer = _selectedCustomer.value
+        val customerId = selectedCustomer?.id ?: 0
+        if (customerId == 0L){
+            return null
+        }
+        return customerId
     }
 
 
@@ -482,7 +530,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         _isGstApplied.value = true
         getTotalAmount()
     }
-
     fun removeGst(){
         _isGstApplied.value = false
         gstAddedAmount = null
@@ -500,7 +547,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         getTotalAmount()
     }
 
-
     fun addOtherCharges(otherChargesAmount: String){
         this.otherChargesAmount = otherChargesAmount.toDouble().toInt()
         _isOtherChargesApplied.value = true
@@ -511,8 +557,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         this.otherChargesAmount = null
         getTotalAmount()
     }
-
-
 
     fun addCreditNote(creditNote: CreditNote?){
         _selectedCreditNote.value = creditNote
@@ -530,70 +574,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         getTotalAmount()
     }
 
-    fun getCreditNote() : CreditNote? {
-        return selectedCreditNote.value
-    }
-
-    fun getInvoice( onlineAmount: Double?, creditAmount: Double?, cashAmount: Double?,customGstAmount: String?,invoicePrefixNumber : String) : Invoice{
-        var createdBy = "Created By Admin"
-        val loginSession = loginRepository.getUserSessions()
-        if (loginSession != null){
-            if (loginSession.staffId != null){
-              val loginResponse = loginRepository.getSession(null, loginSession.staffId.toLong())
-                val staff = loginResponse?.staff
-                if (staff != null){
-                    createdBy = "Created By ${staff.name}"
-                }
-            }
-        }
-        val invoice = Invoice(
-            invoiceId = invoiceId.toInt(),
-            invoiceNumber = invoicePrefixNumber,
-            invoiceDate = System.currentTimeMillis().toString(),
-            invoiceTime = System.currentTimeMillis().toString(),
-            createdBy = createdBy,
-            discount = discounted,
-            totalItems = getInvoiceItem().size,
-            subtotal = getSubTotalamountDouble(),
-            cashAmount = cashAmount,
-            onlineAmount = onlineAmount,
-            creditAmount = creditAmount,
-            packageAmount = packageAmount?.toDouble(),
-            otherChargesAmount = otherChargesAmount?.toDouble(),
-            customGstAmount = customGstAmount,
-            totalAmount = getTotalAmountDouble(),
-            totalGst = gstAddedAmount?.toDouble() ?: 0.0,
-            customerId = getCustomerId(),
-            isSynced = 0,
-            creditNoteAmount = creditNoteAmount?:0,
-            creditNoteId = creditNoteId?:0,
-            status = "Active",
-            invoiceItems =  getInvoiceItem()
-        )
-        viewModelScope.launch {
-            invoiceNumber?.let {
-                settingsRepository.updateInvoiceNumber(Config.userId, it.plus(1))
-            }
-        }
-
-        return invoice
-    }
-    fun getItemsList(): List<InvoiceItem> {
-        return list
-    }
-
-    fun setItemsList(items: List<InvoiceItem>) {
-        list = items.toMutableList()
-        _items.value = list
-    }
-    fun clearItemsList() {
-        viewModelScope.launch {
-            delay(300)
-            list.clear()
-            _items.value = list
-        }
-    }
-
     fun isSavedOrderIdExist(): Long? {
         list.forEach {
             if (it.orderId != 0L){
@@ -603,28 +583,32 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         return null
     }
 
-    fun getCustomerId() : Long?{
-        val selectedCustomer = _selectedCustomer.value
-        val customerId = selectedCustomer?.id ?: 0
-        if (customerId == 0L){
-            return null
-        }
-        return customerId
-    }
-
-   public fun generateInvoiceId(): Int {
+    public fun generateInvoiceId(): Int {
         // Generate a unique invoiceId using a combination of timestamp and counter
         val timestamp = System.currentTimeMillis()
         val counter = (0 until 1000).random() // Choose a random number as the counter
         return (timestamp / 1000).toInt() * 1000 + counter
     }
 
-     fun loadCompanyDetails() : LiveData<Resource<CompanyDetails>> {
-        return  settingsRepository.loadCompanyDetails(Config.userId)
+    fun clearItemsList() {
+        viewModelScope.launch {
+            delay(300)
+            list.clear()
+            _items.value = list
+        }
+    }
+    fun clearOrder(){
+        list.clear()
+        _items.value = list
+        amountValue.value = amountBuilder.clear().toString()
+        updateDeselectCustomer()
+        removeDiscount()
+        removeGst()
+        removePackage()
+        removeOtherCharges()
+        removeCreditNote()
     }
 
-    fun loadCompanyDetailsDb() : LiveData<CompanyDetails> {
-        return  settingsRepository.loadCompanyDetailsDb(Config.userId)
-    }
+
 
 }

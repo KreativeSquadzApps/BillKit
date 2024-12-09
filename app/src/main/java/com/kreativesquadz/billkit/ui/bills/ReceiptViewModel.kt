@@ -128,7 +128,7 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     }
 
 
-    fun printUsingDefaultPrinter(data: String){
+    fun printUsingDefaultPrinter(data: ByteArray){
         printStatus.postValue("printingStart")
         viewModelScope.launch {
             try {

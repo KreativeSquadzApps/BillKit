@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.repository.UserSettingRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.OutputStream
@@ -87,7 +88,45 @@ class BluetoothService @Inject constructor(
     }
 
     // Print data using the connected device
-    suspend fun printData(data: String) = withContext(Dispatchers.IO) {
+//    suspend fun printData(receiptData: ByteArray) = withContext(Dispatchers.IO) {
+//        try {
+//            if (!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+//                throw SecurityException("Bluetooth connect permission not granted")
+//            }
+//
+//            if (connectedDevice == null) {
+//                val defaultPrinterAddress = userSettingRepository.getPrinterSetting(Config.userId)?.defaultPrinterAddress
+//                if (defaultPrinterAddress != null) {
+//                    connectToDeviceByAddress(defaultPrinterAddress)
+//                } else {
+//                    throw IllegalStateException("No default printer found")
+//                }
+//            }
+//
+//            // Print data using classic Bluetooth
+//            outputStream?.write(receiptData)
+//            outputStream?.write("\n\n\n".toByteArray())
+//
+//            // ESC/POS command to cut the paper
+//            val printerSettings = userSettingRepository.getPrinterSetting(Config.userId)
+//            if (printerSettings != null && printerSettings.autoCutAfterPrint) {
+//                val cutCommand = byteArrayOf(0x1D, 0x56, 0x42, 0x00)
+//                outputStream?.write(cutCommand)
+//            }
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        } catch (e: SecurityException) {
+//            e.printStackTrace()
+//        } catch (e: IllegalStateException) {
+//            e.printStackTrace()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            throw RuntimeException("Error printing data: ${e.message}")
+//        } finally {
+//            closeConnection() // Auto-disconnect after printing
+//        }
+//    }
+    suspend fun printData(receiptData: ByteArray) = withContext(Dispatchers.IO) {
         try {
             if (!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("Bluetooth connect permission not granted")
@@ -102,8 +141,19 @@ class BluetoothService @Inject constructor(
                 }
             }
 
-            // Print data using classic Bluetooth
-            outputStream?.write(data.toByteArray())
+            // Split and send data in chunks
+            val chunkSize = 256 // Adjust based on your printer's buffer capacity
+            var start = 0
+            while (start < receiptData.size) {
+                val end = (start + chunkSize).coerceAtMost(receiptData.size)
+                val chunk = receiptData.copyOfRange(start, end)
+                outputStream?.write(chunk)
+                outputStream?.flush()
+                delay(50) // Delay to prevent buffer overflow
+                start = end
+            }
+
+            // Add some line breaks for padding
             outputStream?.write("\n\n\n".toByteArray())
 
             // ESC/POS command to cut the paper

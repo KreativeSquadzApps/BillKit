@@ -84,6 +84,7 @@ class ReceiptFrag : Fragment() {
     private var invoicePrinterSettings = InvoicePrinterSettings()
     private var thermalPrinterSetup: ThermalPrinterSetup? = null
     private var customGstAmount: String? = null
+    private var isGstAvailable = false
 
 
 
@@ -171,8 +172,10 @@ class ReceiptFrag : Fragment() {
 
                                 if (isPrinterCompanyGst.toBoolean()){
                                     binding.isVisibleGst.visibility = View.VISIBLE
+                                    isGstAvailable = true
                                 }else{
                                     binding.isVisibleGst.visibility = View.GONE
+                                    isGstAvailable = false
                                 }
 
                                 if (!isPrinterItemTableCustomerDetails.toBoolean()){
@@ -222,18 +225,6 @@ class ReceiptFrag : Fragment() {
                 binding.isOtherChargesAvalaible = true
                 binding.tvOtherCharges.text = "Other Charges Rs "+ it.otherChargesAmount
             }
-
-            binding.tvTotalTax.text =  "Total Tax Rs " + it.totalAmount.toInt().minus(it.subtotal.toInt()).toDouble()
-                //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
-            val discountApplied = it.discount?.toInt() ?: 0
-            it.discount?.apply{
-                binding.tvTotalTax.text =  "Total Tax Rs " + it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt()).toDouble()
-               // binding.tvtotals.text = it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt()).toString()
-            }
-            it.packageAmount?.apply {
-                binding.tvTotalTax.text =  "Total Tax Rs " + it.totalAmount.toInt().plus(discountApplied).minus(it.packageAmount.toInt()).minus(it.subtotal.toInt()).toDouble()
-            }
-
             invoiceP = it
             binding.isCustomerAvailable = it?.customerId != null
             binding.customer = viewModel.getCustomerById(it?.customerId.toString())
@@ -632,7 +623,7 @@ class ReceiptFrag : Fragment() {
             .setMarginTop(5f)
         document.add(invoiceSubTotal)
 
-        val invoiceTotalTax = Paragraph(binding.tvTotalTax.text.toString())
+        val invoiceTotalTax = Paragraph(invoice.totalTax.toString())
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(15f)
             .setFontColor(ColorConstants.BLACK)
@@ -839,6 +830,7 @@ class ReceiptFrag : Fragment() {
             place = companyDetails.Place,
             contactNumber = companyDetails.ShopContactNumber,
             email = companyDetails.ShopEmail,
+            gst = companyDetails.GSTNo,
             invoiceDate = timestamp,
             invoiceId = invoice!!.invoiceNumber,
             isCustomerAvailable = isCustomer,
@@ -854,7 +846,7 @@ class ReceiptFrag : Fragment() {
             subtotal = invoice.subtotal,
             discount = discount.toDouble(),
             totalAmount = invoice.totalAmount,
-            totalTax = invoice.totalAmount - invoice.subtotal - discount,
+            totalTax = invoice.totalTax,
             cashAmount = invoice.cashAmount,
             onlineAmount = invoice.onlineAmount,
             creditAmount = invoice.creditAmount,
@@ -864,141 +856,12 @@ class ReceiptFrag : Fragment() {
 
     }
 
-
-    private fun formatItem(
-        slNo: String,
-        name: String,
-        quantity: String,
-        rate: String,
-        tax: String,
-        total: String,
-        paperWidth: Int
-    ): String {
-        val isTaxAvailable = true // Example toggle for tax availability
-        val weights = if (isTaxAvailable) {
-            listOf(0.4f, 1.0f, 0.3f, 0.5f, 0.3f, 0.5f)
-        } else {
-            listOf(0.4f, 2.0f, 0.5f, 0.5f, 1.5f)
-        }
-        val totalWeight = weights.sum()
-
-        // Calculate column widths based on paperWidth
-        val columnWidths = weights.map { weight -> ((weight / totalWeight) * paperWidth).toInt() }
-
-        // Helper function to split a value into lines if it exceeds its column width
-        fun splitToLines(value: String, columnWidth: Int): List<String> {
-            return value.chunked(columnWidth)
-        }
-
-        // Generate rows for each line of content
-        val rows = mutableListOf<List<String>>()
-        val content = listOf(slNo, name, quantity, rate, tax, total)
-        val splitContent = content.mapIndexed { index, value ->
-            splitToLines(value, columnWidths[index])
-        }
-
-        // Calculate the maximum number of lines needed for this row
-        val maxLines = splitContent.maxOf { it.size }
-
-        // Generate the rows by combining lines from each column
-        for (i in 0 until maxLines) {
-            val row = splitContent.map { it.getOrElse(i) { "" } } // Safe access to get lines or an empty string if missing
-            rows.add(row)
-        }
-
-        // Format rows into a string
-        return buildString {
-            rows.forEach { row ->
-                row.forEachIndexed { index, value ->
-                    val padding = if (index == row.size - 1) "" else " "
-                    append(value.padEnd(columnWidths[index])).append(padding)
-                }
-                //append("\n")
-            }
-        }
-    }
-
-    private fun formatSingleString(
-        value: String,
-        paperWidth: Int
-    ): String {
-        // Calculate the space on the left and right to center-align the string
-        val padding = (paperWidth - value.length) / 2
-
-        // Return the value with the calculated padding for center alignment
-        return buildString {
-            append(" ".repeat(padding))      // Add leading spaces for centering
-            append(value)                    // Append the value
-            append(" ".repeat(padding)) // Add trailing spaces for centering
-            append("\n")
-
-        }.take(paperWidth) // Ensure the final string length is exactly `paperWidth`
-    }
-
-    private fun formatSingleStringRight(
-        value: String,
-        paperWidth: Int
-    ): String {
-        // Calculate the space to the left to right-align the string
-        val padding = paperWidth - value.length
-
-        // Return the value with the calculated padding for right alignment
-        return buildString {
-            append(" ".repeat(padding))  // Add spaces on the left to right-align the value
-            append(value)
-            append("\n")
-        // Append the value
-        }
-    }
-
-    private fun formatTwoStrings(
-        firstValue: String,
-        secondValue: String,
-        paperWidth: Int
-    ): String {
-        // Calculate the available width between the two strings
-        val totalWidth = paperWidth
-        val spacing = totalWidth - (firstValue.length + secondValue.length)
-
-        // Ensure that spacing is non-negative, handle overflow if needed
-        return if (spacing >= 0) {
-            "$firstValue${" ".repeat(spacing)}$secondValue"  // Align with proper spacing
-        } else {
-            // Truncate values to fit within the available width if too long
-            val maxFirstLength = firstValue.length + spacing / 2
-            val maxSecondLength = secondValue.length + spacing / 2
-
-            val truncatedFirst = if (maxFirstLength > 0) firstValue.take(maxFirstLength) else ""
-            val truncatedSecond = if (maxSecondLength > 0) secondValue.take(maxSecondLength) else ""
-
-            "$truncatedFirst${" ".repeat(totalWidth - (truncatedFirst.length + truncatedSecond.length))}$truncatedSecond"
-        }
-    }
-
-
-
-    private fun formatTax(paperWidth: Int, taxType: String, taxableAmount: String, rate: String, taxAmount: String): String {
-        val weights = listOf(0.25f, 0.25f, 0.25f, 0.25f)  // Equal weights for the four items
-        val totalWeight = weights.sum()
-
-        // Calculate column widths based on paperWidth
-        val columnWidths = weights.map { weight -> ((weight / totalWeight) * paperWidth).toInt() }
-
-        // Format each column with its calculated width
-        return buildString {
-            append(taxType.padEnd(columnWidths[0]))     // Pad tax type
-            append(taxableAmount.padEnd(columnWidths[1]))  // Pad taxable amount
-            append(rate.padStart(columnWidths[2]))       // Pad rate
-            append(taxAmount.padStart(columnWidths[3]))   // Pad tax amount
-        }
-    }
-
-
     private fun createReceiptString(
         businessName: String,
         place: String,
         contactNumber: String,
         email: String,
+        gst: String?,
         invoiceDate: String,
         invoiceId: String,
         isCustomerAvailable: Boolean,
@@ -1014,216 +877,312 @@ class ReceiptFrag : Fragment() {
         subtotal: Double,
         discount: Double?,
         totalAmount: Double,
-        totalTax: Double,
+        totalTax: Double?,
         cashAmount: Double?,
         onlineAmount: Double?,
         creditAmount: Double?,
         footer: String,
-    ): String {
-        val receipt = StringBuilder()
+    ): ByteArray {
+        val receipt = ByteArrayOutputStream()
+
+        // ESC/POS commands for bold text
+        val boldOn = byteArrayOf(0x1B, 0x45, 0x01) // ESC E 1
+        val boldOff = byteArrayOf(0x1B, 0x45, 0x00) // ESC E 0
+
+        // Define paper width for formatting
         var separatorLine = ""
         var paperWidth = "45" // Default to 58MM, adjust as needed
 
         thermalPrinterSetup?.let {
-            //paperWidth = it.printerSize.replace("MM", "")
-            Log.e("Paper Width", paperWidth)
-            separatorLine = generateSeparatorLine(paperWidth)
+            paperWidth = it.printerSize.replace("MM", "")
+        }
+        val charactersPerLine: Int = when (paperWidth.toInt()) {
+            58 -> 32 // 58MM typically fits 32 characters
+            80 -> 48 // 80MM typically fits 48 characters
+            else -> 32 // Default to 32 if unknown
+        }
+        separatorLine = generateSeparatorLine(charactersPerLine)
+
+        setFontSize(receipt, 2)
+        receipt.write(boldOn)
+        receipt.write(formatSingleString(businessName, charactersPerLine,fontSizeMultiplier = 2).toByteArray())
+        receipt.write("\n\n".toByteArray())
+        receipt.write(boldOff)
+        setFontSize(receipt, 1)
+
+        receipt.write(formatSingleString(" "+place, charactersPerLine).toByteArray())
+        receipt.write("\n".toByteArray())
+        receipt.write(formatSingleString(contactNumber, charactersPerLine).toByteArray())
+        receipt.write("\n".toByteArray())
+        receipt.write(formatSingleString("Email: $email", charactersPerLine).toByteArray())
+        if (isGstAvailable){
+            gst?.let {
+                receipt.write("\n".toByteArray())
+                receipt.write(formatSingleString("GST : $gst", charactersPerLine).toByteArray())
+            }
         }
 
-        // Company Details Header
+        receipt.write("\n\n".toByteArray())
 
-        receipt.append(formatSingleString(businessName, paperWidth.toInt()))
-        receipt.append(formatSingleString("  "+place, paperWidth.toInt())).append("\n")
-        receipt.append(formatSingleString(contactNumber, paperWidth.toInt())).append("\n")
-        receipt.append(formatSingleString("Email: $email", paperWidth.toInt()))
-        receipt.append(formatSingleString("INVOICE", paperWidth.toInt())).append("\n")
+        // Add Invoice Header
+        setFontSize(receipt, 2)
+        receipt.write(boldOn)
+        receipt.write(formatSingleString("INVOICE", charactersPerLine, fontSizeMultiplier = 2).toByteArray())
+        receipt.write("\n\n".toByteArray())
+        receipt.write(boldOff)
+        setFontSize(receipt, 1)
 
-        // Invoice Header
-        receipt.append(formatTwoStrings(invoiceDate, "Invoice: $invoiceId", paperWidth.toInt()))
-        receipt.append(generateSeparatorLine(paperWidth))
+        receipt.write(
+            formatLineWithAlignment(invoiceDate, "Invoice: $invoiceId", charactersPerLine).toByteArray()
+        )
+        receipt.write("\n".toByteArray())
+        receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
 
-
-        // Customer Details
+        // Add Customer Details if available
         if (isCustomerAvailable) {
             customerName?.let {
-                if (customerName != ""){
-                    receipt.append(formatSingleString(customerName ?: "", paperWidth.toInt())).append("\n")
+                if (it.isNotEmpty()) {
+                    receipt.write(formatSingleString(it, charactersPerLine).toByteArray())
+                    receipt.write("\n".toByteArray())
                 }
             }
             customerNumber?.let {
-                if (customerNumber != ""){
-                    receipt.append(formatSingleString("Contact: ${customerNumber ?: ""}", paperWidth.toInt())).append("\n")
+                if (it.isNotEmpty()) {
+                    receipt.write(formatSingleString("Contact: $it", charactersPerLine).toByteArray())
+                    receipt.write("\n".toByteArray())
                 }
             }
             customerGst?.let {
-                if (customerGst != ""){
-                    receipt.append(formatSingleString("GST No: ${customerGst ?: ""}", paperWidth.toInt())).append("\n")
+                if (it.isNotEmpty()) {
+                    receipt.write(formatSingleString("GST No: $it", charactersPerLine).toByteArray())
+                    receipt.write("\n".toByteArray())
                 }
             }
             customerAddress?.let {
-                if (customerAddress != ""){
-                    receipt.append(formatSingleString(customerAddress ?: "", paperWidth.toInt())).append("\n")
+                if (it.isNotEmpty()) {
+                    receipt.write(formatSingleString(it, charactersPerLine).toByteArray())
+                    receipt.write("\n".toByteArray())
                 }
             }
-
-            receipt.append( separatorLine)
+            receipt.write(separatorLine.toByteArray())
         }
 
-            receipt.append(formatItem("SL No.", "Item", "Qty", "Rate","Tax", "Total",paperWidth.replace("MM","").toInt()))
-        // Items Header
+        if (isTaxAvailable){
+            receipt.write(
+                formatLineWithMultipleAlignment(
+                    listOf(
+                        "SL No." to 10,
+                        "Item" to 30,
+                        "Qty" to 12,
+                        "Rate" to 16,
+                        "Tax" to 16,
+                        "Total" to 16
+                    ),
+                    charactersPerLine
+                ).toByteArray()
+            )
+        }else{
+            receipt.write(
+                formatLineWithMultipleAlignment(
+                    listOf(
+                        "SL No." to 10,
+                        "Item" to 30,
+                        "Qty" to 18,
+                        "Rate" to 21,
+                        "Total" to 21
+                    ),
+                    charactersPerLine
+                ).toByteArray()
+            )
+        }
 
-       receipt.append(generateSeparatorLine(paperWidth))
+        receipt.write("\n".toByteArray())
+        receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
 
-        // Items
+        // Add Items
         var slNo = 0
         for (item in items) {
             slNo++
-            receipt.append(
-                formatItem(
-                    slNo.toString(),
-                    item.itemName.split("(")[0], // Extract name before parentheses
-                    item.quantity.toString(),
-                    item.unitPrice.toString(),
-                    item.taxRate.toString(),
-                    item.totalPrice.toString(),
-                    paperWidth.replace("MM","").toInt()
+
+            if (isTaxAvailable){
+                receipt.write(
+                    formatLineWithMultipleAlignment(
+                        listOf(
+                            slNo.toString() to 10,
+                            item.itemName.split("(")[0] to 34,
+                            item.quantity.toString() to 11,
+                            item.unitPrice.toString() to 15,
+                            item.taxRate.toString() to 15,
+                            item.totalPrice.toString() to 15
+                        ),
+                        charactersPerLine
+                    ).toByteArray()
                 )
-            ).append("\n")
-        }
-        receipt.append(generateSeparatorLine(paperWidth))
+            }else{
+                receipt.write(
+                    formatLineWithMultipleAlignment(
+                        listOf(
+                            slNo.toString() to 10,
+                            item.itemName.split("(")[0] to 34,
+                            item.quantity.toString() to 18,
+                            item.unitPrice.toString() to 21,
+                            item.totalPrice.toString() to 20
+                        ),
+                        charactersPerLine
+                    ).toByteArray()
+                )
+            }
 
-        // Totals
-        receipt.append(formatTwoStrings("Items: "+totalItems, "Sub Total: "+ subtotal, paperWidth.toInt()))
 
-        if (discount != null && discount > 0) {
-            receipt.append(formatSingleStringRight("Discount: "+ discount, paperWidth.toInt()))
-            receipt.append(formatSingleString("You saved Rs "+ discount, paperWidth.toInt()))
+            receipt.write("\n".toByteArray())
         }
-        if (isTaxAvailable){
-            receipt.append(formatSingleStringRight("Total Tax:"+ totalTax, paperWidth.toInt()))
+        receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
+
+        // Add Totals
+        receipt.write(formatLineWithAlignment("Items: $totalItems", "Sub Total: RS $subtotal", charactersPerLine).toByteArray())
+        receipt.write("\n".toByteArray())
+
+        if (totalTax != null && totalTax > 0) {
+            receipt.write(formatSingleStringRight("Total Tax : RS $totalTax", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
         }
-        receipt.append(generateSeparatorLine(paperWidth))
-//
+
         packageAmount?.let {
-            receipt.append(formatSingleStringRight("Package Amount: "+ packageAmount, paperWidth.toInt()))
+            receipt.write(formatSingleStringRight("Package Amount: RS $it", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
         }
         otherChargesAmount?.let {
-            receipt.append(formatSingleStringRight("Other Charges: "+ otherChargesAmount, paperWidth.toInt()))
+            receipt.write(formatSingleStringRight("Other Charges: RS $it", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
         }
-///
-        receipt.append(formatSingleString("Total: $totalAmount", paperWidth.toInt()))
 
-//
+        if (discount != null && discount > 0) {
+            receipt.write(formatSingleStringRight("Discount: RS $discount", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
+        }
+        receipt.write(boldOn)
+        setFontSize(receipt, 2)
+        receipt.write("\n".toByteArray())
+        receipt.write(formatSingleString("Total: RS $totalAmount", charactersPerLine,fontSizeMultiplier = 2).toByteArray())
+        setFontSize(receipt, 1)
+        receipt.write(boldOff)
+        receipt.write("\n".toByteArray())
+        if (discount != null && discount > 0) {
+            receipt.write(formatSingleString("You saved Rs $discount", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
+        }
+
         if (isTaxAvailable){
-            receipt.append(generateSeparatorLine(paperWidth))
-            receipt.append(formatTax(paperWidth.toInt(),"TaxType","Taxable Amount","Rate","Tax Amount"))
-            receipt.append(generateSeparatorLine(paperWidth))
-            invoiceTax.forEach {
-                receipt.append(formatTax(paperWidth.toInt(),it.taxType,it.taxableAmount.toString(),it.rate.toString(),it.taxAmount.toString())).append("\n")
+            receipt.write("\n\n".toByteArray())
+            receipt.write(formatSingleString("Tax Details", charactersPerLine).toByteArray())
+            receipt.write("\n\n".toByteArray())
+            receipt.write(
+                formatLineWithMultipleAlignment(
+                    listOf(
+                        "TaxType" to 20,
+                        "Amount" to 30,
+                        "Rate" to 20,
+                        "Tax Amount" to 30,
+                    ),
+                    charactersPerLine
+                ).toByteArray()
+            )
+            receipt.write("\n".toByteArray())
+            receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
+            for (invoiceTaxItem in invoiceTax) {
+                receipt.write(
+                    formatLineWithMultipleAlignment(
+                        listOf(
+                            invoiceTaxItem.taxType to 20,
+                            invoiceTaxItem.taxableAmount.toString() to 30,
+                            invoiceTaxItem.rate.toString() to 20,
+                            invoiceTaxItem.taxAmount.toString() to 30
+                        ),
+                        charactersPerLine
+                    ).toByteArray()
+                )
+                receipt.write("\n".toByteArray())
             }
         }
-        receipt.append(generateSeparatorLine(paperWidth))
-        receipt.append(formatSingleString("Payment Mode", paperWidth.toInt())).append("\n")
+
+        receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
+        receipt.write(formatSingleString("Payment Mode", charactersPerLine).toByteArray())
+        receipt.write("\n".toByteArray())
 
         if (cashAmount != null && cashAmount > 0) {
-            receipt.append(formatSingleString("Cash: "+ cashAmount, paperWidth.toInt())).append("\n")
-
+            receipt.write(formatSingleString("Cash : RS $cashAmount", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
         }
         if (onlineAmount != null && onlineAmount > 0) {
-            receipt.append(formatSingleString("Online: "+ onlineAmount, paperWidth.toInt())).append("\n")
+            receipt.write(formatSingleString("Online : RS $onlineAmount", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
         }
+
         if (creditAmount != null && creditAmount > 0) {
-            receipt.append(formatSingleString("Credit: "+ creditAmount, paperWidth.toInt())).append("\n")
+            receipt.write(formatSingleString("Credit : RS $creditAmount", charactersPerLine).toByteArray())
+            receipt.write("\n".toByteArray())
         }
-        receipt.append(generateSeparatorLine(paperWidth))
-        receipt.append(formatSingleString(footer, paperWidth.toInt())).append("\n")
-        receipt.append(formatSingleString("Powered by billkit", paperWidth.toInt())).append("\n")
-        return receipt.toString()
-    }
+        receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
+        receipt.write(formatSingleString(footer, charactersPerLine).toByteArray())
+        receipt.write("\n\n".toByteArray())
 
-    fun createReceipt(businessName: String,
-                      place: String,
-                      contactNumber: String,
-                      email: String,
-                      invoiceDate: String,
-                      invoiceId: String,
-                      isCustomerAvailable: Boolean,
-                      customerName: String?,
-                      customerNumber: String?,
-                      customerGst: String?,
-                      packageAmount: Double?,
-                      customGstAmount: String?,
-                      customerAddress: String?,
-                      items: List<InvoiceItem>,
-                      totalItems: Int,
-                      subtotal: Double,
-                      discount: Double?,
-                      totalAmount: Double,
-                      totalTax: Double,
-                      cashAmount: Double?,
-                      onlineAmount: Double?,
-                      creditAmount: Double?,
-                      footer: String) : String  {
-        val slWidth = 4
-        val receiptText = """
-    [C]<b>$businessName</b>
-    [C]$place
-    [C]Contact: $contactNumber
-    [C]Email: $email
-
-    []Date: $invoiceDate[R]Invoice: $invoiceId
-    ----------------------------------------------
-
-    ${if (isCustomerAvailable) """
-        [L]Customer: $customerName
-        [L]Contact: $customerNumber
-        [L]GST: $customerGst
-        ----------------------------------------------
-    """ else ""}
-    
-    [L]SL  Item       Qty  Rate  Tax   Total
-    ----------------------------------------------
-    ${
-        items.mapIndexed { index, item ->
-                val slNumber = "${index + 1}".padStart((slWidth + 1) / 2).padEnd(slWidth)
-                "[C]${slNumber} ${item.itemName.take(8)} [R] ${item.quantity}  ${item.unitPrice} ${item.taxRate} ${item.totalPrice}"
-            }.joinToString("\n")
-        }
-    ----------------------------------------------
-    [L]Total Items: $totalItems [R] Subtotal: $subtotal
-
-    ${
-            if (isTaxAvailable) """
-            [R]Total Tax: $totalTax
-            ----------------------------------------------
-            [C]<b>Tax Summary</b>
-            [L]Tax Type[R]Taxable Amount[R]Rate[R]Tax Amount
-            ${
-                invoiceTax.joinToString("\n") {
-                    "[L]${it.taxType}[R]${it.taxableAmount}[R]${it.rate}%[R]${it.taxAmount}"
-                }
-            }
-            ----------------------------------------------
-        """ else ""
-        }
-    
-    [C]Payment Mode
-    ${if (cashAmount != null && cashAmount > 0) "[L]Cash: $cashAmount" else ""}
-    ${if (onlineAmount != null && onlineAmount > 0) "[L]Online: $onlineAmount" else ""}
-    ${if (creditAmount != null && creditAmount > 0) "[L]Credit: $creditAmount" else ""}
-
-    ----------------------------------------------
-    [C]$footer
-    [C]Powered by BillKit
-""".trimIndent()
-
-        return receiptText
+        receipt.write(boldOn)
+        receipt.write(formatSingleString("Powered by billkit", charactersPerLine).toByteArray())
+        receipt.write(boldOff)
+        return receipt.toByteArray()
     }
 
 
-    private fun generateSeparatorLine(paperWidth: String): String {
-        return "-".repeat(paperWidth.toInt()) + "\n"
+    fun setFontSize(receipt: ByteArrayOutputStream, size: Int) {
+        val command = when (size) {
+            1 -> byteArrayOf(0x1D, 0x21, 0x00) // Normal size
+            2 -> byteArrayOf(0x1D, 0x21, 0x11) // Double width and height
+            3 -> byteArrayOf(0x1D, 0x21, 0x22) // Triple width and height
+            else -> byteArrayOf(0x1D, 0x21, 0x00) // Default to normal
+        }
+        receipt.write(command)
     }
+
+    fun formatLineWithAlignment(left: String, right: String, paperWidth: Int): String {
+        val totalColumns = paperWidth
+        val leftWeight = totalColumns / 2
+        val rightWeight = totalColumns - leftWeight
+
+        val leftFormatted = left.padEnd(leftWeight).take(leftWeight)
+        val rightFormatted = right.padStart(rightWeight).take(rightWeight)
+
+        return leftFormatted + rightFormatted
+    }
+
+    fun formatLineWithMultipleAlignment(values: List<Pair<String, Int>>, paperWidth: Int): String {
+        val totalColumns = paperWidth
+        val formattedLine = StringBuilder()
+
+        for ((text, weight) in values) {
+            val allocatedWidth = (totalColumns * weight) / 100
+            formattedLine.append(text.padStart((allocatedWidth + text.length) / 2).padEnd(allocatedWidth))
+        }
+
+        return formattedLine.toString()
+    }
+
+    fun generateSeparatorLine(paperWidth: Int): String {
+        return "-".repeat(paperWidth) + "\n"
+    }
+
+    fun formatSingleString(text: String, paperWidth: Int, fontSizeMultiplier: Int = 1): String {
+        // Adjust paperWidth based on font size multiplier
+        val adjustedWidth = paperWidth / fontSizeMultiplier
+
+        // Center-align the text within the adjusted width
+        return text.padStart((adjustedWidth + text.length) / 2).padEnd(adjustedWidth)
+    }
+
+    fun formatSingleStringRight(text: String, paperWidth: Int): String {
+        return text.padStart(paperWidth)
+    }
+
+
 
 
 

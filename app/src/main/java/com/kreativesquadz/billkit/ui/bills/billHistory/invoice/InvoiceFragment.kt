@@ -59,28 +59,19 @@ class InvoiceFragment : Fragment() {
 
     fun observers(){
           viewModel.invoice.observe(viewLifecycleOwner) {
-              Log.e("invoicepppp",it.toString())
               binding.invoice = it
               binding.isCustomerAvailable = it?.customerId != null
               binding.customer = viewModel.getCustomerById(it.customerId.toString())
-              binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().minus(it.subtotal.toInt())
-              //   binding.tvtotals.text = it.totalAmount.toInt().minus(it.subtotal.toInt()).toString()
-              it.discount?.apply{
-                  binding.tvTotalTax.text =  "Total Tax : " + it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt())
-                  // binding.tvtotals.text = it.totalAmount.toInt().plus(it.discount.toInt()).minus(it.subtotal.toInt()).toString()
-
-              }
           }
-          viewModel.invoiceItems.observe(viewLifecycleOwner){
+
+        viewModel.invoiceItems.observe(viewLifecycleOwner){
               it?.forEach {
                   if(it.taxRate > 0){
                       isTaxAvailable = true
                   }
               }
-
               binding.istTaxAvalaible = isTaxAvailable
               setupRecyclerView(it)
-              Log.e("invoiceItemsoooooo", it.toString())
           }
       }
 

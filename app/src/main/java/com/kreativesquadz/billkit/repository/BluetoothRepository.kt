@@ -22,7 +22,7 @@ class BluetoothRepository @Inject constructor(private val bluetoothService: Blue
     }
 
     // Print data
-    suspend fun printData(data: String) {
+    suspend fun printData(data: ByteArray) {
         bluetoothService.printData(data)
     }
 

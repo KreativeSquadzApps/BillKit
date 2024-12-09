@@ -333,7 +333,7 @@
                                 android:layout_marginStart="10dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
-                                android:text='@{"Cash : "+invoice.cashAmount}'
+                                android:text='@{"Cash : RS "+invoice.cashAmount}'
                                 tools:text="Cash : 1020.00 "/>
                             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                 android:id="@+id/tvOnline"
@@ -346,7 +346,7 @@
                                 android:layout_marginStart="10dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/tvCash"
-                                android:text='@{"Online : "+invoice.onlineAmount}'
+                                android:text='@{"Online : RS "+invoice.onlineAmount}'
                                 tools:text="Online : 1020.00 "/>
                             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                 android:id="@+id/tvCredit"
@@ -359,7 +359,7 @@
                                 android:layout_marginStart="10dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/tvOnline"
-                                android:text='@{"Credit : "+invoice.creditAmount}'
+                                android:text='@{"Credit : RS "+invoice.creditAmount}'
                                 tools:text="Credit : 1020.00 "/>
                             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                 android:id="@+id/tvSubTotal"
@@ -372,7 +372,7 @@
                                 android:layout_marginStart="10dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                android:text='@{"Sub Total : "+ invoice.subtotal}'
+                                android:text='@{"Sub Total : RS "+ invoice.subtotal}'
                                 tools:text="Sub Total : 1020"/>
                             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
                                 android:id="@+id/tvDiscount"
@@ -386,7 +386,7 @@
                                 app:hideOnZero="@{invoice.discount}"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvSubTotal"
-                                android:text='@{"Discount : "+ invoice.discount}'
+                                android:text='@{"Discount : RS "+ invoice.discount}'
                                 tools:text="Discount : 1020"/>
                             <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="wrap_content"
@@ -394,7 +394,8 @@
                                 android:id="@+id/tvTotalTax"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvDiscount"
-                                android:visibility="@{istTaxAvalaible ? View.VISIBLE : View.GONE}"
+                                app:isZeroOrNullDouble="@{invoice.totalTax}"
+                                android:text='@{"Total Tax :  Rs "+invoice.totalTax}'
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:gravity="end"
@@ -414,7 +415,7 @@
                                 android:layout_marginStart="10dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/tvTotalTax"
-                                android:text='@{"Packaging : "+invoice.packageAmount}'
+                                android:text='@{"Packaging : RS "+invoice.packageAmount}'
                                 tools:text="Packaging : 1020.00 "/>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -451,7 +452,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/viewfooter"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    android:text='@{"Total Amount  :  "+invoice.totalAmount}'
+                                    android:text='@{"Total Amount  :  RS "+invoice.totalAmount}'
                                     tools:text="Total Amount  :  1020"/>
 
 
