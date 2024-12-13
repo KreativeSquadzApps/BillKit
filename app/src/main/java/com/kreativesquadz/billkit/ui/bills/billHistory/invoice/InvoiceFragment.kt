@@ -69,12 +69,16 @@ class InvoiceFragment : Fragment() {
           }
 
         viewModel.invoiceItems.observe(viewLifecycleOwner){
-              it?.forEach {
+            var totalQty = 0.0
+            it?.forEach {
                   if(it.taxRate > 0){
                       isTaxAvailable = true
                   }
+                totalQty += it.quantity
               }
-              binding.istTaxAvalaible = isTaxAvailable
+
+            binding.tvTotalQty.setText("Total Qty : "+totalQty.toInt().toString())
+            binding.istTaxAvalaible = isTaxAvailable
               setupRecyclerView(it)
           }
       }
