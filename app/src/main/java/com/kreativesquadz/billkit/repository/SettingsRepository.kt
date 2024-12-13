@@ -8,10 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.api.ApiClient
 import com.kreativesquadz.billkit.api.ApiResponse
+import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.InvoicePrefixNumber
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -52,7 +55,10 @@ class SettingsRepository @Inject constructor(val db : AppDatabase) {
             }
         }.asLiveData()
     }
-
+    fun loadCompanyDetailsDb(userId : Long) : LiveData<CompanyDetails> = companyDao.getCompanyDetails(userId)
+    fun getCompanyDetails(userId: Long): CompanyDetails? {
+        return companyDao.getCompanyDetailsById(userId)
+    }
     suspend fun updateCompanyDetails(companyDetails: CompanyDetails?): LiveData<Boolean> {
         val statusLiveData = MutableLiveData<Boolean>()
         try {
@@ -76,38 +82,38 @@ class SettingsRepository @Inject constructor(val db : AppDatabase) {
     suspend fun update(companyDetails: CompanyDetails){
         companyDao.update(companyDetails)
     }
+    suspend fun uploadCompanyImage(userId: RequestBody, image: MultipartBody.Part?): Result<ApiStatus> {
+        return try {
+            val response = ApiClient.getApiService().updateCompanyImage(userId, image)
+            if (response.isSuccessful) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Failed to upload image: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
+
+    fun insertInvoicePrefixNumber(invoicePrefixNumber: InvoicePrefixNumber): Long{
+        val result = companyDao.insertInvoicePrefixNumber(invoicePrefixNumber)
+        companyDao.updateInvoiceNumberAndPrefix(invoicePrefixNumber.userId,invoicePrefixNumber.invoicePrefix,invoicePrefixNumber.invoiceNumber.toInt())
+        return result
+    }
     suspend fun updateInvoiceNumber(userId: Long, invoiceNumber: Int){
         companyDao.updateInvoiceNumber(userId, invoiceNumber)
     }
-
-     fun updateInvoiceNumberAndPrefix(userId: Long,id: Long, invoicePrefix: String , invoiceNumber: Int){
+    fun updateInvoiceNumberAndPrefix(userId: Long,id: Long, invoicePrefix: String , invoiceNumber: Int){
         companyDao.updateInvoiceNumberAndPrefix(userId, invoicePrefix,invoiceNumber)
         companyDao.updateInvoiceNumberAndPrefixTable(id,invoicePrefix,invoiceNumber)
     }
-
-
-
-
-    fun loadCompanyDetailsDb(userId : Long) : LiveData<CompanyDetails> = companyDao.getCompanyDetails(userId)
-
-
-    fun getCompanyDetails(userId: Long): CompanyDetails? {
-        return companyDao.getCompanyDetailsById(userId)
-    }
-    fun insertInvoicePrefixNumber(invoicePrefixNumber: InvoicePrefixNumber): Long{
-       val result = companyDao.insertInvoicePrefixNumber(invoicePrefixNumber)
-        companyDao.updateInvoiceNumberAndPrefix(invoicePrefixNumber.userId,invoicePrefixNumber.invoicePrefix,invoicePrefixNumber.invoiceNumber.toInt())
-        return result
-   }
-
-   suspend fun deleteInvoicePrefixNumber(id: Long){
+    suspend fun deleteInvoicePrefixNumber(id: Long){
        val response = ApiClient.getApiService().deleteInvoicePrefixNumber(id)
        if (response.isSuccessful){
            companyDao.deleteInvoicePrefixNumber(id)
        }
     }
-
     fun loadInvoicePrefixNumberList(userId : Long): LiveData<Resource<List<InvoicePrefixNumber>>> {
         return object : NetworkBoundResource<List<InvoicePrefixNumber>, List<InvoicePrefixNumber>>() {
             override fun saveCallResult(item: List<InvoicePrefixNumber>) {
@@ -137,13 +143,9 @@ class SettingsRepository @Inject constructor(val db : AppDatabase) {
             }
         }.asLiveData()
     }
-
-
     fun getInvoicePrefixNumber(id: Long): InvoicePrefixNumber {
        return companyDao.getInvoicePrefixNumber(id)
     }
-
-
     fun getInvoicePrefixNumberWithPrefix(invoicePrefix: String): InvoicePrefixNumber {
        return companyDao.getInvoicePrefixNumberWithPrefix(invoicePrefix)
     }

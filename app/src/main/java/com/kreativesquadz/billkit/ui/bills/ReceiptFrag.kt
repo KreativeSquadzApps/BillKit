@@ -4,13 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity.CENTER
+import android.view.Gravity.RIGHT
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +27,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dantsu.escposprinter.EscPosPrinter
 import com.itextpdf.io.font.constants.StandardFonts
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.io.source.ByteArrayOutputStream
@@ -41,8 +48,8 @@ import com.itextpdf.layout.property.UnitValue
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
-import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.AdapterReceipt
+import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.databinding.FragmentReceiptBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.CompanyDetails
@@ -53,6 +60,7 @@ import com.kreativesquadz.billkit.model.InvoiceTax
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
+import com.kreativesquadz.billkit.utils.Glide.GlideHelper
 import com.kreativesquadz.billkit.utils.addBackPressHandler
 import com.kreativesquadz.billkit.utils.toBoolean
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,6 +69,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 @AndroidEntryPoint
 class ReceiptFrag : Fragment() {
@@ -85,12 +94,18 @@ class ReceiptFrag : Fragment() {
     private var thermalPrinterSetup: ThermalPrinterSetup? = null
     private var customGstAmount: String? = null
     private var isGstAvailable = false
-
-
+   // private val PRINTER_WIDTH: Int = 384
+    private val PRINTER_WIDTH: Int = 576
+    private val INITIAL_MARGIN_LEFT: Int = -5
+    private val BIT_WIDTH: Int = 384
+    private val WIDTH: Int = 48
+    private val HEAD: Int = 8
+    val FULL_WIDTH: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.fetchAllDetails(invoiceId!!)
+        GlideHelper.initializeGlideWithOkHttp(requireContext())
     }
     override fun onResume() {
         super.onResume()
@@ -106,9 +121,6 @@ class ReceiptFrag : Fragment() {
         onClickListeners()
         addBackPressHandler(viewLifecycleOwner, ::shouldAllowBack)
         binding.isPrintLoading  = false
-        binding.istPackagingAvalaible = false
-        binding.isOtherChargesAvalaible = false
-
         return binding.root
     }
 
@@ -155,7 +167,9 @@ class ReceiptFrag : Fragment() {
                                 val isPrinterItemTableQty = printerItemTableValues.getOrNull(3)?.toIntOrNull() ?: 0
 
                                 if (isPrinterCompanyLogo.toBoolean()){
-
+                                    binding.imageView.visibility = View.VISIBLE
+                                } else{
+                                    binding.imageView.visibility = View.GONE
                                 }
 
                                 if (isPrinterCompanyEmail.toBoolean()){
@@ -212,20 +226,12 @@ class ReceiptFrag : Fragment() {
             if (it.customGstAmount != null){
                 isTaxAvailable = true
                 customGstAmount = it.customGstAmount
-            }
-            if (it.packageAmount == null || it.packageAmount <= 0){
-                binding.istPackagingAvalaible = false
-            }else{
-                binding.istPackagingAvalaible = true
-                binding.tvPackaging.text = "Packaging Rs "+ it.packageAmount
-            }
-            if (it.otherChargesAmount == null || it.otherChargesAmount <= 0){
-                binding.isOtherChargesAvalaible = false
-            }else{
-                binding.isOtherChargesAvalaible = true
-                binding.tvOtherCharges.text = "Other Charges Rs "+ it.otherChargesAmount
+                val firstValue = it.customGstAmount.split("|").first()
+                binding.tvCustomGst.text = "Custom Gst : Rs "+firstValue.toDouble()
+
             }
             invoiceP = it
+            binding.tvDiscount.text = "Discount : Rs "+it.discount?.toDouble()
             binding.isCustomerAvailable = it?.customerId != null
             binding.customer = viewModel.getCustomerById(it?.customerId.toString())
             customerP = viewModel.getCustomerById(it?.customerId.toString())
@@ -235,10 +241,12 @@ class ReceiptFrag : Fragment() {
         viewModel.companyDetails.observe(viewLifecycleOwner){
             it?.let {
                 binding.companyDetails = it
+                GlideHelper.loadImage(requireContext(), it.BusinessImage, binding.imageView)
             }
         }
 
         viewModel.invoiceItems.observe(viewLifecycleOwner){
+            var totalQty = 0.0
             it?.forEach {
                 if(it.taxRate > 0){
                     isTaxAvailable = true
@@ -247,11 +255,12 @@ class ReceiptFrag : Fragment() {
                 if(it.productMrp != it.unitPrice){
                     isMrpAvailable = true
                 }
+                totalQty += it.quantity
             }
+            binding.tvTotalQty.setText("Total Qty : "+totalQty.toInt().toString())
             binding.istTaxAvalaible = isTaxAvailable
             binding.istMrpAvalaible = isMrpAvailable
             setupRecyclerView(it)
-            Log.e("TAG", "observersRecipt: $it")
         }
 
 
@@ -313,7 +322,6 @@ class ReceiptFrag : Fragment() {
 
     }
 
-
     private fun setupRecyclerView(receiptInvoiceItem: List<InvoiceItem>?) {
         var isTaxAvailable = false
         var isMrpAvailable = false
@@ -357,10 +365,10 @@ class ReceiptFrag : Fragment() {
                     }
 
                 }
-
+                setupRecyclerViewGst(invoiceTax)
             }
         }
-        setupRecyclerViewGst(invoiceTax)
+
 
 
         adapter = AdapterReceipt(
@@ -384,7 +392,6 @@ class ReceiptFrag : Fragment() {
 
     }
 
-
     private fun setupRecyclerViewGst(gst: List<InvoiceTax>?) {
         invoiceTax = gst?.toMutableList() ?: mutableListOf()
         adapterGst = GenericAdapter(
@@ -401,12 +408,10 @@ class ReceiptFrag : Fragment() {
         binding.gstRecyclerview.layoutManager = LinearLayoutManager(context)
     }
 
-
     private fun shouldAllowBack(): Boolean {
         // Your logic to allow or restrict back action
         return false // Change this according to your logic
     }
-
 
     private fun generateReceiptPdf(context: Context, pdfSettings: PdfSettings, items: List<InvoiceItem>, companyDetails: CompanyDetails, invoice: Invoice, customer : Customer?) {
         val pdfCompanyInfoValues = pdfSettings.pdfCompanyInfo.split(" ")
@@ -852,8 +857,7 @@ class ReceiptFrag : Fragment() {
             creditAmount = invoice.creditAmount,
             footer = pdfSettings.pdfFooter
         )
-        viewModel.printUsingDefaultPrinter(receipt)
-
+        printByteArray(receipt)
     }
 
     private fun createReceiptString(
@@ -966,8 +970,11 @@ class ReceiptFrag : Fragment() {
             }
             receipt.write(separatorLine.toByteArray())
         }
-
-        if (isTaxAvailable){
+        var isProductTaxAvailable = 0.0
+        items.forEach {
+            isProductTaxAvailable += it.taxRate
+        }
+        if (isProductTaxAvailable != 0.0){
             receipt.write(
                 formatLineWithMultipleAlignment(
                     listOf(
@@ -1001,10 +1008,12 @@ class ReceiptFrag : Fragment() {
 
         // Add Items
         var slNo = 0
+        var totalQty = 0
+
         for (item in items) {
             slNo++
-
-            if (isTaxAvailable){
+            totalQty += item.quantity
+            if (isProductTaxAvailable != 0.0){
                 receipt.write(
                     formatLineWithMultipleAlignment(
                         listOf(
@@ -1038,28 +1047,67 @@ class ReceiptFrag : Fragment() {
         }
         receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
 
-        // Add Totals
+//        // Add Totals
         receipt.write(formatLineWithAlignment("Items: $totalItems", "Sub Total: RS $subtotal", charactersPerLine).toByteArray())
         receipt.write("\n".toByteArray())
+//
 
+        val hasOptionalValues = packageAmount.toString().isNotEmpty() ||
+                otherChargesAmount.toString().isNotEmpty() ||
+                !customGstAmount.isNullOrEmpty() ||
+                (discount != null && discount > 0)
+
+// Track which optional value has been displayed
+        var displayedOptionalLabel: String? = null
+
+        if (hasOptionalValues) {
+            displayedOptionalLabel = when {
+                packageAmount != null  -> "Package Amount : RS ${packageAmount.toDouble()}"
+                otherChargesAmount != null -> "Other Charges : RS $otherChargesAmount"
+                !customGstAmount.isNullOrEmpty() -> "Custom GST : RS ${customGstAmount.split("|").first().toDouble()}"
+                discount != null && discount > 0 -> "Discount : RS $discount"
+                else -> null
+            }
+            if(displayedOptionalLabel == null){
+                receipt.write(formatSingleStringLeft("Qty : $totalQty", charactersPerLine).toByteArray())
+                receipt.write("\n".toByteArray())
+            }else{
+                receipt.write(formatLineWithAlignment("Qty : $totalQty", displayedOptionalLabel, charactersPerLine).toByteArray())
+            }
+        }
         if (totalTax != null && totalTax > 0) {
             receipt.write(formatSingleStringRight("Total Tax : RS $totalTax", charactersPerLine).toByteArray())
             receipt.write("\n".toByteArray())
         }
-
         packageAmount?.let {
-            receipt.write(formatSingleStringRight("Package Amount: RS $it", charactersPerLine).toByteArray())
-            receipt.write("\n".toByteArray())
+            if (displayedOptionalLabel != "Package Amount : RS ${it.toDouble()}") {
+                receipt.write(formatSingleStringRight("Package Amount : RS $it", charactersPerLine).toByteArray())
+                receipt.write("\n".toByteArray())
+            }
         }
+
         otherChargesAmount?.let {
-            receipt.write(formatSingleStringRight("Other Charges: RS $it", charactersPerLine).toByteArray())
-            receipt.write("\n".toByteArray())
+            if (displayedOptionalLabel != "Other Charges : RS $it") {
+                receipt.write(formatSingleStringRight("Other Charges : RS $it", charactersPerLine).toByteArray())
+                receipt.write("\n".toByteArray())
+            }
+        }
+
+        customGstAmount?.let {
+            val firstValue = it.split("|").first()
+            if (displayedOptionalLabel != "Custom GST: RS ${firstValue.toDouble()}") {
+                receipt.write(formatSingleStringRight("Custom GST : RS ${firstValue.toDouble()}", charactersPerLine).toByteArray())
+                receipt.write("\n".toByteArray())
+            }
         }
 
         if (discount != null && discount > 0) {
-            receipt.write(formatSingleStringRight("Discount: RS $discount", charactersPerLine).toByteArray())
-            receipt.write("\n".toByteArray())
+            if (displayedOptionalLabel != "Discount: RS $discount") {
+                receipt.write(formatSingleStringRight("Discount : RS $discount", charactersPerLine).toByteArray())
+                receipt.write("\n".toByteArray())
+            }
         }
+
         receipt.write(boldOn)
         setFontSize(receipt, 2)
         receipt.write("\n".toByteArray())
@@ -1069,11 +1117,11 @@ class ReceiptFrag : Fragment() {
         receipt.write("\n".toByteArray())
         if (discount != null && discount > 0) {
             receipt.write(formatSingleString("You saved Rs $discount", charactersPerLine).toByteArray())
-            receipt.write("\n".toByteArray())
         }
+        receipt.write("\n".toByteArray())
 
         if (isTaxAvailable){
-            receipt.write("\n\n".toByteArray())
+            receipt.write("\n".toByteArray())
             receipt.write(formatSingleString("Tax Details", charactersPerLine).toByteArray())
             receipt.write("\n\n".toByteArray())
             receipt.write(
@@ -1145,14 +1193,19 @@ class ReceiptFrag : Fragment() {
 
     fun formatLineWithAlignment(left: String, right: String, paperWidth: Int): String {
         val totalColumns = paperWidth
-        val leftWeight = totalColumns / 2
+        val leftWeight = (totalColumns * 40) / 100
         val rightWeight = totalColumns - leftWeight
 
+        // Format left side to take its weight
         val leftFormatted = left.padEnd(leftWeight).take(leftWeight)
-        val rightFormatted = right.padStart(rightWeight).take(rightWeight)
 
+        // Format right side to take the remaining space, and add 3 spaces to the right
+        val rightFormatted = right.padStart(rightWeight - 3).take(rightWeight - 3) + "   "
+
+        // Combine left and right with proper alignment
         return leftFormatted + rightFormatted
     }
+
 
     fun formatLineWithMultipleAlignment(values: List<Pair<String, Int>>, paperWidth: Int): String {
         val totalColumns = paperWidth
@@ -1179,12 +1232,154 @@ class ReceiptFrag : Fragment() {
     }
 
     fun formatSingleStringRight(text: String, paperWidth: Int): String {
-        return text.padStart(paperWidth)
+        val totalWidth = paperWidth - 3
+        return text.padStart(totalWidth.coerceAtLeast(0))
+    }
+    fun formatSingleStringLeft(text: String, paperWidth: Int): String {
+        val totalWidth = paperWidth
+        return text.padEnd(totalWidth.coerceAtLeast(0))
     }
 
 
 
+    fun drawableToBitmap(drawable: Drawable): Bitmap {
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
 
+        val width = drawable.intrinsicWidth
+        val height = drawable.intrinsicHeight
+
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
+    }
+
+    fun printImage(textData: ByteArray,alignment: Int, bitmap: Bitmap, width: Int): Boolean {
+        val scaledBitmap = scaledBitmap(bitmap, width)
+        if (scaledBitmap != null) {
+            var marginLeft: Int = INITIAL_MARGIN_LEFT
+            if (alignment == CENTER) {
+                marginLeft = marginLeft + ((PRINTER_WIDTH - scaledBitmap.width) / 2)
+            } else if (alignment == RIGHT) {
+                marginLeft = marginLeft + PRINTER_WIDTH - scaledBitmap.width
+            }
+            val command = autoGrayScale(scaledBitmap, marginLeft, 5)
+            val lines: Int = (command.size - HEAD) / WIDTH
+            System.arraycopy(
+                byteArrayOf(
+                    0x1D, 0x76, 0x30, 0x00, 0x30, 0x00, (lines and 0xff).toByte(),
+                    ((lines shr 8) and 0xff).toByte()
+                ), 0, command, 0, HEAD
+            )
+            return printUnicode(command,textData)
+        } else {
+            return false
+        }
+    }
+
+    private fun printUnicode(imageData: ByteArray, textData: ByteArray): Boolean {
+        val combinedData = imageData + "\n".toByteArray()+ textData
+        viewModel.printUsingDefaultPrinter(combinedData)
+        return true
+    }
+
+
+    private fun printByteArray(textData: ByteArray) {
+        val bitmap: Bitmap = imageViewToBitmap(binding.imageView)
+        val print: Boolean = printImage(textData,CENTER,bitmap, 200)
+            if (!print) {
+                Toast.makeText(requireContext(), "Print image failed", Toast.LENGTH_SHORT).show()
+            }
+
+    }
+    private fun autoGrayScale(bm: Bitmap, bitMarginLeft: Int, bitMarginTop: Int): ByteArray {
+        val result: ByteArray
+        val n = bm.height + bitMarginTop
+        val offset: Int = HEAD
+        result = ByteArray(n * WIDTH + offset)
+        for (y in 0 until bm.height) {
+            for (x in 0 until bm.width) {
+                if (x + bitMarginLeft < BIT_WIDTH) {
+                    val color = bm.getPixel(x, y)
+                    val alpha = Color.alpha(color)
+                    val red = Color.red(color)
+                    val green = Color.green(color)
+                    val blue = Color.blue(color)
+                    if (alpha > 128 && (red < 128 || green < 128 || blue < 128)) {
+                        // set the color black
+                        val bitX = bitMarginLeft + x
+                        val byteX = bitX / 8
+                        val byteY = y + bitMarginTop
+                        result[offset + byteY * WIDTH + byteX] =
+                            (result[offset + byteY * WIDTH + byteX].toInt() or (0x80 shr (bitX - byteX * 8))).toByte()
+                    }
+                } else {
+                    // ignore the rest data of this line
+                    break
+                }
+            }
+        }
+        return result
+    }
+
+    private fun scaledBitmap(bitmap: Bitmap, widths: Int): Bitmap? {
+        var width = widths
+        if (width == FULL_WIDTH) width = PRINTER_WIDTH
+        try {
+            var desiredWidth =
+                if (width == 0 || bitmap.width <= PRINTER_WIDTH) bitmap.width else PRINTER_WIDTH
+            if (width > 0 && width <= PRINTER_WIDTH) {
+                desiredWidth = width
+            }
+            val height: Int
+            val scale = desiredWidth.toFloat() / bitmap.width.toFloat()
+            height = (bitmap.height * scale).toInt()
+            return Bitmap.createScaledBitmap(bitmap, desiredWidth, height, true)
+        } catch (e: NullPointerException) {
+            Log.e("TAG", "Maybe resource is vector or mipmap?")
+            return null
+        }
+    }
+
+
+    fun getBitmapFromVector(drawableId: Int): Bitmap{
+        val drawable = ContextCompat.getDrawable(requireContext(), drawableId)
+            val bitmap = Bitmap.createBitmap(
+                drawable!!.intrinsicWidth,
+                drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+
+            )
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+            return bitmap
+    }
+
+
+    fun imageViewToBitmap(imageView: ImageView): Bitmap {
+        // Measure and layout the ImageView
+        imageView.measure(
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+//        imageView.layout(0, 0, imageView.measuredWidth, imageView.measuredHeight)
+
+        // Create a Bitmap with the same dimensions as the ImageView
+        val bitmap = Bitmap.createBitmap(
+            imageView.width,
+            imageView.height,
+            Bitmap.Config.ARGB_8888
+        )
+
+        // Draw the content of the ImageView onto the Bitmap
+        val canvas = Canvas(bitmap)
+        imageView.draw(canvas)
+
+        return bitmap
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

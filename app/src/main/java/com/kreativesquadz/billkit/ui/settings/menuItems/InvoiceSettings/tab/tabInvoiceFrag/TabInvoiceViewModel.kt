@@ -15,11 +15,13 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.kreativesquadz.billkit.Config
+import com.kreativesquadz.billkit.api.ApiStatus
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.repository.SettingsRepository
 import com.kreativesquadz.billkit.repository.UserSettingRepository
+import com.kreativesquadz.billkit.utils.prepareFilePart
 import com.kreativesquadz.billkit.worker.AddCompanyDetailsWorker
 import com.kreativesquadz.billkit.worker.SyncUserSettingWorker
 import com.kreativesquadz.billkit.worker.UpdateCompanyDetailsWorker
@@ -29,6 +31,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,11 +45,26 @@ class TabInvoiceViewModel @Inject constructor( val workManager: WorkManager,
     var userSetting: LiveData<UserSetting> = _userSetting
     lateinit var companyDetails: LiveData<Resource<CompanyDetails>>
 
-    // StateFlow for loading state
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    // Function to get Company Details
+    private val _uploadStatus = MutableLiveData<Result<ApiStatus>>()
+    val uploadStatus: LiveData<Result<ApiStatus>> get() = _uploadStatus
+
+    private val _isUploading = MutableLiveData<Boolean>()
+    val isUploading: LiveData<Boolean> get() = _isUploading
+
+    fun uploadImage(userId: String, imageUri: Uri?, context: Context) {
+        viewModelScope.launch {
+            _isUploading.value = true
+            val userIdPart = userId.toRequestBody("text/plain".toMediaTypeOrNull())
+            val imagePart = imageUri?.let { prepareFilePart("image", it, context) }
+            val result = settingsRepository.uploadCompanyImage(userIdPart, imagePart)
+            _uploadStatus.value = result
+            _isUploading.value = false
+
+        }
+    }
 
     fun getCompanyDetailsTab(): LiveData<Resource<CompanyDetails>> {
         companyDetails = settingsRepository.loadCompanyDetails(Config.userId)
@@ -81,6 +100,12 @@ class TabInvoiceViewModel @Inject constructor( val workManager: WorkManager,
                 _isLoading.value = false
                 _updateCompanyDetailsStatus.value = false
             }
+        }
+    }
+
+    fun updateCompanyDetailsDb(companyDetails: CompanyDetails) {
+        viewModelScope.launch {
+            settingsRepository.update(companyDetails)
         }
     }
 
@@ -173,6 +198,10 @@ class TabInvoiceViewModel @Inject constructor( val workManager: WorkManager,
         if (uri != null) {
             _selectedImageUri.value = uri
         }
+    }
+
+    fun removeImageUri() {
+        _selectedImageUri.value = null
     }
 
 

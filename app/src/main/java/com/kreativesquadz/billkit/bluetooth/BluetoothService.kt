@@ -155,7 +155,6 @@ class BluetoothService @Inject constructor(
 
             // Add some line breaks for padding
             outputStream?.write("\n\n\n".toByteArray())
-
             // ESC/POS command to cut the paper
             val printerSettings = userSettingRepository.getPrinterSetting(Config.userId)
             if (printerSettings != null && printerSettings.autoCutAfterPrint) {
@@ -175,6 +174,7 @@ class BluetoothService @Inject constructor(
             closeConnection() // Auto-disconnect after printing
         }
     }
+
 
     // Close the Bluetooth connection
     fun closeConnection() {

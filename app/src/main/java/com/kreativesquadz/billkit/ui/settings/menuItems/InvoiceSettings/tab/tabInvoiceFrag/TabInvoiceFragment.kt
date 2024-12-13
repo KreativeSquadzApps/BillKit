@@ -17,6 +17,7 @@ import com.kreativesquadz.billkit.interfaces.OnTextChangedCallback
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.InvoiceSettingsDirections
+import com.kreativesquadz.billkit.utils.Glide.GlideHelper
 import com.kreativesquadz.billkit.utils.setupTextWatcher
 
 class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
@@ -30,13 +31,16 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
     private var oldCompanyDetails : CompanyDetails ?= null
     private var isUpdateEnable = false
     private var businessImage  = ""
+    private var isImageChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //viewModel.getCompanyDetailsSetting()
         //tabInvoiceSettingsViewModel.getInvoicePrefixNumberList()
+        GlideHelper.initializeGlideWithOkHttp(requireContext())
         viewModel.getCompanyDetailsTab()
         viewModel.getUserSettings()
+
     }
 
 
@@ -68,12 +72,9 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                         }else{
                             isUpdateEnable = false
                             binding.isUpdateEnable = isUpdateEnable
-
                         }
                     }
                 }
-
-
             }
         }
 
@@ -84,8 +85,7 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                 binding.tvInvoicePrefix.text = it.InvoicePrefix
                 binding.tvInvoiceNumber.text = it.InvoiceNumber.toString()
                 businessImage = it.BusinessImage
-
-                //tabInvoiceSettingsViewModel.getInvoicePrefixNumber(it.InvoicePrefix)
+                GlideHelper.loadImage(requireContext(), it.BusinessImage, binding.imageView)
             }
         }
         viewModel.userSetting.observe(viewLifecycleOwner){
@@ -93,7 +93,6 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                 if (it?.isdiscount==0){
                     binding.discountSwitch.isChecked = false
                     isDiscount = 0
-
                 }else{
                     binding.discountSwitch.isChecked = true
                     isDiscount = 1
@@ -105,6 +104,14 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                     binding.reverseSwitch.isChecked = true
                     isReverse = 1
                 }
+            }
+        }
+
+        viewModel.isUploading.observe(viewLifecycleOwner) { isUploading ->
+            if (isUploading) {
+                showLoader() // Show the loader when uploading
+            } else {
+                hideLoader() // Hide the loader when the upload finishes
             }
         }
     }
@@ -127,7 +134,6 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                 }else{
                     isUpdateEnable = false
                     binding.isUpdateEnable = isUpdateEnable
-
                 }
             }
         }
@@ -144,20 +150,20 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
 
         }
         binding.btnupdate.setOnClickListener {
-            if (isUpdateEnable) {
-                val currentSettings = getCompanyDetails()
-                viewModel.companyDetails.value?.data?.let {
-                    if (viewModel.isCompanyDetailsUpdated(it, currentSettings)) {
-                        viewModel.updateCompanyDetailsSettings(currentSettings)
-                        Toast.makeText(requireContext(), "Settings Updated", Toast.LENGTH_SHORT).show()
-                        binding.isUpdateEnable = false
+            if (!isUpdateEnable) return@setOnClickListener
 
-                    }
+            val currentSettings = getCompanyDetails()
+            val companyDetails = viewModel.companyDetails.value?.data
+
+            if (companyDetails != null && viewModel.isCompanyDetailsUpdated(companyDetails, currentSettings)) {
+                if (viewModel.selectedImageUri.value != null) {
+                    handleImageUpload(currentSettings)
+                } else {
+                    updateCompanyDetails(currentSettings)
                 }
-
             }
-            userSetting = UserSetting(Config.userId,isDiscount,isReverse,"", "1")
-            viewModel.updateDiscount(requireContext(),userSetting)
+
+            updateUserSettings()
         }
 
 
@@ -187,6 +193,38 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
 
     }
 
+    private fun handleImageUpload(currentSettings: CompanyDetails) {
+        viewModel.uploadImage(
+            Config.userId.toString(),
+            viewModel.selectedImageUri.value,
+            requireContext()
+        )
+        binding.isUpdateEnable = false
+        viewModel.uploadStatus.observe(viewLifecycleOwner) { result ->
+            result.onSuccess {
+                showToast("Upload successful: ${it.message}")
+                viewModel.removeImageUri()
+                viewModel.uploadStatus.removeObservers(viewLifecycleOwner)
+                viewModel.updateCompanyDetailsDb(currentSettings.copy(BusinessImage = it.message))
+                GlideHelper.loadImage(requireContext(), it.message, binding.imageView)
+            }.onFailure {
+                showToast("Upload failed: ${it.message}")
+            }
+        }
+    }
+    private fun updateCompanyDetails(currentSettings: CompanyDetails) {
+        viewModel.updateCompanyDetailsSettings(currentSettings)
+        showToast("Settings Updated")
+        binding.isUpdateEnable = false
+    }
+    private fun updateUserSettings() {
+        val userSetting = UserSetting(Config.userId, isDiscount, isReverse, "", "1")
+        viewModel.updateDiscount(requireContext(), userSetting)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 
     private fun getCompanyDetails() : CompanyDetails{
         return CompanyDetails(oldCompanyDetails?.id ?: 0,Config.userId, binding.etBusinessName.text.toString(),businessImage,
@@ -196,7 +234,6 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
             oldCompanyDetails?.InvoicePrefix ?: "", oldCompanyDetails?.InvoiceNumber ?: 0)
     }
     private fun setupPermissionLauncher() {
-        // Handle the permission request
         val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 viewModel.selectImage(requireContext())
@@ -212,6 +249,17 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
         }
 
         viewModel.init(activityResultLauncher, permissionLauncher)
+    }
+    fun showLoader() {
+        isUpdateEnable = false
+        binding.isUpdateEnable = isUpdateEnable
+        binding.tvUpdate.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE // Assuming a ProgressBar in your layout
+    }
+
+    fun hideLoader() {
+        binding.tvUpdate.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
     }
     override fun onDestroyView() {
         super.onDestroyView()

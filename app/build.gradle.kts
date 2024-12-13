@@ -93,8 +93,9 @@ dependencies {
     implementation(libs.itext7.core)
     implementation (libs.androidx.paging.runtime)  // Latest version of Paging 3
     implementation( libs.androidx.room.paging)
-    implementation (libs.escpos.thermalprinter.android)
     implementation (libs.poi)
     implementation (libs.poi.ooxml)
-
+    implementation(libs.glide)
+    ksp(libs.compiler)
+    implementation(libs.okhttp3.integration)
 }

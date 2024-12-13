@@ -8,6 +8,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.kreativesquadz.billkit.utils.Glide.GlideHelper
 import com.kreativesquadz.billkit.utils.PreferencesHelper
 import dagger.hilt.android.HiltAndroidApp
 
@@ -38,6 +39,7 @@ class MyApplication : Application(), Configuration.Provider {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
     }
 
 

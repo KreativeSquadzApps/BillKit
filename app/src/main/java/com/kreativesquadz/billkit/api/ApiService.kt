@@ -23,12 +23,16 @@ import com.kreativesquadz.billkit.model.request.InvoiceStatusUpdate
 import com.kreativesquadz.billkit.model.request.LoginRequest
 import com.kreativesquadz.billkit.model.request.ProductStockRequest
 import com.kreativesquadz.billkit.model.request.ProductStockRequestByName
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
+import retrofit2.http.Part
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -62,6 +66,10 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addCompanyDetails(@Body companyDetails: CompanyDetails?): Response<ApiStatus>
 
+    @Multipart
+    @POST("/api/updateCompanyImage")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun updateCompanyImage(@Part("userId") userId: RequestBody, @Part image: MultipartBody.Part?): Response<ApiStatus>
 
     @GET("api/companyDetails/{userId}")
     @Headers("X-API-KEY: " + Config.API_Key)

@@ -11,18 +11,14 @@
         <variable
             name="invoice"
             type="com.kreativesquadz.billkit.model.Invoice" />
+
         <variable
             name="isCustomerAvailable"
             type="Boolean" />
         <variable
             name="istTaxAvalaible"
             type="Boolean" />
-        <variable
-            name="istPackagingAvalaible"
-            type="Boolean" />
-        <variable
-            name="isOtherChargesAvalaible"
-            type="Boolean" />
+
         <variable
             name="istProductTaxAvalaible"
             type="Boolean" />
@@ -71,6 +67,27 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="@dimen/_100dp"
+                            android:layout_height="@dimen/_100dp"
+                            android:layout_margin="@dimen/_5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:scaleType="centerCrop"
+                            android:padding="@dimen/_5dp"
+                            android:visibility="gone"
+                            android:background="@drawable/corner_four_grey"
+                            android:src="@drawable/baseline_add_24"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                     <!-- Company Details Header -->
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
@@ -78,6 +95,7 @@
                         android:text="@{companyDetails.BusinessName}"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:layout_marginTop="@dimen/_5dp"
                         android:textColor="@color/text_color_main"
                         android:layout_gravity="center"
                         tools:text="KreativeSquadz Technology pvt Ltd"/>
@@ -88,6 +106,7 @@
                         android:text="@{companyDetails.Place}"
                         android:textColor="@color/text_color_main"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:textSize="14sp"
                         tools:text="Shop Place "/>
 
@@ -154,6 +173,7 @@
                             android:layout_height="wrap_content"
                             android:text='@{"Invoice : " + invoice.invoiceNumber}'
                             android:textSize="12sp"
+                            android:layout_marginEnd="@dimen/_5dp"
                             android:textStyle="bold"
                             android:layout_weight="1"
                             android:textColor="@color/text_color_main"
@@ -349,6 +369,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:weightSum="2">
                         <TextView android:fontFamily="@font/montserrat_regular"
                             android:layout_width="match_parent"
@@ -365,7 +386,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text='@{"Sub Total  Rs " + invoice.subtotal}'
+                            android:text='@{"Sub Total :  Rs " + invoice.subtotal}'
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:gravity="end"
@@ -374,33 +395,71 @@
                             tools:text="Sub Total  Rs 990.00"/>
 
                     </LinearLayout>
-                    <TextView android:fontFamily="@font/montserrat_regular"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvPackaging"
-                        android:visibility="@{istPackagingAvalaible ? View.VISIBLE : View.GONE}"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:gravity="end"
-                        android:textColor="@color/text_color_main"
-                        tools:text="Packaging Rs 11100.00"/>
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:id="@+id/tvTotalQty"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            tools:text="Items: 3"/>
+
+
+                        <TextView android:fontFamily="@font/montserrat_regular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/tvPackaging"
+                            android:layout_marginEnd="@dimen/_10dp"
+
+                            app:isZeroOrNullDouble="@{invoice.packageAmount}"
+                            android:text='@{"Packaging : Rs "+invoice.packageAmount}'
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/text_color_main"
+                            tools:text="Packaging Rs 11100.00"/>
+
+                    </LinearLayout>
+
+
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvOtherCharges"
-                        android:visibility="@{isOtherChargesAvalaible ? View.VISIBLE : View.GONE}"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        app:isZeroOrNullDouble="@{invoice.otherChargesAmount}"
+                        android:text='@{"Other Charges : Rs "+invoice.otherChargesAmount}'
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:gravity="end"
                         android:textColor="@color/text_color_main"
-                        tools:text="Packaging Rs 11100.00"/>
+                        tools:text="Other Charges Rs 11100.00"/>
+                    <TextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvCustomGst"
+                        app:isZeroOrNullString="@{invoice.customGstAmount}"
+                        android:textSize="12sp"
+                        android:layout_marginEnd="@dimen/_10dp"
+                        android:textStyle="bold"
+                        android:gravity="end"
+                        android:textColor="@color/text_color_main"
+                        tools:text="Custom Gst Rs 11100.00"/>
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvTotalTax"
                         app:isZeroOrNullDouble="@{invoice.totalTax}"
-                        android:text='@{"Total Tax  Rs "+invoice.totalTax}'                        android:textSize="12sp"
+                        android:text='@{"Total Tax :  Rs "+invoice.totalTax}'                        android:textSize="12sp"
                         android:textStyle="bold"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:gravity="end"
                         android:textColor="@color/text_color_main"
                         tools:text="Total Tax  Rs 11100.00"/>
@@ -408,9 +467,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="@{invoice.discount==null||invoice.discount==0 ? View.GONE : View.VISIBLE }"
-                        android:text='@{"Discount " + invoice.discount}'
                         android:textSize="12sp"
                         android:textStyle="bold"
+                        android:id="@+id/tvDiscount"
+                        android:layout_marginEnd="@dimen/_10dp"
                         android:gravity="end"
                         android:textColor="@color/text_color_main"
                         tools:text="Discount  Rs 11100.00"/>

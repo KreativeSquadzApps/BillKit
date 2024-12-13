@@ -121,6 +121,18 @@ fun isZeroOrNullDouble(view: TextView, text: Double?) {
         view.visibility = View.GONE
     }
 }
+@BindingAdapter("isZeroOrNullString")
+fun isZeroOrNullString(view: TextView, text: String?) {
+    if (text != null) {
+        if (text.isNotEmpty()) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }else{
+        view.visibility = View.GONE
+    }
+}
 @BindingAdapter("hideView")
 fun hideView(view: View, text: String?) {
     if (text != null) {
