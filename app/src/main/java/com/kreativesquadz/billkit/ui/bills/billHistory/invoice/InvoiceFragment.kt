@@ -62,6 +62,10 @@ class InvoiceFragment : Fragment() {
               binding.invoice = it
               binding.isCustomerAvailable = it?.customerId != null
               binding.customer = viewModel.getCustomerById(it.customerId.toString())
+              val firstValue = it.customGstAmount?.split("|")?.first()
+              binding.tvCustomGst.text = "Custom Gst : Rs "+firstValue?.toDouble()
+              binding.tvDiscount.text = "Discount : Rs "+it.discount?.toDouble()
+
           }
 
         viewModel.invoiceItems.observe(viewLifecycleOwner){

@@ -189,7 +189,7 @@ class TabInvoiceViewModel @Inject constructor( val workManager: WorkManager,
         permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    fun selectImage(context: Context) {
+    fun selectImage() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         activityResultLauncher.launch(intent)
     }

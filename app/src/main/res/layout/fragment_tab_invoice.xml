@@ -70,7 +70,9 @@
                                 android:layout_margin="@dimen/_15dp"
                                 android:background="@drawable/corner_four_stroke"
                                 android:layout_weight="3">
-
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
                                     <ImageView
                                         android:id="@+id/imageView"
                                         android:layout_width="match_parent"
@@ -80,6 +82,15 @@
                                         android:background="@drawable/corner_four_grey"
                                         android:src="@drawable/baseline_add_24"/>
 
+                                    <ProgressBar
+                                        android:id="@+id/progress_loader"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:visibility="visible"
+                                        style="?android:attr/progressBarStyle" />
+
+                                </FrameLayout>
 
                             </LinearLayout>
 

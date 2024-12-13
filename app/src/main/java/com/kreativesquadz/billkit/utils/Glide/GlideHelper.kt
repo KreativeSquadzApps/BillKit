@@ -1,16 +1,21 @@
 package com.kreativesquadz.billkit.utils.Glide
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.request.RequestListener
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
+import com.bumptech.glide.request.target.Target
 import java.io.InputStream
 
 object GlideHelper {
@@ -27,6 +32,43 @@ object GlideHelper {
             .load(GlideUrl(Config.APP_API_IMAGE_URL + url)) // Make sure the complete URL is correct
             .apply(RequestOptions().placeholder(R.drawable.add_image).error(R.drawable.add_image))
             .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(imageView)
+    }
+    fun loadImageWithLoader(context: Context, url: String?, imageView: ImageView, progressBar: ProgressBar) {
+        if (url.isNullOrEmpty()) {
+            imageView.setImageResource(R.drawable.add_image)
+            progressBar.visibility = View.GONE // Hide loader
+            return
+        }
+
+        progressBar.visibility = View.VISIBLE // Show loader
+
+        Glide.with(context)
+            .load(GlideUrl(Config.APP_API_IMAGE_URL + url))
+            .apply(RequestOptions().placeholder(R.drawable.add_image).error(R.drawable.add_image))
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    progressBar.visibility = View.GONE // Hide loader on error
+                    return false // Allow Glide to handle the error drawable
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    progressBar.visibility = View.GONE // Hide loader when loaded
+                    return false // Allow Glide to set the ImageView
+                }
+            })
             .into(imageView)
     }
 

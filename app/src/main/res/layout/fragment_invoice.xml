@@ -386,7 +386,6 @@
                                 app:hideOnZero="@{invoice.discount}"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tvSubTotal"
-                                android:text='@{"Discount : RS "+ invoice.discount}'
                                 tools:text="Discount : 1020"/>
                             <TextView android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="wrap_content"
@@ -417,6 +416,19 @@
                                 app:layout_constraintTop_toBottomOf="@id/tvTotalTax"
                                 android:text='@{"Packaging : RS "+invoice.packageAmount}'
                                 tools:text="Packaging : 1020.00 "/>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvCustomGst"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_12sp"
+                                app:isZeroOrNullString="@{invoice.customGstAmount}"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvPackaging"
+                                tools:text="Custom Gst : 1020.00 "/>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

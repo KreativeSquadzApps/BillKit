@@ -31,6 +31,7 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
     private var oldCompanyDetails : CompanyDetails ?= null
     private var isUpdateEnable = false
     private var businessImage  = ""
+    private var businessImageName  : String ?=null
     private var isImageChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,11 +82,11 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
         viewModel.companyDetails.observe(viewLifecycleOwner) {
             it.data?.let {
                 oldCompanyDetails = it
+                GlideHelper.loadImageWithLoader(requireContext(), it.BusinessImage, binding.imageView,binding.progressLoader)
                 binding.companyDetails = oldCompanyDetails
                 binding.tvInvoicePrefix.text = it.InvoicePrefix
                 binding.tvInvoiceNumber.text = it.InvoiceNumber.toString()
                 businessImage = it.BusinessImage
-                GlideHelper.loadImage(requireContext(), it.BusinessImage, binding.imageView)
             }
         }
         viewModel.userSetting.observe(viewLifecycleOwner){
@@ -142,7 +143,7 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
 
     private fun onClickListeners(){
         binding.imageView.setOnClickListener {
-            viewModel.selectImage(requireContext())
+            viewModel.selectImage()
         }
         binding.btnReset.setOnClickListener{
             val action = InvoiceSettingsDirections.actionInvoiceSettingsToInvoiceResetFragment(oldCompanyDetails?.InvoicePrefix ?: "",oldCompanyDetails?.InvoiceNumber ?: 0)
@@ -157,7 +158,7 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
 
             if (companyDetails != null && viewModel.isCompanyDetailsUpdated(companyDetails, currentSettings)) {
                 if (viewModel.selectedImageUri.value != null) {
-                    handleImageUpload(currentSettings)
+                    handleImageUpload()
                 } else {
                     updateCompanyDetails(currentSettings)
                 }
@@ -193,7 +194,7 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
 
     }
 
-    private fun handleImageUpload(currentSettings: CompanyDetails) {
+    private fun handleImageUpload() {
         viewModel.uploadImage(
             Config.userId.toString(),
             viewModel.selectedImageUri.value,
@@ -202,13 +203,13 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
         binding.isUpdateEnable = false
         viewModel.uploadStatus.observe(viewLifecycleOwner) { result ->
             result.onSuccess {
-                showToast("Upload successful: ${it.message}")
-                viewModel.removeImageUri()
-                viewModel.uploadStatus.removeObservers(viewLifecycleOwner)
-                viewModel.updateCompanyDetailsDb(currentSettings.copy(BusinessImage = it.message))
-                GlideHelper.loadImage(requireContext(), it.message, binding.imageView)
+                if (it.invoiceId == 200){
+                    showToast("Image Updated successfully")
+                    businessImageName = it.message
+                }
+
             }.onFailure {
-                showToast("Upload failed: ${it.message}")
+                showToast("Upload failed: Check Internet Connection")
             }
         }
     }
@@ -236,7 +237,7 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
     private fun setupPermissionLauncher() {
         val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                viewModel.selectImage(requireContext())
+                viewModel.selectImage()
             }
         }
 
@@ -257,9 +258,14 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
         binding.progressBar.visibility = View.VISIBLE // Assuming a ProgressBar in your layout
     }
 
-    fun hideLoader() {
+    private fun hideLoader() {
         binding.tvUpdate.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
+        viewModel.removeImageUri()
+        viewModel.uploadStatus.removeObservers(viewLifecycleOwner)
+        businessImageName?.let {
+            GlideHelper.loadImageWithLoader(requireContext(), it, binding.imageView,binding.progressLoader)
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()
