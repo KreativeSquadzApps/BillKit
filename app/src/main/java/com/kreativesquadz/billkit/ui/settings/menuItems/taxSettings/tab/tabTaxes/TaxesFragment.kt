@@ -25,8 +25,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class TaxesFragment : Fragment(), FragmentBaseFunctions {
     private val viewModel: TaxesViewModel by viewModels()
     private var _binding: FragmentTaxesBinding? = null
-    private lateinit var adapter: GenericAdapter<GST>
     private val binding get() = _binding!!
+    private lateinit var adapter: GenericAdapter<GST>
     private var selectedTaxTpe = "GST"
     val taxTypeList = listOf("GST",
         "SGST",
@@ -56,7 +56,6 @@ class TaxesFragment : Fragment(), FragmentBaseFunctions {
         viewModel.gstTax.observe(viewLifecycleOwner) {
             it.data?.let {
                 adapter.submitList(it)
-
             }
         }
 

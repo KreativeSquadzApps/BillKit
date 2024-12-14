@@ -255,6 +255,18 @@ fun timestampToTime(view: TextView, timestamp: String?) {
         view.text = ""
     }
 }
+@BindingAdapter("textColorRnG")
+fun textColorRnG(view: TextView, text: Int?) {
+    if (text != null ) {
+        if (text > 0) {
+            view.setTextColor(view.context.getColor(R.color.green))
+        } else {
+            view.setTextColor(view.context.getColor(R.color.red))
+        }
+    }else{
+        view.visibility = View.GONE
+    }
+}
 @BindingAdapter("currentDate")
 fun currentDate(view: TextView, timestamp: String?) {
 

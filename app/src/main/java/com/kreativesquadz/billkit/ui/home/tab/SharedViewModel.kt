@@ -23,17 +23,22 @@ import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.LoginResponse
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.settings.GST
+import com.kreativesquadz.billkit.model.settings.POSSettings
 import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.model.settings.TaxSettings
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
 import com.kreativesquadz.billkit.repository.GstTaxRepository
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.SettingsRepository
+import com.kreativesquadz.billkit.repository.UserSettingRepository
 import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -44,7 +49,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
                                           val loginRepository: LoginRepository,
                                           val settingsRepository: SettingsRepository,
                                           val gstTaxRepository: GstTaxRepository,
-                                          val billHistoryRepository: BillHistoryRepository) : ViewModel() {
+                                          val billHistoryRepository: BillHistoryRepository,
+                                          val userSettingRepository: UserSettingRepository) : ViewModel() {
 
      private var invoiceNumber: Int? = null
 
@@ -107,6 +113,9 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
     var isReversedAmountNQty = false
     val taxSettings: LiveData<TaxSettings> = gstTaxRepository.getTaxSettings()
     var invoiceId =  generateInvoiceId().toLong()
+
+    private val _posSettings = MutableStateFlow(POSSettings())
+    val posSettings: StateFlow<POSSettings> = _posSettings.asStateFlow()
 
 
     fun initializeTaxSettings() {
@@ -590,6 +599,21 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         return (timestamp / 1000).toInt() * 1000 + counter
     }
 
+    private fun insertPosSetting(posSettings: POSSettings) {
+        viewModelScope.launch {
+            userSettingRepository.insertPosSetting(posSettings)
+            _posSettings.value = userSettingRepository.getPosSetting(Config.userId)  ?: POSSettings()
+        }
+    }
+
+    fun getPosSetting()  {
+        if (userSettingRepository.getPosSetting(Config.userId) == null){
+            insertPosSetting(POSSettings(userId = Config.userId))
+        }
+        else{
+            _posSettings.value = userSettingRepository.getPosSetting(Config.userId) ?: POSSettings()
+        }
+    }
     fun clearItemsList() {
         viewModelScope.launch {
             delay(300)

@@ -62,7 +62,7 @@ class BillHistoryViewModel @Inject constructor(val repository: BillHistoryReposi
                             Status.SUCCESS -> {
                                 _invoicesList.value = Resource.success(resource.data)
                                 // Call getPagedInvoicesFromDb once invoices are fetched
-                                getPagedInvoicesFromDb(startDate, endDate)
+
                             }
                             Status.ERROR -> {
                                 _invoicesList.value = Resource.error(resource.message ?: "Unknown error", null)
@@ -70,7 +70,9 @@ class BillHistoryViewModel @Inject constructor(val repository: BillHistoryReposi
                             Status.LOADING -> {
                                 _invoicesList.value = Resource.loading(null)
                             }
+
                         }
+                        getPagedInvoicesFromDb(startDate, endDate)
                     }
             } catch (e: Exception) {
                 _invoicesList.value = Resource.error("Failed to load invoices", null)

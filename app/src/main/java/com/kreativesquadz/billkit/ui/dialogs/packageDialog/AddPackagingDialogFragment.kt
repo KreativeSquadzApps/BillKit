@@ -5,9 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.customdialog.BaseDialogFragment
+import com.kreativesquadz.billkit.BR
+import com.kreativesquadz.billkit.R
+import com.kreativesquadz.billkit.adapter.GenericSpinnerAdapter
 import com.kreativesquadz.billkit.databinding.DialogFragmentAddPackagingBinding
+import com.kreativesquadz.billkit.ui.settings.menuItems.billSettings.BillSettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -16,6 +21,8 @@ import java.text.DecimalFormat
 class AddPackagingDialogFragment : BaseDialogFragment<DialogFragmentAddPackagingBinding>() {
 
     private val viewModel: AddPackagingDialogViewModel by activityViewModels()
+    private val billSettingsViewModel: BillSettingsViewModel by activityViewModels()
+    private var selectedPackaging : String ?= null
     val df = DecimalFormat("#")
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): DialogFragmentAddPackagingBinding {
@@ -25,6 +32,7 @@ class AddPackagingDialogFragment : BaseDialogFragment<DialogFragmentAddPackaging
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        setupSpinner()
         // Observe the dismissDialog LiveData
         viewModel.dismissDialog.observe(this) { shouldDismiss ->
             if (shouldDismiss) {
@@ -33,8 +41,17 @@ class AddPackagingDialogFragment : BaseDialogFragment<DialogFragmentAddPackaging
             }
         }
 
-        viewModel.dialogText.observe(viewLifecycleOwner) { packageAmount ->
-            handleDialogTextChange(packageAmount)
+//        viewModel.dialogText.observe(viewLifecycleOwner) { packageAmount ->
+//            handleDialogTextChange(packageAmount)
+//        }
+        binding.btnUpdate.setOnClickListener {
+            if (selectedPackaging != null){
+                viewModel.packagingText.value = selectedPackaging
+                viewModel.getPackagingsText()
+                dismiss()
+            }else{
+                Toast.makeText(requireContext(), "Please select a packaging", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -47,16 +64,27 @@ class AddPackagingDialogFragment : BaseDialogFragment<DialogFragmentAddPackaging
 
     }
 
-    private fun handleDialogTextChange(packageAmount: String) {
-       df.roundingMode = RoundingMode.DOWN
-        if (packageAmount.isNotEmpty()) {
-            viewModel.packagingText.value = df.format(packageAmount.toInt())
-        }
-    }
+//    private fun handleDialogTextChange(packageAmount: String) {
+//       df.roundingMode = RoundingMode.DOWN
+//        if (packageAmount.isNotEmpty()) {
+//            viewModel.packagingText.value = df.format(packageAmount.toInt())
+//        }
+//    }
 
     companion object {
         const val TAG = "AddPackagingDialogFragment"
     }
 
-
+    private fun setupSpinner() {
+        val adapter  = GenericSpinnerAdapter(
+            context = requireContext(),
+            layoutResId = R.layout.dropdown_item, // Use your custom layout
+            bindVariableId = BR.item,
+            liveDataItems = billSettingsViewModel.getPackagingListLivedata()
+        )
+        binding.dropdownPackaging.setAdapter(adapter)
+        binding.dropdownPackaging.setOnItemClickListener { _, _, position, _ ->
+            selectedPackaging = adapter.getItem(position).toString()
+        }
+    }
 }

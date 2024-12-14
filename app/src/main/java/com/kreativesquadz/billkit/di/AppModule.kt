@@ -6,6 +6,7 @@ import com.kreativesquadz.billkit.Database.AppDatabase
 import com.kreativesquadz.billkit.bluetooth.BluetoothService
 import com.kreativesquadz.billkit.repository.LoginRepository
 import com.kreativesquadz.billkit.repository.BillHistoryRepository
+import com.kreativesquadz.billkit.repository.BillSettingsRepository
 import com.kreativesquadz.billkit.repository.BluetoothRepository
 import com.kreativesquadz.billkit.repository.CreditNoteRepository
 import com.kreativesquadz.billkit.repository.CreditRepository
@@ -53,6 +54,11 @@ object AppModule {
     @Provides
     fun provideBillHistoryRepository(providedb: AppDatabase): BillHistoryRepository {
         return BillHistoryRepository(providedb)
+    }
+
+    @Provides
+    fun provideBillSettingsRepository(providedb: AppDatabase): BillSettingsRepository {
+        return BillSettingsRepository(providedb)
     }
 
     @Provides

@@ -40,8 +40,4 @@ class AddGstDialogViewModel : ViewModel() {
         totalAmountLivedata.value = totalAmount
     }
 
-
-
-
-
 }

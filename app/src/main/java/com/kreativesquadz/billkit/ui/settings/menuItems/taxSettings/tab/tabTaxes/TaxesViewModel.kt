@@ -22,11 +22,13 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class TaxesViewModel @Inject constructor( val repository: GstTaxRepository) : ViewModel() {
+class TaxesViewModel @Inject constructor(val repository: GstTaxRepository) : ViewModel() {
     lateinit var gstTax : LiveData<Resource<List<GST>>>
+
     fun getGstTax(){
         gstTax = repository.loadAllgstTax(Config.userId.toInt())
     }
+
     fun getTaxList(): LiveData<List<String>> {
         gstTax = repository.loadAllgstTax(Config.userId.toInt())
         return gstTax.map {
@@ -59,7 +61,5 @@ class TaxesViewModel @Inject constructor( val repository: GstTaxRepository) : Vi
             syncWorkRequest
         )
     }
-
-
 
 }

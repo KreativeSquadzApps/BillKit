@@ -65,7 +65,8 @@ class SettingsFrag : Fragment() {
                 getString(R.string.settings_item_3),
                 getString(R.string.settings_item_4),
                 getString(R.string.settings_item_5),
-                getString(R.string.settings_item_6)),
+                getString(R.string.settings_item_6),
+                getString(R.string.settings_item_7)),
             object : OnItemClickListener<String> {
                 override fun onItemClick(item: String) {
                     when (item) {
@@ -79,13 +80,15 @@ class SettingsFrag : Fragment() {
                             findNavController().navigate(R.id.action_settingsFrag_to_posSettingsFrag)
                         }
                         getString(R.string.settings_item_4) -> {
-                            findNavController().navigate(R.id.action_settingsFrag_to_printerSettingsFragment)
-
+                            findNavController().navigate(R.id.action_settingsFrag_to_billSettingsFragment)
                         }
                         getString(R.string.settings_item_5) -> {
-                            findNavController().navigate(R.id.action_settingsFrag_to_themeFragment)
+                            findNavController().navigate(R.id.action_settingsFrag_to_printerSettingsFragment)
                         }
                         getString(R.string.settings_item_6) -> {
+                            findNavController().navigate(R.id.action_settingsFrag_to_themeFragment)
+                        }
+                        getString(R.string.settings_item_7) -> {
                             setupPopup{
                                 viewModel.hardReset(Config.userId,requireContext())
                             }

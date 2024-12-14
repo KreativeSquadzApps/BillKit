@@ -164,6 +164,13 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_settingsFrag_to_themeFragment"
             app:destination="@id/themeFragment" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_settingsFrag_to_billSettingsFragment"
+            app:destination="@id/billSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/billDetailsFrag"
@@ -479,6 +486,9 @@
         android:id="@+id/themeFragment"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.theme.ThemeFragment"
         android:label="ThemeFragment" />
-
+    <fragment
+        android:id="@+id/billSettingsFragment"
+        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.billSettings.BillSettingsFragment"
+        android:label="Bill Settings" />
 
 </navigation>

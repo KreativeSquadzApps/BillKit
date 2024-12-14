@@ -50,7 +50,7 @@
                 android:textColor="@color/black" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchEnablCashBalance"
+                android:id="@+id/switchBlockOutOfStock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end|center"

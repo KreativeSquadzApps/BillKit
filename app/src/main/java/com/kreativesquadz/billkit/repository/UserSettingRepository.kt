@@ -10,6 +10,7 @@ import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
 import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
+import com.kreativesquadz.billkit.model.settings.POSSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import timber.log.Timber
@@ -101,5 +102,16 @@ class UserSettingRepository @Inject constructor(val db: AppDatabase) {
     }
 
 
+    fun insertPosSetting(posSetting: POSSettings) : Long {
+       return userSettingDao.insertPosSetting(posSetting)
+    }
+
+    fun getPosSetting(userId: Long): POSSettings? {
+        return userSettingDao.getPosSettingsById(userId)
+    }
+
+    suspend fun updatePosSetting(userId: Long, isEnableCashBalance: Boolean, isBlockOutOfStock: Boolean) {
+            userSettingDao.updatePosSettings(userId, isEnableCashBalance, isBlockOutOfStock)
+    }
 
 }

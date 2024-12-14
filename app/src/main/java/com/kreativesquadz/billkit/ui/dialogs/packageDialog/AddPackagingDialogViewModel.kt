@@ -15,11 +15,10 @@ class AddPackagingDialogViewModel : ViewModel() {
     val df = DecimalFormat("#")
 
     fun getPackagingsText() {
-        if (dialogText.value.isNullOrEmpty()){
+        if (packagingText.value.isNullOrEmpty()){
             _dismissDialog.value = true
             return
         }
-
         isApplied.value = true
         _dismissDialog.value = true
     }

@@ -58,6 +58,7 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/_10dp"
                     app:endIconMode="none"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -72,6 +73,26 @@
                         android:hint="Amount"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10dp"
+                    android:layout_weight="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/dropdownPackaging"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/txt_14sp"
+                        android:inputType="none"
+                        android:hint="Available Packagings"
+                        android:text="Select Packaging" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
             </LinearLayout>
@@ -81,10 +102,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Update"
+            android:id="@+id/btnUpdate"
             android:layout_marginStart="@dimen/_10dp"
             android:layout_marginEnd="@dimen/_10dp"
             android:textAllCaps="false"
-            android:onClick="@{() -> viewModel.getPackagingsText()}"
             android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 </layout>

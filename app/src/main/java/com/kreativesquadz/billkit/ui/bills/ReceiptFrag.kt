@@ -1288,7 +1288,10 @@ class ReceiptFrag : Fragment() {
 
 
     private fun printByteArray(textData: ByteArray) {
-        val bitmap: Bitmap = imageViewToBitmap(binding.imageView)
+        val bitmap: Bitmap? = imageViewToBitmap(binding.imageView)
+        if (bitmap == null) {
+            return
+        }
         val print: Boolean = printImage(textData,CENTER,bitmap, 200)
             if (!print) {
                 Toast.makeText(requireContext(), "Print image failed", Toast.LENGTH_SHORT).show()
@@ -1359,26 +1362,30 @@ class ReceiptFrag : Fragment() {
     }
 
 
-    fun imageViewToBitmap(imageView: ImageView): Bitmap {
-        // Measure and layout the ImageView
-        imageView.measure(
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-//        imageView.layout(0, 0, imageView.measuredWidth, imageView.measuredHeight)
+    fun imageViewToBitmap(imageView: ImageView): Bitmap? {
+        return try {
+            // Measure and layout the ImageView
+            imageView.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            )
+            // Create a Bitmap with the same dimensions as the ImageView
+            val bitmap = Bitmap.createBitmap(
+                imageView.measuredWidth,
+                imageView.measuredHeight,
+                Bitmap.Config.ARGB_8888
+            )
 
-        // Create a Bitmap with the same dimensions as the ImageView
-        val bitmap = Bitmap.createBitmap(
-            imageView.width,
-            imageView.height,
-            Bitmap.Config.ARGB_8888
-        )
+            // Draw the content of the ImageView onto the Bitmap
+            val canvas = Canvas(bitmap)
+            imageView.draw(canvas)
 
-        // Draw the content of the ImageView onto the Bitmap
-        val canvas = Canvas(bitmap)
-        imageView.draw(canvas)
-
-        return bitmap
+            bitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(imageView.context, "Logo is not compatible, try another logo.", Toast.LENGTH_SHORT).show()
+            null
+        }
     }
 
     override fun onDestroyView() {

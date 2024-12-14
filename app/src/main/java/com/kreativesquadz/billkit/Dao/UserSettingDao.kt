@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.kreativesquadz.billkit.model.settings.UserSetting
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
+import com.kreativesquadz.billkit.model.settings.POSSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 
@@ -61,6 +62,13 @@ interface UserSettingDao {
     @Query("UPDATE thermal_printer_setup SET printerSize = :printerSize, printerMode = :printerMode, fontSize = :fontSize, enableAutoPrint = :enableAutoPrint, openCashDrawer = :openCashDrawer, disconnectAfterPrint = :disconnectAfterPrint, autoCutAfterPrint = :autoCutAfterPrint, defaultPrinterAddress = :defaultPrinterAddress , defaultPrinterName = :defaultPrinterName WHERE userId = :userId")
     suspend fun updatePrinterSettings(userId: Long, printerSize : String, printerMode : String, fontSize : String, enableAutoPrint : Boolean, openCashDrawer : Boolean, disconnectAfterPrint : Boolean, autoCutAfterPrint : Boolean, defaultPrinterAddress : String, defaultPrinterName : String)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPosSetting(posSettings: POSSettings) : Long
 
+    @Query("SELECT * FROM pos_settings WHERE userId = :userId")
+    fun getPosSettingsById(userId: Long): POSSettings?
+
+    @Query("UPDATE pos_settings SET isEnableCashBalance = :isEnableCashBalance, isBlockOutOfStock = :isBlockOutOfStock WHERE userId = :userId")
+    suspend fun updatePosSettings(userId: Long, isEnableCashBalance: Boolean, isBlockOutOfStock: Boolean)
 
 }

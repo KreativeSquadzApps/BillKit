@@ -23,6 +23,7 @@ import com.kreativesquadz.billkit.model.request.InvoiceStatusUpdate
 import com.kreativesquadz.billkit.model.request.LoginRequest
 import com.kreativesquadz.billkit.model.request.ProductStockRequest
 import com.kreativesquadz.billkit.model.request.ProductStockRequestByName
+import com.kreativesquadz.billkit.model.settings.Packaging
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import okhttp3.RequestBody
@@ -220,14 +221,27 @@ interface ApiService {
     @Headers("X-API-KEY: " + Config.API_Key)
     fun loadAllGstTax(@Path("userId") userId: Int): LiveData<ApiResponse<List<GST>>>
 
+    @GET("/api/loadpackaging/{userId}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    fun loadAllPackaging(@Path("userId") userId: Int): LiveData<ApiResponse<List<Packaging>>>
+
 
     @POST("/api/addgsttax")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun addGstTax(@Body gst: GST): Response<ApiStatus>
 
+    @POST("/api/addPackaging")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun addPackaging(@Body packaging: Packaging): Response<ApiStatus>
+
     @DELETE("/api/deleteGstTax/{id}")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun deleteGstTax(@Path("id") id: Int): Response<ResponseBody>
+
+
+    @DELETE("/api/deletepackaging/{id}")
+    @Headers("X-API-KEY: " + Config.API_Key)
+    suspend fun deletePackaging(@Path("id") id: Int): Response<ResponseBody>
 
 
 

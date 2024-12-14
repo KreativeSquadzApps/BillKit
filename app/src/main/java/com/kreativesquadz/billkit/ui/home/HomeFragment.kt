@@ -98,6 +98,7 @@ class HomeFragment : Fragment() {
                 //Log.d("invoiceHistory", it.toString())
             }
         }
+        sharedViewModel.getPosSetting()
     }
 
     override fun onCreateView(

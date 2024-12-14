@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
@@ -15,13 +18,16 @@ import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.AdapterCategory
+import com.kreativesquadz.billkit.adapter.showCustomAlertDialog
 import com.kreativesquadz.billkit.databinding.FragmentSaleBinding
 import com.kreativesquadz.billkit.interfaces.OnItemCatListener
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.Category
+import com.kreativesquadz.billkit.model.DialogData
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -32,11 +38,15 @@ class SaleFragment : Fragment() {
     private lateinit var adapter: GenericAdapter<Product>
     private lateinit var adapterCat: AdapterCategory<Category>
     private val sharedViewModel : SharedViewModel by activityViewModels()
+    private var isOutOfStock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getProducts()
         viewModel.getCategories()
+    }
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onCreateView(
@@ -44,16 +54,15 @@ class SaleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSaleBinding.inflate(inflater, container, false)
-        setupRecyclerView()
-        setupRecyclerViewCat()
-        observers()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.takeIf { it.containsKey("object") }?.apply {
         }
+        setupRecyclerView()
+        setupRecyclerViewCat()
+        observers()
     }
 
     private fun observers(){
@@ -78,7 +87,15 @@ class SaleFragment : Fragment() {
         viewModel.filteredProducts.observe(viewLifecycleOwner) { filteredList ->
             adapter.submitList(filteredList)
         }
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                launch {
+                    sharedViewModel.posSettings.collect { printerSettings ->
+                        isOutOfStock = printerSettings.isBlockOutOfStock
+                    }
+                }
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -87,9 +104,14 @@ class SaleFragment : Fragment() {
             object : OnItemClickListener<Product> {
                 override fun onItemClick(item: Product) {
                     if(!sharedViewModel.isProductAdded(item)){
-                        sharedViewModel.addProduct(item)
-                    }else{
-
+                        item.productStock?.let {
+                            if (it <= 0 && isOutOfStock){
+                                setupPopup(item.productName){
+                                }
+                            }else{
+                                sharedViewModel.addProduct(item)
+                            }
+                        }
                     }
                 }
             },
@@ -118,7 +140,27 @@ class SaleFragment : Fragment() {
         binding.recyclerViewCat.layoutManager = LinearLayoutManager(context)
     }
 
+    private fun setupPopup(name : String ,action: () -> Unit){
+        val dialogData = DialogData(
+            title = "Out Of Stock",
+            info = "Item ${name} is Out Of Stock. You Cannot Proceed with the sale.\n To proceed with the sale," +
+                    " Adjust the stock or Enable the sale of Out Of Stock Item in Pos Settings",
+            positiveButtonText = "Okay",
+            negativeButtonText = "Cancel"
+        )
 
+        showCustomAlertDialog(
+            context = requireActivity(),
+            dialogData = dialogData,
+            positiveAction = {
+                action()
+            },
+            negativeAction = {
+                // Handle negative button action
+                // E.g., dismiss the dialog
+            }
+        )
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
