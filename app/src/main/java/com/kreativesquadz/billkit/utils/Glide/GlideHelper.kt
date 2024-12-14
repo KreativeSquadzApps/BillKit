@@ -29,7 +29,7 @@ object GlideHelper {
     // Load image with API key header
     fun loadImage(context: Context, url: String, imageView: ImageView) {
         Glide.with(context)
-            .load(GlideUrl(Config.APP_API_IMAGE_URL + url)) // Make sure the complete URL is correct
+            .load(GlideUrl(Config.APP_API_IMAGE_URL + url))
             .apply(RequestOptions().placeholder(R.drawable.add_image).error(R.drawable.add_image))
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)

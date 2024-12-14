@@ -86,7 +86,6 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                 binding.companyDetails = oldCompanyDetails
                 binding.tvInvoicePrefix.text = it.InvoicePrefix
                 binding.tvInvoiceNumber.text = it.InvoiceNumber.toString()
-                businessImage = it.BusinessImage
             }
         }
         viewModel.userSetting.observe(viewLifecycleOwner){
@@ -154,16 +153,13 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
             if (!isUpdateEnable) return@setOnClickListener
 
             val currentSettings = getCompanyDetails()
-            val companyDetails = viewModel.companyDetails.value?.data
+            val companyDetails = viewModel.companyDetails.value?.data ?: return@setOnClickListener
 
-            if (companyDetails != null && viewModel.isCompanyDetailsUpdated(companyDetails, currentSettings)) {
-                if (viewModel.selectedImageUri.value != null) {
-                    handleImageUpload()
-                } else {
-                    updateCompanyDetails(currentSettings)
-                }
-            }
+            if (!viewModel.isCompanyDetailsUpdated(companyDetails, currentSettings)) return@setOnClickListener
 
+            viewModel.selectedImageUri.value?.let {
+                handleImageUpload(currentSettings)
+            } ?: updateCompanyDetails(currentSettings)
             updateUserSettings()
         }
 
@@ -194,25 +190,24 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
 
     }
 
-    private fun handleImageUpload() {
+    private fun handleImageUpload(currentSettings: CompanyDetails) {
         viewModel.uploadImage(
             Config.userId.toString(),
             viewModel.selectedImageUri.value,
-            requireContext()
+            requireContext(),
+            currentSettings
         )
-        binding.isUpdateEnable = false
-        viewModel.uploadStatus.observe(viewLifecycleOwner) { result ->
-            result.onSuccess {
-                if (it.invoiceId == 200){
-                    showToast("Image Updated successfully")
-                    businessImageName = it.message
-                }
-
-            }.onFailure {
+        viewModel.uploadStatus.observe(viewLifecycleOwner) { success ->
+            if (success){
+                showToast("Image Updated successfully")
+                viewModel.removeImageUri()
+            }else{
                 showToast("Upload failed: Check Internet Connection")
             }
+
         }
     }
+
     private fun updateCompanyDetails(currentSettings: CompanyDetails) {
         viewModel.updateCompanyDetailsSettings(currentSettings)
         showToast("Settings Updated")
@@ -228,7 +223,8 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
     }
 
     private fun getCompanyDetails() : CompanyDetails{
-        return CompanyDetails(oldCompanyDetails?.id ?: 0,Config.userId, binding.etBusinessName.text.toString(),businessImage,
+        businessImageName = businessImage.ifEmpty { oldCompanyDetails?.BusinessImage }
+        return CompanyDetails(oldCompanyDetails?.id ?: 0,Config.userId, binding.etBusinessName.text.toString(),businessImageName ?:"",
             binding.etPlace.text.toString(), binding.etshopContactNumber.text.toString(),
             binding.etshopEmail.text.toString(),binding.etGSTNo.text.toString(),
             binding.etFSSAINo.text.toString(),binding.etCurrencySymbol.text.toString(),
@@ -240,8 +236,6 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
                 viewModel.selectImage()
             }
         }
-
-        // Handle the image selection result
         val activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
                 val imageUri: Uri? = result.data?.data
@@ -255,21 +249,19 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
         isUpdateEnable = false
         binding.isUpdateEnable = isUpdateEnable
         binding.tvUpdate.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE // Assuming a ProgressBar in your layout
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun hideLoader() {
         binding.tvUpdate.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
-        viewModel.removeImageUri()
-        viewModel.uploadStatus.removeObservers(viewLifecycleOwner)
-        businessImageName?.let {
-            GlideHelper.loadImageWithLoader(requireContext(), it, binding.imageView,binding.progressLoader)
-        }
+
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 
 

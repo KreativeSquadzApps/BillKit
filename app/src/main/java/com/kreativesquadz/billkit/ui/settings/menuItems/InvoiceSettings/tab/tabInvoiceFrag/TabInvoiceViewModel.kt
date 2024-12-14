@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -48,23 +49,46 @@ class TabInvoiceViewModel @Inject constructor( val workManager: WorkManager,
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _uploadStatus = MutableLiveData<Result<ApiStatus>>()
-    val uploadStatus: LiveData<Result<ApiStatus>> get() = _uploadStatus
+    private val _uploadStatus = MutableLiveData<Boolean>()
+    val uploadStatus: LiveData<Boolean> get() = _uploadStatus
 
     private val _isUploading = MutableLiveData<Boolean>()
     val isUploading: LiveData<Boolean> get() = _isUploading
 
-    fun uploadImage(userId: String, imageUri: Uri?, context: Context) {
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
+
+    private val _selectedImageUri = MutableLiveData<Uri?>()
+    val selectedImageUri: MutableLiveData<Uri?> = _selectedImageUri
+
+    fun uploadImage(userId: String, imageUri: Uri?, context: Context, companyDetails: CompanyDetails) {
         viewModelScope.launch {
             _isUploading.value = true
-            val userIdPart = userId.toRequestBody("text/plain".toMediaTypeOrNull())
-            val imagePart = imageUri?.let { prepareFilePart("image", it, context) }
-            val result = settingsRepository.uploadCompanyImage(userIdPart, imagePart)
-            _uploadStatus.value = result
-            _isUploading.value = false
+            _uploadStatus.value = try {
+                val userIdPart = userId.toRequestBody("text/plain".toMediaTypeOrNull())
+                val imagePart = imageUri?.let { prepareFilePart("image", it, context) }
 
+                val result = settingsRepository.uploadCompanyImage(userIdPart, imagePart)
+                val invoiceId = result.getOrNull()?.invoiceId
+
+                if (invoiceId == 200) {
+                    val message = result.getOrNull()?.message ?: throw Exception("Missing success message")
+                    companyDetails.BusinessImage = message
+                    settingsRepository.update(companyDetails)
+                    getCompanyDetailsTab()
+                    true
+                } else {
+                    throw Exception("Image upload failed with: $invoiceId")
+                }
+            } catch (e: Exception) {
+                Log.e("UploadImage", "Error uploading image", e) // Log the error for debugging
+                false // Upload failed
+            } finally {
+                _isUploading.value = false
+            }
         }
     }
+
 
     fun getCompanyDetailsTab(): LiveData<Resource<CompanyDetails>> {
         companyDetails = settingsRepository.loadCompanyDetails(Config.userId)
@@ -173,11 +197,7 @@ class TabInvoiceViewModel @Inject constructor( val workManager: WorkManager,
 
 
 
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-    private lateinit var permissionLauncher: ActivityResultLauncher<String>
 
-    private val _selectedImageUri = MutableLiveData<Uri?>()
-    val selectedImageUri: MutableLiveData<Uri?> = _selectedImageUri
 
     fun init(activityResultLauncher: ActivityResultLauncher<Intent>, permissionLauncher: ActivityResultLauncher<String>) {
         this.activityResultLauncher = activityResultLauncher

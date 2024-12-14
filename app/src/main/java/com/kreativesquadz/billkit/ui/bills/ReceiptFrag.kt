@@ -101,6 +101,7 @@ class ReceiptFrag : Fragment() {
     private val WIDTH: Int = 48
     private val HEAD: Int = 8
     val FULL_WIDTH: Int = -1
+    private var isLogoPrint = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,8 +169,10 @@ class ReceiptFrag : Fragment() {
 
                                 if (isPrinterCompanyLogo.toBoolean()){
                                     binding.imageView.visibility = View.VISIBLE
+                                    isLogoPrint = true
                                 } else{
                                     binding.imageView.visibility = View.GONE
+                                    isLogoPrint = false
                                 }
 
                                 if (isPrinterCompanyEmail.toBoolean()){
@@ -857,7 +860,11 @@ class ReceiptFrag : Fragment() {
             creditAmount = invoice.creditAmount,
             footer = pdfSettings.pdfFooter
         )
-        printByteArray(receipt)
+        if (isLogoPrint){
+            printByteArray(receipt)
+        }else{
+            viewModel.printUsingDefaultPrinter(receipt)
+        }
     }
 
     private fun createReceiptString(
@@ -1288,15 +1295,11 @@ class ReceiptFrag : Fragment() {
 
 
     private fun printByteArray(textData: ByteArray) {
-        val bitmap: Bitmap? = imageViewToBitmap(binding.imageView)
-        if (bitmap == null) {
-            return
-        }
+        val bitmap: Bitmap = imageViewToBitmap(binding.imageView) ?: return
         val print: Boolean = printImage(textData,CENTER,bitmap, 200)
             if (!print) {
                 Toast.makeText(requireContext(), "Print image failed", Toast.LENGTH_SHORT).show()
             }
-
     }
     private fun autoGrayScale(bm: Bitmap, bitMarginLeft: Int, bitMarginTop: Int): ByteArray {
         val result: ByteArray

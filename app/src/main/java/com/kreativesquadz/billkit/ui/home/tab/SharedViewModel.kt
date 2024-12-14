@@ -321,6 +321,12 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         getSubTotalamount()
 
     }
+    fun removeItem(item : InvoiceItem){
+        list.remove(item)
+        _items.value = list
+        getSubTotalamount()
+    }
+
     fun updateItemAt(oldItem: InvoiceItem, newItem : InvoiceItem){
         val position = list.indexOf(oldItem)
         Log.e("positionssss", position.toString())
@@ -330,6 +336,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         _invoiceItems.value = list
         _items.value = list
     }
+
     fun isProductAdded(product: Product?): Boolean {
         val isAdded = list.any {
             val isMatch = it.itemName.split("(")[0].trim()

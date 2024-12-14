@@ -41,7 +41,7 @@ class InvoiceSettings : Fragment() {
     }
 
     fun tabSetup(){
-        val fragments = listOf(TabInvoiceFragment(), TabPrinterFrag(), TabPdfFrag()) // Replace with your fragments
+        val fragments = listOf(TabInvoiceFragment(), TabPrinterFrag(), TabPdfFrag())
         val adapter = GenericTabAdapter(requireActivity(), fragments)
         binding.viewPager.adapter = adapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
