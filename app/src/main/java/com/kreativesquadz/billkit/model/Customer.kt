@@ -13,5 +13,7 @@ data class Customer(
     val totalSales: String,
     val address: String,
     val creditAmount: String,
+    val customerMark : String? = null,
+    val customerOther : String? = null,
     val isSynced: Int = 0,
     ) : Serializable

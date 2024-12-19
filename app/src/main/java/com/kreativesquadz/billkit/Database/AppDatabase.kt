@@ -45,7 +45,7 @@ import kotlin.concurrent.Volatile
 @Database(entities = [User::class,Customer::class, Invoice::class ,CompanyDetails::class,InvoiceItem::class,
     UserSetting::class,Category::class, Product::class,CreditNote::class, Staff::class,UserSession::class, GST::class,
     SavedOrderEntity::class, PdfSettings::class,ThermalPrinterSetup::class, CustomerCreditDetail::class, InvoicePrinterSettings::class,
-    InvoicePrefixNumber::class, TaxSettings::class, POSSettings::class,Packaging::class], version = 125, exportSchema = false)
+    InvoicePrefixNumber::class, TaxSettings::class, POSSettings::class,Packaging::class], version = 127, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase  : RoomDatabase() {
     companion object{

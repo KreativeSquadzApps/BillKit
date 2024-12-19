@@ -55,13 +55,14 @@ class EditCustomerFragment : Fragment() {
 
     private fun getCustomerData(): Customer? {
         customer?.let {
-
             return Customer(it.id,binding.etCustomerName.text.toString(),
                 binding.etShopContactNumber.text.toString(),
                 binding.etGSTNo.text.toString(),
                 it.totalSales,
                 binding.etAddress.text.toString(),
-                it.creditAmount,it.isSynced)
+                it.creditAmount,
+                binding.etCustomerMark.text.toString()
+                , binding.etCustomerOther.text.toString() ,it.isSynced)
         }
         return null
     }

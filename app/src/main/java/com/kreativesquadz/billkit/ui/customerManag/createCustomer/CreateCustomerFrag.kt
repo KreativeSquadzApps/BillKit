@@ -95,9 +95,12 @@ class CreateCustomerFrag : Fragment() {
         return Customer(0,binding.etCustomerName.text.toString(),
                         binding.etShopContactNumber.text.toString(),
                         binding.etGSTNo.text.toString(),
-                        binding.etTotalSales.text.toString(),
+                        "0",
                         binding.etAddress.text.toString(),
-                        binding.etCreditAmount.text.toString(),0)
+                        "0",
+                        binding.etCustomerMark.text.toString(),
+                        binding.etCustomerOther.text.toString(),
+                        0)
     }
     private fun observers(){
         binding.etGSTNo.addTextChangedListener(object : TextWatcher {

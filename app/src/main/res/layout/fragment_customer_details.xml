@@ -95,6 +95,52 @@
                                     android:textStyle="bold"
                                     tools:text="5500.00" />
                             </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5dp"
+                                android:orientation="horizontal">
+                                <TextView android:fontFamily="@font/montserrat_medium"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_11sp"
+                                    android:text="Mark :  "
+                                    android:paddingBottom="4dp" />
+                                <TextView
+                                    android:fontFamily="@font/montserrat_medium"
+                                    android:id="@+id/tvCustomerMark"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorPrimary"
+                                    android:text="@{customer.customerMark}"
+                                    android:paddingBottom="4dp"
+                                    android:textStyle="bold"
+                                    tools:text="5500.00" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5dp"
+                                android:orientation="horizontal">
+                                <TextView android:fontFamily="@font/montserrat_medium"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/text_color_main"
+                                    android:textSize="@dimen/txt_11sp"
+                                    android:text="Other :  "
+                                    android:paddingBottom="4dp" />
+                                <TextView
+                                    android:fontFamily="@font/montserrat_medium"
+                                    android:id="@+id/tvCustomerOther"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorPrimary"
+                                    android:text="@{customer.customerOther}"
+                                    android:paddingBottom="4dp"
+                                    android:textStyle="bold"
+                                    tools:text="5500.00" />
+                            </LinearLayout>
 
 
                         </LinearLayout>
