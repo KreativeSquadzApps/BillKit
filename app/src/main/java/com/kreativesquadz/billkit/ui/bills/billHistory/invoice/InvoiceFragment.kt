@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -29,18 +30,17 @@ class InvoiceFragment : Fragment() {
     private val viewModel: InvoiceViewModel by activityViewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var adapter: GenericAdapter<InvoiceItem>
-    var isTaxAvailable = false  
+    var isTaxAvailable = false
     val invoice by lazy {
         arguments?.getSerializable("invoice") as? Invoice
     }
+    var invoiceSend : Invoice? = null
 
     override fun onResume() {
         super.onResume()
         viewModel.getInvoiceDetails(invoice?.id.toString())
         viewModel.fetchInvoiceItems(invoice!!.invoiceId.toLong())
-        Log.e("invoiceId",invoice!!.invoiceId.toString())
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +56,6 @@ class InvoiceFragment : Fragment() {
         observers()
      }
 
-
     fun observers(){
           viewModel.invoice.observe(viewLifecycleOwner) {
               binding.invoice = it
@@ -65,7 +64,8 @@ class InvoiceFragment : Fragment() {
               val firstValue = it.customGstAmount?.split("|")?.first()
               binding.tvCustomGst.text = "Custom Gst : Rs "+firstValue?.toDouble()
               binding.tvDiscount.text = "Discount : Rs "+it.discount?.toDouble()
-
+              binding.tvCreditNote.text = "Credit Note : Rs "+it.creditNoteAmount?.toDouble()
+              invoiceSend = it
           }
 
         viewModel.invoiceItems.observe(viewLifecycleOwner){
@@ -85,8 +85,10 @@ class InvoiceFragment : Fragment() {
 
     private  fun onClickListeners() {
         binding.btnEdit.setOnClickListener{
-            val action = InvoiceFragmentDirections.actionInvoiceFragmentToEditBillDetailsFrag(invoice!!)
-            findNavController().navigate(action)
+            invoiceSend?.let {
+                val action = InvoiceFragmentDirections.actionInvoiceFragmentToEditBillDetailsFrag(it)
+                findNavController().navigate(action)
+            }
         }
         binding.btnReceipt.setOnClickListener {
             val action = InvoiceFragmentDirections.actionInvoiceFragmentToReceiptFrag(invoice?.invoiceId.toString(),Config.InvoiceFragmentToReceiptFragment)

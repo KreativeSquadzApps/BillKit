@@ -254,7 +254,7 @@
                         app:layout_constraintStart_toEndOf="@+id/removeGst"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Add Gst :  "
+                        android:text="Gst RS :  "
                         android:id="@+id/txtGstAmount"
                         android:textColor="@color/colorPrimary" />
 
@@ -317,7 +317,7 @@
                         app:layout_constraintStart_toEndOf="@+id/removePack"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Add Packaging :  "
+                        android:text="Packaging RS :  "
                         android:id="@+id/txtPackageAmount"
                         android:textColor="@color/colorPrimary" />
 
@@ -380,7 +380,7 @@
                         app:layout_constraintStart_toEndOf="@+id/removeOther"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Add Other Charges :  "
+                        android:text="Other Charges RS :  "
                         android:id="@+id/txtOtherCharges"
                         android:textColor="@color/colorPrimary" />
 
@@ -455,7 +455,7 @@
                         app:layout_constraintStart_toEndOf="@+id/removeDiscount"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Discount :  "
+                        android:text="Discount RS :  "
                         android:id="@+id/txtDiscountAmount"
                         android:textColor="@color/colorPrimary" />
 
@@ -512,7 +512,7 @@
                     app:layout_constraintStart_toEndOf="@+id/removeCreditNote"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="Credit Note Amount :  "
+                    android:text="CreditNote Amount RS :  "
                     android:id="@+id/txtcreditNoteAmount"
                     android:textColor="@color/colorPrimary" />
 

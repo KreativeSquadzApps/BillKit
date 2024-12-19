@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
@@ -51,6 +52,7 @@ class CreditNoteDetailsFragment : Fragment() {
                 binding.creditNote = it
                 binding.isActive = it.status == "Active"
                 creditNote = it
+               binding.tvTotalTax.text =  "Total Tax Rs: ${it.totalAmount - it.amount}"
             }
         }
         viewModel.itemsList.observe(viewLifecycleOwner){
@@ -59,7 +61,6 @@ class CreditNoteDetailsFragment : Fragment() {
                 setupRecyclerView(list)
                 binding.totalItem = list.size.toString()
             }
-
         }
     }
 
@@ -67,7 +68,10 @@ class CreditNoteDetailsFragment : Fragment() {
         binding.btnRefund.setOnClickListener {
             setupPopup()
         }
-
+        binding.btnReceipt.setOnClickListener {
+            val action = CreditNoteDetailsFragmentDirections.actionCreditNoteDetailsFragmentToCreditNoteReceiptFragment(creditNote)
+            findNavController().navigate(action)
+        }
     }
 
     private fun setupRecyclerView(list : List<InvoiceItem>?) {

@@ -44,7 +44,7 @@ interface CreditNoteDao {
     @Query("UPDATE credit_notes SET status = :status WHERE id = :id")
     suspend fun updateCreditNoteStatus(id: Int?, status: String)
 
-    @Query("UPDATE invoices SET status = 'Returned' WHERE id = :invoiceId")
+    @Query("UPDATE invoices SET status = 'Returned' WHERE invoiceId = :invoiceId")
     suspend fun updateInvoiceStatus(invoiceId: Int)
 
     @Query("SELECT * FROM credit_notes WHERE dateTime BETWEEN :startDate AND :endDate ORDER BY dateTime DESC")

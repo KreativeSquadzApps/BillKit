@@ -160,8 +160,6 @@ class SplitFragment : Fragment(),FragmentBaseFunctions {
                        items =  sharedViewModel.getItemsList(),
                        creditNoteId =  sharedViewModel.getCreditNote()?.id)
                    billDetailsViewModel.updateInvoicePrefixNumber(invoicePrefix)
-
-
                }else{
                    Toast.makeText(requireContext(),"Please select a customer",Toast.LENGTH_SHORT).show()
                }

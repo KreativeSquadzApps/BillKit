@@ -59,8 +59,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
     var list = mutableListOf<InvoiceItem>()
 
-    private val _selectedCustomer = MutableLiveData<Customer?>()
-    val selectedCustomer: LiveData<Customer?> get() = _selectedCustomer
+
 
     val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
@@ -75,6 +74,9 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
 
     var _isCustomerSelected = MutableLiveData<Boolean>()
     val isCustomerSelected : LiveData<Boolean> get() = _isCustomerSelected
+
+    private val _selectedCustomer = MutableLiveData<Customer?>()
+    val selectedCustomer: LiveData<Customer?> get() = _selectedCustomer
 
     val include = "X"
 
@@ -270,7 +272,7 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         val finalTotalPrice = (product.productPrice.toString().toDouble() * defaultQty)
          var finalPrice = finalTotalPrice
 
-            product.productTaxType?.let { taxTypeString ->
+        product.productTaxType?.let { taxTypeString ->
             val taxType = TaxType.fromString(taxTypeString)
             taxType?.let { type ->
                 when (type) {
@@ -310,6 +312,8 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             totalPrice = finalPrice,
             taxRate = product.productTax?.toString()?.toDouble() ?: 0.0,
             productMrp = productMrp,
+            productTaxType = product.productTaxType,
+            isProduct = 1
             )
         list.add(homeItem)
         _items.value = list
@@ -454,7 +458,6 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
             }
         }
     }
-
 
 
     fun getTotalValues(): Triple<Double, Double, Double> {

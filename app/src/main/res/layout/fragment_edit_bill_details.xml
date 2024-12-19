@@ -7,6 +7,9 @@
     <data>
         <import type="android.view.View" />
         <variable
+            name="sharedViewModel"
+            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+        <variable
             name="invoice"
             type="com.kreativesquadz.billkit.model.Invoice" />
         <variable
@@ -23,8 +26,13 @@
             name="isPackagingApplied"
             type="Boolean" />
         <variable
+            name="isOtherChargesApplied"
+            type="Boolean" />
+
+        <variable
             name="isCreditNoteApplied"
             type="Boolean" />
+
         <variable
             name="customer"
             type="com.kreativesquadz.billkit.model.Customer" />
@@ -50,7 +58,12 @@
         <variable
             name="packagingAppliedAmount"
             type="String" />
-
+        <variable
+            name="isOtherCharges"
+            type="Boolean" />
+        <variable
+            name="otherChargesAppliedAmount"
+            type="String" />
     </data>
 
 
@@ -147,11 +160,6 @@
           </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
-
-
-
       </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -227,7 +235,7 @@
                         app:layout_constraintStart_toEndOf="@+id/removeGst"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Add Gst :  "
+                        android:text="Gst RS :  "
                         android:id="@+id/txtGstAmount"
                         android:textColor="@color/colorPrimary" />
 
@@ -288,7 +296,7 @@
                         app:layout_constraintStart_toEndOf="@+id/removePack"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Add Packaging :  "
+                        android:text="Packaging RS:  "
                         android:id="@+id/txtPackageAmount"
                         android:textColor="@color/colorPrimary" />
 
@@ -319,6 +327,68 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/otherChargesView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="@{isOtherCharges ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@+id/packagingView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{isOtherChargesApplied ? View.VISIBLE : View.GONE}"
+                    >
+
+                    <ImageView
+                        android:id="@+id/removeOther"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="@dimen/_10dp"
+                        android:src="@drawable/close_circle"
+                        android:paddingEnd="@dimen/_8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/removeOther"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Other Charges RS :  "
+                        android:id="@+id/txtOtherCharges"
+                        android:textColor="@color/colorPrimary" />
+
+                    <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10dp"
+                        app:layout_constraintStart_toEndOf="@+id/txtOtherCharges"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="@{otherChargesAppliedAmount}"
+                        android:textColor="@color/colorPrimary"
+                        tools:text="10"
+                        android:id="@+id/tvOtherCharges"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Add Other Charges"
+                    android:visibility="@{isOtherChargesApplied ? View.GONE : View.VISIBLE}"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/addOtherCharges"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                 android:layout_width="wrap_content"
@@ -326,7 +396,7 @@
                 android:layout_marginTop="@dimen/_10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/amountTotal"
-                android:text='@{"Total Tax : " + invoice.totalItems}'
+                android:text='@{"Total Tax : " + sharedViewModel.getTotalTax()}'
                 android:textColor="@color/text_color_main"
                 android:id="@+id/amountTotalTax"
                 tools:text="Total Tax : "/>
@@ -363,7 +433,7 @@
                         app:layout_constraintStart_toEndOf="@+id/removeDiscount"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Discount :  "
+                        android:text="Discount RS :  "
                         android:id="@+id/txtDiscountAmount"
                         android:textColor="@color/colorPrimary" />
 
@@ -420,7 +490,7 @@
                     app:layout_constraintStart_toEndOf="@+id/removeCreditNote"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="Credit Note Amount :  "
+                    android:text="CreditNote Amount RS :  "
                     android:id="@+id/txtcreditNoteAmount"
                     android:textColor="@color/colorPrimary" />
 

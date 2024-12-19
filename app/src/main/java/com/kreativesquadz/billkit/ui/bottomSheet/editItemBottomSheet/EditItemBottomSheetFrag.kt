@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -15,6 +16,7 @@ import com.kreativesquadz.billkit.databinding.FragmentEditItemBottomSheetBinding
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
+import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -88,23 +90,52 @@ class EditItemBottomSheetFrag(var item: InvoiceItem) : BottomSheetDialogFragment
 
         binding.btnupdate.setOnClickListener {
             var totalprice = item.unitPrice * binding.etQty.text.toString().toDouble()
-            val selectedTaxPercentage = sharedViewModel.taxSettings.value?.selectedTaxPercentage
-            sharedViewModel.taxSettings.value?.defaultTaxOption?.let {
-                if (it == TaxOption.ExemptTax){
-                }
-                if (it == TaxOption.PriceIncludesTax){
-                    totalprice += binding.etQty.text.toString().toDouble()
-                }
-                if (it == TaxOption.PriceExcludesTax){
-                    selectedTaxPercentage?.let {
-                        val productTax =  item.unitPrice.times(it).div(100)
-                        totalprice += (productTax * binding.etQty.text.toString().toInt())
+            if (item.isProduct == 1){
+                item.productTaxType?.let { taxTypeString ->
+                    val taxType = TaxType.fromString(taxTypeString)
+                    taxType?.let { type ->
+                        when (type) {
+                            TaxType.PriceIncludesTax -> {
+                            }
+                            TaxType.PriceWithoutTax -> {
+                                Toast.makeText(requireContext(), "${item.taxRate}", Toast.LENGTH_SHORT).show()
+                                if (item.taxRate != 0.0 ){
+                                    val productTax =   item.unitPrice.times(item.taxRate).div(100)
+                                    totalprice += (productTax * binding.etQty.text.toString().toInt())
+                                }
+
+                                // Handle PriceWithoutTax
+                            }
+                            TaxType.ZeroRatedTax -> {
+
+                                // Handle ZeroRatedTax
+                            }
+                            TaxType.ExemptTax -> {
+                                // Handle ExemptTax
+                            }
+                        }
                     }
                 }
-                if (it == TaxOption.ZeroRatedTax){
-                }
-
             }
+            else{
+                val selectedTaxPercentage = sharedViewModel.taxSettings.value?.selectedTaxPercentage
+                sharedViewModel.taxSettings.value?.defaultTaxOption?.let {
+                    if (it == TaxOption.ExemptTax){
+                    }
+                    if (it == TaxOption.PriceIncludesTax){
+                    }
+                    if (it == TaxOption.PriceExcludesTax){
+                        selectedTaxPercentage?.let {
+                            val productTax =  item.unitPrice.times(it).div(100)
+                            totalprice += (productTax * binding.etQty.text.toString().toInt())
+                        }
+                    }
+                    if (it == TaxOption.ZeroRatedTax){
+                    }
+
+                }
+            }
+
             val itemName = binding.etItemName.text.toString() + " ( " + binding.etPrice.text.toString() + " )"+ " X " + binding.etQty.text.toString().toInt()
             sharedViewModel.updateItemAt(item,item.copy(itemName = itemName, unitPrice = binding.etPrice.text.toString().toDouble() , quantity = binding.etQty.text.toString().toInt() , totalPrice = totalprice))
             dismiss()

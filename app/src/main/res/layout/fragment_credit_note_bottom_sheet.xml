@@ -40,37 +40,33 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <EditText
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_marginStart="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_20dp"
+            app:endIconMode="none">
+
+            <AutoCompleteTextView
+                android:id="@+id/etCreditNote"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:layout_height="wrap_content"
                 android:padding="@dimen/_10dp"
-                android:textSize="@dimen/txt_18sp"
-                android:drawableLeft="@android:drawable/ic_menu_search"
-                android:hint="Contact/Name/GST No "
-                />
+                android:drawableStart="@drawable/search_icon"
+                android:drawableTint="@color/colorPrimary"
+                android:hint="Invoice No" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                android:layout_width="34dp"
-                android:layout_weight="1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="@dimen/_10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@android:drawable/ic_input_add"
-                android:layout_height="34dp"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginStart="@dimen/_15dp"
+            android:layout_marginEnd="@dimen/_15dp"
+
             android:id="@+id/recyclerView"/>
 
 

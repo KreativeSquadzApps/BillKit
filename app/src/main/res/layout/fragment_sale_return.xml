@@ -24,6 +24,9 @@
         <variable
             name="isRefund"
             type="Boolean" />
+        <variable
+            name="isButtonActive"
+            type="Boolean" />
 
 
 
@@ -401,7 +404,8 @@
                     app:cardUseCompatPadding="true"
                     android:layout_marginStart="@dimen/_10dp"
                     android:layout_marginEnd="@dimen/_10dp"
-                    app:cardBackgroundColor="@color/colorPrimary"
+                    app:cardBackgroundColor="@{isButtonActive ? @color/colorPrimary : @color/lite_grey_200}"
+                    tools:cardBackgroundColor="@color/colorPrimary"
                     android:textStyle="bold"
                     android:textColor="@color/text_color_heading"
                     android:gravity="center">

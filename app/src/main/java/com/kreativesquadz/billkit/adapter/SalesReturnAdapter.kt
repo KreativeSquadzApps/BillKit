@@ -55,30 +55,35 @@ class SalesReturnAdapter<T>(
             binding.tvAvailableQty.text = ogQty.toString()
 
             var qty = 0
-            binding.qtyAdd.setOnClickListener{
-                qty++
-                if (ogQty < qty){
-                    listenerToast.showToast("No Items Available")
-                }else{
-                    binding.tvAvailableQty.text = (binding.tvAvailableQty.text.toString().toInt() - 1).toString()
+            binding.qtyAdd.setOnClickListener {
+                if (ogQty > qty) {
+                    qty++
+                    invoiceItem.returnedQty = qty
                     binding.etQty.setText("$qty")
-                    invoiceItem.returnedQty =  invoiceItem.returnedQty!! + 1
-                    listListener.onItemList(item.copy(returnedQty = invoiceItem.returnedQty))
+                    binding.tvAvailableQty.text = (ogQty - qty).toString()
+                    listListener.onItemList(item.copy(returnedQty = qty))
+                } else {
+                    listenerToast.showToast("No Items Available")
                 }
             }
+
             binding.qtyMinus.setOnClickListener {
                 if (qty > 0) {
                     qty--
-                    binding.tvAvailableQty.text = (binding.tvAvailableQty.text.toString().toInt() + 1).toString()
+                    invoiceItem.returnedQty = qty
                     binding.etQty.setText("$qty")
-                    invoiceItem.returnedQty = invoiceItem.returnedQty!! - 1
-                    listListener.onItemList(item.copy(returnedQty = invoiceItem.returnedQty))
+                    binding.tvAvailableQty.text = (ogQty - qty).toString()
+                    listListener.onItemList(item.copy(returnedQty = qty))
                 } else {
                     listenerToast.showToast("Quantity cannot be less than zero")
                 }
             }
+
             binding.executePendingBindings()
         }
+    }
+    private fun updateQuantity(qty: Int) {
+
     }
 
 }

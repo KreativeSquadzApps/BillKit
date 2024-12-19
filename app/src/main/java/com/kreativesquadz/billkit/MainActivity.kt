@@ -77,6 +77,11 @@ class MainActivity  : AppCompatActivity(), HomeFragment.DrawerToggleListener {
                         supportActionBar!!.hide()
                     }
                 }
+                R.id.creditNoteReceiptFragment -> {
+                    if (supportActionBar != null) {
+                        supportActionBar!!.hide()
+                    }
+                }
                 R.id.nav_home ->{
                     if (supportActionBar != null) {
                         supportActionBar!!.hide()

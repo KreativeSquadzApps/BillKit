@@ -41,8 +41,7 @@ data class Invoice(
 
 @Entity(
     tableName = "invoice_items",
-
-)
+    )
 data class InvoiceItem(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -55,7 +54,7 @@ data class InvoiceItem(
     var totalPrice: Double,
     val productMrp: Double?=null,
     val taxRate: Double,
-    val productTaxType : String?=null
-
+    val productTaxType : String?=null,
+    val isProduct : Int = 0,
 ) : Serializable
 

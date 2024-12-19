@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.ui.bills
+package com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteDetails.creditNoteReceipt
 
 import android.content.Context
 import android.content.Intent
@@ -6,22 +6,19 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
+import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity.CENTER
 import android.view.Gravity.RIGHT
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -49,22 +46,19 @@ import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.AdapterReceipt
-import com.kreativesquadz.billkit.adapter.GenericAdapter
-import com.kreativesquadz.billkit.databinding.FragmentReceiptBinding
+import com.kreativesquadz.billkit.databinding.FragmentCreditNoteReceiptBinding
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.CompanyDetails
+import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.InvoiceTax
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
-import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
-import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
+import com.kreativesquadz.billkit.ui.bills.ReceiptFragDirections
 import com.kreativesquadz.billkit.utils.Glide.GlideHelper
-import com.kreativesquadz.billkit.utils.TaxType
-import com.kreativesquadz.billkit.utils.addBackPressHandler
 import com.kreativesquadz.billkit.utils.toBoolean
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -73,32 +67,19 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
 @AndroidEntryPoint
-class ReceiptFrag : Fragment() {
-    var _binding: FragmentReceiptBinding? = null
-    val binding get() = _binding!!
-    private val viewModel: ReceiptViewModel by viewModels()
+class CreditNoteReceiptFragment : Fragment() {
+    private var _binding: FragmentCreditNoteReceiptBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: CreditNoteReceiptViewModel by viewModels()
     private lateinit var adapter: AdapterReceipt<InvoiceItem>
-    private lateinit var adapterGst: GenericAdapter<InvoiceTax>
-    lateinit var invoiceP: Invoice
     private var customerP : Customer? = null
-    var invoiceTax = mutableListOf<InvoiceTax>()
+    private var creditNoteP : CreditNote? = null
     var isTaxAvailable = false
     var isMrpAvailable = false
-    val invoiceId by lazy {
-        arguments?.getString("invoiceId")
-    }
-    val target by lazy {
-        arguments?.getString("target")
-    }
     private var pdfSettings = PdfSettings()
     private var invoicePrinterSettings = InvoicePrinterSettings()
     private var thermalPrinterSetup: ThermalPrinterSetup? = null
-
-    private var customGstAmount: String? = null
-    private var isGstAvailable = false
-   // private val PRINTER_WIDTH: Int = 384
     private val PRINTER_WIDTH: Int = 576
     private val INITIAL_MARGIN_LEFT: Int = -5
     private val BIT_WIDTH: Int = 384
@@ -106,11 +87,14 @@ class ReceiptFrag : Fragment() {
     private val HEAD: Int = 8
     val FULL_WIDTH: Int = -1
     private var isLogoPrint = false
-
+    val creditNote by lazy {
+        arguments?.getSerializable("creditNote") as CreditNote?
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        invoiceId?.let {
-            viewModel.fetchAllDetails(it)
+        Log.e("lllloooo",creditNote.toString())
+        creditNote?.let {
+            viewModel.fetchAllDetails(it.invoiceId.toString())
         }
         GlideHelper.initializeGlideWithOkHttp(requireContext())
     }
@@ -123,15 +107,24 @@ class ReceiptFrag : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentReceiptBinding.inflate(inflater, container, false)
+        _binding = FragmentCreditNoteReceiptBinding.inflate(inflater, container, false)
+        creditNoteP = creditNote
+        binding.creditNote = creditNoteP
+        val totalTax = (creditNoteP?.totalAmount!! - creditNoteP?.amount!!)
+        if (totalTax > 0){
+            binding.tvTotalTax.text = "Total Tax RS: ${(creditNoteP?.totalAmount!! - creditNoteP?.amount!!)}"
+            binding.tvTotalTax.visibility = View.VISIBLE
+        }else{
+            binding.tvTotalTax.visibility = View.GONE
+        }
         observers()
         onClickListeners()
-        addBackPressHandler(viewLifecycleOwner, ::shouldAllowBack)
         binding.isPrintLoading  = false
+
         return binding.root
     }
 
-    fun observers(){
+    private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -145,105 +138,78 @@ class ReceiptFrag : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.pdfSettings.collect { pdfSettings ->
-                        this@ReceiptFrag.pdfSettings = pdfSettings
+                        this@CreditNoteReceiptFragment.pdfSettings = pdfSettings
                         binding.tvFooter.text = pdfSettings.pdfFooter
                     }
                 }
             }
         }
         lifecycleScope.launch {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        launch {
-                            viewModel.invoicePrinterSettings.collect { invoicePrinterSettings ->
-                                this@ReceiptFrag.invoicePrinterSettings = invoicePrinterSettings
-                                binding.tvFooter.text = invoicePrinterSettings.printerFooter
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.invoicePrinterSettings.collect { invoicePrinterSettings ->
+                        this@CreditNoteReceiptFragment.invoicePrinterSettings = invoicePrinterSettings
+                        binding.tvFooter.text = invoicePrinterSettings.printerFooter
 
-                                val printerCompanyInfoValues = invoicePrinterSettings.printerCompanyInfo.split(" ")
-                                val isPrinterCompanyLogo = printerCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
-                                val isPrinterCompanyEmail = printerCompanyInfoValues.getOrNull(1)?.toIntOrNull() ?: 0
-                                val isPrinterCompanyPhone = printerCompanyInfoValues.getOrNull(2)?.toIntOrNull() ?: 0
-                                val isPrinterCompanyGst = printerCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
-
-
+                        val printerCompanyInfoValues = invoicePrinterSettings.printerCompanyInfo.split(" ")
+                        val isPrinterCompanyLogo = printerCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
+                        val isPrinterCompanyEmail = printerCompanyInfoValues.getOrNull(1)?.toIntOrNull() ?: 0
+                        val isPrinterCompanyPhone = printerCompanyInfoValues.getOrNull(2)?.toIntOrNull() ?: 0
+                        val isPrinterCompanyGst = printerCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
 
 
-                                val printerItemTableValues = invoicePrinterSettings.printerItemTable.split(" ")
-                                val  isPrinterItemTableCustomerDetails = printerItemTableValues.getOrNull(0)?.toIntOrNull() ?: 0
-                                val  isPrinterItemTableMrp = printerItemTableValues.getOrNull(1)?.toIntOrNull() ?: 0
-                                val isPrinterItemTablePayment = printerItemTableValues.getOrNull(2)?.toIntOrNull() ?: 0
-                                val isPrinterItemTableQty = printerItemTableValues.getOrNull(3)?.toIntOrNull() ?: 0
+                        val printerItemTableValues = invoicePrinterSettings.printerItemTable.split(" ")
+                        val  isPrinterItemTableCustomerDetails = printerItemTableValues.getOrNull(0)?.toIntOrNull() ?: 0
+                        val  isPrinterItemTableMrp = printerItemTableValues.getOrNull(1)?.toIntOrNull() ?: 0
+                        val isPrinterItemTablePayment = printerItemTableValues.getOrNull(2)?.toIntOrNull() ?: 0
+                        val isPrinterItemTableQty = printerItemTableValues.getOrNull(3)?.toIntOrNull() ?: 0
 
-                                if (isPrinterCompanyLogo.toBoolean()){
-                                    binding.imageView.visibility = View.VISIBLE
-                                    isLogoPrint = true
-                                } else{
-                                    binding.imageView.visibility = View.GONE
-                                    isLogoPrint = false
-                                }
+                        if (isPrinterCompanyLogo.toBoolean()){
+                            binding.imageView.visibility = View.VISIBLE
+                            isLogoPrint = true
+                        } else{
+                            binding.imageView.visibility = View.GONE
+                            isLogoPrint = false
+                        }
 
-                                if (isPrinterCompanyEmail.toBoolean()){
-                                    binding.isVisibleEmail.visibility = View.VISIBLE
-                                }else{
-                                    binding.isVisibleEmail.visibility = View.GONE
-                                }
+                        if (isPrinterCompanyEmail.toBoolean()){
+                            binding.isVisibleEmail.visibility = View.VISIBLE
+                        }else{
+                            binding.isVisibleEmail.visibility = View.GONE
+                        }
 
-                                if (isPrinterCompanyPhone.toBoolean()){
-                                    binding.isVisibleContact.visibility = View.VISIBLE
-                                }else{
-                                    binding.isVisibleContact.visibility = View.GONE
-                                }
+                        if (isPrinterCompanyPhone.toBoolean()){
+                            binding.isVisibleContact.visibility = View.VISIBLE
+                        }else{
+                            binding.isVisibleContact.visibility = View.GONE
+                        }
 
-                                if (isPrinterCompanyGst.toBoolean()){
-                                    binding.isVisibleGst.visibility = View.VISIBLE
-                                    isGstAvailable = true
-                                }else{
-                                    binding.isVisibleGst.visibility = View.GONE
-                                    isGstAvailable = false
-                                }
+                        if (isPrinterCompanyGst.toBoolean()){
+                            binding.isVisibleGst.visibility = View.VISIBLE
+                        }else{
+                            binding.isVisibleGst.visibility = View.GONE
+                        }
 
-                                if (!isPrinterItemTableCustomerDetails.toBoolean()){
-                                    binding.isCustomerAvailable = false
-                                }
+                        if (!isPrinterItemTableCustomerDetails.toBoolean()){
+                            binding.isCustomerAvailable = false
+                        }
 
-                                if (isPrinterItemTableMrp.toBoolean()){
-                                    binding.istMrpAvalaible = true
-                                }else{
-                                    binding.istMrpAvalaible = false
-                                }
+                        if (isPrinterItemTableMrp.toBoolean()){
+                            binding.istMrpAvalaible = true
+                        }else{
+                            binding.istMrpAvalaible = false
+                        }
 
-                                if (isPrinterItemTablePayment.toBoolean()){
-                                    binding.paymentViews.visibility = View.VISIBLE
-                                }else{
-                                    binding.paymentViews.visibility = View.GONE
-                                }
+                        if (isPrinterItemTablePayment.toBoolean()){
+                        }else{
+                        }
 
-                                if (isPrinterItemTableQty.toBoolean()){
-                                    binding.tvItems.visibility = View.VISIBLE
-                                }else{
-                                    binding.tvItems.visibility = View.GONE
-                                }
-
-
-
-                            }
+                        if (isPrinterItemTableQty.toBoolean()){
+                        }else{
                         }
                     }
-        }
-
-        viewModel.invoiceData.observe(viewLifecycleOwner) {
-            binding.invoice = it
-            if (it.customGstAmount != null){
-                isTaxAvailable = true
-                customGstAmount = it.customGstAmount
-                val firstValue = it.customGstAmount.split("|").first()
-                binding.tvCustomGst.text = "Custom Gst : Rs "+firstValue.toDouble()
+                }
             }
-            invoiceP = it
-            binding.tvDiscount.text = "Discount : Rs "+it.discount?.toDouble()
-            binding.tvCreditNote.text = "Credit Note : Rs "+it.creditNoteAmount?.toDouble()
-            binding.isCustomerAvailable = it?.customerId != null
-            binding.customer = viewModel.getCustomerById(it?.customerId.toString())
-            customerP = viewModel.getCustomerById(it?.customerId.toString())
         }
 
         viewModel.companyDetails.observe(viewLifecycleOwner){
@@ -252,9 +218,7 @@ class ReceiptFrag : Fragment() {
                 GlideHelper.loadImage(requireContext(), it.BusinessImage, binding.imageView)
             }
         }
-
         viewModel.invoiceItems.observe(viewLifecycleOwner){
-            var totalQty = 0.0
             it?.forEach {
                 if(it.taxRate > 0){
                     isTaxAvailable = true
@@ -263,23 +227,12 @@ class ReceiptFrag : Fragment() {
                 if(it.productMrp != it.unitPrice){
                     isMrpAvailable = true
                 }
-                totalQty += it.quantity
             }
-            binding.tvTotalQty.setText("Total Qty : "+totalQty.toInt().toString())
             binding.istTaxAvalaible = isTaxAvailable
             binding.istMrpAvalaible = isMrpAvailable
-            setupRecyclerView(it)
-        }
-
-
-
-        target?.let {
-            if (it.equals(Config.BillDetailsFragmentToReceiptFragment)){
-                binding.backImage.setBackgroundResource(R.drawable.home_light)
-                binding.backText.text = "New Sale"
-            }else{
-                binding.backImage.setBackgroundResource(R.drawable.back_light)
-                binding.backText.text = "Back"
+            it?.let {
+                val list = it.filter { it.returnedQty!! > 0 }
+                setupRecyclerView(list)
             }
         }
         viewModel.printStatus.observe(viewLifecycleOwner){
@@ -290,93 +243,44 @@ class ReceiptFrag : Fragment() {
                 binding.isPrintLoading = false
             }
         }
-
         viewModel.allDataReady.observe(viewLifecycleOwner) { ready ->
             if (ready) {
                 thermalPrinterSetup?.let {
                     if (it.defaultPrinterAddress.isNotEmpty() && it.enableAutoPrint){
-                        printInvoice(customerP, invoiceP, viewModel.invoiceItems.value!!, viewModel.companyDetails.value!!)
+                        printInvoice(customerP,creditNoteP, viewModel.invoiceItems.value!!, viewModel.companyDetails.value!!)
+                    }
                 }
-           }
                 // Other operations after all data is ready
             }
         }
     }
 
-    fun onClickListeners(){
+
+    private fun onClickListeners() {
         binding.btnBack.setOnClickListener {
-            if(target == Config.BillDetailsFragmentToReceiptFragment)
-                findNavController().navigate(R.id.action_receiptFrag_to_nav_home)
-            else
-                findNavController().popBackStack()
-            }
-
-
-
+            findNavController().popBackStack()
+        }
         binding.btnPrint.setOnClickListener {
             if (thermalPrinterSetup != null && thermalPrinterSetup!!.defaultPrinterAddress.isNotEmpty()){
-                printInvoice(customerP, invoiceP, viewModel.invoiceItems.value!!, viewModel.companyDetails.value!!)
+                printInvoice(customerP,creditNoteP,viewModel.invoiceItems.value!!, viewModel.companyDetails.value!!)
             }else{
                 Toast.makeText(requireContext(), "No Default Printer Found", Toast.LENGTH_SHORT).show()
-                val action = ReceiptFragDirections.actionReceiptFragToBluetoothDeviceFragment(invoiceP)
-                findNavController().navigate(action)
+//                val action = ReceiptFragDirections.actionReceiptFragToBluetoothDeviceFragment()
+//                findNavController().navigate(action)
             }
         }
-
         binding.btnShare.setOnClickListener {
-            generateReceiptPdf(requireContext(),pdfSettings, viewModel.invoiceItems.value!!,viewModel.companyDetails.value!!, invoiceP, customerP)
+            generateReceiptPdf(requireContext(),creditNoteP,pdfSettings, viewModel.invoiceItems.value!!,viewModel.companyDetails.value!!, customerP)
         }
-
     }
 
     private fun setupRecyclerView(receiptInvoiceItem: List<InvoiceItem>?) {
         var isTaxAvailable = false
         var isMrpAvailable = false
-        val taxList = mutableListOf<Double>()
-        var taxAmount: Double
-        var taxableAmount: Double
-        invoiceTax.clear()
-
         receiptInvoiceItem?.forEach {
-            if (it.taxRate > 0) {
-                isTaxAvailable = true
-                val index = taxList.indexOf(it.taxRate)
-                taxAmount = (it.unitPrice * it.quantity) * it.taxRate / 100
-                taxableAmount = it.unitPrice * it.quantity
-                if (index >= 0) {
-                    invoiceTax[index].taxableAmount += taxableAmount
-                    invoiceTax[index].taxAmount += taxAmount
-                } else {
-                    taxList.add(it.taxRate)
-                    invoiceTax.add(InvoiceTax("", taxableAmount, it.taxRate, taxAmount))
-                }
-            }
             if(it.productMrp != it.unitPrice){
                 isMrpAvailable = true
             }
-
-        }
-        customGstAmount?.let {
-            val customGstAmount = it.split("|")[0].toDouble()
-            val customGstRateApplied = it.split("|")[1].toDouble()
-            val taxableAmount = it.split("|")[2].toDouble()
-                invoiceTax.add(InvoiceTax("Custom GST",taxableAmount, customGstRateApplied, customGstAmount))
-             }
-
-        viewModel.getGstListByValue(taxList).observe(viewLifecycleOwner) { gstList ->
-            gstList?.let { gstItems ->
-                gstItems.forEach { gst ->
-                    invoiceTax.forEach { invoiceItem ->
-                        if (invoiceItem.rate == gst.taxAmount && invoiceItem.taxType != "Custom GST") {
-                            invoiceItem.taxType = gst.taxType
-                        }
-                    }
-
-                }
-
-            }
-            Log.e("llllll","$invoiceTax")
-            setupRecyclerViewGst(invoiceTax)
         }
         adapter = AdapterReceipt(
             receiptInvoiceItem ?: emptyList(),
@@ -397,35 +301,13 @@ class ReceiptFrag : Fragment() {
         val params = binding.itemListRecyclerview.layoutParams
         params.height = itemHeight * adapter.itemCount
         binding.itemListRecyclerview.layoutParams = params
-
     }
 
-    private fun setupRecyclerViewGst(gst: List<InvoiceTax>?) {
-        Log.e("kkkk","$invoiceTax")
-        adapterGst = GenericAdapter(
-            invoiceTax,
-            object : OnItemClickListener<InvoiceTax> {
-                override fun onItemClick(item: InvoiceTax) {
-                    // Handle item click
-                }
-            },
-            R.layout.item_gst,
-            BR.taxGst, // Variable ID generated by data binding
-        )
-        binding.gstRecyclerview.adapter = adapterGst
-        binding.gstRecyclerview.layoutManager = LinearLayoutManager(context)
-    }
-
-    private fun shouldAllowBack(): Boolean {
-        // Your logic to allow or restrict back action
-        return false // Change this according to your logic
-    }
-
-    private fun generateReceiptPdf(context: Context, pdfSettings: PdfSettings, items: List<InvoiceItem>, companyDetails: CompanyDetails, invoice: Invoice, customer : Customer?) {
+    private fun generateReceiptPdf(context: Context,creditNote: CreditNote?,pdfSettings: PdfSettings, items: List<InvoiceItem>, companyDetails: CompanyDetails, customer : Customer?) {
         val pdfCompanyInfoValues = pdfSettings.pdfCompanyInfo.split(" ")
-      val isCompanyLogo = pdfCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
-       val isCompanyEmail = pdfCompanyInfoValues.getOrNull(1)?.toIntOrNull() ?: 0
-       val isCompanyPhone = pdfCompanyInfoValues.getOrNull(2)?.toIntOrNull() ?: 0
+        val isCompanyLogo = pdfCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
+        val isCompanyEmail = pdfCompanyInfoValues.getOrNull(1)?.toIntOrNull() ?: 0
+        val isCompanyPhone = pdfCompanyInfoValues.getOrNull(2)?.toIntOrNull() ?: 0
         //  isCompanyAddress = pdfCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
         val  isCompanyGst = pdfCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
 
@@ -438,7 +320,7 @@ class ReceiptFrag : Fragment() {
 
 
 
-        val file = File(context.getExternalFilesDir(null), "Invoice ${invoice.invoiceNumber}.pdf")
+        val file = File(context.getExternalFilesDir(null), "CreditNote ${creditNote?.invoiceNumber!!}.pdf")
         val writer = PdfWriter(file)
         val pdfDocument = PdfDocument(writer)
         val document = Document(pdfDocument)
@@ -502,7 +384,7 @@ class ReceiptFrag : Fragment() {
         }
 
 
-            val header = Paragraph("INVOICE")
+        val header = Paragraph("CreditNote")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
             .setFontSize(20f)
             .setFontColor(ColorConstants.BLACK)
@@ -514,55 +396,55 @@ class ReceiptFrag : Fragment() {
 
         customer?.let {
             if (isItemTableCustomerDetails.toBoolean()){
-            val billTo = Paragraph("Bill To,")
-                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                .setFontSize(12f)
-                .setFontColor(ColorConstants.BLACK)
-                .setTextAlignment(TextAlignment.LEFT)
-            document.add(billTo)
+                val billTo = Paragraph("Bill To,")
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                    .setFontSize(12f)
+                    .setFontColor(ColorConstants.BLACK)
+                    .setTextAlignment(TextAlignment.LEFT)
+                document.add(billTo)
 
-            val customerName = Paragraph(customer.customerName)
-                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
-                .setFontSize(14f)
-                .setFontColor(ColorConstants.BLACK)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setMarginTop(-5f)
-            document.add(customerName)
+                val customerName = Paragraph(customer.customerName)
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(14f)
+                    .setFontColor(ColorConstants.BLACK)
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .setMarginTop(-5f)
+                document.add(customerName)
 
-            val customerMobile = Paragraph(customer.shopContactNumber)
-                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                .setFontSize(12f)
-                .setFontColor(ColorConstants.BLACK)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setMarginTop(-5f)
-            document.add(customerMobile)
+                val customerMobile = Paragraph(customer.shopContactNumber)
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                    .setFontSize(12f)
+                    .setFontColor(ColorConstants.BLACK)
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .setMarginTop(-5f)
+                document.add(customerMobile)
 
-            val customerGst = Paragraph(customer.gstNo)
-                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                .setFontSize(12f)
-                .setFontColor(ColorConstants.BLACK)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setMarginTop(-5f)
-            document.add(customerGst)
+                val customerGst = Paragraph(customer.gstNo)
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                    .setFontSize(12f)
+                    .setFontColor(ColorConstants.BLACK)
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .setMarginTop(-5f)
+                document.add(customerGst)
 
-            val customerAddress = Paragraph(customer.address)
-                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                .setFontSize(12f)
-                .setFontColor(ColorConstants.BLACK)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setMarginTop(-5f)
-            document.add(customerAddress)
+                val customerAddress = Paragraph(customer.address)
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                    .setFontSize(12f)
+                    .setFontColor(ColorConstants.BLACK)
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .setMarginTop(-5f)
+                document.add(customerAddress)
+            }
         }
-    }
 
-        val invoiceId = Paragraph("Invoice No : ${invoice.invoiceNumber}")
+        val invoiceId = Paragraph("Invoice No : ${creditNote?.invoiceNumber!!}")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
             .setFontSize(14f)
             .setFontColor(ColorConstants.BLACK)
             .setTextAlignment(TextAlignment.RIGHT)
         document.add(invoiceId)
 
-        val date = Date(invoice.invoiceDate.toLong())
+        val date = Date(creditNote.dateTime.toLong())
         val format = SimpleDateFormat("dd-MM-yyyy HH:mm a", Locale.getDefault())
 
         val invoiceDate = Paragraph(format.format(date))
@@ -577,18 +459,30 @@ class ReceiptFrag : Fragment() {
         // Add Item Table
         val table: Table
         if (isItemTableMrp.toBoolean()){
-             table = Table(UnitValue.createPercentArray(floatArrayOf(2f, 4f, 1f, 2f, 2f, 2f,2f)))
+            table = Table(UnitValue.createPercentArray(floatArrayOf(2f, 4f, 1f, 2f, 2f, 2f,2f)))
         }else{
-             table = Table(UnitValue.createPercentArray(floatArrayOf(2f, 4f, 1f, 2f, 2f, 2f)))
+            table = Table(UnitValue.createPercentArray(floatArrayOf(2f, 4f, 1f, 2f, 2f, 2f)))
         }
         table.setWidth(UnitValue.createPercentValue(100f))
 
         // Table Header
 
 
-        table.addCell(Cell().add(Paragraph("SL No").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("ITEM").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("QTY").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(
+            Cell().add(
+                Paragraph("SL No").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(
+                    ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderRight(
+                Border.NO_BORDER))
+        table.addCell(
+            Cell().add(
+                Paragraph("ITEM").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(
+                    ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(
+                Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(
+            Cell().add(
+                Paragraph("QTY").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(
+                    ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f)).setBorderLeft(
+                Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
         if (isItemTableMrp.toBoolean()) {
             table.addCell(
                 Cell().add(
@@ -599,9 +493,21 @@ class ReceiptFrag : Fragment() {
                 ).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
             )
         }
-        table.addCell(Cell().add(Paragraph("PRICE").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("TAX[ % ]").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("AMOUNT").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER))
+        table.addCell(
+            Cell().add(
+                Paragraph("PRICE").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(
+                    ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(
+                Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(
+            Cell().add(
+                Paragraph("TAX[ % ]").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(
+                    ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(
+                Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(
+            Cell().add(
+                Paragraph("AMOUNT").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(
+                    ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(
+                Border.NO_BORDER))
 
 
 
@@ -612,9 +518,15 @@ class ReceiptFrag : Fragment() {
             val  finalRate = item.unitPrice - item.unitPrice * item.taxRate / 100
             val  taxAmount = item.unitPrice - finalRate
 
-            table.addCell(Cell().add(Paragraph(serialNo.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderRight(Border.NO_BORDER))
-            table.addCell(Cell().add(Paragraph(item.itemName.split("(")[0]).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            table.addCell(Cell().add(Paragraph(item.quantity.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+            table.addCell(
+                Cell().add(Paragraph(serialNo.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderRight(
+                    Border.NO_BORDER))
+            table.addCell(
+                Cell().add(Paragraph(item.itemName.split("(")[0]).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
+                    Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+            table.addCell(
+                Cell().add(Paragraph(item.quantity.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
+                    Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
             if (isItemTableMrp.toBoolean()) {
                 table.addCell(
                     Cell().add(
@@ -622,13 +534,21 @@ class ReceiptFrag : Fragment() {
                     ).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                 )
             }
-            table.addCell(Cell().add(Paragraph(finalRate.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            table.addCell(Cell().add(Paragraph((taxAmount * item.quantity).toString() +" ["+ item.taxRate.toString()+"%]").setPaddingLeft(10f).setFontSize(10f).setTextAlignment(TextAlignment.CENTER)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            table.addCell(Cell().add(Paragraph(item.totalPrice.toString()).setPaddingRight(10f).setFontSize(12f).setTextAlignment(TextAlignment.RIGHT)).setBorderLeft(Border.NO_BORDER))
+            table.addCell(
+                Cell().add(Paragraph(finalRate.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
+                    Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+            table.addCell(
+                Cell().add(
+                    Paragraph((taxAmount * item.quantity).toString() +" ["+ item.taxRate.toString()+"%]").setPaddingLeft(10f).setFontSize(10f).setTextAlignment(
+                        TextAlignment.CENTER)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+            table.addCell(
+                Cell().add(
+                    Paragraph(item.totalPrice.toString()).setPaddingRight(10f).setFontSize(12f).setTextAlignment(
+                        TextAlignment.RIGHT)).setBorderLeft(Border.NO_BORDER))
         }
         document.add(table)
 
-        val invoiceSubTotal = Paragraph("Sub Total : ${Config.CURRENCY} ${invoice.subtotal}")
+        val invoiceSubTotal = Paragraph("Sub Total : ${Config.CURRENCY} ${creditNote.amount}")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(15f)
             .setFontColor(ColorConstants.BLACK)
@@ -636,7 +556,7 @@ class ReceiptFrag : Fragment() {
             .setMarginTop(5f)
         document.add(invoiceSubTotal)
 
-        val invoiceTotalTax = Paragraph(invoice.totalTax.toString())
+        val invoiceTotalTax = Paragraph((creditNote.totalAmount - creditNote.amount).toString())
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(15f)
             .setFontColor(ColorConstants.BLACK)
@@ -644,53 +564,15 @@ class ReceiptFrag : Fragment() {
             .setMarginTop(-5f)
         document.add(invoiceTotalTax)
 
-        val totalQty = Paragraph("Total Qty : ${serialNo}")
-            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-            .setFontSize(12f)
-            .setFontColor(ColorConstants.BLACK)
-            .setTextAlignment(TextAlignment.LEFT)
-        if (isItemTableQty.toBoolean()){
-            document.add(totalQty)
-        }
 
 
-        invoice.cashAmount?.let {
-            if (isItemTablePayment.toBoolean()) {
-                val cash = Paragraph("Cash : ${it}")
-                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                    .setFontSize(12f)
-                    .setFontColor(ColorConstants.BLACK)
-                    .setTextAlignment(TextAlignment.LEFT)
-                    .setMarginTop(-5f)
-                document.add(cash)
-
-                invoice.onlineAmount?.let {
-                    val onlineAmount = Paragraph("Online : ${it}")
-                        .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                        .setFontSize(12f)
-                        .setFontColor(ColorConstants.BLACK)
-                        .setTextAlignment(TextAlignment.LEFT)
-                        .setMarginTop(-5f)
-                    document.add(onlineAmount)
-                }
-                invoice.creditAmount?.let {
-                    val creditAmount = Paragraph("Credit : ${it}")
-                        .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                        .setFontSize(12f)
-                        .setFontColor(ColorConstants.BLACK)
-                        .setTextAlignment(TextAlignment.LEFT)
-                        .setMarginTop(-5f)
-                    document.add(creditAmount)
-                }
-            }
-        }
 
         val tableTotal = Table(UnitValue.createPercentArray(floatArrayOf(70f, 20f))) // Two columns with equal width
         tableTotal.setWidth(UnitValue.createPercentValue(100f)) // Ensure table width is 100% of page width
         tableTotal.setMarginTop(5f)
 
 // First paragraph
-        val amountToWords = Paragraph(amountToWords(invoice.totalAmount))
+        val amountToWords = Paragraph(amountToWords(creditNote.totalAmount))
             .setTextAlignment(TextAlignment.LEFT)
             .setFontSize(12f)
             .setFontColor(ColorConstants.BLACK)
@@ -698,7 +580,7 @@ class ReceiptFrag : Fragment() {
             .setPadding(5f)
 
 // Second paragraph
-        val invoiceTotal = Paragraph("Total : ${invoice.totalAmount}")
+        val invoiceTotal = Paragraph("Total : ${creditNote.totalAmount}")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(15f)
             .setFontColor(ColorConstants.BLACK)
@@ -710,40 +592,6 @@ class ReceiptFrag : Fragment() {
         tableTotal.addCell(Cell().add(amountToWords).setBorder(Border.NO_BORDER))
         tableTotal.addCell(Cell().add(invoiceTotal).setBorder(Border.NO_BORDER))
         document.add(tableTotal)
-
-
-
-
-
-        if (isTaxAvailable){
-            val taxDetails = Paragraph("TAX DETAILS")
-                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
-                .setFontSize(14f)
-                .setFontColor(ColorConstants.BLACK)
-                .setTextAlignment(TextAlignment.LEFT)
-            document.add(taxDetails)
-
-            val tableTax = Table(UnitValue.createPercentArray(floatArrayOf(2f, 3f, 3f, 2f, 3f)))
-            tableTax.setWidth(UnitValue.createPercentValue(100f))
-
-            tableTax.addCell(Cell().add(Paragraph("SL No").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("TAX TYPE").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("TAXABLE AMOUNT").setFontSize(10f).setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("RATE").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("TAX AMOUNT").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER))
-
-           var serialNoTax = 0
-            invoiceTax.forEach{ item ->
-                serialNoTax ++
-                tableTax.addCell(Cell().add(Paragraph(serialNoTax.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderRight(Border.NO_BORDER))
-                tableTax.addCell(Cell().add(Paragraph(item.taxType).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-                tableTax.addCell(Cell().add(Paragraph(item.taxableAmount.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-                tableTax.addCell(Cell().add(Paragraph(item.rate.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-                tableTax.addCell(Cell().add(Paragraph(item.taxAmount.toString()).setPaddingRight(10f).setTextAlignment(TextAlignment.RIGHT).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER))
-
-            }
-            document.add(tableTax)
-        }
 
         val thankYou = Paragraph(pdfSettings.pdfFooter)
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
@@ -827,11 +675,10 @@ class ReceiptFrag : Fragment() {
         return "$intPartWords $fractionPartWords"
     }
 
-    private fun printInvoice(customer : Customer?, invoice : Invoice?, invoiceItems : List<InvoiceItem>, companyDetails : CompanyDetails) {
+    private fun printInvoice(customer : Customer?,creditNote: CreditNote?, invoiceItems : List<InvoiceItem>, companyDetails : CompanyDetails) {
         val isCustomer = customer != null
-        val discount = invoice?.discount ?: 0
         val timestamp = try {
-            val date = Date(invoice!!.invoiceDate.toLong())
+            val date = Date(creditNote?.dateTime!!.toLong())
             val format = SimpleDateFormat("dd-MM-yyyy HH:mm a", Locale.getDefault())
             format.format(date)
         } catch (e: Exception) {
@@ -845,25 +692,17 @@ class ReceiptFrag : Fragment() {
             email = companyDetails.ShopEmail,
             gst = companyDetails.GSTNo,
             invoiceDate = timestamp,
-            invoiceId = invoice!!.invoiceNumber,
+            invoiceId = creditNote?.invoiceNumber!!,
             isCustomerAvailable = isCustomer,
             customerName = customer?.customerName,
             customerNumber = customer?.shopContactNumber,
             customerGst = customer?.gstNo,
-            packageAmount = invoice.packageAmount,
-            otherChargesAmount = invoice.otherChargesAmount,
-            customGstAmount = invoice.customGstAmount,
-            creditNoteAmount = invoice.creditNoteAmount.toDouble(),
             customerAddress = customer?.address,
             items = invoiceItems,
             totalItems = invoiceItems.size,
-            subtotal = invoice.subtotal,
-            discount = discount.toDouble(),
-            totalAmount = invoice.totalAmount,
-            totalTax = invoice.totalTax,
-            cashAmount = invoice.cashAmount,
-            onlineAmount = invoice.onlineAmount,
-            creditAmount = invoice.creditAmount,
+            subtotal = creditNote.amount,
+            totalAmount = creditNote.totalAmount,
+            totalTax = (creditNote.totalAmount - creditNote.amount) ,
             footer = pdfSettings.pdfFooter
         )
         if (isLogoPrint){
@@ -885,20 +724,12 @@ class ReceiptFrag : Fragment() {
         customerName: String?,
         customerNumber: String?,
         customerGst: String?,
-        packageAmount: Double?,
-        otherChargesAmount: Double?,
-        customGstAmount: String?,
-        creditNoteAmount : Double?,
         customerAddress: String?,
         items: List<InvoiceItem>,
         totalItems: Int,
         subtotal: Double,
-        discount: Double?,
         totalAmount: Double,
         totalTax: Double?,
-        cashAmount: Double?,
-        onlineAmount: Double?,
-        creditAmount: Double?,
         footer: String,
     ): ByteArray {
         val receipt = ByteArrayOutputStream()
@@ -933,19 +764,19 @@ class ReceiptFrag : Fragment() {
         receipt.write(formatSingleString(contactNumber, charactersPerLine).toByteArray())
         receipt.write("\n".toByteArray())
         receipt.write(formatSingleString("Email: $email", charactersPerLine).toByteArray())
-        if (isGstAvailable){
-            gst?.let {
-                receipt.write("\n".toByteArray())
-                receipt.write(formatSingleString("GST : $gst", charactersPerLine).toByteArray())
-            }
-        }
+//        if (isGstAvailable){
+//            gst?.let {
+//                receipt.write("\n".toByteArray())
+//                receipt.write(formatSingleString("GST : $gst", charactersPerLine).toByteArray())
+//            }
+//        }
 
         receipt.write("\n\n".toByteArray())
 
         // Add Invoice Header
         setFontSize(receipt, 2)
         receipt.write(boldOn)
-        receipt.write(formatSingleString("INVOICE", charactersPerLine, fontSizeMultiplier = 2).toByteArray())
+        receipt.write(formatSingleString("CreditNote", charactersPerLine, fontSizeMultiplier = 2).toByteArray())
         receipt.write("\n\n".toByteArray())
         receipt.write(boldOff)
         setFontSize(receipt, 1)
@@ -1064,72 +895,11 @@ class ReceiptFrag : Fragment() {
 //        // Add Totals
         receipt.write(formatLineWithAlignment("Items: $totalItems", "Sub Total: RS $subtotal", charactersPerLine).toByteArray())
         receipt.write("\n".toByteArray())
-//
 
-        val hasOptionalValues = packageAmount.toString().isNotEmpty() ||
-                otherChargesAmount.toString().isNotEmpty() ||
-                !customGstAmount.isNullOrEmpty() ||
-                (discount != null && discount > 0) || (creditNoteAmount != null && creditNoteAmount > 0.0)
-
-// Track which optional value has been displayed
-        var displayedOptionalLabel: String? = null
-
-        if (hasOptionalValues) {
-            displayedOptionalLabel = when {
-                packageAmount != null  -> "Package Amount : RS ${packageAmount.toDouble()}"
-                otherChargesAmount != null -> "Other Charges : RS $otherChargesAmount"
-                !customGstAmount.isNullOrEmpty() -> "Custom GST : RS ${customGstAmount.split("|").first().toDouble()}"
-                discount != null && discount > 0 -> "Discount : RS $discount"
-                creditNoteAmount != null && creditNoteAmount > 0.0 -> "Credit Note : RS $creditNoteAmount"
-                else -> null
-            }
-            if(displayedOptionalLabel == null){
-                receipt.write(formatSingleStringLeft("Qty : $totalQty", charactersPerLine).toByteArray())
-                receipt.write("\n".toByteArray())
-            }else{
-                receipt.write(formatLineWithAlignment("Qty : $totalQty", displayedOptionalLabel, charactersPerLine).toByteArray())
-            }
-        }
         if (totalTax != null && totalTax > 0) {
             receipt.write(formatSingleStringRight("Total Tax : RS $totalTax", charactersPerLine).toByteArray())
             receipt.write("\n".toByteArray())
         }
-        packageAmount?.let {
-            if (displayedOptionalLabel != "Package Amount : RS ${it.toDouble()}") {
-                receipt.write(formatSingleStringRight("Package Amount : RS $it", charactersPerLine).toByteArray())
-                receipt.write("\n".toByteArray())
-            }
-        }
-
-        otherChargesAmount?.let {
-            if (displayedOptionalLabel != "Other Charges : RS $it") {
-                receipt.write(formatSingleStringRight("Other Charges : RS $it", charactersPerLine).toByteArray())
-                receipt.write("\n".toByteArray())
-            }
-        }
-
-        customGstAmount?.let {
-            val firstValue = it.split("|").first()
-            if (displayedOptionalLabel != "Custom GST: RS ${firstValue.toDouble()}") {
-                receipt.write(formatSingleStringRight("Custom GST : RS ${firstValue.toDouble()}", charactersPerLine).toByteArray())
-                receipt.write("\n".toByteArray())
-            }
-        }
-
-        if (discount != null && discount > 0) {
-            if (displayedOptionalLabel != "Discount: RS $discount") {
-                receipt.write(formatSingleStringRight("Discount : RS $discount", charactersPerLine).toByteArray())
-                receipt.write("\n".toByteArray())
-            }
-        }
-
-        if (creditNoteAmount != null && creditNoteAmount > 0) {
-            if (displayedOptionalLabel != "Credit Note : RS $creditNoteAmount") {
-                receipt.write(formatSingleStringRight("Credit Note : RS $creditNoteAmount", charactersPerLine).toByteArray())
-                receipt.write("\n".toByteArray())
-            }
-        }
-
         receipt.write(boldOn)
         setFontSize(receipt, 2)
         receipt.write("\n".toByteArray())
@@ -1137,61 +907,7 @@ class ReceiptFrag : Fragment() {
         setFontSize(receipt, 1)
         receipt.write(boldOff)
         receipt.write("\n".toByteArray())
-        if (discount != null && discount > 0) {
-            receipt.write(formatSingleString("You saved Rs $discount", charactersPerLine).toByteArray())
-        }
-        receipt.write("\n".toByteArray())
 
-        if (isTaxAvailable){
-            receipt.write("\n".toByteArray())
-            receipt.write(formatSingleString("Tax Details", charactersPerLine).toByteArray())
-            receipt.write("\n\n".toByteArray())
-            receipt.write(
-                formatLineWithMultipleAlignment(
-                    listOf(
-                        "TaxType" to 20,
-                        "Amount" to 30,
-                        "Rate" to 20,
-                        "Tax Amount" to 30,
-                    ),
-                    charactersPerLine
-                ).toByteArray()
-            )
-            receipt.write("\n".toByteArray())
-            receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
-            for (invoiceTaxItem in invoiceTax) {
-                receipt.write(
-                    formatLineWithMultipleAlignment(
-                        listOf(
-                            invoiceTaxItem.taxType to 20,
-                            invoiceTaxItem.taxableAmount.toString() to 30,
-                            invoiceTaxItem.rate.toString() to 20,
-                            invoiceTaxItem.taxAmount.toString() to 30
-                        ),
-                        charactersPerLine
-                    ).toByteArray()
-                )
-                receipt.write("\n".toByteArray())
-            }
-        }
-
-        receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
-        receipt.write(formatSingleString("Payment Mode", charactersPerLine).toByteArray())
-        receipt.write("\n".toByteArray())
-
-        if (cashAmount != null && cashAmount > 0) {
-            receipt.write(formatSingleString("Cash : RS $cashAmount", charactersPerLine).toByteArray())
-            receipt.write("\n".toByteArray())
-        }
-        if (onlineAmount != null && onlineAmount > 0) {
-            receipt.write(formatSingleString("Online : RS $onlineAmount", charactersPerLine).toByteArray())
-            receipt.write("\n".toByteArray())
-        }
-
-        if (creditAmount != null && creditAmount > 0) {
-            receipt.write(formatSingleString("Credit : RS $creditAmount", charactersPerLine).toByteArray())
-            receipt.write("\n".toByteArray())
-        }
         receipt.write(generateSeparatorLine(charactersPerLine).toByteArray())
         receipt.write(formatSingleString(footer, charactersPerLine).toByteArray())
         receipt.write("\n\n".toByteArray())
@@ -1262,7 +978,6 @@ class ReceiptFrag : Fragment() {
         return text.padEnd(totalWidth.coerceAtLeast(0))
     }
 
-
     fun printImage(textData: ByteArray,alignment: Int, bitmap: Bitmap, width: Int): Boolean {
         val scaledBitmap = scaledBitmap(bitmap, width)
         if (scaledBitmap != null) {
@@ -1295,10 +1010,10 @@ class ReceiptFrag : Fragment() {
 
     private fun printByteArray(textData: ByteArray) {
         val bitmap: Bitmap = imageViewToBitmap(binding.imageView) ?: return
-        val print: Boolean = printImage(textData,CENTER,bitmap, 200)
-            if (!print) {
-                Toast.makeText(requireContext(), "Print image failed", Toast.LENGTH_SHORT).show()
-            }
+        val print: Boolean = printImage(textData, CENTER,bitmap, 200)
+        if (!print) {
+            Toast.makeText(requireContext(), "Print image failed", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun autoGrayScale(bm: Bitmap, bitMarginLeft: Int, bitMarginTop: Int): ByteArray {

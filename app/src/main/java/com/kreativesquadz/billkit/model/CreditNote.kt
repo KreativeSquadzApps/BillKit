@@ -2,6 +2,7 @@ package com.kreativesquadz.billkit.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "credit_notes")
 data class CreditNote(
@@ -16,4 +17,4 @@ data class CreditNote(
     val isSynced: Int = 0,
     val userId: Long,
     var invoiceItems: List<InvoiceItem>
-)
+) : Serializable

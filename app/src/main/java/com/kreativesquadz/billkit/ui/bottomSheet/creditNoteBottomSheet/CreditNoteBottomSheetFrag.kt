@@ -1,6 +1,8 @@
 package com.kreativesquadz.billkit.ui.bottomSheet.creditNoteBottomSheet
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -87,6 +89,17 @@ class CreditNoteBottomSheetFrag : BottomSheetDialogFragment() {
     }
 
     private fun onClickListeners() {
+        binding.etCreditNote.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.creditNoteList.value?.data?.let {
+                    adapter.submitList(it.filter { creditNote ->
+                        creditNote.invoiceNumber.contains(s.toString(), ignoreCase = true)})
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
         binding.btnDismiss.setOnClickListener {
             dismiss()
         }
@@ -95,7 +108,7 @@ class CreditNoteBottomSheetFrag : BottomSheetDialogFragment() {
     private fun observers(){
         viewModel.creditNoteList.observe(viewLifecycleOwner){
             it.data?.let {
-                adapter.submitList(it)
+                adapter.submitList(it.sortedByDescending{ it.dateTime })
             }
         }
     }

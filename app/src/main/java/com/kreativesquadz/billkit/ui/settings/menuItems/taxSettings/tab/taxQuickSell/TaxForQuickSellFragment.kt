@@ -34,6 +34,7 @@ class  TaxForQuickSellFragment : Fragment() {
     private var selectedPosition: Int = -1 // Keeps track of selected switch position
     private var selectedTaxValue: Double? = null
     private var selectedTaxOption: TaxOption = TaxOption.ExemptTax // Default value
+    private var isUpdateEnabled = false
     val itemList = TaxType.getList().map{ it.displayName }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +56,7 @@ class  TaxForQuickSellFragment : Fragment() {
     private fun observers(){
         viewModel.taxSettings.observe(viewLifecycleOwner ){ taxSettings ->
             taxSettings?.let {
-                val selectedTaxOption = taxSettings.defaultTaxOption
+                 selectedTaxOption = taxSettings.defaultTaxOption
                 viewModel.gstTaxList.observe(viewLifecycleOwner) {
                     it.data?.let {
                         selectedPosition = it.indexOfFirst { it.taxAmount == taxSettings.selectedTaxPercentage.toDouble() }
@@ -90,6 +91,8 @@ class  TaxForQuickSellFragment : Fragment() {
                     3 -> binding.recyclerView.visibility = View.GONE
                 }
                 binding.dropdownTaxType.setText(itemList[position])
+                updateButton(selectedTaxOption.toString())
+
             }
 
         }
@@ -101,35 +104,39 @@ class  TaxForQuickSellFragment : Fragment() {
 
     private fun onClickListeners(){
         binding.btnAdd.setOnClickListener {
-            val position = when (selectedTaxOption) {
-                is TaxOption.PriceIncludesTax -> 0
-                is TaxOption.PriceExcludesTax -> 1
-                is TaxOption.ZeroRatedTax -> 2
-                is TaxOption.ExemptTax -> 3
-            }
-            when(position){
-                0 -> {
-                    if (selectedTaxValue == null){
-                        Toast.makeText(requireContext(), "Please select a tax value", Toast.LENGTH_SHORT).show()
-                    }else{
-                        viewModel.setDefaultTaxOption(selectedTaxOption, selectedTaxValue?.toFloat())
-                    }
-                }
-                1 -> {
-                    if (selectedTaxValue == null){
-                        Toast.makeText(requireContext(), "Please select a tax value", Toast.LENGTH_SHORT).show()
-                    } else{
-                        viewModel.setDefaultTaxOption(selectedTaxOption, selectedTaxValue?.toFloat())
-                    }
-                }
-                2 -> {
-                    viewModel.setDefaultTaxOption(selectedTaxOption, null)
-                }
-                3 -> {
-                    viewModel.setDefaultTaxOption(selectedTaxOption, null)
-            }
-            }
+          if (isUpdateEnabled){
+              val position = when (selectedTaxOption) {
+                  is TaxOption.PriceIncludesTax -> 0
+                  is TaxOption.PriceExcludesTax -> 1
+                  is TaxOption.ZeroRatedTax -> 2
+                  is TaxOption.ExemptTax -> 3
+              }
+              when(position){
+                  0 -> {
+                      if (selectedTaxValue == null){
+                          Toast.makeText(requireContext(), "Please select a tax value", Toast.LENGTH_SHORT).show()
+                      }else{
+                          viewModel.setDefaultTaxOption(selectedTaxOption, selectedTaxValue?.toFloat())
+                      }
+                  }
+                  1 -> {
+                      if (selectedTaxValue == null){
+                          Toast.makeText(requireContext(), "Please select a tax value", Toast.LENGTH_SHORT).show()
+                      } else{
+                          viewModel.setDefaultTaxOption(selectedTaxOption, selectedTaxValue?.toFloat())
+                      }
+                  }
+                  2 -> {
+                      viewModel.setDefaultTaxOption(selectedTaxOption, null)
+                  }
+                  3 -> {
+                      viewModel.setDefaultTaxOption(selectedTaxOption, null)
+                  }
+              }
+              updateButton(selectedTaxOption.toString())
+              Toast.makeText(requireContext(), "Tax Settings Updated", Toast.LENGTH_SHORT).show()
 
+          }
         }
     }
 
@@ -149,6 +156,7 @@ class  TaxForQuickSellFragment : Fragment() {
                 "Price includes Tax" -> {
                     selectedTaxOption = TaxOption.PriceIncludesTax
                     binding.recyclerView.visibility = View.VISIBLE
+
                 }
                 "Price is without Tax" -> {
                     selectedTaxOption = TaxOption.PriceExcludesTax
@@ -165,8 +173,20 @@ class  TaxForQuickSellFragment : Fragment() {
                     binding.recyclerView.visibility = View.GONE
                 }
             }
+            updateButton(selectedTaxOption.toString())
         }
 
+    }
+    private fun updateButton(selectedTax : String?){
+        val taxOption = viewModel.taxSettings.value?.defaultTaxOption.toString().replace(" ","").lowercase()
+        val selectedTaxOption = selectedTax?.replace(" ","")?.lowercase()
+        if (selectedTaxOption == taxOption){
+            isUpdateEnabled = false
+            binding.isUpdateEnabled = isUpdateEnabled
+        }else{
+            isUpdateEnabled = true
+            binding.isUpdateEnabled = isUpdateEnabled
+        }
     }
     private fun setupRecyclerView() {
         adapter = GenericAdapter(

@@ -23,6 +23,8 @@ import com.kreativesquadz.billkit.model.Category
 import com.kreativesquadz.billkit.model.CreditNote
 import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
+import com.kreativesquadz.billkit.model.settings.TaxOption
+import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,18 +37,20 @@ class SaleReturnFragment : Fragment() {
     val returnModeOption = listOf("Cash", "Online")
     var isRefund = false
     var total = 0.0
-    var finaltotal = 0.0
-    var tax = 0.0
+    var finaltotals = 0.0
+    var productTax = 0.0
     var itemList = mutableListOf<InvoiceItem>()
     val invoice by lazy {
         arguments?.getSerializable("invoice") as? Invoice
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.fetchInvoiceItems(invoice!!.id)
-
     }
-
+    override fun onResume() {
+        super.onResume()
+        viewModel.getInvoiceDetails(invoice?.id.toString())
+        viewModel.fetchInvoiceItems(invoice!!.invoiceId.toLong())
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,7 +59,6 @@ class SaleReturnFragment : Fragment() {
         observers()
         onClickListeners()
         bindings()
-        observers()
         setupSpinnerReturnMode(returnMode)
         setupSpinnerReturnModeOption(returnModeOption)
         return binding.root
@@ -65,16 +68,14 @@ class SaleReturnFragment : Fragment() {
         binding.returnMode = "Save Credit Note"
         binding.amount =  "${Config.CURRENCY} 0"
         binding.totalGst = "${Config.CURRENCY} 0"
-        binding.totalAmount = "${Config.CURRENCY} 0"
+        binding.totalAmount = "${Config.CURRENCY} $finaltotals"
+        isButtonActive(finaltotals)
     }
 
 
    fun observers(){
-       val invoice = viewModel.getInvoiceDetails(invoice?.id.toString())
-       invoice.observe(viewLifecycleOwner) {
+       viewModel.invoice.observe(viewLifecycleOwner) {
            binding.invoice = it
-           Log.e("rrrrrrr",it.toString())
-
        }
        viewModel.invoiceItems.observe(viewLifecycleOwner){
            setupRecyclerView(it)
@@ -83,25 +84,31 @@ class SaleReturnFragment : Fragment() {
 
     fun onClickListeners(){
         binding.btnAdd.setOnClickListener{
+            if (finaltotals > 0.0){
+                invoice?.let {
+                    val creditNote = CreditNote(
+                        invoiceId = it.invoiceId.toLong(),
+                        invoiceNumber = it.invoiceNumber,
+                        createdBy = it.createdBy,
+                        dateTime = it.invoiceDate,
+                        status = "Active",
+                        amount = total,
+                        totalAmount = finaltotals,
+                        userId = Config.userId,
+                        invoiceItems = itemList
+                    )
+                    viewModel.generateCreditNote(requireContext(),creditNote,isRefund){ isSuccess ->
+                        if (isSuccess){
+                            Toast.makeText(requireContext(),"Credit Note Saved",Toast.LENGTH_SHORT).show()
+                            findNavController().popBackStack()
+                        }
 
-            invoice?.let {
-                val creditNote = CreditNote(
-                    invoiceId = it.id,
-                    invoiceNumber = it.invoiceNumber,
-                    createdBy = it.createdBy,
-                    dateTime = it.invoiceDate,
-                    status = "Active",
-                    amount = total,
-                    totalAmount = finaltotal,
-                    userId = Config.userId,
-                    invoiceItems = itemList
-                )
-
-                viewModel.generateCreditNote(requireContext(),creditNote,isRefund)
-                findNavController().popBackStack()
+                    }
             }
+          }
         }
     }
+
     private fun setupSpinnerReturnMode(itemList: List<String>) {
         val adapterStockUnit = GenericSpinnerAdapter(
             context = requireContext(),
@@ -147,29 +154,61 @@ class SaleReturnFragment : Fragment() {
                     // Handle item click
                 }
             }, object : OnItemListListener<InvoiceItem> {
-                override fun onItemList(item: InvoiceItem) {
-                    itemList.removeAll { it.id == item.id }
+                override fun onItemList(itemP: InvoiceItem) {
+                    // Update the item list
+                    itemList.removeAll { it.id == itemP.id }
+                    itemList.add(itemP)
 
-    // Add the new item
-    itemList.add(item)
+                    // Initialize accumulators
+                    var total = 0.0
+                    var totalProductTax = 0.0
+                    var finalTotal = 0.0
 
-    // Calculate totals (optimized)
-     total = 0.0
-     tax = 0.0
-    for (it in itemList) {
-        total += it.unitPrice * it.returnedQty!!
-        tax += it.taxRate
-    }
-     finaltotal = total + tax
+                    // Loop through all items to calculate totals
+                    itemList.forEach { item ->
+                        val itemTotal = item.unitPrice * (item.returnedQty ?: 0)
+                        var itemProductTax = if (item.taxRate > 0) {
+                            item.unitPrice.times(item.taxRate).div(100)
+                        } else {
+                            0.0
+                        }
 
-    // Update UI (no changes needed here)
-    binding.amount = "${Config.CURRENCY} $total"
-    binding.totalGst = "${Config.CURRENCY} $tax"
-    binding.totalAmount = "${Config.CURRENCY} ${finaltotal}"
+                        var itemFinalTotal = itemTotal
+                        if (item.isProduct == 1) {
+                            item.productTaxType?.let { taxTypeString ->
+                                TaxType.fromString(taxTypeString)?.let { taxType ->
+                                    when (taxType) {
+                                        TaxType.PriceIncludesTax -> {
+                                        }
+                                        TaxType.PriceWithoutTax -> {
+                                            if (item.taxRate > 0) {
+                                                itemFinalTotal += itemProductTax * (item.returnedQty ?: 0)
+                                            }
+                                        }
+                                        TaxType.ZeroRatedTax, TaxType.ExemptTax -> {
+                                            // No tax adjustments needed
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Accumulate totals
+                        total += itemTotal
+                        totalProductTax += if ((item.returnedQty ?: 0) > 0) itemProductTax * (item.returnedQty ?: 0) else 0.0
+                        finalTotal += if ((item.returnedQty ?: 0) > 0) itemFinalTotal else 0.0
+                    }
+
+                    // Update binding with calculated values
+                    binding.amount = "${Config.CURRENCY} $total"
+                    binding.totalGst = "${Config.CURRENCY} $totalProductTax"
+                    binding.totalAmount = "${Config.CURRENCY} $finalTotal"
+                    finaltotals = finalTotal
+                    this@SaleReturnFragment.total = total
+                    isButtonActive(finalTotal)
                 }
             },
-
-             object : OnToastShow {
+            object : OnToastShow {
                 override fun showToast(msg: String) {
                     Toast.makeText(requireContext(),msg,Toast.LENGTH_SHORT).show()
                 }
@@ -182,6 +221,13 @@ class SaleReturnFragment : Fragment() {
         binding.recyclerView.isNestedScrollingEnabled = false
     }
 
+    private fun isButtonActive(total : Double){
+        if (total > 0.0){
+            binding.isButtonActive = true
+        }else{
+            binding.isButtonActive = false
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

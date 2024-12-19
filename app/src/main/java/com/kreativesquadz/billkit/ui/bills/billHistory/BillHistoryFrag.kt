@@ -133,6 +133,10 @@ class BillHistoryFrag : Fragment() {
         binding.calenderView.setOnClickListener {
             setCurrentDateOnCalendar(binding.tvDate)
         }
+        binding.searchInvoice.setOnClickListener {
+            val action = BillHistoryFragDirections.actionBillHistoryFragToSearchBillFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun setupRecyclerView() {

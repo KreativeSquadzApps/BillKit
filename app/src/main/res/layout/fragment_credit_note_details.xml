@@ -345,8 +345,8 @@
                             android:layout_marginStart="10dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tvTotalItems"
-                            android:text='@{"Cash : "+creditNote.totalAmount}'
-                            tools:text="Cash : 1020.00 "/>
+                            android:text='@{"Cash RS : "+creditNote.totalAmount}'
+                            tools:text="Cash RS : 1020.00 "/>
 
 
                         <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
@@ -360,8 +360,21 @@
                             android:layout_marginStart="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            android:text='@{"Amount : "+ creditNote.amount}'
-                            tools:text="Amount : 1020"/>
+                            android:text='@{"Amount RS : "+ creditNote.amount}'
+                            tools:text="Amount RS : 1020"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_medium"
+                            android:id="@+id/tvTotalTax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_color_main"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginEnd="@dimen/_10dp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvAmount"
+                            tools:text="Total Tax RS: 1020"/>
 
 
 
@@ -388,8 +401,8 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/viewfooter"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            android:text='@{"Total Amount  :  "+creditNote.totalAmount}'
-                            tools:text="Total Amount  :  1020"/>
+                            android:text='@{"Total Amount RS :  "+creditNote.totalAmount}'
+                            tools:text="Total Amount RS :  1020"/>
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

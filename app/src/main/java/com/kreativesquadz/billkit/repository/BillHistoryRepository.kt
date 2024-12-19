@@ -69,12 +69,17 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     fun getInvoiceById(id: Int): LiveData<Invoice> {
         return invoiceDao.getInvoiceById(id)
     }
+
     fun getInvoiceByInvoiceId(invoiceId: Int): LiveData<Invoice> {
         return invoiceDao.getInvoiceByInvoiceId(invoiceId)
     }
 
     fun getInvoiceByIdWithoutLiveData(id: Int): Invoice {
         return invoiceDao.getInvoiceByIdWithoutLiveData(id)
+    }
+
+    fun getInvoiceByInvoiceNumberWithoutLiveData(invoiceNumber: String): Invoice {
+        return invoiceDao.getInvoiceByInvoiceNumberWithoutLiveData(invoiceNumber)
     }
 
     fun getPagedInvoicesFromDb(startDate: Long, endDate: Long): Flow<PagingData<Invoice>> {
@@ -90,6 +95,7 @@ class BillHistoryRepository @Inject constructor(private val db: AppDatabase) {
     suspend fun updateInvoiceStatus( status: String, invoiceId: Int) {
         invoiceDao.updateInvoiceStatus( status, invoiceId)
     }
+
     suspend fun getUnsyncedInvoices(): List<Invoice> {
         return invoiceDao.getUnsyncedInvoices()
     }

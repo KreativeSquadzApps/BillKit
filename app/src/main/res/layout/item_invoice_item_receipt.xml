@@ -69,10 +69,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_medium"
-            app:rate='@{item.unitPrice +" "+ item.taxRate}'
             tools:text="rate"
             android:gravity="center"
-
             android:textSize="12sp"
             android:textColor="@color/text_color_main"
             app:layout_constraintEnd_toStartOf="@+id/tax"

@@ -14,4 +14,5 @@ class EditItemBottomSheetViewModel @Inject constructor(val repository: CustomerM
     fun getCustomers(){
         customer = repository.loadAllCustomers()
     }
+
 }

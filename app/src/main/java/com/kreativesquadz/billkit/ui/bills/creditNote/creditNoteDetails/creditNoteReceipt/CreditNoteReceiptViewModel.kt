@@ -1,4 +1,4 @@
-package com.kreativesquadz.billkit.ui.bills
+package com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteDetails.creditNoteReceipt
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.model.CompanyDetails
 import com.kreativesquadz.billkit.model.Customer
-import com.kreativesquadz.billkit.model.settings.GST
-import com.kreativesquadz.billkit.model.Invoice
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.settings.InvoicePrinterSettings
 import com.kreativesquadz.billkit.model.settings.PdfSettings
@@ -31,14 +29,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepository,
-                                           val billHistoryRepository: BillHistoryRepository,
-                                           val customerManagRepository: CustomerManagRepository,
-                                           val taxRepository: GstTaxRepository,
-                                           val userSettingRepository: UserSettingRepository ,
-                                           private val repository: BluetoothRepository
+class CreditNoteReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepository,
+                                                     val billHistoryRepository: BillHistoryRepository,
+                                                     val customerManagRepository: CustomerManagRepository,
+                                                     val taxRepository: GstTaxRepository,
+                                                     val userSettingRepository: UserSettingRepository,
+                                                     private val repository: BluetoothRepository
+) : ViewModel() {
 
-                                           ) : ViewModel() {
+
     val printStatus = MutableLiveData<String>()
 
     private val _printerSettings = MutableStateFlow(ThermalPrinterSetup())
@@ -48,19 +47,11 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     val companyDetails: LiveData<CompanyDetails> = _companyDetails
 
 
-    private val _invoiceData = MutableLiveData<Invoice>()
-    val invoiceData: LiveData<Invoice> = _invoiceData
-
-
     val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
     val _taxSettings = MutableLiveData<TaxSettings>()
     val taxSettings: LiveData<TaxSettings> = _taxSettings
-
-
-    private val _gstValue = MutableLiveData<List<GST>>()
-    val gstValue: LiveData<List<GST>> get() = _gstValue
 
 
     private val _pdfSettings = MutableStateFlow(PdfSettings())
@@ -75,27 +66,23 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     val allDataReady: LiveData<Boolean> = _allDataReady
 
 
-
-
     fun fetchAllDetails(invoiceId: String) = viewModelScope.launch {
         try {
             val companyDetailsDeferred = async { settingsRepository.loadCompanyDetailsDb(Config.userId).asFlow().first()}
-            val invoiceDetailsDeferred = async { billHistoryRepository.getInvoiceByInvoiceId(invoiceId.toInt()).asFlow().first() }
             val invoiceItemsDeferred = async { billHistoryRepository.getInvoiceItems(invoiceId.toLong())}
             val taxSettingsDeferred = async { taxRepository.getTaxSettings().asFlow().first()}
             val pdfSettingsDeferred = async { userSettingRepository.getPdfSetting(Config.userId) ?: PdfSettings()}
-            val invoicePrinterSettingsDeferred = async { userSettingRepository.getInvoicePrinterSetting(Config.userId) ?: InvoicePrinterSettings()}
+            val invoicePrinterSettingsDeferred = async { userSettingRepository.getInvoicePrinterSetting(
+                Config.userId) ?: InvoicePrinterSettings()}
 
 
             val companyDetails = companyDetailsDeferred.await()
-            val invoiceDetails = invoiceDetailsDeferred.await()
             val invoiceItems = invoiceItemsDeferred.await()
             val taxSettings = taxSettingsDeferred.await()
             val pdfSettings = pdfSettingsDeferred.await()
             val invoicePrinterSettings = invoicePrinterSettingsDeferred.await()
 
             _companyDetails.value = companyDetails
-            _invoiceData.value = invoiceDetails
             _invoiceItems.value = invoiceItems
             _taxSettings.value = taxSettings
             _pdfSettings.value = pdfSettings
@@ -107,7 +94,7 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
         }
     }
     private fun checkIfAllDataReady() {
-        if (_companyDetails.value != null && _invoiceData.value != null && _invoiceItems.value != null && _taxSettings.value != null) {
+        if (_companyDetails.value != null && _invoiceItems.value != null && _taxSettings.value != null) {
             _allDataReady.value = true
         }
     }
@@ -115,11 +102,6 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
     fun getCustomerById(id: String) : Customer {
         return customerManagRepository.getCustomer(id)
     }
-
-    fun getGstListByValue(taxAmounts: List<Double>): LiveData<List<GST>> {
-        return taxRepository.getGSTListByTaxValues(taxAmounts)
-    }
-
 
     private fun insertPrinterSetting(thermalPrinterSetup: ThermalPrinterSetup) {
         viewModelScope.launch {
@@ -136,11 +118,6 @@ class ReceiptViewModel @Inject constructor(val settingsRepository: SettingsRepos
             _printerSettings.value = userSettingRepository.getPrinterSetting(Config.userId) ?: ThermalPrinterSetup()
         }
     }
-
-    fun getPrinter(): ThermalPrinterSetup? {
-        return userSettingRepository.getPrinterSetting(Config.userId)
-    }
-
 
     fun printUsingDefaultPrinter(data: ByteArray){
         printStatus.postValue("printingStart")

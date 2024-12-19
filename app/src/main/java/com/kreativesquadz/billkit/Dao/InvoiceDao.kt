@@ -72,6 +72,9 @@ interface InvoiceDao {
     @Query("SELECT * FROM invoices WHERE id = :id")
     fun getInvoiceByIdWithoutLiveData(id: Int): Invoice
 
+    @Query("SELECT * FROM invoices WHERE invoiceNumber = :invoiceNumber COLLATE NOCASE")
+    fun getInvoiceByInvoiceNumberWithoutLiveData(invoiceNumber: String): Invoice
+
     @Query("SELECT * FROM invoices WHERE isSynced = 0")
     suspend fun getUnsyncedInvoices(): List<Invoice>
 

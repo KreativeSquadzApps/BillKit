@@ -35,7 +35,6 @@ class CreditNoteFrag : Fragment() {
     private val viewModel: CreditNoteViewModel by activityViewModels()
     private lateinit var adapter: GenericAdapterPagination<CreditNote>
 
-
     val statusOption = listOf("All",
         "Active",
         "Cleared")
@@ -88,6 +87,10 @@ class CreditNoteFrag : Fragment() {
    }
 
     private fun onClickListener(){
+        binding.searchView.setOnClickListener {
+            val action = CreditNoteFragDirections.actionCreditNoteFragToCreditNoteSearchFragment()
+            findNavController().navigate(action)
+        }
         binding.calenderView.setOnClickListener {
             setCurrentDateOnCalendar(binding.tvDate)
         }

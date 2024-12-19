@@ -430,6 +430,20 @@
                                 tools:text="Packaging : 1020.00 "/>
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvOtherCharges"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_12sp"
+                                android:visibility="@{invoice.otherChargesAmount==null||invoice.otherChargesAmount==0 ? View.GONE : View.VISIBLE }"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvPackaging"
+                                android:text='@{"Other charges : RS "+invoice.otherChargesAmount}'
+                                tools:text="Other charges : 1020.00 "/>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:fontFamily="@font/montserrat_medium"
                                 android:id="@+id/tvCustomGst"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -439,9 +453,21 @@
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginStart="10dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvPackaging"
+                                app:layout_constraintTop_toBottomOf="@id/tvOtherCharges"
                                 tools:text="Custom Gst : 1020.00 "/>
-
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:fontFamily="@font/montserrat_medium"
+                                android:id="@+id/tvCreditNote"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_color_main"
+                                android:textSize="@dimen/txt_12sp"
+                                android:visibility="@{invoice.creditNoteAmount==0 ? View.GONE : View.VISIBLE }"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginStart="10dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvCustomGst"
+                                tools:text="Credit Note : 1020.00 "/>
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -603,7 +629,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:weightSum="5"
-                    app:hideViewCancel="@{invoice.status}"
+                    app:hideView="@{invoice.status}"
                     android:layout_marginTop="@dimen/_10dp"
                     android:layout_marginBottom="@dimen/_10dp"
                     android:layout_marginStart="@dimen/_5dp"

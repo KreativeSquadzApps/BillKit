@@ -33,24 +33,42 @@ class SaleReturnViewModel @Inject constructor(val inventoryRepository: Inventory
     private val _invoiceItems = MutableLiveData<List<InvoiceItem>>()
     val invoiceItems: LiveData<List<InvoiceItem>> get() = _invoiceItems
 
-    fun generateCreditNote(context: Context,creditNote: CreditNote, isRefund: Boolean){
+    private val _invoice = MutableLiveData<Invoice>()
+    val invoice: LiveData<Invoice> get() = _invoice
+
+    fun generateCreditNote(
+        context: Context,
+        creditNote: CreditNote,
+        isRefund: Boolean,
+        isSuccess: (Boolean) -> Unit
+    ) {
         viewModelScope.launch {
-            if (!isRefund){
-                val existingNote = creditNoteRepository.getCreditNoteByInvoiceId(creditNote.invoiceId)
-                if (existingNote != null) {
-                    creditNoteRepository.updateCreditNote(creditNote)
-                } else {
-                    creditNoteRepository.addCreditNote(creditNote)
+            try {
+                if (!isRefund) {
+                    val existingNote = creditNoteRepository.getCreditNoteByInvoiceId(creditNote.invoiceId)
+                    if (existingNote != null) {
+                        creditNoteRepository.updateCreditNote(creditNote)
+                    } else {
+                        creditNoteRepository.addCreditNote(creditNote)
+                    }
+                    scheduleCreditNoteSync(context)
                 }
-                scheduleCreditNoteSync(context)
-            }
 
-            creditNote.invoiceItems.forEach{
-                billHistoryRepository.updateInvoiceItem(it.invoiceId,it.itemName,it.returnedQty!!)
-            }
-            creditNoteRepository.updateInvoiceStatus(creditNote.invoiceId.toInt())
-            updateInvoiceStatusWork(context,"Returned",creditNote.invoiceId.toString())
+                creditNote.invoiceItems.forEach {
+                    billHistoryRepository.updateInvoiceItem(it.invoiceId, it.itemName, it.returnedQty!!)
+                }
 
+                creditNoteRepository.updateInvoiceStatus(creditNote.invoiceId.toInt())
+                updateInvoiceStatusWork(context, "Returned", creditNote.invoiceId.toString())
+
+                // Indicate success
+                isSuccess(true)
+            } catch (e: Exception) {
+                // Log the exception if needed
+                e.printStackTrace()
+                // Indicate failure
+                isSuccess(false)
+            }
         }
     }
 
@@ -65,8 +83,11 @@ class SaleReturnViewModel @Inject constructor(val inventoryRepository: Inventory
     }
 
 
-    fun getInvoiceDetails(invoiceId: String) : LiveData<Invoice> {
-        return billHistoryRepository.getInvoiceById(invoiceId.toInt())
+    fun getInvoiceDetails(invoiceId: String) {
+        viewModelScope.launch {
+            val invoiceData = billHistoryRepository.getInvoiceByIdWithoutLiveData(invoiceId.toInt())
+            _invoice.postValue(invoiceData)
+        }
     }
 
 

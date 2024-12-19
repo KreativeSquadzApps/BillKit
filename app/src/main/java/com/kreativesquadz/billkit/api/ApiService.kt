@@ -54,7 +54,6 @@ interface ApiService {
     suspend fun updateInvoiceStatus(@Body invoiceStatusUpdate: InvoiceStatusUpdate?): Response<ApiStatus>
 
 
-
     @POST("/api/addinvoice")
     @Headers("X-API-KEY: " + Config.API_Key)
     suspend fun createInvoice(@Body invoiceRequest: InvoiceRequest): Response<ApiStatus>

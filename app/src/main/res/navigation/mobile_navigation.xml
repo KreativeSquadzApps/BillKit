@@ -35,6 +35,13 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_billHistoryFrag_to_invoiceFragment"
             app:destination="@id/invoiceFragment" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_billHistoryFrag_to_searchBillFragment"
+            app:destination="@id/searchBillFragment" />
     </fragment>
 
     <fragment
@@ -50,6 +57,13 @@
             app:popExitAnim="@anim/zoom_out"
             android:id="@+id/action_creditNoteFrag_to_creditNoteDetailsFragment"
             app:destination="@id/creditNoteDetailsFragment" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_creditNoteFrag_to_creditNoteSearchFragment"
+            app:destination="@id/creditNoteSearchFragment" />
     </fragment>
 
     <fragment
@@ -311,6 +325,13 @@
         android:label="CreditNote" >
 
         <argument android:name="invoiceId" app:argType="string" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_creditNoteDetailsFragment_to_creditNoteReceiptFragment"
+            app:destination="@id/creditNoteReceiptFragment" />
     </fragment>
     <fragment
         android:id="@+id/bluetoothDeviceFragment"
@@ -469,6 +490,13 @@
         <argument
             android:name="invoice"
             app:argType="com.kreativesquadz.billkit.model.Invoice" />
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_editBillDetailsFrag_to_splitFragment"
+            app:destination="@id/splitFragment" />
     </fragment>
     <dialog
         android:id="@+id/customerAddBottomSheetFrag"
@@ -490,5 +518,28 @@
         android:id="@+id/billSettingsFragment"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.billSettings.BillSettingsFragment"
         android:label="Bill Settings" />
+    <fragment
+        android:id="@+id/creditNoteReceiptFragment"
+        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteDetails.creditNoteReceipt.CreditNoteReceiptFragment"
+        android:label="CreditNote Receipt" >
+        <argument android:name="creditNote"
+            app:argType="com.kreativesquadz.billkit.model.CreditNote" />
+    </fragment>
+    <fragment
+        android:id="@+id/creditNoteSearchFragment"
+        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteSearch.CreditNoteSearchFragment"
+        android:label="CreditNote Search" />
+    <fragment
+        android:id="@+id/searchBillFragment"
+        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.searchBill.SearchBillFragment"
+        android:label="Search Invoice" >
+        <action
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/zoom_out"
+            app:popEnterAnim="@anim/zoom_in"
+            app:popExitAnim="@anim/zoom_out"
+            android:id="@+id/action_searchBillFragment_to_invoiceFragment"
+            app:destination="@id/invoiceFragment" />
+    </fragment>
 
 </navigation>
