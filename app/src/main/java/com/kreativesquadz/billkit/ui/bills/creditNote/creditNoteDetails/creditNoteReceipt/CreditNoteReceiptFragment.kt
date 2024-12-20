@@ -278,9 +278,13 @@ class CreditNoteReceiptFragment : Fragment() {
         var isTaxAvailable = false
         var isMrpAvailable = false
         receiptInvoiceItem?.forEach {
+            if (it.taxRate > 0) {
+                isTaxAvailable = true
+            }
             if(it.productMrp != it.unitPrice){
                 isMrpAvailable = true
             }
+
         }
         adapter = AdapterReceipt(
             receiptInvoiceItem ?: emptyList(),
@@ -514,37 +518,41 @@ class CreditNoteReceiptFragment : Fragment() {
         // Table Rows
         var serialNo = 0
         items.forEach { item ->
-            serialNo++
-            val  finalRate = item.unitPrice - item.unitPrice * item.taxRate / 100
-            val  taxAmount = item.unitPrice - finalRate
+            item.returnedQty?.let {
+                if (it > 0){
+                    serialNo++
+                    val  finalRate = item.unitPrice - item.unitPrice * item.taxRate / 100
+                    val  taxAmount = item.unitPrice - finalRate
 
-            table.addCell(
-                Cell().add(Paragraph(serialNo.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderRight(
-                    Border.NO_BORDER))
-            table.addCell(
-                Cell().add(Paragraph(item.itemName.split("(")[0]).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
-                    Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            table.addCell(
-                Cell().add(Paragraph(item.quantity.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
-                    Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            if (isItemTableMrp.toBoolean()) {
-                table.addCell(
-                    Cell().add(
-                        Paragraph(item.productMrp.toString()).setPaddingLeft(10f).setFontSize(12f)
-                    ).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                )
+                    table.addCell(
+                        Cell().add(Paragraph(serialNo.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderRight(
+                            Border.NO_BORDER))
+                    table.addCell(
+                        Cell().add(Paragraph(item.itemName.split("(")[0]).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
+                            Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+                    table.addCell(
+                        Cell().add(Paragraph(item.quantity.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
+                            Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+                    if (isItemTableMrp.toBoolean()) {
+                        table.addCell(
+                            Cell().add(
+                                Paragraph(item.productMrp.toString()).setPaddingLeft(10f).setFontSize(12f)
+                            ).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        )
+                    }
+                    table.addCell(
+                        Cell().add(Paragraph(finalRate.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
+                            Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+                    table.addCell(
+                        Cell().add(
+                            Paragraph((taxAmount * item.quantity).toString() +" ["+ item.taxRate.toString()+"%]").setPaddingLeft(10f).setFontSize(10f).setTextAlignment(
+                                TextAlignment.CENTER)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+                    table.addCell(
+                        Cell().add(
+                            Paragraph(item.totalPrice.toString()).setPaddingRight(10f).setFontSize(12f).setTextAlignment(
+                                TextAlignment.RIGHT)).setBorderLeft(Border.NO_BORDER))
+                }
             }
-            table.addCell(
-                Cell().add(Paragraph(finalRate.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
-                    Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            table.addCell(
-                Cell().add(
-                    Paragraph((taxAmount * item.quantity).toString() +" ["+ item.taxRate.toString()+"%]").setPaddingLeft(10f).setFontSize(10f).setTextAlignment(
-                        TextAlignment.CENTER)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            table.addCell(
-                Cell().add(
-                    Paragraph(item.totalPrice.toString()).setPaddingRight(10f).setFontSize(12f).setTextAlignment(
-                        TextAlignment.RIGHT)).setBorderLeft(Border.NO_BORDER))
         }
         document.add(table)
 
