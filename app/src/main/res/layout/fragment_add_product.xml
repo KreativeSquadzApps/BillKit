@@ -176,26 +176,28 @@
                                     android:hint="Barcode" />
                             </com.google.android.material.textfield.TextInputLayout>
 
-                            <LinearLayout
+                            <androidx.cardview.widget.CardView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_weight="3"
-                                android:layout_marginTop="@dimen/_15dp"
+                                app:cardCornerRadius="@dimen/_10dp"
+                                app:cardElevation="4dp"
+                                android:layout_marginTop="@dimen/_5dp"
                                 android:layout_marginBottom="@dimen/_5dp"
-                                android:layout_marginEnd="@dimen/_10dp"
-                                android:layout_marginStart="@dimen/_5dp"
+                                app:cardUseCompatPadding="true"
                                 android:id="@+id/btnBarcode"
-                                android:background="@drawable/corner_four_stroke">
+                                android:textStyle="bold"
+                                android:textColor="@color/text_color_heading"
+                                android:gravity="center">
 
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:paddingStart="@dimen/_10dp"
-                                    android:paddingEnd="@dimen/_10dp"
-                                    android:paddingTop="@dimen/_5dp"
-                                    android:paddingBottom="@dimen/_5dp"
+                                    android:padding="15dp"
+                                    android:id="@+id/imgBarcode"
                                     android:src="@drawable/barcode" />
-                            </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
 
 
                         </LinearLayout>

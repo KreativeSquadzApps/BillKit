@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.ui.home
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
@@ -13,14 +14,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.camera.core.Camera
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -31,27 +32,21 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericAdapter
 import com.kreativesquadz.billkit.adapter.GenericTabAdapter
 import com.kreativesquadz.billkit.databinding.FragmentHomeBinding
-import com.kreativesquadz.billkit.ui.dialogs.AddDiscountDialogFragment
 import com.kreativesquadz.billkit.ui.dialogs.savedOrderDialogFrag.SavedOrderDialogFragment
-import com.kreativesquadz.billkit.ui.dialogs.savedOrderDialogFrag.SavedOrderDialogViewModel
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.InvoiceItem
-import com.kreativesquadz.billkit.model.SavedOrder
 import com.kreativesquadz.billkit.ui.bottomSheet.editItemBottomSheet.EditItemBottomSheetFrag
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import com.kreativesquadz.billkit.ui.home.tab.quickSale.QuickSaleFragment
 import com.kreativesquadz.billkit.ui.home.tab.sale.SaleFragment
 import com.kreativesquadz.billkit.ui.home.tab.savedOrders.SavedOrdersFragment
+import com.kreativesquadz.billkit.utils.BarcodeScannerUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -68,12 +63,13 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: GenericAdapter<InvoiceItem>
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val requestCodeCameraPermission = 200
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
-    private var camera: Camera? = null
     private  var  cameraProvider: ProcessCameraProvider?=null
-    var isScanner = true
+    private var isScanner = true
+    private var isCameraStopped = false
+    private var imageAnalysis: ImageAnalysis? = null
+    private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
 
 
     override fun onAttach(context: Context) {
@@ -82,6 +78,17 @@ class HomeFragment : Fragment() {
             drawerToggleListener = context
         } else {
             throw RuntimeException("$context must implement DrawerToggleListener")
+        }
+        requestCameraPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission granted, call the start() function
+                startCamera()
+            } else {
+                // Permission denied, show a message to the user
+                Toast.makeText(requireContext(), "Camera permission is required.", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -135,29 +142,19 @@ class HomeFragment : Fragment() {
 
         binding.btnBarcode.setOnClickListener{
             if (!isCameraClicked) {
-                isCameraClicked = true
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_GRANTED) {
-                    startCamera()
-                } else {
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.CAMERA),
-                        requestCodeCameraPermission
-                    )
-                }
+                checkCameraPermission()
             }else{
                 isCameraClicked = false
                 stopCamera()
             }
             binding.isCameraOpen = isCameraClicked
+            updateBarcodeIcon(isCameraClicked)
         }
 
         binding.btnSavedOrder.setOnClickListener {
             showSavedOrderDialog()
         }
     }
-
 
     private fun observers(){
         sharedViewModel.loadCompanyDetailsDb().observe(viewLifecycleOwner){
@@ -259,39 +256,49 @@ class HomeFragment : Fragment() {
         val editItemBottomSheetFrag = EditItemBottomSheetFrag(item)
         editItemBottomSheetFrag.show(parentFragmentManager, "EditItemBottomSheetFrag")
     }
-    @androidx.annotation.OptIn(ExperimentalGetImage::class)
+
+    @OptIn(ExperimentalGetImage::class)
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
         cameraProviderFuture.addListener({
-             cameraProvider = cameraProviderFuture.get()
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(binding.previewView.surfaceProvider)
             }
 
-            val barcodeScannerOptions = BarcodeScannerOptions.Builder()
-                .setBarcodeFormats(
-                    Barcode.FORMAT_EAN_8,
-                    Barcode.FORMAT_EAN_13,
-                    Barcode.FORMAT_UPC_A,
-                    Barcode.FORMAT_UPC_E,
-                    Barcode.TYPE_ISBN
-                )
+             imageAnalysis = ImageAnalysis.Builder()
                 .build()
-
-            val barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions)
-
-            val imageAnalysis = ImageAnalysis.Builder()
-                .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor) { imageProxy ->
+                .also { analysis ->
+                    analysis.setAnalyzer(cameraExecutor) { imageProxy ->
                         val mediaImage = imageProxy.image
+                        if (!isScanner || isCameraStopped) {
+                            Log.d("ScannerState", "Scanner is not ready or camera stopped. Skipping image processing.")
+                            imageProxy.close()
+                            return@setAnalyzer
+                        }
+
                         if (mediaImage != null) {
                             val image = InputImage.fromMediaImage(
                                 mediaImage,
                                 imageProxy.imageInfo.rotationDegrees
                             )
-                            processImage(image, barcodeScanner, imageProxy)
+
+                            BarcodeScannerUtil.getBarcodeScanner().process(image)
+                                .addOnSuccessListener { barcodes ->
+                                    for (barcode in barcodes) {
+                                        Log.e("barcode", barcode.rawValue.toString())
+                                        if (!sharedViewModel.isProductAdded(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))) {
+                                            sharedViewModel.addProduct(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))
+                                        }
+                                        playBeepSound()
+                                        delay1sec()
+                                    }
+                                    imageProxy.close()
+                                }
+                                .addOnFailureListener {
+                                    Log.e("BarcodeScanner", "Error processing barcode: ${it.message}")
+                                    imageProxy.close()
+                                }
                         } else {
                             imageProxy.close()
                         }
@@ -301,87 +308,91 @@ class HomeFragment : Fragment() {
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                cameraProvider?.unbindAll()
-                camera = cameraProvider?.bindToLifecycle(
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageAnalysis
                 )
+                this.cameraProvider = cameraProvider // Save the reference for later use
+                this.imageAnalysis = imageAnalysis // Save reference to the analysis
+                isCameraStopped = false // Reset the flag when starting the camera
             } catch (exc: Exception) {
-                Log.e("CameraSetup", "Failed to bind camera use cases", exc)
+                Log.e("CameraSetup", "Exception: ${exc.message}")
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     private fun stopCamera() {
-            cameraProvider?.unbindAll()
+        try {
+            isCameraStopped = true // Flag to stop further processing
+            imageAnalysis?.clearAnalyzer() // Remove the analyzer to stop processing frames
+            cameraProvider?.unbindAll() // Unbind the camera provider
+            Log.d("CameraState", "Camera stopped successfully.")
+        } catch (exc: Exception) {
+            Log.e("CameraState", "Error stopping the camera: ${exc.message}")
+        }
     }
 
-    private fun logScannerState(state: Boolean) {
-        Log.d("ScannerState", "isScanner is set to: $state")
+
+    private fun playBeepSound() {
+        val beepSoundUri = Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.barcode_beep)
+        val audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
+        val ringtone = RingtoneManager.getRingtone(requireContext(), beepSoundUri)
+        ringtone.audioAttributes = audioAttributes
+        ringtone.play()
     }
 
     private fun delay1sec() {
         isScanner = false
-        logScannerState(isScanner) // Log state change
         lifecycleScope.launch {
-            delay(1000)
-            isScanner = true
-            logScannerState(isScanner) // Log state change
+            delay(1000) // Delay for 2 seconds
+            isScanner = true // Resume scanning
         }
     }
 
-
-    private fun processImage(image: InputImage, barcodeScanner: BarcodeScanner, imageProxy: ImageProxy) {
-        if (!isScanner) {
-            Log.d("ScannerState", "Scanner is not ready, skipping image processing.")
-            imageProxy.close()
-            return
-        }
-
-        //isScanner = false // Prevent further scans while processing
-        barcodeScanner.process(image)
-            .addOnSuccessListener { barcodes ->
-                for (barcode in barcodes) {
-                    if (!sharedViewModel.isProductAdded(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))) {
-                        sharedViewModel.addProduct(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))
+    private fun checkCameraPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                isCameraClicked = true
+                startCamera()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                // Show rationale to the user, then request permission
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Camera Permission Needed")
+                    .setMessage("This app requires camera access to function properly.")
+                    .setPositiveButton("OK") { _, _ ->
+                        requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                     }
-                    val beepSoundUri = Uri.parse("android.resource://" + "com.kreativesquadz.billkit" + "/" + R.raw.barcode_beep)
-                    val audioAttributes = AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build()
-                    val ringtone = RingtoneManager.getRingtone(requireContext(), beepSoundUri)
-                    ringtone.audioAttributes = audioAttributes
-                    ringtone.play()
-                    delay1sec()
-                }
-                imageProxy.close()
+                    .setNegativeButton("Cancel", null)
+                    .show()
             }
-            .addOnFailureListener {
-                Log.e("BarcodeScanning", "Failed to process image", it)
-                imageProxy.close()
+            else -> {
+                // Directly request permission
+                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
+        }
     }
 
     private fun showSavedOrderDialog() {
         val dialog = SavedOrderDialogFragment()
         dialog.show(childFragmentManager, SavedOrderDialogFragment.TAG)
-       // dialogViewModel.setTotalAmount(sharedViewModel.totalLivedata.value.toString())
+        // dialogViewModel.setTotalAmount(sharedViewModel.totalLivedata.value.toString())
 
     }
 
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == requestCodeCameraPermission && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            isCameraClicked = true
-            startCamera()
-        } else {
-            Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+    private fun updateBarcodeIcon(isCameraOpen:Boolean){
+        if (isCameraOpen){
+            binding.imgBarcode.setImageResource(R.drawable.baseline_close_24)
+        }else{
+            binding.imgBarcode.setImageResource(R.drawable.barcode)
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -395,3 +406,6 @@ class HomeFragment : Fragment() {
 
 
 }
+
+
+
