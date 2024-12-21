@@ -36,7 +36,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_medium"
-            android:text="@{item.quantity}"
             tools:text="qty"
             android:gravity="center"
             android:textSize="12sp"

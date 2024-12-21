@@ -1,6 +1,5 @@
 package com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabPdfFrag
 
-import android.animation.ValueAnimator
 import android.graphics.Color
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -10,13 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kreativesquadz.billkit.BR
 import com.kreativesquadz.billkit.Config
@@ -28,8 +25,7 @@ import com.kreativesquadz.billkit.interfaces.FragmentBaseFunctions
 import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.ColorItem
 import com.kreativesquadz.billkit.model.settings.PdfSettings
-import com.kreativesquadz.billkit.utils.collapse
-import com.kreativesquadz.billkit.utils.expand
+import com.kreativesquadz.billkit.utils.PdfColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,6 +45,7 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
     private var isItemTablePayment = 0
     private var isItemTableQty = 0
     private var isUpdateEnable = false
+    private var selectedPdfColor : String ?= null
     private lateinit var adapter: GenericAdapter<ColorItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +61,8 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
         observers()
         onClickListener()
         setupRecyclerView()
-        binding.selectedColor = Color.GRAY
+
+
         return binding.root
     }
 
@@ -113,7 +111,20 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
     private fun updateUI(settings: PdfSettings) {
         updateSwitches(settings)
         updateFooterText(settings)
+        updatePdfColor(settings)
         updateIsUpdateEnabled(settings)
+    }
+
+    private fun updatePdfColor(settings: PdfSettings){
+        selectedPdfColor = settings.pdfColor
+        when(settings.pdfColor){
+            PdfColor.RED.toString() -> binding.selectedColor = Color.RED
+            PdfColor.GREEN.toString() -> binding.selectedColor = Color.GREEN
+            PdfColor.BLUE.toString() -> binding.selectedColor = Color.BLUE
+            PdfColor.YELLOW.toString()-> binding.selectedColor = Color.YELLOW
+            PdfColor.GRAY.toString() -> binding.selectedColor = Color.GRAY
+            else -> binding.selectedColor = Color.GRAY
+        }
     }
 
     private fun updateSwitches(settings: PdfSettings) {
@@ -226,16 +237,18 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
             userId = Config.userId,
             pdfCompanyInfo = "$isCompanyLogo $isCompanyEmail $isCompanyPhone $isCompanyGst",
             pdfItemTable = "$isItemTableCustomerDetails $isItemTableMrp $isItemTablePayment $isItemTableQty",
-            pdfFooter = binding.etFooterText.text.toString()
+            pdfFooter = binding.etFooterText.text.toString(),
+            pdfColor = selectedPdfColor
         )
     }
 
     private fun setupRecyclerView() {
         val colors = listOf(
-            ColorItem(Color.RED),
-            ColorItem(Color.GREEN),
-            ColorItem(Color.BLUE),
-            ColorItem(Color.YELLOW),
+            ColorItem(Color.RED,"RED"),
+            ColorItem(Color.GREEN,"GREEN"),
+            ColorItem(Color.BLUE,"BLUE"),
+            ColorItem(Color.YELLOW,"YELLOW"),
+            ColorItem(Color.GRAY,"GRAY")
         )
         adapter = GenericAdapter(
             colors,
@@ -243,6 +256,14 @@ class TabPdfFrag : Fragment(),FragmentBaseFunctions {
             object : OnItemClickListener<ColorItem> {
                 override fun onItemClick(item: ColorItem) {
                         binding.selectedColor = item.color
+                        selectedPdfColor = item.colorName
+                    if (viewModel.isSettingsUpdated(viewModel.pdfSettings.value, getPdfSettingObj())){
+                        isUpdateEnable = true
+                        binding.isUpdateEnable = isUpdateEnable
+                    }else{
+                        isUpdateEnable = false
+                        binding.isUpdateEnable = isUpdateEnable
+                    }
                 }
             },
             R.layout.item_colors,

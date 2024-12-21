@@ -531,7 +531,7 @@ class CreditNoteReceiptFragment : Fragment() {
                         Cell().add(Paragraph(item.itemName.split("(")[0]).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
                             Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
                     table.addCell(
-                        Cell().add(Paragraph(item.quantity.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
+                        Cell().add(Paragraph(item.returnedQty.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(
                             Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
                     if (isItemTableMrp.toBoolean()) {
                         table.addCell(
@@ -564,7 +564,7 @@ class CreditNoteReceiptFragment : Fragment() {
             .setMarginTop(5f)
         document.add(invoiceSubTotal)
 
-        val invoiceTotalTax = Paragraph((creditNote.totalAmount - creditNote.amount).toString())
+        val invoiceTotalTax = Paragraph("Total Tax : RS ${creditNote.totalAmount - creditNote.amount}")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(15f)
             .setFontColor(ColorConstants.BLACK)
@@ -872,7 +872,7 @@ class CreditNoteReceiptFragment : Fragment() {
                         listOf(
                             slNo.toString() to 10,
                             item.itemName.split("(")[0] to 34,
-                            item.quantity.toString() to 11,
+                            item.returnedQty.toString() to 11,
                             item.unitPrice.toString() to 15,
                             item.taxRate.toString() to 15,
                             item.totalPrice.toString() to 15

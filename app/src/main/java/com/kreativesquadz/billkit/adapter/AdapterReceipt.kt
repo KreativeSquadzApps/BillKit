@@ -90,6 +90,7 @@ class AdapterReceipt<T>(
                         if (it == TaxOption.ExemptTax){ }
                     }
                 }
+                binding.qty.text = item.quantity.toString()
             }
             if (viewModel is CreditNoteReceiptViewModel) {
                 if (invoiceItem.isProduct == 1){
@@ -123,6 +124,8 @@ class AdapterReceipt<T>(
                         if (it == TaxOption.ExemptTax){ }
                     }
                 }
+                binding.qty.text = item.returnedQty.toString()
+
             }
             binding.rate.text = finalRate.toString()
 

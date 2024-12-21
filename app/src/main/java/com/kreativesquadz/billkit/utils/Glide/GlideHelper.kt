@@ -1,6 +1,7 @@
 package com.kreativesquadz.billkit.utils.Glide
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
@@ -13,9 +14,11 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.CustomTarget
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import java.io.InputStream
 
 object GlideHelper {
@@ -71,5 +74,21 @@ object GlideHelper {
             })
             .into(imageView)
     }
+
+    fun loadBitmap(context: Context, url: String, onBitmapLoaded: (Bitmap) -> Unit) {
+        Glide.with(context)
+            .asBitmap()
+            .load(GlideUrl(Config.APP_API_IMAGE_URL + url))
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    onBitmapLoaded(resource) // Callback with the loaded bitmap
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Handle cleanup if necessary
+                }
+            })
+    }
+
 
 }

@@ -69,8 +69,8 @@ class UserSettingRepository @Inject constructor(val db: AppDatabase) {
     fun getPdfSetting(userId: Long): PdfSettings? {
         return userSettingDao.getUserPdfSettingsById(userId)
     }
-    suspend fun updatePdfSetting(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String) {
-            userSettingDao.updatePdfSettings(userId, pdfCompanyInfo, pdfItemTable, pdfFooter)
+    suspend fun updatePdfSetting(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfColor: String?, pdfFooter: String) {
+            userSettingDao.updatePdfSettings(userId, pdfCompanyInfo, pdfItemTable,pdfColor ,pdfFooter)
       //  userSettingDao.updatePdfSettings(pdfSetting)
     }
 

@@ -42,6 +42,7 @@ class TabPdfViewModel @Inject constructor(val userSettingRepository: UserSetting
                     newSettings.userId,
                     newSettings.pdfCompanyInfo,
                     newSettings.pdfItemTable,
+                    newSettings.pdfColor,
                     newSettings.pdfFooter
                 )
                 getPdfSetting()

@@ -1,5 +1,6 @@
 package com.kreativesquadz.billkit.ui.bills
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.transition.Transition
 import android.util.Log
 import android.view.Gravity.CENTER
 import android.view.Gravity.RIGHT
@@ -27,10 +29,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.itextpdf.io.font.constants.StandardFonts
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.io.source.ByteArrayOutputStream
 import com.itextpdf.kernel.colors.ColorConstants
+import com.itextpdf.kernel.colors.DeviceRgb
 import com.itextpdf.kernel.font.PdfFontFactory
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
@@ -63,6 +68,7 @@ import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import com.kreativesquadz.billkit.utils.Glide.GlideHelper
+import com.kreativesquadz.billkit.utils.PdfColor
 import com.kreativesquadz.billkit.utils.TaxType
 import com.kreativesquadz.billkit.utils.addBackPressHandler
 import com.kreativesquadz.billkit.utils.toBoolean
@@ -106,6 +112,8 @@ class ReceiptFrag : Fragment() {
     private val HEAD: Int = 8
     val FULL_WIDTH: Int = -1
     private var isLogoPrint = false
+    private var CompanyLogoUrl : String ?= null
+    private var companyLogoBitmap : Bitmap ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,6 +140,14 @@ class ReceiptFrag : Fragment() {
     }
 
     fun observers(){
+        viewModel.companyDetails.observe(viewLifecycleOwner){
+            it?.let {
+                binding.companyDetails = it
+                CompanyLogoUrl  = it.BusinessImage
+                GlideHelper.loadImage(requireContext(), it.BusinessImage, binding.imageView)
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -147,6 +163,17 @@ class ReceiptFrag : Fragment() {
                     viewModel.pdfSettings.collect { pdfSettings ->
                         this@ReceiptFrag.pdfSettings = pdfSettings
                         binding.tvFooter.text = pdfSettings.pdfFooter
+                        val pdfCompanyInfoValues = pdfSettings.pdfCompanyInfo.split(" ")
+                        val isCompanyLogo = pdfCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
+
+                        if(isCompanyLogo.toBoolean()){
+                            CompanyLogoUrl?.let {
+                                GlideHelper.loadBitmap(requireContext(), it) { bitmap ->
+                                    companyLogoBitmap = bitmap
+                                }
+                            }
+
+                        }
                     }
                 }
             }
@@ -246,12 +273,7 @@ class ReceiptFrag : Fragment() {
             customerP = viewModel.getCustomerById(it?.customerId.toString())
         }
 
-        viewModel.companyDetails.observe(viewLifecycleOwner){
-            it?.let {
-                binding.companyDetails = it
-                GlideHelper.loadImage(requireContext(), it.BusinessImage, binding.imageView)
-            }
-        }
+
 
         viewModel.invoiceItems.observe(viewLifecycleOwner){
             var totalQty = 0.0
@@ -421,6 +443,7 @@ class ReceiptFrag : Fragment() {
         return false // Change this according to your logic
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun generateReceiptPdf(context: Context, pdfSettings: PdfSettings, items: List<InvoiceItem>, companyDetails: CompanyDetails, invoice: Invoice, customer : Customer?) {
         val pdfCompanyInfoValues = pdfSettings.pdfCompanyInfo.split(" ")
       val isCompanyLogo = pdfCompanyInfoValues.getOrNull(0)?.toIntOrNull() ?: 0
@@ -428,6 +451,25 @@ class ReceiptFrag : Fragment() {
        val isCompanyPhone = pdfCompanyInfoValues.getOrNull(2)?.toIntOrNull() ?: 0
         //  isCompanyAddress = pdfCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
         val  isCompanyGst = pdfCompanyInfoValues.getOrNull(3)?.toIntOrNull() ?: 0
+        val pdfColor : DeviceRgb
+        var titleColor : DeviceRgb
+            titleColor = getDeviceRgbFromColorResource(Color.WHITE)
+                when(pdfSettings.pdfColor){
+                PdfColor.RED.toString() -> pdfColor = getDeviceRgbFromColorResource(Color.RED)
+                PdfColor.GREEN.toString() -> pdfColor = getDeviceRgbFromColorResource(Color.GREEN)
+                PdfColor.BLUE.toString() -> pdfColor = getDeviceRgbFromColorResource(Color.BLUE)
+                PdfColor.YELLOW.toString()-> pdfColor = getDeviceRgbFromColorResource(Color.YELLOW)
+                PdfColor.GRAY.toString() -> {
+                    pdfColor = getDeviceRgbFromColorResource(Color.GRAY)
+                    titleColor = getDeviceRgbFromColorResource(Color.BLACK)
+                }
+                else -> {
+                    pdfColor = getDeviceRgbFromColorResource(Color.GRAY)
+                    titleColor = getDeviceRgbFromColorResource(Color.BLACK)
+                }
+            }
+
+
 
         // Split pdfItemTable and update corresponding variables
         val pdfItemTableValues = pdfSettings.pdfItemTable.split(" ")
@@ -443,7 +485,19 @@ class ReceiptFrag : Fragment() {
         val pdfDocument = PdfDocument(writer)
         val document = Document(pdfDocument)
 
-
+        if (isCompanyLogo.toBoolean()){
+            val CompanyLogo = companyLogoBitmap
+            val streamCompany = ByteArrayOutputStream()
+            CompanyLogo?.compress(Bitmap.CompressFormat.PNG, 100, streamCompany)
+            val logoImageDataCompany = streamCompany.toByteArray()
+            val imageCompanyLogo = Image(ImageDataFactory.create(logoImageDataCompany))
+            imageCompanyLogo.setHeight(100f)
+            imageCompanyLogo.setWidth(100f)
+            imageCompanyLogo.setMarginTop(10f)
+            imageCompanyLogo.setMarginBottom(10f)
+            imageCompanyLogo.setHorizontalAlignment(HorizontalAlignment.CENTER)
+            document.add(imageCompanyLogo)
+        }
         val businessName = Paragraph(companyDetails.BusinessName)
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
             .setFontSize(16f)
@@ -505,8 +559,8 @@ class ReceiptFrag : Fragment() {
             val header = Paragraph("INVOICE")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
             .setFontSize(20f)
-            .setFontColor(ColorConstants.BLACK)
-            .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+            .setFontColor(titleColor)
+            .setBackgroundColor(pdfColor)
             .setTextAlignment(TextAlignment.RIGHT)
         header.setPaddingRight(40f)
         document.add(header)
@@ -586,31 +640,33 @@ class ReceiptFrag : Fragment() {
         // Table Header
 
 
-        table.addCell(Cell().add(Paragraph("SL No").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("ITEM").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("QTY").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(Cell().add(Paragraph("SL No").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderRight(Border.NO_BORDER))
+        table.addCell(Cell().add(Paragraph("ITEM").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(Cell().add(Paragraph("QTY").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
         if (isItemTableMrp.toBoolean()) {
             table.addCell(
                 Cell().add(
-                    Paragraph("MRP").setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                    Paragraph("MRP")
                         .setFontColor(ColorConstants.WHITE)
                         .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
-                        .setPaddingLeft(5f)
+                        .setPaddingLeft(5f).setBackgroundColor(pdfColor)
                 ).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
             )
         }
-        table.addCell(Cell().add(Paragraph("PRICE").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("TAX[ % ]").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-        table.addCell(Cell().add(Paragraph("AMOUNT").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER))
+        table.addCell(Cell().add(Paragraph("PRICE").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(Cell().add(Paragraph("TAX[ % ]").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+        table.addCell(Cell().add(Paragraph("AMOUNT").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER))
 
 
 
         // Table Rows
         var serialNo = 0
+        var totalItemQty = 0
         items.forEach { item ->
             serialNo++
             val  finalRate = item.unitPrice - item.unitPrice * item.taxRate / 100
             val  taxAmount = item.unitPrice - finalRate
+            totalItemQty += item.quantity
 
             table.addCell(Cell().add(Paragraph(serialNo.toString()).setPaddingLeft(10f).setFontSize(12f)).setBorderRight(Border.NO_BORDER))
             table.addCell(Cell().add(Paragraph(item.itemName.split("(")[0]).setPaddingLeft(10f).setFontSize(12f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
@@ -636,7 +692,7 @@ class ReceiptFrag : Fragment() {
             .setMarginTop(5f)
         document.add(invoiceSubTotal)
 
-        val invoiceTotalTax = Paragraph(invoice.totalTax.toString())
+        val invoiceTotalTax = Paragraph("Total Tax : RS ${invoice.totalTax }")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(15f)
             .setFontColor(ColorConstants.BLACK)
@@ -644,36 +700,100 @@ class ReceiptFrag : Fragment() {
             .setMarginTop(-5f)
         document.add(invoiceTotalTax)
 
-        val totalQty = Paragraph("Total Qty : ${serialNo}")
+        invoice.packageAmount?.let {
+            val invoicePackageAmount = Paragraph("Package Amount : RS ${it.toDouble()}")
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(15f)
+                .setFontColor(ColorConstants.BLACK)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setMarginTop(-5f)
+            document.add(invoicePackageAmount)
+        }
+
+        invoice.otherChargesAmount?.let {
+            val invoiceOtherChargesAmount = Paragraph("Other Charges : RS $it")
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(15f)
+                .setFontColor(ColorConstants.BLACK)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setMarginTop(-5f)
+            document.add(invoiceOtherChargesAmount)
+        }
+
+        customGstAmount?.let {
+            val firstValue = it.split("|").first()
+            val invoiceCustomGstAmount = Paragraph("Custom GST: RS ${firstValue.toDouble()}")
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(15f)
+                .setFontColor(ColorConstants.BLACK)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setMarginTop(-5f)
+            document.add(invoiceCustomGstAmount)
+        }
+
+        if (invoice.discount != null && invoice.discount > 0) {
+            val invoiceDiscount = Paragraph("Discount : RS ${invoice.discount}")
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(15f)
+                .setFontColor(ColorConstants.BLACK)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setMarginTop(-5f)
+            document.add(invoiceDiscount)
+        }
+
+        if (invoice.creditNoteAmount != null && invoice.creditNoteAmount > 0) {
+            val invoiceCreditNoteAmount = Paragraph("Credit Note : RS ${invoice.creditNoteAmount}")
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(15f)
+                .setFontColor(ColorConstants.BLACK)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setMarginTop(-5f)
+            document.add(invoiceCreditNoteAmount)
+        }
+
+
+        val totalItem = Paragraph("Total Item : ${serialNo}")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(12f)
             .setFontColor(ColorConstants.BLACK)
             .setTextAlignment(TextAlignment.LEFT)
+             document.add(totalItem)
+
         if (isItemTableQty.toBoolean()){
+            val totalQty = Paragraph("Total Qty : ${totalItemQty}")
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(12f)
+                .setFontColor(ColorConstants.BLACK)
+                .setTextAlignment(TextAlignment.LEFT)
             document.add(totalQty)
         }
-
-
-        invoice.cashAmount?.let {
-            if (isItemTablePayment.toBoolean()) {
-                val cash = Paragraph("Cash : ${it}")
-                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-                    .setFontSize(12f)
-                    .setFontColor(ColorConstants.BLACK)
-                    .setTextAlignment(TextAlignment.LEFT)
-                    .setMarginTop(-5f)
-                document.add(cash)
-
-                invoice.onlineAmount?.let {
-                    val onlineAmount = Paragraph("Online : ${it}")
+        if (isItemTablePayment.toBoolean()) {
+                invoice.cashAmount?.let {
+                    if (it > 0){
+                    val cash = Paragraph("Cash : ${it}")
                         .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
                         .setFontSize(12f)
                         .setFontColor(ColorConstants.BLACK)
                         .setTextAlignment(TextAlignment.LEFT)
                         .setMarginTop(-5f)
-                    document.add(onlineAmount)
+                    document.add(cash)
+                }
+                }
+
+
+                invoice.onlineAmount?.let {
+                    if (it > 0){
+                        val onlineAmount = Paragraph("Online : ${it}")
+                            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                            .setFontSize(12f)
+                            .setFontColor(ColorConstants.BLACK)
+                            .setTextAlignment(TextAlignment.LEFT)
+                            .setMarginTop(-5f)
+                        document.add(onlineAmount)
+                    }
                 }
                 invoice.creditAmount?.let {
+                    if (it > 0){
                     val creditAmount = Paragraph("Credit : ${it}")
                         .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
                         .setFontSize(12f)
@@ -681,8 +801,9 @@ class ReceiptFrag : Fragment() {
                         .setTextAlignment(TextAlignment.LEFT)
                         .setMarginTop(-5f)
                     document.add(creditAmount)
+                  }
                 }
-            }
+
         }
 
         val tableTotal = Table(UnitValue.createPercentArray(floatArrayOf(70f, 20f))) // Two columns with equal width
@@ -701,8 +822,8 @@ class ReceiptFrag : Fragment() {
         val invoiceTotal = Paragraph("Total : ${invoice.totalAmount}")
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(15f)
-            .setFontColor(ColorConstants.BLACK)
-            .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+            .setFontColor(titleColor)
+            .setBackgroundColor(pdfColor)
             .setPadding(5f)
             .setTextAlignment(TextAlignment.RIGHT)
 
@@ -726,11 +847,11 @@ class ReceiptFrag : Fragment() {
             val tableTax = Table(UnitValue.createPercentArray(floatArrayOf(2f, 3f, 3f, 2f, 3f)))
             tableTax.setWidth(UnitValue.createPercentValue(100f))
 
-            tableTax.addCell(Cell().add(Paragraph("SL No").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("TAX TYPE").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("TAXABLE AMOUNT").setFontSize(10f).setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("RATE").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
-            tableTax.addCell(Cell().add(Paragraph("TAX AMOUNT").setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f)).setBorderLeft(Border.NO_BORDER))
+            tableTax.addCell(Cell().add(Paragraph("SL No").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderRight(Border.NO_BORDER))
+            tableTax.addCell(Cell().add(Paragraph("TAX TYPE").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+            tableTax.addCell(Cell().add(Paragraph("TAXABLE AMOUNT").setFontSize(10f).setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+            tableTax.addCell(Cell().add(Paragraph("RATE").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(5f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER))
+            tableTax.addCell(Cell().add(Paragraph("TAX AMOUNT").setFontColor(ColorConstants.WHITE).setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD)).setPaddingLeft(10f).setBackgroundColor(pdfColor)).setBorderLeft(Border.NO_BORDER))
 
            var serialNoTax = 0
             invoiceTax.forEach{ item ->
@@ -760,7 +881,6 @@ class ReceiptFrag : Fragment() {
             .setMarginTop(50f)
             .setMarginBottom(10f)
         document.add(separator)
-
         val logo = BitmapFactory.decodeResource(context.resources, R.drawable.logo)
         val stream = ByteArrayOutputStream()
         logo.compress(Bitmap.CompressFormat.PNG, 100, stream)
@@ -1295,7 +1415,7 @@ class ReceiptFrag : Fragment() {
 
     private fun printByteArray(textData: ByteArray) {
         val bitmap: Bitmap = imageViewToBitmap(binding.imageView) ?: return
-        val print: Boolean = printImage(textData,CENTER,bitmap, 200)
+         val print: Boolean = printImage(textData,CENTER,bitmap, 200)
             if (!print) {
                 Toast.makeText(requireContext(), "Print image failed", Toast.LENGTH_SHORT).show()
             }
@@ -1374,6 +1494,14 @@ class ReceiptFrag : Fragment() {
             Toast.makeText(imageView.context, "Logo is not compatible, try another logo.", Toast.LENGTH_SHORT).show()
             null
         }
+    }
+
+    fun getDeviceRgbFromColorResource(colorInt: Int): DeviceRgb {
+        val red = Color.red(colorInt)
+        val green = Color.green(colorInt)
+        val blue = Color.blue(colorInt)
+
+        return DeviceRgb(red, green, blue)
     }
 
     override fun onDestroyView() {

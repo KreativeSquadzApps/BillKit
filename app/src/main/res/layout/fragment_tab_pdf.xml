@@ -54,11 +54,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="@dimen/_20dp"
+                        android:visibility="gone"
                         android:background="@color/lite_grey_200">
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="-30dp">
+                            android:layout_marginTop="-55dp">
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="400dp"
@@ -66,7 +67,7 @@
                             </ImageView>
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="wrap_content">
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -243,17 +244,13 @@
                             </LinearLayout>
 
                         </FrameLayout>
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
                             android:orientation="horizontal"
                             android:id="@+id/recyclerView"
                             tools:listitem="@layout/item_colors"
-                            android:layout_marginTop="-20dp" />
-
-
-                        <!-- Add more content here -->
+                            android:layout_marginTop="-55dp" />
                     </LinearLayout>
 
 

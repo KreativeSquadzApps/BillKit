@@ -33,8 +33,8 @@ interface UserSettingDao {
      @Insert(onConflict = OnConflictStrategy.REPLACE)
      fun insertPdfSettings(pdfSettings: PdfSettings) : Long
 
-    @Query("UPDATE pdf_settings SET pdfCompanyInfo = :pdfCompanyInfo, pdfItemTable = :pdfItemTable,pdfFooter = :pdfFooter WHERE userId = :userId")
-    suspend fun updatePdfSettings(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfFooter: String)
+    @Query("UPDATE pdf_settings SET pdfCompanyInfo = :pdfCompanyInfo, pdfItemTable = :pdfItemTable,pdfColor = :pdfColor,pdfFooter = :pdfFooter WHERE userId = :userId")
+    suspend fun updatePdfSettings(userId: Long, pdfCompanyInfo: String, pdfItemTable: String, pdfColor: String? ,pdfFooter: String)
 
 
 

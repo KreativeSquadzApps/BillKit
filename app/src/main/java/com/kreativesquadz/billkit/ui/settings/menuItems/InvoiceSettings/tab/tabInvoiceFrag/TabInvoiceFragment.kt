@@ -168,24 +168,24 @@ class TabInvoiceFragment : Fragment(), OnTextChangedCallback {
            lateinit var userSetting : UserSetting
            if(isChecked) {
                isDiscount = 1
-             //  userSetting = UserSetting(Config.userId,1,isReverse, "", "1")
+               userSetting = UserSetting(Config.userId,1,isReverse, "", "1")
             } else {
                  isDiscount = 0
-              //   userSetting = UserSetting(Config.userId,0, isReverse,"", "1")
+                 userSetting = UserSetting(Config.userId,0, isReverse,"", "1")
             }
-          //  viewModel.updateDiscount(requireContext(),userSetting,isChecked)
+            viewModel.updateDiscount(requireContext(),userSetting)
         }
 
         binding.reverseSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if(isChecked) {
                  isReverse = 1
-               //  userSetting = UserSetting(Config.userId,isDiscount,1, "", "1")
+                 userSetting = UserSetting(Config.userId,isDiscount,1, "", "1")
             } else {
                  isReverse = 0
-                // userSetting = UserSetting(Config.userId,isDiscount,0, "", "1")
+                 userSetting = UserSetting(Config.userId,isDiscount,0, "", "1")
             }
-           // viewModel.updateDiscount(requireContext(),userSetting,isChecked)
+            viewModel.updateDiscount(requireContext(),userSetting)
         }
 
     }
