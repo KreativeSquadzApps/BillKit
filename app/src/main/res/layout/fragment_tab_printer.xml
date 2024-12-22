@@ -172,7 +172,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:text="Total Qty"
-
                             android:thumb="@drawable/custom_thumb"
                             android:track="@drawable/custom_track"/>
 

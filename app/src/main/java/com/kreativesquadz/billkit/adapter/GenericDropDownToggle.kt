@@ -30,7 +30,7 @@ class GenericDropDownToggle<T : TextView>(
                 0, 0, if (isCollapsed) expandedDrawable else collapsedDrawable, 0
             )
             layoutView.setBackgroundColor(
-                ContextCompat.getColor(headerView.context, if (isCollapsed) R.color.lite_grey_200 else R.color.white)
+                ContextCompat.getColor(headerView.context, if (isCollapsed) R.color.lite_grey_200 else R.color.white_n_black)
             )
             onExpand?.takeIf { isCollapsed }?.invoke()
             onStateChange?.invoke(!isCollapsed)

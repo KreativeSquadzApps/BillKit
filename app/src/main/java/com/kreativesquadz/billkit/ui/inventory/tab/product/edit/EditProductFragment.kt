@@ -188,7 +188,7 @@ class EditProductFragment : Fragment() {
             if (binding.dropdownContent.visibility == View.GONE) {
                 binding.dropdownContent.expand()
                 binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)
-                binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.white)
+                binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.white_n_black)
                 binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
 
             } else {

@@ -4,9 +4,6 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
-import android.media.AudioAttributes
-import android.media.RingtoneManager
-import android.net.Uri
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
@@ -23,19 +20,13 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.kreativesquadz.billkit.Config
 import com.kreativesquadz.billkit.R
@@ -171,7 +162,7 @@ class AddProductFrag : Fragment() {
             if (binding.dropdownContent.visibility == View.GONE) {
                 binding.dropdownContent.expand()
                 binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)
-                binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.white)
+                binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.white_n_black)
                 binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
 
             } else {

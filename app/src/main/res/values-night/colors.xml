@@ -1,39 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white_n_black">#000000</color>
 
-    <color name="text_color_primary">#2e2b38</color>
     <color name="colorPrimaryDark">#2e2b38</color>
     <color name="colorPrimary">#2e2b38</color>
-    <color name="nuemph_shadow_dark">#33313f</color>
     <color name="green">#00D100</color>
 
-    <color name="background_color">#393646</color>
-    <color name="background_color_popup">#393646</color>
-    <color name="background_color_lite">#b0a5ab</color>
     <color name="main_color">#822812</color>
+
     <color name="lite_grey_200">#3f3f3f</color>
-
-
     <color name="popup">#6D5D6E</color>
-    <color name="colorAccent">#6D5D6E</color>
-    <color name="colorPrimaryLight">#6D5D6E</color>
-    <color name="nuemph_shadow_light">#4d4a59</color>
-
     <color name="lite_grey">#D3D3D3</color>
 
-
-    <color name="icon_color_main">#fff</color>
     <color name="text_color_main">#fff</color>
     <color name="text_color_heading">#fff</color>
     <color name="text_color_heading_reverse">#000</color>
-
 
     <color name="colorThumbChecked">#FF4081</color>
     <color name="colorThumbUnchecked">#B0BEC5</color>
     <color name="colorTrackChecked">#FFC1E3</color>
     <color name="colorTrackUnchecked">#CFD8DC</color>
     <color name="darker_green">#027148</color>
-
-
-
 </resources>

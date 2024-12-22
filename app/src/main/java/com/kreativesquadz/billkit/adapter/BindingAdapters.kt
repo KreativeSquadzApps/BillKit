@@ -5,7 +5,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
-import androidx.paging.Config
 import com.kreativesquadz.billkit.R
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -166,9 +165,9 @@ fun isNullorBlank(view: View, text: String?) {
 fun isSelected(textView: TextView, isSelected: Boolean?) {
     val context = textView.context
     val color = if (isSelected == true) {
-        context.getColor(R.color.white) // Use your selected color resource
+        context.getColor(R.color.white_n_black)
     } else {
-        context.getColor(R.color.text_color_heading) // Use your default color resource
+        context.getColor(R.color.text_color_heading)
     }
     textView.setTextColor(color)
 }

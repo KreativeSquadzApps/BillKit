@@ -45,10 +45,12 @@ class SettingsFrag : Fragment() {
     }
     fun onClickListeners(){
         binding.signOut.setOnClickListener {
-            viewModel.logout()
-            val intent = Intent(requireActivity(), LoginActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            setupPopup("Logout", "Are you sure you want to Logout ?","LOGOUT"){
+                viewModel.logout()
+                val intent = Intent(requireActivity(), LoginActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
         }
 
     }
@@ -89,7 +91,7 @@ class SettingsFrag : Fragment() {
                             findNavController().navigate(R.id.action_settingsFrag_to_themeFragment)
                         }
                         getString(R.string.settings_item_7) -> {
-                            setupPopup{
+                            setupPopup("Hard Reset", "Are you sure you want to Reset the complete data ?","YES"){
                                 viewModel.hardReset(Config.userId,requireContext())
                             }
                         }
@@ -103,12 +105,11 @@ class SettingsFrag : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
     }
-    private fun setupPopup(action: () -> Unit){
-
+    private fun setupPopup(title: String, des: String,positiveText :String, action: () -> Unit){
         val dialogData = DialogData(
-            title = "Hard Reset",
-            info = "Are you sure you want to Reset the complete data ?",
-            positiveButtonText = "YES",
+            title = title,
+            info = des,
+            positiveButtonText = positiveText,
             negativeButtonText = "Cancel"
         )
 

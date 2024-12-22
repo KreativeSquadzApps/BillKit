@@ -153,7 +153,7 @@ class DayBookFrag : Fragment() {
             return TextView(requireContext()).apply {
                 layoutParams = textViewParams
                 this.text = text
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.white_n_black))
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
                 setBackgroundDrawable(backgroundLast)
                 gravity = Gravity.CENTER
