@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -12,7 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/text_color_heading_reverse"
+        android:background="@color/white_n_black"
         android:orientation="vertical">
 
 
@@ -20,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginStart="@dimen/_5dp"
             android:layout_marginEnd="@dimen/_5dp"
             android:layout_marginBottom="@dimen/_10dp"
 
@@ -314,6 +314,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:padding="20dp"
+                                        app:tint="@color/text_color_main"
                                         android:src="@drawable/ic_delete">
 
                                     </ImageView>
@@ -353,7 +354,7 @@
                                     android:layout_marginBottom="@dimen/_8dp"
                                     android:textStyle="bold"
                                     android:layout_weight="2"
-                                    bind:cardBackgroundColor="@color/colorPrimaryDark"
+                                    app:cardBackgroundColor="@color/btn_primary_n_dark"
                                     android:textColor="@color/text_color_heading"
                                     android:gravity="center">
 
@@ -364,10 +365,8 @@
                                         android:text="Add\n Item"
                                         android:textStyle="bold"
                                         android:gravity="center"
-                                        
                                         android:textSize="@dimen/txt_16sp"
-                                        android:textColor="@color/text_color_heading_reverse"
-                                        bind:neumorph_backgroundColor="@color/colorPrimaryDark"/>
+                                        android:textColor="@color/text_color_heading_reverse" />
 
                                 </androidx.cardview.widget.CardView>
 

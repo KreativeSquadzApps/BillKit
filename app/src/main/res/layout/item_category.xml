@@ -36,7 +36,7 @@
                 android:text="@{category.categoryName}"
                 android:drawableRight="@drawable/ic_arrow_down"
                 android:padding="@dimen/_10dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:textSize="@dimen/txt_16sp"
                 android:background="?attr/selectableItemBackground"
                 tools:text="Category"/>

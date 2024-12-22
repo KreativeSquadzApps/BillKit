@@ -36,7 +36,7 @@
                         android:layout_height="wrap_content"
                         android:textSize= "@dimen/txt_20sp"
                         android:id="@+id/tvInvoicePrefix"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         tools:text="uuu"/>
 
                     <TextView
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:textSize= "@dimen/txt_20sp"
                         android:id="@+id/tvInvoiceNumber"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         tools:text="uuu"/>
 
                     <TextView

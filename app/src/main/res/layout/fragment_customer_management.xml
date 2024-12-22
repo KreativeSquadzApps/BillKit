@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white_n_black"
         android:orientation="vertical">
 
 
@@ -21,7 +22,7 @@
           android:textStyle="bold"
           android:layout_gravity="end"
           android:layout_marginEnd="@dimen/_10dp"
-          app:cardBackgroundColor="@color/colorPrimaryDark"
+          app:cardBackgroundColor="@color/btn_primary_n_dark"
           android:textColor="@color/text_color_heading">
 
           <TextView android:fontFamily="@font/montserrat_regular"

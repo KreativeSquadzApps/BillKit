@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/white_n_black"
         tools:context=".ui.settings.menuItems.taxSettings.tab.tabTaxes.TaxesFragment">
 
         <TextView
@@ -20,7 +21,7 @@
             android:padding="@dimen/_10dp"
             android:gravity="center"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_primary_n_dark"
             android:text="Add New Tax" />
 
         <LinearLayout
@@ -79,7 +80,7 @@
             app:cardCornerRadius="@dimen/_8dp"
             app:cardUseCompatPadding="true"
             android:textStyle="bold"
-            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardBackgroundColor="@color/btn_primary_n_dark"
             android:textColor="@color/text_color_heading"
             android:gravity="center">
 

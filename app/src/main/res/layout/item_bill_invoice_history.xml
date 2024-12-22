@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toEndOf="@+id/txtInvoiceID"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         android:textSize="@dimen/txt_13sp"
                         android:text='@{invoice.invoiceNumber}'
                         tools:text="2000"/>
@@ -66,7 +66,7 @@
                         android:id="@+id/item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         android:textSize="@dimen/txt_13sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginEnd="10dp"
@@ -104,7 +104,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toEndOf="@+id/txttime"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         android:textSize="@dimen/txt_13sp"
                         app:timestampToDateTimeTxt="@{invoice.invoiceTime}"
                         tools:text="2000"/>
@@ -113,7 +113,7 @@
                         android:id="@+id/totalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         android:textSize="@dimen/txt_13sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginEnd="10dp"
@@ -148,7 +148,7 @@
                 android:textSize="10sp"
                 android:layout_marginStart="-20dp"
                 android:layout_marginTop="-20dp"
-                android:textColor="@color/text_color_heading_reverse"
+                android:textColor="@color/white"
                 android:background="@color/colorPrimary"
                 />
             <TextView android:fontFamily="@font/montserrat_regular"
@@ -163,7 +163,7 @@
                 android:textSize="10sp"
                 android:layout_marginStart="-20dp"
                 android:layout_marginTop="-20dp"
-                android:textColor="@color/text_color_heading_reverse"
+                android:textColor="@color/white"
                 android:background="@color/red"
                 />
 

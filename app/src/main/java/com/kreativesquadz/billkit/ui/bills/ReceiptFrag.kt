@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -22,6 +23,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -296,11 +298,41 @@ class ReceiptFrag : Fragment() {
 
 
         target?.let {
-            if (it.equals(Config.BillDetailsFragmentToReceiptFragment)){
-                binding.backImage.setBackgroundResource(R.drawable.home_light)
+            if (it == Config.BillDetailsFragmentToReceiptFragment) {
+                // Set the image resource for the ImageView
+                binding.backImage.setImageResource(R.drawable.home_light)
+
+                // Apply the tint to the image
+                binding.backImage.post {
+                    val drawable = binding.backImage.drawable
+                    drawable?.let { d ->
+                        val wrappedDrawable = DrawableCompat.wrap(d)
+                        DrawableCompat.setTint(
+                            wrappedDrawable,
+                            ContextCompat.getColor(requireContext(), R.color.image_primary_n_dark)
+                        )
+                        binding.backImage.setImageDrawable(wrappedDrawable)
+                    }
+                }
+
                 binding.backText.text = "New Sale"
-            }else{
-                binding.backImage.setBackgroundResource(R.drawable.back_light)
+            } else {
+                // Set the image resource for the ImageView for the "Back" case
+                binding.backImage.setImageResource(R.drawable.back_light)
+
+                // Apply the tint to the image
+                binding.backImage.post {
+                    val drawable = binding.backImage.drawable
+                    drawable?.let { d ->
+                        val wrappedDrawable = DrawableCompat.wrap(d)
+                        DrawableCompat.setTint(
+                            wrappedDrawable,
+                            ContextCompat.getColor(requireContext(), R.color.image_primary_n_dark)
+                        )
+                        binding.backImage.setImageDrawable(wrappedDrawable)
+                    }
+                }
+
                 binding.backText.text = "Back"
             }
         }

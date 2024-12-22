@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{creditCustomer.CustomerName}"
                     android:textSize="@dimen/txt_16sp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:textStyle="bold"
                     android:paddingBottom="4dp"
                     tools:text="DEMO" />
@@ -74,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:layout_marginEnd="@dimen/_10dp"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         android:textSize="@dimen/txt_16sp"
                         app:isPriceStringEmpty="@{creditCustomer.creditAmount}"
                         tools:text="5500.0000" />

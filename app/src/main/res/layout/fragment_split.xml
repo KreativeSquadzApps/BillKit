@@ -46,7 +46,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
                 android:id="@+id/totalAmount"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:textSize="@dimen/txt_22sp"
                 tools:text="500" />
 
@@ -68,7 +68,7 @@
                 android:layout_marginTop="@dimen/_10dp"
                 android:layout_marginStart="@dimen/_15dp"
                 android:layout_marginEnd="@dimen/_15dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:textSize="@dimen/txt_20sp"
                 android:inputType="number"
                 android:id="@+id/etCash"/>
@@ -91,7 +91,7 @@
                 android:layout_marginTop="@dimen/_10dp"
                 android:layout_marginStart="@dimen/_15dp"
                 android:layout_marginEnd="@dimen/_15dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:textSize="@dimen/txt_20sp"
                 android:inputType="number"
 
@@ -115,7 +115,7 @@
                 android:layout_marginTop="@dimen/_10dp"
                 android:layout_marginStart="@dimen/_15dp"
                 android:layout_marginEnd="@dimen/_15dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:textSize="@dimen/txt_20sp"
                 android:editable="false"
                 android:inputType="number"
@@ -133,7 +133,7 @@
                 android:layout_marginTop="@dimen/_20dp"
                 android:layout_marginBottom="@dimen/_8dp"
                 android:textStyle="bold"
-                app:cardBackgroundColor="@color/colorPrimaryDark"
+                app:cardBackgroundColor="@color/btn_primary_n_dark"
                 android:textColor="@color/text_color_heading"
                 android:gravity="center">
 

@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textSize="@dimen/txt_16sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_primary_n_dark"
             android:gravity="center"
             android:text="@{mergedCreditDetail.creditType}"
             tools:text="Manual"/>

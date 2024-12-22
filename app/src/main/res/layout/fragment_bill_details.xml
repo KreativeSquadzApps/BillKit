@@ -77,7 +77,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/text_color_heading_reverse">
+    android:background="@color/white_n_black">
 
       <androidx.constraintlayout.widget.ConstraintLayout
           android:layout_width="match_parent"
@@ -101,6 +101,7 @@
                   android:layout_height="50dp"
                   android:padding="@dimen/_15dp"
                   android:layout_marginEnd="-10dp"
+                  app:tint="@color/image_primary_n_dark"
                   android:src="@drawable/addcustomer_light"
                   app:layout_constraintStart_toStartOf="@+id/addCustomer"/>
               <TextView android:fontFamily="@font/montserrat_regular"
@@ -109,7 +110,7 @@
                   android:gravity="center"
                   android:textSize="@dimen/txt_16sp"
                   android:id="@+id/addCustomer"
-                  android:textColor="@color/colorPrimary"
+                  android:textColor="@color/text_primary_n_dark"
                   app:layout_constraintStart_toStartOf="parent"
                   app:layout_constraintTop_toTopOf="parent"
                   app:layout_constraintEnd_toEndOf="parent"
@@ -135,7 +136,7 @@
                   app:layout_constraintStart_toStartOf="parent"
                   app:layout_constraintTop_toTopOf="parent"
                   android:textSize="20sp"
-                  android:textColor="@color/colorPrimary"
+                  android:textColor="@color/text_primary_n_dark"
                   android:id="@+id/tvCustomerName"
                   android:text="@{customer.customerName}"
                   tools:text="Demo"/>
@@ -256,7 +257,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="Gst RS :  "
                         android:id="@+id/txtGstAmount"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/text_primary_n_dark" />
 
                     <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
@@ -266,7 +267,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="@{gstAppliedAmount}"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         tools:text="10"
                         android:id="@+id/tvGst"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -280,7 +281,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:text="Add Gst"
                     android:visibility="@{isGSTApplied ? View.GONE : View.VISIBLE}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:id="@+id/addGst"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -319,7 +320,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="Packaging RS :  "
                         android:id="@+id/txtPackageAmount"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/text_primary_n_dark" />
 
                     <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
@@ -329,7 +330,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="@{packagingAppliedAmount}"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         tools:text="10"
                         android:id="@+id/tvPack"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -343,7 +344,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:text="Add Packaging"
                     android:visibility="@{isPackagingApplied ? View.GONE : View.VISIBLE}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:id="@+id/addPackaging"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -382,7 +383,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="Other Charges RS :  "
                         android:id="@+id/txtOtherCharges"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/text_primary_n_dark" />
 
                     <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="wrap_content"
@@ -392,7 +393,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="@{otherChargesAppliedAmount}"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         tools:text="10"
                         android:id="@+id/tvOtherCharges"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -406,7 +407,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:text="Add Other Charges"
                     android:visibility="@{isOtherChargesApplied ? View.GONE : View.VISIBLE}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:id="@+id/addOtherCharges"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -457,7 +458,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="Discount RS :  "
                         android:id="@+id/txtDiscountAmount"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/text_primary_n_dark" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:fontFamily="@font/montserrat_regular"
@@ -468,7 +469,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:text="@{discountedAmount}"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         tools:text="10"
                         android:id="@+id/tvDiscount"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -481,7 +482,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:text="Add Discount"
                     android:visibility="@{isDiscountApplied ? View.GONE : View.VISIBLE}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:id="@+id/addDiscount"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -514,7 +515,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:text="CreditNote Amount RS :  "
                     android:id="@+id/txtcreditNoteAmount"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/text_primary_n_dark" />
 
                 <androidx.appcompat.widget.AppCompatTextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="wrap_content"
@@ -524,7 +525,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:text="@{creditNote.totalAmount}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     tools:text="10"
                     android:id="@+id/tvCreditNote"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -537,7 +538,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/discountView"
                 android:text='@{isCreditNoteApplied ? "" :"Add Credit Note"}'
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:id="@+id/addCreditNote"
                 tools:text="Add Credit Note"/>
 
@@ -588,7 +589,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="4"
                     android:layout_gravity="center"
-                    android:src="@drawable/cash_light"
+                    android:src="@drawable/cash_light_v"
                     android:id="@+id/backImage" />
 
                 <TextView android:fontFamily="@font/montserrat_regular"
@@ -624,7 +625,7 @@
                     android:layout_height="0dp"
                     android:paddingTop="@dimen/_18dp"
                     android:layout_weight="4"
-                    android:src="@drawable/creditcard_light" />
+                    android:src="@drawable/creditcard_light_v" />
 
                 <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
@@ -658,7 +659,7 @@
                     android:layout_height="0dp"
                     android:paddingTop="@dimen/_18dp"
                     android:layout_weight="4"
-                    android:src="@drawable/split_light" />
+                    android:src="@drawable/split_light_v" />
 
                 <TextView android:fontFamily="@font/montserrat_regular"
                     android:layout_width="match_parent"
@@ -693,6 +694,7 @@
                     android:layout_height="0dp"
                     android:paddingTop="@dimen/_18dp"
                     android:layout_weight="4"
+                    app:tint="@color/image_primary_n_dark"
                     android:src="@drawable/writing_light" />
 
                 <TextView android:fontFamily="@font/montserrat_regular"

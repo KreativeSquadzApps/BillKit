@@ -8,7 +8,8 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white_n_black">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
             android:layout_marginEnd="@dimen/_10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardBackgroundColor="@color/btn_primary_n_dark"
             android:textColor="@color/text_color_heading">
 
             <TextView android:fontFamily="@font/montserrat_regular"

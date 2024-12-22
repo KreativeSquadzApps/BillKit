@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white_n_black">#ffffff</color>
+    <color name="black_n_white">#000</color>
+    <color name="white_n_dark">#fff</color>
+    <color name="white">#fff</color>
+
+
+
+    <color name="text_primary_n_dark">#0B5E8C</color>
+    <color name="text_color_main">#000</color>
+
+    <color name="image_primary_n_dark">#0B5E8C</color>
+    <color name="image_primarydark_n_dark">#084b70</color>
+
+    <color name="btn_primary_n_dark">#0B5E8C</color>
+    <color name="btn_background">#F0F0F0</color>
+    <color name="btn_light_grey">#F0F0F0</color>
+
+    <color name="lite_grey">#D3D3D3</color>
+    <color name="lite_grey_200">#F0F0F0</color>
+
+
+
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="gray">#D3D3D3</color>
-    <color name="white_n_black">#ffffff</color>
     <color name="green">#00D100</color>
     <color name="darker_green">#027148</color>
     <color name="darker_red">#32012C</color>
@@ -19,10 +40,8 @@
     <color name="colorPrimary">#0B5E8C</color>
     <color name="popup">#EEE0C9</color>
 
-    <color name="lite_grey">#D3D3D3</color>
-    <color name="lite_grey_200">#F0F0F0</color>
 
-    <color name="text_color_main">#000</color>
+
     <color name="text_color_heading">#000</color>
     <color name="text_color_heading_reverse">#fff</color>
 

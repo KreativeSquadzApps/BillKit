@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{customer.CustomerName}"
                     android:textSize="@dimen/txt_16sp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:textStyle="bold"
                     android:paddingBottom="4dp"
                     tools:text="DEMO" />
@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text='@{"GST No : "+customer.gstNo}'
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:textSize="@dimen/txt_12sp"
                     android:paddingBottom="4dp"
                     tools:text="GST No : 26895" />
@@ -85,7 +85,7 @@
                         android:id="@+id/creditAmountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         app:isPriceStringEmpty="@{customer.CreditAmount}"
                         android:paddingBottom="4dp"
                         android:textStyle="bold"
@@ -116,7 +116,7 @@
                         android:id="@+id/totalSalesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         android:layout_marginEnd="@dimen/_10dp"
                         app:isPriceStringEmpty="@{customer.totalSales}"
                         tools:text="5500.0000" />

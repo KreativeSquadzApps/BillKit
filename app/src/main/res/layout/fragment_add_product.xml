@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white_n_black">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
@@ -35,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10dp"
                     android:layout_marginBottom="@dimen/_10dp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:text="Product Information"/>
 
 
@@ -195,6 +196,7 @@
                                     android:layout_height="match_parent"
                                     android:padding="15dp"
                                     android:id="@+id/imgBarcode"
+                                    app:tint="@color/image_primary_n_dark"
                                     android:src="@drawable/barcode" />
                             </androidx.cardview.widget.CardView>
 
@@ -227,7 +229,7 @@
                             android:layout_marginBottom="@dimen/_10dp"
                             android:textSize="@dimen/txt_16sp"
                             android:layout_marginTop="@dimen/_20dp"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/text_primary_n_dark"
                             android:text="Tax"/>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -332,7 +334,7 @@
                     app:cardCornerRadius="@dimen/_5dp"
                     app:cardUseCompatPadding="true"
                     android:textStyle="bold"
-                    app:cardBackgroundColor="@color/colorPrimaryDark"
+                    app:cardBackgroundColor="@color/btn_primary_n_dark"
                     android:textColor="@color/text_color_heading"
                     android:gravity="center">
 

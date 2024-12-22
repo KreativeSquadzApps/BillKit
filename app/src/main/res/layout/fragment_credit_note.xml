@@ -8,7 +8,8 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white_n_black">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -24,6 +25,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:tint="@color/image_primary_n_dark"
                 android:src="@drawable/calender"/>
 
             <TextView android:fontFamily="@font/montserrat_regular"
@@ -34,7 +36,7 @@
                 android:textSize="@dimen/txt_16sp"
                 android:layout_marginStart="@dimen/_5dp"
                 android:layout_marginEnd="@dimen/_5dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/text_primary_n_dark"/>
 
 
 
@@ -67,6 +69,7 @@
             android:padding="@dimen/_12dp"
             android:layout_marginTop="@dimen/_5dp"
             android:src="@drawable/search_icon"
+            app:tint="@color/image_primary_n_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

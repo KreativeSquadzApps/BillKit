@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -20,6 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:background="@color/white_n_black"
                 android:id="@+id/linearLayout">
 
 
@@ -285,7 +285,7 @@
                                         android:layout_height="wrap_content"
                                         android:id="@+id/tvInvoicePrefix"
                                         android:textSize="@dimen/txt_14sp"
-                                        android:textColor="@color/colorPrimary"
+                                        android:textColor="@color/text_primary_n_dark"
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/txtInvoicePrefix"
                                         tools:text="prefix"/>
@@ -316,7 +316,7 @@
                                         android:layout_height="wrap_content"
                                         android:id="@+id/tvInvoiceNumber"
                                         android:textSize="@dimen/txt_14sp"
-                                        android:textColor="@color/colorPrimary"
+                                        android:textColor="@color/text_primary_n_dark"
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/txtInvoiceNumber"
                                         tools:text="82"/>
@@ -338,7 +338,7 @@
                                     app:cardCornerRadius="@dimen/_5dp"
                                     app:cardUseCompatPadding="true"
                                     android:textStyle="bold"
-                                    app:cardBackgroundColor="@color/colorPrimaryDark"
+                                    app:cardBackgroundColor="@color/btn_primary_n_dark"
                                     android:textColor="@color/text_color_heading">
 
                                     <TextView android:fontFamily="@font/montserrat_regular"
@@ -358,33 +358,31 @@
 
                         </LinearLayout>
 
-                        <Switch
-                            android:fontFamily="@font/montserrat_bold"
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:fontFamily="@font/montserrat_medium"
                             android:id="@+id/discountSwitch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="Discount On"
-                            android:layout_marginStart="@dimen/_12dp"
-                            android:layout_marginEnd="@dimen/_10dp"
-                            android:layout_marginTop="@dimen/_5dp"
+                            android:text="Discount"
+                            android:textStyle="bold"
+                            android:layout_marginStart="@dimen/_15dp"
+                            android:layout_marginEnd="@dimen/_15dp"
                             android:thumb="@drawable/custom_thumb"
                             android:track="@drawable/custom_track"/>
 
-                        <Switch
-                            android:fontFamily="@font/montserrat_bold"
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:fontFamily="@font/montserrat_medium"
                             android:id="@+id/reverseSwitch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:text="Qty Reverse"
-                            android:layout_marginStart="@dimen/_12dp"
-                            android:layout_marginEnd="@dimen/_10dp"
-                            android:layout_marginTop="@dimen/_10dp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="@dimen/_15dp"
+                            android:layout_marginEnd="@dimen/_15dp"
                             android:thumb="@drawable/custom_thumb"
                             android:track="@drawable/custom_track"/>
-
-
 
 
                     </LinearLayout>
@@ -393,7 +391,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
-                    android:background="@color/lite_grey_200"
+                    android:background="@color/btn_background"
                     android:paddingTop="@dimen/_10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -408,9 +406,8 @@
                         android:layout_marginStart="@dimen/_20dp"
                         android:layout_marginEnd="@dimen/_20dp"
                         android:layout_marginBottom="@dimen/_10dp"
-                        app:cardBackgroundColor="@{isUpdateEnable ? @color/colorPrimary : @color/lite_grey }"
+                        app:cardBackgroundColor="@{isUpdateEnable ? @color/btn_primary_n_dark : @color/btn_light_grey }"
                         tools:cardBackgroundColor="@color/colorPrimary"
-                        android:textColor="@color/text_color_heading"
                         android:gravity="center">
 
                         <TextView android:fontFamily="@font/montserrat_medium"
@@ -422,7 +419,8 @@
                             android:textStyle="bold"
                             android:gravity="center"
                             android:textSize="20sp"
-                            android:textColor="@color/text_color_heading_reverse"/>
+                            android:textColor="@color/white"
+                            />
                         <ProgressBar
                             android:id="@+id/progressBar"
                             android:layout_width="match_parent"

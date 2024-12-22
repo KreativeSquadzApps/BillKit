@@ -165,9 +165,9 @@ fun isNullorBlank(view: View, text: String?) {
 fun isSelected(textView: TextView, isSelected: Boolean?) {
     val context = textView.context
     val color = if (isSelected == true) {
-        context.getColor(R.color.white_n_black)
+        context.getColor(R.color.white_n_dark)
     } else {
-        context.getColor(R.color.text_color_heading)
+        context.getColor(R.color.text_color_main)
     }
     textView.setTextColor(color)
 }

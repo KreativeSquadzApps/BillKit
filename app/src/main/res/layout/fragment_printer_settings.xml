@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        android:background="@color/text_color_heading_reverse">
+        android:background="@color/white_n_black">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                     android:gravity="center|left"
                     android:text="@string/printer_size"
                     android:layout_weight="1"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/text_color_main" />
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                     android:gravity="center|left"
                     android:text="@string/printer_mode"
                     android:layout_weight="1"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/text_color_main" />
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
@@ -119,7 +119,7 @@
                     android:gravity="center|left"
                     android:text="@string/font_size"
                     android:layout_weight="1"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/text_color_main" />
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/enable_auto_print"
                         android:textSize="@dimen/txt_14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/text_color_main" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchEnableAutoPrint"
@@ -187,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/open_cash_drawer"
                         android:textSize="@dimen/txt_14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/text_color_main" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchOpenCashDrawer"
@@ -210,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/disconnect_after_print"
                         android:textSize="@dimen/txt_14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/text_color_main" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchDisconnectAfterPrint"
@@ -233,7 +233,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/auto_cut_after_print"
                         android:textSize="@dimen/txt_14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/text_color_main" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchAutoCutAfterPrint"
@@ -252,7 +252,7 @@
                 android:layout_marginTop="@dimen/_20dp"
                 android:text="@string/default_printer"
                 android:textSize="16sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_color_main" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -267,7 +267,7 @@
                 <ImageView
                     android:layout_width="@dimen/_30dp"
                     android:layout_height="@dimen/_30dp"
-                    android:src="@drawable/printer_icon"
+                    android:src="@drawable/printer_icon_v"
                     android:contentDescription="@string/printer_icon" />
 
                 <LinearLayout
@@ -284,7 +284,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:visibility="@{isDefaultPrinterAdded ? View.VISIBLE : View.GONE}"
                         android:text="@{thermalPrinter.defaultPrinterName}"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_color_main"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="Default" />
@@ -295,7 +295,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:visibility="@{isDefaultPrinterAdded ? View.GONE : View.VISIBLE}"
                         android:text="Add Default Printer"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_color_main"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
 
@@ -317,7 +317,7 @@
                     android:visibility="@{isDefaultPrinterAdded ? View.VISIBLE : View.GONE}"
                     android:text="@string/change"
                     android:textSize="16sp"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/text_primary_n_dark" />
             </LinearLayout>
 
         </LinearLayout>
@@ -336,7 +336,7 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="@dimen/_10dp"
                 app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="@{isUpdateEnable ? @color/colorPrimary : @color/lite_grey_200}"
+                app:cardBackgroundColor="@{isUpdateEnable ? @color/btn_primary_n_dark : @color/btn_light_grey }"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/_20dp"
                 android:layout_marginEnd="@dimen/_20dp"
@@ -354,7 +354,7 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:textSize="20sp"
-                    android:textColor="@color/text_color_heading_reverse"/>
+                    android:textColor="@color/white"/>
                 <ProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="match_parent"

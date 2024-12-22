@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/text_color_heading_reverse"
+        android:background="@color/white_n_black"
         android:fitsSystemWindows="true"
         tools:context="ui.home.HomeFragment">
 
@@ -29,6 +29,7 @@
             android:layout_height="50dp"
             android:padding="@dimen/_5dp"
             android:src="@drawable/drawer_icon"
+            app:tint="@color/black_n_white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -38,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/text_color_heading_reverse"
+            android:background="@color/white_n_black"
             android:cursorVisible="true"
             android:ellipsize="start"
             android:focusable="false"
@@ -72,7 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/itemRecyclerView"
             app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
-            android:layout_marginBottom="70dp"
+            android:layout_marginBottom="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="170dp"
             android:orientation="vertical">
@@ -119,6 +120,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:tabMode="fixed"
+                        android:background="@color/white_n_black"
                         app:tabGravity="fill" />
 
                     <androidx.viewpager2.widget.ViewPager2
@@ -150,6 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:id="@+id/bottom_bar"
+            app:cardBackgroundColor="@color/white_n_black"
             app:cardElevation="@dimen/_10dp"
             android:paddingTop="@dimen/_10dp"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -158,6 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:weightSum="5"
+                android:paddingStart="@dimen/_5dp"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
@@ -165,20 +169,21 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     app:cardCornerRadius="@dimen/_10dp"
-                    app:cardElevation="4dp"
+                    app:cardElevation="2dp"
                     android:layout_marginTop="@dimen/_5dp"
                     android:layout_marginBottom="@dimen/_5dp"
                     app:cardUseCompatPadding="true"
                     android:id="@+id/btnBarcode"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_color_heading"
+                    app:cardBackgroundColor="@color/white_n_black"
                     android:gravity="center">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="15dp"
+                        android:background="@drawable/corner_four_stroke"
                         android:id="@+id/imgBarcode"
+                        app:tint="@color/image_primary_n_dark"
                         android:src="@drawable/barcode" />
                 </androidx.cardview.widget.CardView>
 
@@ -190,15 +195,16 @@
                     android:layout_marginTop="@dimen/_5dp"
                     android:layout_marginBottom="@dimen/_5dp"
                     app:cardCornerRadius="@dimen/_10dp"
-                    app:cardElevation="4dp"
-
-                    app:cardUseCompatPadding="true"
-                    android:textColor="@color/text_color_heading">
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white_n_black"
+                    app:cardUseCompatPadding="true">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="15dp"
+                        android:background="@drawable/corner_four_stroke"
+                        app:tint="@color/image_primary_n_dark"
                         android:src="@drawable/saveorder">
 
                     </ImageView>
@@ -215,8 +221,8 @@
                     android:layout_marginTop="@dimen/_5dp"
                     android:layout_marginBottom="@dimen/_5dp"
                     android:layout_weight="1"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/colorPrimaryDark"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="@color/btn_primary_n_dark"
                     android:textColor="@color/text_color_heading"
                     android:gravity="center">
 

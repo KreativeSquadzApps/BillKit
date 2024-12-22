@@ -478,7 +478,7 @@
                 app:cardUseCompatPadding="true"
 
                 android:textStyle="bold"
-                app:cardBackgroundColor="@color/colorPrimaryDark"
+                app:cardBackgroundColor="@color/btn_primary_n_dark"
                 android:textColor="@color/text_color_heading"
                 android:gravity="center">
 

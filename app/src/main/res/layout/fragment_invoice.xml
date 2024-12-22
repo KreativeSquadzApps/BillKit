@@ -98,7 +98,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:textColor="@color/text_color_main"
+                                    android:textColor="@color/text_primary_n_dark"
                                     android:textSize="25sp"
                                     android:layout_marginEnd="@dimen/_10dp"
                                     android:layout_marginStart="10dp"
@@ -541,7 +541,8 @@
                         android:layout_height="0dp"
                         android:paddingTop="@dimen/_15dp"
                         android:layout_weight="4"
-                        android:src="@drawable/salesreturn_light" />
+                        android:src="@drawable/salesreturn_light"
+                        app:tint="@color/image_primary_n_dark" />
 
                     <TextView android:fontFamily="@font/montserrat_medium"
                         android:layout_width="match_parent"
@@ -609,6 +610,7 @@
                         android:layout_height="0dp"
                         android:paddingTop="@dimen/_15dp"
                         android:layout_weight="4"
+                        app:tint="@color/image_primary_n_dark"
                         android:src="@drawable/receipt" />
 
                     <TextView android:fontFamily="@font/montserrat_medium"
@@ -644,7 +646,7 @@
                         android:layout_height="0dp"
                         android:paddingTop="@dimen/_15dp"
                         android:layout_weight="4"
-                        app:tint="@color/colorPrimaryDark"
+                        app:tint="@color/image_primary_n_dark"
                         android:src="@drawable/edit" />
 
                     <TextView android:fontFamily="@font/montserrat_medium"

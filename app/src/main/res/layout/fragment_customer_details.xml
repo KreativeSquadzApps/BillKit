@@ -14,6 +14,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/white_n_black"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -42,7 +43,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{customer.CustomerName}"
                                 android:textSize="@dimen/txt_16sp"
-                                android:textColor="@color/colorPrimary"
+                                android:textColor="@color/text_primary_n_dark"
                                 android:textStyle="bold"
                                 android:paddingBottom="4dp"
                                 tools:text="DEMO" />
@@ -65,7 +66,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text='@{"GST No : "+customer.gstNo}'
-                                android:textColor="@color/colorPrimary"
+                                android:textColor="@color/text_primary_n_dark"
                                 android:textSize="@dimen/txt_12sp"
                                 android:layout_marginTop="@dimen/_5dp"
                                 android:paddingBottom="4dp"
@@ -89,7 +90,7 @@
                                     android:id="@+id/creditAmountTextView"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="@color/text_primary_n_dark"
                                     android:text="@{customer.address}"
                                     android:paddingBottom="4dp"
                                     android:textStyle="bold"
@@ -112,7 +113,7 @@
                                     android:id="@+id/tvCustomerMark"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="@color/text_primary_n_dark"
                                     android:text="@{customer.customerMark}"
                                     android:paddingBottom="4dp"
                                     android:textStyle="bold"
@@ -135,7 +136,7 @@
                                     android:id="@+id/tvCustomerOther"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="@color/text_primary_n_dark"
                                     android:text="@{customer.customerOther}"
                                     android:paddingBottom="4dp"
                                     android:textStyle="bold"
@@ -188,7 +189,7 @@
                                     android:id="@+id/totalSalesTextView"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
+                                    android:textColor="@color/text_primary_n_dark"
                                     android:layout_marginEnd="@dimen/_10dp"
                                     app:isPriceStringEmpty="@{customer.totalSales}"
                                     tools:text="5500.0000" />
@@ -228,7 +229,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_10dp"
                                 android:textSize="@dimen/txt_18sp"
-                                android:textColor="@color/colorPrimary"
+                                android:textColor="@color/text_primary_n_dark"
                                 android:text="@{customer.creditAmount}"
                                 tools:text="200"/>
                         </LinearLayout>
@@ -251,7 +252,7 @@
                                 app:cardCornerRadius="@dimen/_5dp"
                                 app:cardUseCompatPadding="true"
                                 android:textStyle="bold"
-                                app:cardBackgroundColor="@color/colorPrimaryDark"
+                                app:cardBackgroundColor="@color/btn_primary_n_dark"
                                 android:textColor="@color/text_color_heading"
                                 android:gravity="center">
 
@@ -312,6 +313,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:tabMode="fixed"
+                        android:background="@color/white_n_black"
                         app:tabGravity="fill" />
 
                     <androidx.viewpager2.widget.ViewPager2

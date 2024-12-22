@@ -79,7 +79,7 @@
                 tools:text="Imtiaz"
                 android:textAllCaps="true"
                 android:textSize="@dimen/txt_16sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/_10dp"
                 app:layout_constraintStart_toEndOf="@+id/circleName"

@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/_5dp"
         android:layout_marginEnd="@dimen/_5dp"
+        android:background="@color/white_n_black"
         android:orientation="vertical">
 
         <TextView
@@ -21,7 +22,7 @@
             android:padding="@dimen/_10dp"
             android:gravity="center"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_primary_n_dark"
             android:text="Add New Packaging" />
 
 
@@ -52,7 +53,7 @@
             app:cardCornerRadius="@dimen/_8dp"
             app:cardUseCompatPadding="true"
             android:textStyle="bold"
-            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardBackgroundColor="@color/btn_primary_n_dark"
             android:textColor="@color/text_color_heading"
             android:gravity="center">
 

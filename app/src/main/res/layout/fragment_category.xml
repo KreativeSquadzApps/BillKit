@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/white_n_black"
         tools:context=".ui.inventory.tab.category.CategoryFrag">
 
 
@@ -54,7 +55,7 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="-5dp"
                     android:layout_marginStart="@dimen/_10dp"
-                    app:cardBackgroundColor="@color/colorPrimaryDark"
+                    app:cardBackgroundColor="@color/btn_primary_n_dark"
                     android:textColor="@color/text_color_heading"
                     android:gravity="center">
 

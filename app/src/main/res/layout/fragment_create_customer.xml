@@ -20,6 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white_n_black"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -37,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:textSize="@dimen/txt_16sp"
                     android:padding="@dimen/_10dp"
                     android:text="Load From Contact"/>

@@ -38,7 +38,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white_n_black">
 
 
         <com.kreativesquadz.billkit.utils.ZigzagView
@@ -408,7 +409,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#000000"
+                        android:background="@color/text_color_main"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"/>
 
@@ -478,6 +479,7 @@
                     android:paddingBottom="@dimen/_5dp"
                     android:layout_marginBottom="@dimen/_5dp"
                     android:src="@drawable/back_light"
+                    app:tint="@color/image_primary_n_dark"
                     android:layout_gravity="center"
                     android:id="@+id/backImage" />
 
@@ -516,6 +518,7 @@
                     android:paddingTop="@dimen/_20dp"
                     android:paddingBottom="@dimen/_10dp"
                     android:layout_weight="4"
+                    app:tint="@color/image_primary_n_dark"
                     android:src="@drawable/share" />
 
                 <TextView android:fontFamily="@font/montserrat_medium"

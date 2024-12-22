@@ -12,6 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white_n_black"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +65,7 @@
                         tools:text="Imtiaz"
                         android:textAllCaps="true"
                         android:textSize="@dimen/txt_16sp"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary_n_dark"
                         android:textStyle="bold"
                         android:layout_marginStart="@dimen/_10dp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -130,7 +131,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/text_primary_n_dark"
                             android:text="Edit"
                             android:textSize="@dimen/txt_14sp"
                             android:gravity="center|start"
@@ -240,7 +241,7 @@
                             android:textAllCaps="true"
                             android:padding="@dimen/_10dp"
                             android:textSize="@dimen/txt_24sp"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/text_primary_n_dark"
                             android:textStyle="bold"/>
 
                         <TextView android:fontFamily="@font/montserrat_regular"
@@ -279,7 +280,7 @@
                             android:textAllCaps="true"
                             android:padding="@dimen/_10dp"
                             android:textSize="@dimen/txt_24sp"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/text_primary_n_dark"
                             android:textStyle="bold"/>
 
                         <TextView android:fontFamily="@font/montserrat_regular"

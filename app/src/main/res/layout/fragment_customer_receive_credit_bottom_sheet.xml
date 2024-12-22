@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white_n_black"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text='@{customer.CustomerName}'
                 android:textSize="@dimen/txt_16sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary_n_dark"
                 android:textStyle="bold"
                 android:paddingBottom="4dp"
                 tools:text="DEMO" />
@@ -81,7 +82,7 @@
                     android:id="@+id/creditAmountTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary_n_dark"
                     android:gravity="end"
                     android:layout_marginEnd="@dimen/_10dp"
                     android:text="@{customer.creditAmount}"
@@ -134,7 +135,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="4"
                         android:layout_gravity="center"
-                        android:src="@drawable/cash_light"
+                        android:src="@drawable/cash_light_v"
                         android:id="@+id/backImage" />
 
                     <TextView android:fontFamily="@font/montserrat_regular"
@@ -171,7 +172,7 @@
                         android:layout_height="0dp"
                         android:paddingTop="@dimen/_18dp"
                         android:layout_weight="4"
-                        android:src="@drawable/creditcard_light" />
+                        android:src="@drawable/creditcard_light_v"/>
 
                     <TextView android:fontFamily="@font/montserrat_regular"
                         android:layout_width="match_parent"
@@ -207,6 +208,7 @@
                         android:layout_height="0dp"
                         android:paddingTop="@dimen/_18dp"
                         android:layout_weight="4"
+                        app:tint="@color/image_primary_n_dark"
                         android:src="@drawable/writing_light" />
 
                     <TextView android:fontFamily="@font/montserrat_regular"

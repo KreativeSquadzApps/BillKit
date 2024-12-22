@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white_n_black"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
@@ -21,7 +22,7 @@
             android:textStyle="bold"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/_10dp"
-            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardBackgroundColor="@color/btn_primary_n_dark"
             android:textColor="@color/text_color_heading">
 
             <TextView android:fontFamily="@font/montserrat_regular"
@@ -70,7 +71,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:layout_marginStart="@dimen/_5dp"
                 android:padding="@dimen/_10dp"
-                app:tint="@color/colorPrimary"
+                app:tint="@color/image_primary_n_dark"
                 android:src="@drawable/setting"/>
             <ImageView
                 android:layout_width="match_parent"
@@ -80,7 +81,7 @@
                 android:id="@+id/moreOptions"
                 android:layout_marginStart="@dimen/_5dp"
                 android:padding="@dimen/_10dp"
-                app:tint="@color/colorPrimary"
+                app:tint="@color/image_primary_n_dark"
                 android:src="@drawable/dots"/>
 
         </LinearLayout>
