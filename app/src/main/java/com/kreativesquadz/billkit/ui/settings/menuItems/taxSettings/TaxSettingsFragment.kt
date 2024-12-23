@@ -7,17 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericTabAdapter
 import com.kreativesquadz.billkit.databinding.FragmentTaxSettingsBinding
 import com.kreativesquadz.billkit.interfaces.FragmentBaseFunctions
-import com.kreativesquadz.billkit.ui.home.tab.quickSale.QuickSaleFragment
-import com.kreativesquadz.billkit.ui.home.tab.sale.SaleFragment
-import com.kreativesquadz.billkit.ui.home.tab.savedOrders.SavedOrdersFragment
-import com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabInvoiceFrag.TabInvoiceFragment
-import com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabPdfFrag.TabPdfFrag
-import com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabPrinterFrag.TabPrinterFrag
 import com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.tab.tabTaxes.TaxesFragment
 import com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.tab.taxQuickSell.TaxForQuickSellFragment
 
@@ -64,6 +59,7 @@ class TaxSettingsFragment : Fragment(), FragmentBaseFunctions {
                 0 -> tabText.text = "Taxes"
                 1 -> tabText.text = "Tax For Quick Sale"
             }
+            tabText.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tab_text_color_selector))
             tab.customView = tabView
         }.attach()
 

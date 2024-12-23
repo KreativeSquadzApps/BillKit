@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white_n_black"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,6 +25,7 @@
                 android:textStyle="bold"
                 android:padding="@dimen/_10dp"
                 android:textSize="@dimen/txt_18sp"
+                android:textColor="@color/text_color_main"
                 android:text="Available Credit Notes" />
 
             <ImageView
@@ -45,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5dp"
-            android:layout_marginStart="@dimen/_20dp"
-            android:layout_marginEnd="@dimen/_20dp"
+            android:layout_marginStart="@dimen/_25dp"
+            android:layout_marginEnd="@dimen/_25dp"
             app:endIconMode="none">
 
             <AutoCompleteTextView
@@ -55,7 +57,8 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10dp"
                 android:drawableStart="@drawable/search_icon"
-                android:drawableTint="@color/colorPrimary"
+                android:drawableTint="@color/text_color_main"
+                android:textColor="@color/text_color_main"
                 android:hint="Invoice No" />
         </com.google.android.material.textfield.TextInputLayout>
 

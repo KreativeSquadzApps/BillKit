@@ -28,9 +28,6 @@ class HomeViewModel @Inject constructor(val inventoryRepository: InventoryReposi
     lateinit var userSetting : LiveData<UserSetting>
 
 
-    fun addInvoice(invoice: Invoice){
-        //billHistoryRepository.addInvoice(invoice)
-    }
     fun getProductDetailByBarcode(barcode: String): Product {
         return  inventoryRepository.getProductByBarcode(barcode)
     }

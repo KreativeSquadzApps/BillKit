@@ -319,11 +319,10 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         _items.value = list
     }
     fun removeItemAt(position: Int){
-        Log.e("pree",list.toString())
-        list.removeAt(position)
+        val originalPosition = list.size - 1 - position
+        list.removeAt(originalPosition)
         _items.value = list
         getSubTotalamount()
-
     }
     fun removeItem(item : InvoiceItem){
         list.remove(item)
@@ -345,13 +344,12 @@ class SharedViewModel @Inject constructor(val workManager: WorkManager,
         val isAdded = list.any {
             val isMatch = it.itemName.split("(")[0].trim()
             if (isMatch == product?.productName?.trim()){
-                it.itemName = "${product.productName} ( ${product.productPrice} )  $include ${it.quantity + 1}"
                 if (product.productDefaultQty !=null && product.productDefaultQty > 0){
                     it.quantity += product.productDefaultQty
                 }else{
                     it.quantity += 1
                 }
-
+                it.itemName = "${product.productName}  ( ${product.productPrice} )  $include ${it.quantity}"
 
                 val finalTotalPrice = (product.productPrice.toString().toDouble() * it.quantity)
                 var finalPrice = finalTotalPrice

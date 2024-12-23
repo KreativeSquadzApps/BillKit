@@ -27,12 +27,6 @@ class AddStaffFragment : Fragment() {
     var role = ""
     var permissions : MutableList<String> = ArrayList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getStaffList()
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

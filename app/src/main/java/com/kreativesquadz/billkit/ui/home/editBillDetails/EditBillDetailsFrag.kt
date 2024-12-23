@@ -356,16 +356,14 @@ class EditBillDetailsFrag : Fragment() {
         sharedViewModel.invoiceItems.observe(viewLifecycleOwner){
             it?.let {
                 sharedViewModel.list = it.toMutableList()
-                setupRecyclerView(sharedViewModel.list)
+                setupRecyclerView(sharedViewModel.list.asReversed())
                 Log.e("list",sharedViewModel.list.toString())
                 //sharedViewModel.setItemsList(it)
                 sharedViewModel.getTotalAmount()
                 binding.amountTotalTax.text =  "Total Tax : " + sharedViewModel.getTotalTax()
                 binding.itemsCount.text = "Items : "+ sharedViewModel.getInvoiceItemCount()
                 btnUpdateState()
-
             }
-
         }
 
         sharedViewModel.isCustomerSelected.observe(viewLifecycleOwner) { isCustomerSelected ->
@@ -442,6 +440,7 @@ class EditBillDetailsFrag : Fragment() {
                 binding.isDiscountApplied  = false
             }
         }
+
         dialogGstViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
                 if (dialogGstViewModel.gstText.value != null){
@@ -462,6 +461,7 @@ class EditBillDetailsFrag : Fragment() {
                     customGstAmount = null
             }
         }
+
         dialogPackagingViewModel.isApplied.observe(viewLifecycleOwner) {
             if (it == true) {
                 if (dialogPackagingViewModel.packagingText.value != null){
@@ -627,12 +627,9 @@ class EditBillDetailsFrag : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
-
         viewModel.clearInvoiceStatus()
-
         sharedViewModel.list.clear()
         sharedViewModel._invoiceItems.value = null
         sharedViewModel.removeGst()
@@ -641,13 +638,10 @@ class EditBillDetailsFrag : Fragment() {
         sharedViewModel.removeCreditNote()
         sharedViewModel.updateDeselectCustomer()
         sharedViewModel.removeOtherCharges()
-
         dialogViewModel.isApplied.value = false
         dialogGstViewModel.isApplied.value = false
         dialogPackagingViewModel.isApplied.value = false
         dialogOtherChargesViewModel.isApplied.value = false
-
-
         _binding = null
     }
 }

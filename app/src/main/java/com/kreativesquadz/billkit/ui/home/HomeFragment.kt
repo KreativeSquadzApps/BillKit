@@ -164,7 +164,6 @@ class HomeFragment : Fragment() {
         }
 
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
-            Log.d("itemssssssss", items.toString())
             adapter.submitList(items.asReversed())
             val totalSum = items.sumOf { it.totalPrice }
             binding.tvBill.text = totalSum.toString()
@@ -210,9 +209,9 @@ class HomeFragment : Fragment() {
                 2 -> tabText.text = "Saved Orders"
                 // Add more cases for additional tabs if needed
             }
+            tabText.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tab_text_color_selector))
             tab.customView = tabView
         }.attach()
-
     }
 
     private fun setupRecyclerView() {
@@ -272,7 +271,6 @@ class HomeFragment : Fragment() {
                     analysis.setAnalyzer(cameraExecutor) { imageProxy ->
                         val mediaImage = imageProxy.image
                         if (!isScanner || isCameraStopped) {
-                            Log.d("ScannerState", "Scanner is not ready or camera stopped. Skipping image processing.")
                             imageProxy.close()
                             return@setAnalyzer
                         }
@@ -286,7 +284,6 @@ class HomeFragment : Fragment() {
                             BarcodeScannerUtil.getBarcodeScanner().process(image)
                                 .addOnSuccessListener { barcodes ->
                                     for (barcode in barcodes) {
-                                        Log.e("barcode", barcode.rawValue.toString())
                                         if (!sharedViewModel.isProductAdded(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))) {
                                             sharedViewModel.addProduct(homeViewModel.getProductDetailByBarcode(barcode.rawValue.toString()))
                                         }
@@ -296,7 +293,6 @@ class HomeFragment : Fragment() {
                                     imageProxy.close()
                                 }
                                 .addOnFailureListener {
-                                    Log.e("BarcodeScanner", "Error processing barcode: ${it.message}")
                                     imageProxy.close()
                                 }
                         } else {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.adapter.GenericTabAdapter
@@ -59,6 +60,7 @@ class CreditDetailsFrag : Fragment() {
                 0 -> "Sales"
                 else -> ""
             }
+            tabText.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.tab_text_color_selector))
             tab.customView = tabView
         }.attach()
     }

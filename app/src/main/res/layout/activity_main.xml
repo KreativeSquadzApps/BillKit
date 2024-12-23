@@ -21,6 +21,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:maxWidth="240dp"
+        style="@style/CustomNavigationView"
+        android:background="@color/white_n_black"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>

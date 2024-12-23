@@ -1,6 +1,8 @@
 package com.kreativesquadz.billkit.ui.inventory.tab.product.edit
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -12,7 +14,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.widget.SwitchCompat
 import androidx.camera.core.CameraSelector
@@ -26,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.mlkit.vision.barcode.BarcodeScanner
@@ -44,10 +50,13 @@ import com.kreativesquadz.billkit.interfaces.OnItemClickListener
 import com.kreativesquadz.billkit.model.DialogData
 import com.kreativesquadz.billkit.model.settings.GST
 import com.kreativesquadz.billkit.model.Product
+import com.kreativesquadz.billkit.utils.BarcodeScannerUtil
 import com.kreativesquadz.billkit.utils.TaxType
 import com.kreativesquadz.billkit.utils.collapse
 import com.kreativesquadz.billkit.utils.expand
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
 @AndroidEntryPoint
@@ -64,9 +73,13 @@ class EditProductFragment : Fragment() {
         "Quintal (Qtl)", "Roll (Rol)", "Square Feet (Sqf)",
         "Square Meter (Sqm)", "Tablets (Tbs)","Jar (Jar)")
 
-    private val requestCodeCameraPermission = 200
+    private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var isCameraClicked = false
+    private  var  cameraProvider: ProcessCameraProvider?=null
+    private var isScanner = true
+    private var isCameraStopped = false
+    private var imageAnalysis: ImageAnalysis? = null
     private var selectedPosition: Int = -1 // Keeps track of selected switch position
     private var selectedTaxValue: Double? = null
     private var selectedTaxType: String = ""
@@ -74,7 +87,21 @@ class EditProductFragment : Fragment() {
     val productEdit by lazy {
         arguments?.getSerializable("product") as? Product
     }
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Initialize the ActivityResultLauncher in onAttach or onCreate
+        requestCameraPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission granted, call the start() function
+                startCamera()
+            } else {
+                // Permission denied, show a message to the user
+                Toast.makeText(requireContext(), "Camera permission is required.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getCategories()
@@ -168,34 +195,27 @@ class EditProductFragment : Fragment() {
         }
         binding.btnBarcode.setOnClickListener{
             if (!isCameraClicked) {
-                isCameraClicked = true
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_GRANTED) {
-                    startCamera()
-                } else {
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.CAMERA),
-                        requestCodeCameraPermission
-                    )
-                }
+                checkCameraPermission()
+                // Check and request permission when needed
             }else{
                 isCameraClicked = false
+                stopCamera()
             }
             binding.isCameraOpen = isCameraClicked
+            updateBarcodeIcon(isCameraClicked)
         }
         binding.header.setOnClickListener {
             if (binding.dropdownContent.visibility == View.GONE) {
                 binding.dropdownContent.expand()
                 binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)
                 binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.white_n_black)
-                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_primary_n_dark))
 
             } else {
                 binding.dropdownContent.collapse()
                 binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
                 binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.lite_grey_200)
-                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_color_main))
             }
 
         }
@@ -308,39 +328,73 @@ class EditProductFragment : Fragment() {
         }
     }
 
+    private fun checkCameraPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                isCameraClicked = true
+                startCamera()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                // Show rationale to the user, then request permission
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Camera Permission Needed")
+                    .setMessage("This app requires camera access to function properly.")
+                    .setPositiveButton("OK") { _, _ ->
+                        requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+            else -> {
+                // Directly request permission
+                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
+
     @OptIn(ExperimentalGetImage::class)
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(binding.previewView.surfaceProvider)
             }
 
-            val barcodeScannerOptions = BarcodeScannerOptions.Builder()
-                .setBarcodeFormats(
-                    Barcode.FORMAT_EAN_8,
-                    Barcode.FORMAT_EAN_13,
-                    Barcode.FORMAT_UPC_A,
-                    Barcode.FORMAT_UPC_E,
-                    Barcode.TYPE_ISBN
-                )
+            imageAnalysis = ImageAnalysis.Builder()
                 .build()
-
-            val barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions)
-
-            val imageAnalysis = ImageAnalysis.Builder()
-                .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor) { imageProxy ->
+                .also { analysis ->
+                    analysis.setAnalyzer(cameraExecutor) { imageProxy ->
                         val mediaImage = imageProxy.image
+                        if (!isScanner || isCameraStopped) {
+                            Log.d("ScannerState", "Scanner is not ready or camera stopped. Skipping image processing.")
+                            imageProxy.close()
+                            return@setAnalyzer
+                        }
                         if (mediaImage != null) {
                             val image = InputImage.fromMediaImage(
                                 mediaImage,
                                 imageProxy.imageInfo.rotationDegrees
                             )
-                            processImage(image, barcodeScanner, imageProxy)
+
+                            BarcodeScannerUtil.getBarcodeScanner().process(image)
+                                .addOnSuccessListener { barcodes ->
+                                    for (barcode in barcodes) {
+                                        Log.e("barcode", barcode.rawValue.toString())
+                                        viewModel.setBarcodeText(barcode.rawValue.toString() ?: "No Value")
+                                        delay1sec()
+                                    }
+                                    imageProxy.close()
+                                }
+                                .addOnFailureListener {
+                                    Log.e("BarcodeScanner", "Error processing barcode: ${it.message}")
+                                    imageProxy.close()
+                                }
+                        } else {
+                            imageProxy.close()
                         }
                     }
                 }
@@ -352,38 +406,35 @@ class EditProductFragment : Fragment() {
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageAnalysis
                 )
+                this.cameraProvider = cameraProvider // Save the reference for later use
+                this.imageAnalysis = imageAnalysis // Save reference to the analysis
+                isCameraStopped = false // Reset the flag when starting the camera
             } catch (exc: Exception) {
-                // Handle exceptions here
+                Log.e("CameraSetup", "Exception: ${exc.message}")
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    private fun processImage(image: InputImage, barcodeScanner: BarcodeScanner, imageProxy: ImageProxy) {
-        barcodeScanner.process(image)
-            .addOnSuccessListener { barcodes ->
-                for (barcode in barcodes) {
-                    Log.e("barcode",barcode.rawValue.toString())
-                    viewModel.setBarcodeText(barcode.rawValue.toString() ?: "No Value")
-
-                }
-                imageProxy.close()
-            }
-            .addOnFailureListener {
-                // Handle the error
-                imageProxy.close()
-            }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == requestCodeCameraPermission && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startCamera()
-        } else {
-            Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+    private fun stopCamera() {
+        try {
+            isCameraStopped = true // Flag to stop further processing
+            imageAnalysis?.clearAnalyzer() // Remove the analyzer to stop processing frames
+            cameraProvider?.unbindAll() // Unbind the camera provider
+            Log.d("CameraState", "Camera stopped successfully.")
+        } catch (exc: Exception) {
+            Log.e("CameraState", "Error stopping the camera: ${exc.message}")
         }
     }
+
+
+    private fun delay1sec() {
+        isScanner = false
+        lifecycleScope.launch {
+            delay(1000) // Delay for 2 seconds
+            isScanner = true // Resume scanning
+        }
+    }
+
 
     private fun setupRecyclerView() {
         adapter = GenericAdapter(
@@ -428,7 +479,7 @@ class EditProductFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
     }
-    fun onOptionMenu(){
+    private fun onOptionMenu(){
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.edit_product_menu, menu)
@@ -473,7 +524,13 @@ class EditProductFragment : Fragment() {
             }
         )
     }
-
+    private fun updateBarcodeIcon(isCameraOpen:Boolean){
+        if (isCameraOpen){
+            binding.imgBarcode.setImageResource(R.drawable.baseline_close_24)
+        }else{
+            binding.imgBarcode.setImageResource(R.drawable.barcode)
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

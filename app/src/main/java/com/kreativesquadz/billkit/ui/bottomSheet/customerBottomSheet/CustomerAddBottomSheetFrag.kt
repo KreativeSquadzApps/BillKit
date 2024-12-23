@@ -36,7 +36,7 @@ class CustomerAddBottomSheetFrag : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
+        //setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
         viewModel.getCustomers()
     }
 

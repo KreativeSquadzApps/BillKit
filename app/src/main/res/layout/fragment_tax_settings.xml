@@ -12,6 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/white_n_black"
         android:orientation="vertical">
 
         <com.google.android.material.tabs.TabLayout
@@ -19,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabMode="fixed"
+            android:background="@color/white_n_black"
             app:tabGravity="fill" />
 
         <androidx.viewpager2.widget.ViewPager2

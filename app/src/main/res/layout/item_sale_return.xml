@@ -150,6 +150,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="-"
+                    android:textColor="@color/white"
                     android:id="@+id/qtyMinus"
                     android:textSize="20sp"
                     android:layout_weight="1"/>
@@ -159,9 +160,10 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:inputType="number"
-                    android:paddingStart="@dimen/_20dp"
                     android:id="@+id/etQty"
+                    android:gravity="center"
                     android:text="0"
+                    android:textColor="@color/black"
                     android:background="@drawable/rectangle_outline_view"
                     android:layout_weight="1"
                     />
@@ -170,6 +172,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="+"
+                    android:textColor="@color/white"
                     android:id="@+id/qtyAdd"
                     android:textSize="20sp"
                     android:layout_weight="1"

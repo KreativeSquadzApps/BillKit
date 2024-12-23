@@ -25,7 +25,6 @@ class AddStaffViewModel @Inject constructor( private val repository: StaffManagR
     private var _staffStatus = MutableLiveData<ApiStatus>()
     val staffStatus: LiveData<ApiStatus> get() = _staffStatus
 
-    lateinit var staffList : LiveData<Resource<List<Staff>>>
 
     fun addStaffObj(context: Context, staff: Staff) {
         if(staff.name.isEmpty()){
@@ -34,25 +33,17 @@ class AddStaffViewModel @Inject constructor( private val repository: StaffManagR
             return
         }
         viewModelScope.launch {
-            staffList.value?.data?.let {
-                it.forEach {
-                    if(it.name == staff.name){
-                        val apiStatus = ApiStatus(400,"Staff Already Exists" )
-                        _staffStatus.value = apiStatus
-                        return@launch
-                    }
-                }
+            val isStaff = repository.addStaff(staff)
+            if (isStaff == null) {
+                _staffStatus.value = ApiStatus(400,"Staff Already Exists" )
+                return@launch
+            } else {
+                _staffStatus.value  = ApiStatus(200,"Staff added Successfully" )
+                scheduleStaffSync(context)
             }
-            repository.addStaff(staff)
-            scheduleStaffSync(context)
-            val apiStatus = ApiStatus(200,"Staff added Successfully" )
-            _staffStatus.value = apiStatus
         }
     }
 
-    fun getStaffList(){
-        staffList = repository.loadAllStaff(Config.userId)
-    }
     fun scheduleStaffSync(context: Context) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)

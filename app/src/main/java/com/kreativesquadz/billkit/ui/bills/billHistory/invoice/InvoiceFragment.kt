@@ -112,7 +112,6 @@ class InvoiceFragment : Fragment() {
             positiveButtonText = "Cancel Invoice",
             negativeButtonText = "Cancel"
         )
-
         showCustomAlertDialog(
             context = requireActivity(),
             dialogData = dialogData,

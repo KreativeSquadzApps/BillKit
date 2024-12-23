@@ -7,17 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.kreativesquadz.billkit.R
 import com.kreativesquadz.billkit.databinding.FragmentEditItemBottomSheetBinding
 import com.kreativesquadz.billkit.model.InvoiceItem
 import com.kreativesquadz.billkit.model.settings.TaxOption
 import com.kreativesquadz.billkit.ui.home.tab.SharedViewModel
 import com.kreativesquadz.billkit.utils.TaxType
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class EditItemBottomSheetFrag(var item: InvoiceItem) : BottomSheetDialogFragment() {
@@ -30,9 +29,27 @@ class EditItemBottomSheetFrag(var item: InvoiceItem) : BottomSheetDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
-    }
+       // setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
+        }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentEditItemBottomSheetBinding.inflate(inflater, container, false)
+        binding.invoiceItem = item
+        binding.invoiceName = item.itemName.split("(")[0]
+        return binding.root
+    }
+//    override fun getTheme(): Int {
+//        return R.style.CustomBottomSheetDialogTheme
+//    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onClickListeners()
+        observers()
+    }
     override fun onStart() {
         super.onStart()
         dialog?.let { dialog ->
@@ -49,11 +66,10 @@ class EditItemBottomSheetFrag(var item: InvoiceItem) : BottomSheetDialogFragment
 
             // Set the height of the BottomSheet to be the screen height minus the ActionBar height
             val layoutParams = bottomSheet.layoutParams
-            layoutParams.height = screenHeight - actionBarHeight - 200
+            layoutParams.height = screenHeight - actionBarHeight - 300
             bottomSheet.layoutParams = layoutParams
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
             behavior.skipCollapsed = true
-            bottomSheet.background = ContextCompat.getDrawable(requireContext(), R.drawable.corner_top)
 
         }
     }
@@ -66,22 +82,9 @@ class EditItemBottomSheetFrag(var item: InvoiceItem) : BottomSheetDialogFragment
         return actionBarHeight
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentEditItemBottomSheetBinding.inflate(inflater, container, false)
-        binding.invoiceItem = item
-        binding.invoiceName = item.itemName.split("(")[0]
 
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        onClickListeners()
-        observers()
-    }
+
 
     private fun onClickListeners() {
         binding.btnDismiss.setOnClickListener {
@@ -141,16 +144,25 @@ class EditItemBottomSheetFrag(var item: InvoiceItem) : BottomSheetDialogFragment
             dismiss()
         }
         binding.txtMinus.setOnClickListener {
-            var qty = binding.etQty.text.toString().toInt()
-            if (qty > 1){
-                qty--
-                binding.etQty.setText(qty.toString())
+            if (binding.etQty.text.isEmpty()){
+                binding.etQty.setText("1")
+            }else{
+                var qty = binding.etQty.text.toString().toInt()
+                if (qty > 1){
+                    qty--
+                    binding.etQty.setText(qty.toString())
+                }
             }
         }
         binding.txtPlus.setOnClickListener {
-            var qty = binding.etQty.text.toString().toInt()
-            qty++
-            binding.etQty.setText(qty.toString())
+            if (binding.etQty.text.isEmpty()){
+                binding.etQty.setText("1")
+            }else{
+                var qty = binding.etQty.text.toString().toInt()
+                qty++
+                binding.etQty.setText(qty.toString())
+            }
+
         }
         binding.btnDelete.setOnClickListener {
             sharedViewModel.removeItem(item)

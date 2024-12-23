@@ -6,13 +6,20 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Product
 import com.kreativesquadz.billkit.model.Staff
 
 @Dao
 interface StaffDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertStaff(staff: Staff)
+    suspend fun insertStaff(staff: Staff) : Long
+
+    @Query("SELECT COUNT(*) FROM staff WHERE name = :name OR mailId = :mailId")
+    suspend fun isStaffExists(name: String, mailId: String): Int
+
+    @Query("SELECT * FROM staff WHERE name = :name")
+    suspend fun getStaffByName(name: String): Staff
 
     @Query("SELECT * FROM staff WHERE adminId = :adminId")
     fun getStaffByUser(adminId: Long): LiveData<List<Staff>>

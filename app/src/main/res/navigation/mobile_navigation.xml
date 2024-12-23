@@ -513,7 +513,7 @@
     <fragment
         android:id="@+id/themeFragment"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.theme.ThemeFragment"
-        android:label="ThemeFragment" />
+        android:label="Theme" />
     <fragment
         android:id="@+id/billSettingsFragment"
         android:name="com.kreativesquadz.billkit.ui.settings.menuItems.billSettings.BillSettingsFragment"

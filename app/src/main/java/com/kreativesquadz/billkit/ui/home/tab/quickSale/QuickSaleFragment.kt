@@ -16,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class QuickSaleFragment : Fragment() {
-
     private var _binding: FragmentQuickSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: QuickSaleViewModel by viewModels()

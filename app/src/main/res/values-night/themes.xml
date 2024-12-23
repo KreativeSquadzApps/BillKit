@@ -4,13 +4,11 @@
         <item name="colorPrimary">@color/main_color</item>
         <item name="colorPrimaryVariant">@color/main_color</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/main_color</item>
         <item name="colorSecondaryVariant">@color/main_color</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        <item name="colorAccent">@color/image_primary_n_dark</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

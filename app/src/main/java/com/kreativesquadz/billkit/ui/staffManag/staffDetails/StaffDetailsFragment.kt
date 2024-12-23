@@ -25,7 +25,6 @@ import kotlin.properties.Delegates
 class StaffDetailsFragment : Fragment() {
     var _binding: FragmentStaffDetailsBinding? = null
     private val viewModel: StaffDetailsViewModel by viewModels()
-    private val editStaffViewModel: EditStaffViewModel by viewModels()
     val binding get() = _binding!!
     var staffId by Delegates.notNull<Long>()
     private lateinit var adapter: GenericAdapter<String>
@@ -33,6 +32,7 @@ class StaffDetailsFragment : Fragment() {
     val staff by lazy {
         arguments?.getSerializable("staff") as? Staff
     }
+    var staffP : Staff ?= null
 
     override fun onResume() {
         super.onResume()
@@ -62,27 +62,27 @@ class StaffDetailsFragment : Fragment() {
 
         }
         binding.btnEdit.setOnClickListener {
-            staff?.let {
+            staffP?.let {
                 val action = StaffDetailsFragmentDirections.actionStaffDetailsFragmentToEditStaffFragment(it)
                 findNavController().navigate(action)
             }
         }
         binding.btnActivate.setOnClickListener {
-            staff?.let {
+            staffP?.let {
                 if(it.status == "Active"){
                     setupPopup(it.name ,binding.staffStatusr.text.toString()){
-                        editStaffViewModel.addStaffObj(requireContext(),it.copy(status = "Deactivated"))
+                        viewModel.updateStaff(it.copy(status = "Deactivated"))
                     }
                 }else{
                     setupPopup(it.name ,binding.staffStatusr.text.toString()){
-                        editStaffViewModel.addStaffObj(requireContext(),it.copy(status = "Active"))
+                        viewModel.updateStaff(it.copy(status = "Active"))
                     }
                 }
             }
         }
 
         binding.btnDelete.setOnClickListener {
-            staff?.let {
+            staffP?.let {
                 setupPopup(it.name ,"Delete"){
                     viewModel.deleteStaff(requireContext(),it.id)
                     findNavController().popBackStack()
@@ -131,15 +131,16 @@ class StaffDetailsFragment : Fragment() {
 
 
     private fun observers() {
-        editStaffViewModel.staffStatus.observe(viewLifecycleOwner){
-            Toast.makeText(requireContext(), "Staff Status Updated", Toast.LENGTH_SHORT).show()
+        viewModel.staffStatus.observe(viewLifecycleOwner){
             if (it.invoiceId == 200){
                 staffId = staff!!.id
                 viewModel.getStaffDetails(staffId)
             }
+            Toast.makeText(requireContext(), "Staff Status Updated", Toast.LENGTH_SHORT).show()
         }
         viewModel.staffDetails.observe(viewLifecycleOwner) {
             binding.staff = it
+            staffP = it
             adapter.submitList(it.permissions.split(","))
         }
     }

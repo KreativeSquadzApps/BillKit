@@ -54,7 +54,7 @@ class CreditNoteBottomSheetFrag : BottomSheetDialogFragment() {
 
             // Set the height of the BottomSheet to be the screen height minus the ActionBar height
             val layoutParams = bottomSheet.layoutParams
-            layoutParams.height = screenHeight - actionBarHeight
+            layoutParams.height = screenHeight - actionBarHeight - 100
             bottomSheet.layoutParams = layoutParams
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
             behavior.skipCollapsed = true
@@ -106,9 +106,10 @@ class CreditNoteBottomSheetFrag : BottomSheetDialogFragment() {
     }
 
     private fun observers(){
-        viewModel.creditNoteList.observe(viewLifecycleOwner){
-            it.data?.let {
-                adapter.submitList(it.sortedByDescending{ it.dateTime })
+        viewModel.creditNoteList.observe(viewLifecycleOwner) {
+            it.data?.let { list ->
+                val filteredList = list.filter { it.status == "Active" }
+                adapter.submitList(filteredList.sortedByDescending { it.dateTime })
             }
         }
     }

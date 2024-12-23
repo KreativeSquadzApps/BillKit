@@ -8,6 +8,7 @@ import com.kreativesquadz.billkit.api.ApiClient
 import com.kreativesquadz.billkit.api.ApiResponse
 import com.kreativesquadz.billkit.api.common.NetworkBoundResource
 import com.kreativesquadz.billkit.api.common.common.Resource
+import com.kreativesquadz.billkit.model.Customer
 import com.kreativesquadz.billkit.model.Staff
 import javax.inject.Inject
 
@@ -44,11 +45,20 @@ class StaffManagRepository @Inject constructor(private val db: AppDatabase) {
         }.asLiveData()
     }
 
-    suspend fun addStaff(Staff: Staff) : LiveData<Boolean> {
-        val statusLiveData = MutableLiveData<Boolean>()
-        staffDao.insertStaff(Staff)
-        statusLiveData.value = true
-        return statusLiveData
+//    suspend fun addStaff(Staff: Staff) : LiveData<Boolean> {
+//        val statusLiveData = MutableLiveData<Boolean>()
+//        staffDao.insertStaff(Staff)
+//        statusLiveData.value = true
+//        return statusLiveData
+//    }
+    suspend fun addStaff(staff: Staff): Staff? {
+        val exists = staffDao.isStaffExists(staff.name, staff.mailId) > 0
+        if (!exists) {
+            staffDao.insertStaff(staff)
+            return staffDao.getStaffByName(staff.name)
+        } else {
+            return null
+        }
     }
     suspend fun updateStaff(Staff: Staff) : LiveData<Boolean> {
         val statusLiveData = MutableLiveData<Boolean>()

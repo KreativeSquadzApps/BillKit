@@ -244,7 +244,7 @@ class BillDetailsFrag : Fragment() {
             }
 
         sharedViewModel.items.observe(viewLifecycleOwner) { items ->
-                adapter.submitList(items)
+            adapter.submitList(items.asReversed())
                 sharedViewModel.getTotalAmount()
                 binding.amountTotalTax.text = "Total Tax : " + sharedViewModel.getTotalTax()
                 binding.itemsCount.text = "Items : " + sharedViewModel.getInvoiceItemCount()

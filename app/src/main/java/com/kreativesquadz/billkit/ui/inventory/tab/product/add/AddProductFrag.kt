@@ -163,13 +163,13 @@ class AddProductFrag : Fragment() {
                 binding.dropdownContent.expand()
                 binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)
                 binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.white_n_black)
-                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_primary_n_dark))
 
             } else {
                 binding.dropdownContent.collapse()
                 binding.header.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
                 binding.header.background = ContextCompat.getDrawable(requireContext(), R.color.lite_grey_200)
-                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                binding.header.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_color_main))
             }
 
         }
