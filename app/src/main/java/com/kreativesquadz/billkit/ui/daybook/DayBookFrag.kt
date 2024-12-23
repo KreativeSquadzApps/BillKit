@@ -308,12 +308,12 @@ class DayBookFrag : Fragment() {
             .setBackgroundColor(ColorConstants.WHITE)
 
         val cellContent1 = Cell().setBorder(Border.NO_BORDER)
-            .setBackgroundColor(getDeviceRgbFromColorResource(requireContext(),R.color.lite_grey_200))
+            .setBackgroundColor(getDeviceRgbFromColorResource(requireContext(),R.color.grey_both_200))
             .setPadding(10f)
             .add(tableinternalLeft)
 
         val cellContent2 = Cell().setBorder(Border.NO_BORDER)
-            .setBackgroundColor(getDeviceRgbFromColorResource(requireContext(),R.color.lite_grey_200))
+            .setBackgroundColor(getDeviceRgbFromColorResource(requireContext(),R.color.grey_both_200))
             .setPadding(10f)
             .add(tableinternalRight)
 

@@ -27,6 +27,7 @@
     <color name="lite_grey_200">#222222</color>
     <color name="popup">#6D5D6E</color>
     <color name="lite_grey">#222222</color>
+    <color name="grey_both_200">#F0F0F0</color>
 
     <color name="text_color_heading">#fff</color>
     <color name="text_color_heading_reverse">#fff</color>
