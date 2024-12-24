@@ -6,10 +6,10 @@
         <import type="android.widget.TextView" />
 
         <import type="android.view.View"/>
-        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt" />
+        <import type="com.kreativesquadz.hisabkitab.adapter.BindingAdaptersKt" />
         <variable
             name="invoice"
-            type="com.kreativesquadz.billkit.model.Invoice" />
+            type="com.kreativesquadz.hisabkitab.model.Invoice" />
 
         <variable
             name="isReturned"

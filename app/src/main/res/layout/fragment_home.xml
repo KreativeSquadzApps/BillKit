@@ -6,7 +6,7 @@
         <import type="android.view.View"/>
         <variable
             name="sharedViewModels"
-            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.home.tab.SharedViewModel" />
         <variable
             name="isItemAvailable"
             type="Boolean" />

@@ -7,7 +7,7 @@
 
         <variable
             name="category"
-            type="com.kreativesquadz.billkit.model.Category" /> <!-- Replace "your.package.name" with your actual package name -->
+            type="com.kreativesquadz.hisabkitab.model.Category" /> <!-- Replace "your.package.name" with your actual package name -->
 
 
     </data>

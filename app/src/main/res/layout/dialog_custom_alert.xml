@@ -5,7 +5,7 @@
     <data>
         <variable
             name="dialogData"
-            type="com.kreativesquadz.billkit.model.DialogData" />
+            type="com.kreativesquadz.hisabkitab.model.DialogData" />
     </data>
 
     <LinearLayout

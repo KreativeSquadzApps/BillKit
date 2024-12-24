@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
+        <import type="com.kreativesquadz.hisabkitab.adapter.BindingAdaptersKt"/>
 
         <variable
             name="creditCustomer"
-            type="com.kreativesquadz.billkit.model.Customer" /> <!-- Replace "your.package.name" with your actual package name -->
+            type="com.kreativesquadz.hisabkitab.model.Customer" /> <!-- Replace "your.package.name" with your actual package name -->
 
     </data>
 

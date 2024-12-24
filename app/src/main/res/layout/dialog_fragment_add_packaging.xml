@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.kreativesquadz.billkit.ui.dialogs.packageDialog.AddPackagingDialogViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.dialogs.packageDialog.AddPackagingDialogViewModel" />
     </data>
 
     <LinearLayout

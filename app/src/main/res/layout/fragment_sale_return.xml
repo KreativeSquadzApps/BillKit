@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="invoice"
-            type="com.kreativesquadz.billkit.model.Invoice" />
+            type="com.kreativesquadz.hisabkitab.model.Invoice" />
 
         <variable
             name="returnMode"

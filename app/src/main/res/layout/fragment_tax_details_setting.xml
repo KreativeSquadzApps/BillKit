@@ -7,7 +7,7 @@
 
         <variable
             name="gstDetailsdd"
-            type="com.kreativesquadz.billkit.model.settings.GST" /> <!-- Replace "your.package.name" with your actual package name -->
+            type="com.kreativesquadz.hisabkitab.model.settings.GST" /> <!-- Replace "your.package.name" with your actual package name -->
 
     </data>
 

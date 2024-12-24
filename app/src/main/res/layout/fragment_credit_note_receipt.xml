@@ -7,11 +7,11 @@
         <import type="android.view.View"/>
         <variable
             name="companyDetails"
-            type="com.kreativesquadz.billkit.model.CompanyDetails" />
+            type="com.kreativesquadz.hisabkitab.model.CompanyDetails" />
 
         <variable
             name="creditNote"
-            type="com.kreativesquadz.billkit.model.CreditNote" />
+            type="com.kreativesquadz.hisabkitab.model.CreditNote" />
         <variable
             name="isCustomerAvailable"
             type="Boolean" />
@@ -27,10 +27,10 @@
             type="Boolean" />
         <variable
             name="customer"
-            type="com.kreativesquadz.billkit.model.Customer" />
+            type="com.kreativesquadz.hisabkitab.model.Customer" />
         <variable
             name="taxGst"
-            type="com.kreativesquadz.billkit.model.settings.GST" />
+            type="com.kreativesquadz.hisabkitab.model.settings.GST" />
         <variable
             name="isPrintLoading"
             type="Boolean" />
@@ -42,7 +42,7 @@
         android:background="@color/white_n_black">
 
 
-        <com.kreativesquadz.billkit.utils.ZigzagView
+        <com.kreativesquadz.hisabkitab.utils.ZigzagView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
@@ -349,7 +349,7 @@
                         android:layout_marginBottom="5dp"/>
 
 
-                    <com.kreativesquadz.billkit.utils.ExpandingRecyclerView
+                    <com.kreativesquadz.hisabkitab.utils.ExpandingRecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/itemListRecyclerview"
@@ -446,7 +446,7 @@
             </ScrollView>
 
 
-        </com.kreativesquadz.billkit.utils.ZigzagView>
+        </com.kreativesquadz.hisabkitab.utils.ZigzagView>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"

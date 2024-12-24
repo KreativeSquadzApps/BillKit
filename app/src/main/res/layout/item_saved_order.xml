@@ -7,7 +7,7 @@
 
         <variable
             name="savedOrder"
-            type="com.kreativesquadz.billkit.model.SavedOrder" /> <!-- Replace "your.package.name" with your actual package name -->
+            type="com.kreativesquadz.hisabkitab.model.SavedOrder" /> <!-- Replace "your.package.name" with your actual package name -->
 
     </data>
 

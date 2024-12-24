@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.widget.TextView" />
-        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt" />
+        <import type="com.kreativesquadz.hisabkitab.adapter.BindingAdaptersKt" />
         <variable
             name="device"
             type="android.bluetooth.BluetoothDevice" />

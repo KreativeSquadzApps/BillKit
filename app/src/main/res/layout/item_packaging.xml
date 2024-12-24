@@ -7,7 +7,7 @@
 
         <variable
             name="packaging"
-            type="com.kreativesquadz.billkit.model.settings.Packaging" /> <!-- Replace "your.package.name" with your actual package name -->
+            type="com.kreativesquadz.hisabkitab.model.settings.Packaging" /> <!-- Replace "your.package.name" with your actual package name -->
 
     </data>
 

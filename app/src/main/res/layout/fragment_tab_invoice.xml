@@ -8,7 +8,7 @@
             type="Boolean" />
         <variable
             name="companyDetails"
-            type="com.kreativesquadz.billkit.model.CompanyDetails" />
+            type="com.kreativesquadz.hisabkitab.model.CompanyDetails" />
 
 
     </data>

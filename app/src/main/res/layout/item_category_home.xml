@@ -7,7 +7,7 @@
 
         <variable
             name="category"
-            type="com.kreativesquadz.billkit.model.Category" />
+            type="com.kreativesquadz.hisabkitab.model.Category" />
 
         <variable
             name="isSelected"

@@ -6,7 +6,7 @@
         <import type="android.view.View"/>
         <variable
             name="thermalPrinter"
-            type="com.kreativesquadz.billkit.model.settings.ThermalPrinterSetup" />
+            type="com.kreativesquadz.hisabkitab.model.settings.ThermalPrinterSetup" />
         <variable
             name="isUpdateEnable"
             type="Boolean" />

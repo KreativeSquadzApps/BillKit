@@ -5,7 +5,7 @@
     <data>
         <variable
             name="mergedCreditDetail"
-            type="com.kreativesquadz.billkit.model.MergedCreditDetail" />
+            type="com.kreativesquadz.hisabkitab.model.MergedCreditDetail" />
     </data>
 
     <LinearLayout

@@ -7,13 +7,13 @@
         <import type="android.view.View" />
         <variable
             name="invoice"
-            type="com.kreativesquadz.billkit.model.Invoice" />
+            type="com.kreativesquadz.hisabkitab.model.Invoice" />
         <variable
             name="isCustomerAvailable"
             type="Boolean" />
         <variable
             name="customer"
-            type="com.kreativesquadz.billkit.model.Customer" />
+            type="com.kreativesquadz.hisabkitab.model.Customer" />
         <variable
             name="istTaxAvalaible"
             type="Boolean" />
@@ -286,7 +286,7 @@
                             </LinearLayout>
 
 
-                            <com.kreativesquadz.billkit.utils.ExpandingRecyclerView
+                            <com.kreativesquadz.hisabkitab.utils.ExpandingRecyclerView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/recyclerView"

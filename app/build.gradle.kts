@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace = "com.kreativesquadz.billkit"
+    namespace = "com.kreativesquadz.hisabkitab"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.kreativesquadz.billkit"
+        applicationId = "com.kreativesquadz.hisabkitab"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

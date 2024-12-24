@@ -7,7 +7,7 @@
 
         <variable
             name="staff"
-            type="com.kreativesquadz.billkit.model.Staff" /> <!-- Replace "your.package.name" with your actual package name -->
+            type="com.kreativesquadz.hisabkitab.model.Staff" /> <!-- Replace "your.package.name" with your actual package name -->
 
     </data>
 

@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.kreativesquadz.billkit.ui.dialogs.otherChargesDialog.AddOtherChargesDialogViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.dialogs.otherChargesDialog.AddOtherChargesDialogViewModel" />
     </data>
 
     <LinearLayout

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.kreativesquadz.billkit.ui.home.HomeFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.home.HomeFragment"
         android:label="@string/menu_new_sale"
         tools:layout="@layout/fragment_home">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/billHistoryFrag"
-        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.BillHistoryFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.billHistory.BillHistoryFrag"
         android:label="@string/menu_bill_history"
         tools:layout="@layout/fragment_bill_history" >
 
@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/creditNoteFrag"
-        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.CreditNoteFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.creditNote.CreditNoteFrag"
         android:label="@string/menu_credit_notes"
         tools:layout="CreditNote" >
         <argument android:name="invoiceId" app:argType="string" />
@@ -68,7 +68,7 @@
 
     <fragment
         android:id="@+id/inventoryFrag"
-        android:name="com.kreativesquadz.billkit.ui.inventory.InventoryFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.inventory.InventoryFragment"
         android:label="@string/menu_inventory"
         tools:layout="@layout/fragment_inventory" >
         <action
@@ -88,7 +88,7 @@
 
     <fragment
         android:id="@+id/customerManagementFrag"
-        android:name="com.kreativesquadz.billkit.ui.customerManag.CustomerManagementFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.customerManag.CustomerManagementFrag"
         android:label="@string/menu_customer_management"
         tools:layout="@layout/fragment_customer_management" >
         <action
@@ -111,7 +111,7 @@
 
     <fragment
         android:id="@+id/staffManagementFrag"
-        android:name="com.kreativesquadz.billkit.ui.staffManag.StaffManagementFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.staffManag.StaffManagementFrag"
         android:label="@string/menu_staff_management"
         tools:layout="@layout/fragment_staff_management" >
         <action app:enterAnim="@anim/zoom_in"
@@ -130,19 +130,19 @@
 
     <fragment
         android:id="@+id/creditDetailsFrag"
-        android:name="com.kreativesquadz.billkit.ui.creditDetails.CreditDetailsFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.creditDetails.CreditDetailsFrag"
         android:label="@string/menu_credit_details"
         tools:layout="@layout/fragment_credit_details" />
 
     <fragment
         android:id="@+id/dayBookFrag"
-        android:name="com.kreativesquadz.billkit.ui.daybook.DayBookFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.daybook.DayBookFrag"
         android:label="@string/menu_dayBook"
         tools:layout="@layout/fragment_day_book" />
 
     <fragment
         android:id="@+id/settingsFrag"
-        android:name="com.kreativesquadz.billkit.ui.settings.SettingsFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.SettingsFrag"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -188,7 +188,7 @@
     </fragment>
     <fragment
         android:id="@+id/billDetailsFrag"
-        android:name="com.kreativesquadz.billkit.ui.home.billDetails.BillDetailsFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.home.billDetails.BillDetailsFrag"
         android:label="Bill Details"
         tools:layout="@layout/fragment_bill_details" >
         <action app:enterAnim="@anim/zoom_in"
@@ -213,7 +213,7 @@
     </fragment>
     <fragment
         android:id="@+id/receiptFrag"
-        android:name="com.kreativesquadz.billkit.ui.bills.ReceiptFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.ReceiptFrag"
         android:label="fragment_receipt"
         tools:layout="@layout/fragment_receipt" >
         <argument
@@ -238,11 +238,11 @@
     </fragment>
     <fragment
         android:id="@+id/invoiceFragment"
-        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.invoice.InvoiceFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.billHistory.invoice.InvoiceFragment"
         android:label="Invoice" >
         <argument
             android:name="invoice"
-            app:argType="com.kreativesquadz.billkit.model.Invoice" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Invoice" />
         <argument
             android:name="target"
             app:argType="string" />
@@ -270,7 +270,7 @@
     </fragment>
     <fragment
         android:id="@+id/invoiceSettings"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.InvoiceSettings"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.InvoiceSettings.InvoiceSettings"
         android:label="Invoice Settings"
         tools:layout="@layout/fragment_invoice_settings" >
         <action
@@ -284,18 +284,18 @@
 
     <fragment
         android:id="@+id/createCustomerFrag"
-        android:name="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.customerManag.createCustomer.CreateCustomerFrag"
         android:label="Create Customer" >
         <argument android:name="target" app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/addProductFrag"
-        android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.add.AddProductFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.inventory.tab.product.add.AddProductFrag"
         android:label="Add Product" />
     <fragment
         android:id="@+id/productFragment"
-        android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.ProductFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.inventory.tab.product.ProductFragment"
         android:label="Product" >
         <action
             app:enterAnim="@anim/zoom_in"
@@ -313,15 +313,15 @@
     </fragment>
     <fragment
         android:id="@+id/saleReturnFragment"
-        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.saleReturn.SaleReturnFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.billHistory.saleReturn.SaleReturnFragment"
         android:label="Sale Return" >
         <argument
             android:name="invoice"
-            app:argType="com.kreativesquadz.billkit.model.Invoice" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Invoice" />
     </fragment>
     <fragment
         android:id="@+id/creditNoteDetailsFragment"
-        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteDetails.CreditNoteDetailsFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.creditNote.creditNoteDetails.CreditNoteDetailsFragment"
         android:label="CreditNote" >
 
         <argument android:name="invoiceId" app:argType="string" />
@@ -335,24 +335,24 @@
     </fragment>
     <fragment
         android:id="@+id/bluetoothDeviceFragment"
-        android:name="com.kreativesquadz.billkit.ui.bluetoothPrinter.BluetoothDeviceFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.bluetoothPrinter.BluetoothDeviceFragment"
         android:label="Bluetooth Device">
 
         <argument
             android:name="invoice"
-            app:argType="com.kreativesquadz.billkit.model.Invoice" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Invoice" />
     </fragment>
     <fragment
         android:id="@+id/addStaffFragment"
-        android:name="com.kreativesquadz.billkit.ui.staffManag.add.AddStaffFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.staffManag.add.AddStaffFragment"
         android:label="Add Staff" />
     <fragment
         android:id="@+id/staffDetailsFragment"
-        android:name="com.kreativesquadz.billkit.ui.staffManag.staffDetails.StaffDetailsFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.staffManag.staffDetails.StaffDetailsFragment"
         android:label="Staff Details" >
         <argument
             android:name="staff"
-            app:argType="com.kreativesquadz.billkit.model.Staff" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Staff" />
 
         <action app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
@@ -370,7 +370,7 @@
     </fragment>
     <fragment
         android:id="@+id/taxSettingsFragment"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.TaxSettingsFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.taxSettings.TaxSettingsFragment"
         android:label="Tax Settings"
         tools:layout="@layout/fragment_tax_settings" >
         <action
@@ -379,7 +379,7 @@
     </fragment>
     <fragment
         android:id="@+id/splitFragment"
-        android:name="com.kreativesquadz.billkit.ui.home.billDetails.split.SplitFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.home.billDetails.split.SplitFragment"
         android:label="Split" >
         <action app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
@@ -390,7 +390,7 @@
     </fragment>
     <fragment
         android:id="@+id/printerSettingsFragment"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.printerSettings.PrinterSettingsFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.printerSettings.PrinterSettingsFragment"
         android:label="Printer Settings" >
         <action app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
@@ -401,20 +401,20 @@
     </fragment>
     <fragment
         android:id="@+id/editProductFragment"
-        android:name="com.kreativesquadz.billkit.ui.inventory.tab.product.edit.EditProductFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.inventory.tab.product.edit.EditProductFragment"
         android:label="Edit Product">
         <argument
             android:name="product"
-            app:argType="com.kreativesquadz.billkit.model.Product" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Product" />
     </fragment>
     <fragment
         android:id="@+id/customerDetailsFragment"
-        android:name="com.kreativesquadz.billkit.ui.customerManag.customerDetails.CustomerDetailsFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.customerManag.customerDetails.CustomerDetailsFragment"
         android:label="Customer Details">
 
         <argument
             android:name="customer"
-            app:argType="com.kreativesquadz.billkit.model.Customer"/>
+            app:argType="com.kreativesquadz.hisabkitab.model.Customer"/>
         <action
             android:id="@+id/action_customerDetailsFragment_to_invoiceFragment"
             app:destination="@id/invoiceFragment"
@@ -441,27 +441,27 @@
     </fragment>
     <fragment
         android:id="@+id/addCreditFragment"
-        android:name="com.kreativesquadz.billkit.ui.customerManag.customerDetails.addCreditFrag.AddCreditFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.customerManag.customerDetails.addCreditFrag.AddCreditFragment"
         android:label="Add Credit" >
         <argument
             android:name="customer"
-            app:argType="com.kreativesquadz.billkit.model.Customer" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Customer" />
     </fragment>
     <fragment
         android:id="@+id/editCustomerFragment"
-        android:name="com.kreativesquadz.billkit.ui.customerManag.editCustomer.EditCustomerFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.customerManag.editCustomer.EditCustomerFragment"
         android:label="Edit Customer" />
     <fragment
         android:id="@+id/editStaffFragment"
-        android:name="com.kreativesquadz.billkit.ui.staffManag.edit.EditStaffFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.staffManag.edit.EditStaffFragment"
         android:label="Edit Staff" >
         <argument
             android:name="staff"
-            app:argType="com.kreativesquadz.billkit.model.Staff" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Staff" />
     </fragment>
     <fragment
         android:id="@+id/invoiceResetFragment"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.InvoiceSettings.tab.tabInvoiceFrag.invoiceResetFrag.InvoiceResetFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.InvoiceSettings.tab.tabInvoiceFrag.invoiceResetFrag.InvoiceResetFragment"
         android:label="Invoice Reset">
 
         <argument android:name="invoicePrefix"
@@ -471,25 +471,25 @@
     </fragment>
     <fragment
         android:id="@+id/taxDetailsSettingFragment"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.taxSettings.tab.tabTaxes.taxDetails.TaxDetailsSettingFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.taxSettings.tab.tabTaxes.taxDetails.TaxDetailsSettingFragment"
         android:label="Tax Setting" >
 
         <argument android:name="selectedGstTax"
-           app:argType="com.kreativesquadz.billkit.model.settings.GST"/>
+           app:argType="com.kreativesquadz.hisabkitab.model.settings.GST"/>
 
     </fragment>
     <fragment
         android:id="@+id/posSettingsFrag"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.posSettings.PosSettingsFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.posSettings.PosSettingsFrag"
         android:label="POS Settings" />
     <fragment
         android:id="@+id/editBillDetailsFrag"
-        android:name="com.kreativesquadz.billkit.ui.home.editBillDetails.EditBillDetailsFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.home.editBillDetails.EditBillDetailsFrag"
         android:label="Edit Invoice">
 
         <argument
             android:name="invoice"
-            app:argType="com.kreativesquadz.billkit.model.Invoice" />
+            app:argType="com.kreativesquadz.hisabkitab.model.Invoice" />
         <action
             app:enterAnim="@anim/zoom_in"
             app:exitAnim="@anim/zoom_out"
@@ -500,7 +500,7 @@
     </fragment>
     <dialog
         android:id="@+id/customerAddBottomSheetFrag"
-        android:name="com.kreativesquadz.billkit.ui.bottomSheet.customerBottomSheet.CustomerAddBottomSheetFrag"
+        android:name="com.kreativesquadz.hisabkitab.ui.bottomSheet.customerBottomSheet.CustomerAddBottomSheetFrag"
         android:label="CustomerAddBottomSheetFrag" >
         <action
             app:enterAnim="@anim/zoom_in"
@@ -512,26 +512,26 @@
     </dialog>
     <fragment
         android:id="@+id/themeFragment"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.theme.ThemeFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.theme.ThemeFragment"
         android:label="Theme" />
     <fragment
         android:id="@+id/billSettingsFragment"
-        android:name="com.kreativesquadz.billkit.ui.settings.menuItems.billSettings.BillSettingsFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.settings.menuItems.billSettings.BillSettingsFragment"
         android:label="Bill Settings" />
     <fragment
         android:id="@+id/creditNoteReceiptFragment"
-        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteDetails.creditNoteReceipt.CreditNoteReceiptFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.creditNote.creditNoteDetails.creditNoteReceipt.CreditNoteReceiptFragment"
         android:label="CreditNote Receipt" >
         <argument android:name="creditNote"
-            app:argType="com.kreativesquadz.billkit.model.CreditNote" />
+            app:argType="com.kreativesquadz.hisabkitab.model.CreditNote" />
     </fragment>
     <fragment
         android:id="@+id/creditNoteSearchFragment"
-        android:name="com.kreativesquadz.billkit.ui.bills.creditNote.creditNoteSearch.CreditNoteSearchFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.creditNote.creditNoteSearch.CreditNoteSearchFragment"
         android:label="CreditNote Search" />
     <fragment
         android:id="@+id/searchBillFragment"
-        android:name="com.kreativesquadz.billkit.ui.bills.billHistory.searchBill.SearchBillFragment"
+        android:name="com.kreativesquadz.hisabkitab.ui.bills.billHistory.searchBill.SearchBillFragment"
         android:label="Search Invoice" >
         <action
             app:enterAnim="@anim/zoom_in"

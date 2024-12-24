@@ -6,11 +6,11 @@
     <data>
         <variable
             name="sharedViewModel"
-            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.home.tab.SharedViewModel" />
 
         <variable
             name="viewModel"
-            type="com.kreativesquadz.billkit.ui.home.billDetails.split.SplitViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.home.billDetails.split.SplitViewModel" />
     </data>
 
     <LinearLayout

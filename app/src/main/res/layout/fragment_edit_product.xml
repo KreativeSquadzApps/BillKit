@@ -9,7 +9,7 @@
             type="Boolean" />
         <variable
             name="product"
-            type="com.kreativesquadz.billkit.model.Product" />
+            type="com.kreativesquadz.hisabkitab.model.Product" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

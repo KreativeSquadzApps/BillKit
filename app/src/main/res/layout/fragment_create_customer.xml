@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.kreativesquadz.billkit.ui.customerManag.createCustomer.CreateCustomerViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.customerManag.createCustomer.CreateCustomerViewModel" />
 
         <variable
             name="resetValue"

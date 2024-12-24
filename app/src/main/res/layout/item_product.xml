@@ -8,7 +8,7 @@
 
         <variable
             name="product"
-            type="com.kreativesquadz.billkit.model.Product" /> <!-- Replace "your.package.name" with your actual package name -->
+            type="com.kreativesquadz.hisabkitab.model.Product" /> <!-- Replace "your.package.name" with your actual package name -->
 
     </data>
 

@@ -8,10 +8,10 @@
         <import type="android.view.View" />
         <variable
             name="sharedViewModel"
-            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.home.tab.SharedViewModel" />
         <variable
             name="invoice"
-            type="com.kreativesquadz.billkit.model.Invoice" />
+            type="com.kreativesquadz.hisabkitab.model.Invoice" />
         <variable
             name="isCustomerSelected"
             type="Boolean" />
@@ -35,11 +35,11 @@
 
         <variable
             name="customer"
-            type="com.kreativesquadz.billkit.model.Customer" />
+            type="com.kreativesquadz.hisabkitab.model.Customer" />
 
         <variable
             name="creditNote"
-            type="com.kreativesquadz.billkit.model.CreditNote" />
+            type="com.kreativesquadz.hisabkitab.model.CreditNote" />
 
         <variable
             name="isDiscount"

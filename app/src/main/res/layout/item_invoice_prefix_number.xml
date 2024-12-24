@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
+        <import type="com.kreativesquadz.hisabkitab.adapter.BindingAdaptersKt"/>
         <variable
             name="invoicePrefixNumber"
-            type="com.kreativesquadz.billkit.model.InvoicePrefixNumber" />
+            type="com.kreativesquadz.hisabkitab.model.InvoicePrefixNumber" />
     </data>
 
 

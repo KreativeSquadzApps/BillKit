@@ -10,10 +10,10 @@
             type="Boolean" />
         <variable
             name="customer"
-            type="com.kreativesquadz.billkit.model.Customer" />
+            type="com.kreativesquadz.hisabkitab.model.Customer" />
         <variable
             name="creditNote"
-            type="com.kreativesquadz.billkit.model.CreditNote" />
+            type="com.kreativesquadz.hisabkitab.model.CreditNote" />
         <variable
             name="totalItem"
             type="String" />

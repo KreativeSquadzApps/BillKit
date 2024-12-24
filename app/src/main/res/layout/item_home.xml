@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.widget.TextView" />
-        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt" />
+        <import type="com.kreativesquadz.hisabkitab.adapter.BindingAdaptersKt" />
         <variable
             name="item"
-            type="com.kreativesquadz.billkit.model.InvoiceItem" />
+            type="com.kreativesquadz.hisabkitab.model.InvoiceItem" />
 
     </data>
     <LinearLayout

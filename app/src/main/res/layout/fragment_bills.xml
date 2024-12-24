@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt"/>
+        <import type="com.kreativesquadz.hisabkitab.adapter.BindingAdaptersKt"/>
         <variable
             name="viewModel"
-            type="com.kreativesquadz.billkit.ui.bills.billHistory.BillHistoryViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.bills.billHistory.BillHistoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

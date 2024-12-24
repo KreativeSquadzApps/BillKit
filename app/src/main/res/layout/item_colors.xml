@@ -5,10 +5,10 @@
     <data>
         <import type="android.widget.TextView" />
         <import type="android.view.View" />
-        <import type="com.kreativesquadz.billkit.adapter.BindingAdaptersKt" />
+        <import type="com.kreativesquadz.hisabkitab.adapter.BindingAdaptersKt" />
         <variable
             name="colorItem"
-            type="com.kreativesquadz.billkit.model.ColorItem" />
+            type="com.kreativesquadz.hisabkitab.model.ColorItem" />
 
     </data>
     <LinearLayout

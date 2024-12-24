@@ -6,7 +6,7 @@
     <data>
         <variable
             name="sharedViewModels"
-            type="com.kreativesquadz.billkit.ui.home.tab.SharedViewModel" />
+            type="com.kreativesquadz.hisabkitab.ui.home.tab.SharedViewModel" />
         <import type="android.view.View"/>
     </data>
 
